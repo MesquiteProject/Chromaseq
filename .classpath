@@ -3,5 +3,7 @@
 	<classpathentry kind="src" path="Source"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Mesquite Project"/>
+	<classpathentry kind="lib" path="jars/ToLEditor.jar"/>
+	<classpathentry kind="lib" path="jars/ToLSupportFiles.jar"/>
 	<classpathentry kind="output" path="Mesquite_Folder"/>
 </classpath>

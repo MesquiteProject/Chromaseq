@@ -1,5 +1,15 @@
 package mesquite.chromaseq.lib;
 
+import java.util.Hashtable;
+import java.util.Map;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.tolweb.treegrow.main.HttpRequestMaker;
+import org.tolweb.treegrow.main.RequestParameters;
+import org.tolweb.treegrow.main.XMLConstants;
+import org.tolweb.treegrow.main.XMLReader;
+
 import mesquite.lib.*;
 
 /* ======================================================================== */
@@ -10,9 +20,18 @@ public class PrimerList {
 	boolean [] forward;
 	String fragName;
 	int numPrimers;
+	private String databaseURL;
 	
 	public PrimerList(String primerList) {
-		readTabbedPrimerFile(primerList);
+		this(primerList, false);
+	}
+	
+	public PrimerList(String primerListPathOrDbUrl, boolean useDb) {
+		if (useDb) {
+			setDatabaseURL(primerListPathOrDbUrl);
+		} else {
+			readTabbedPrimerFile(primerListPathOrDbUrl);
+		}
 	}
 	
 	public void readXMLPrimerFile(String primerList) {  // this does not work; just started to build this.
@@ -146,17 +165,40 @@ public class PrimerList {
 	/*.................................................................................................................*/
 	public String getFragmentName(String primerName, MesquiteString stLouisString) {
 		if (!StringUtil.blank(primerName)) {
-			for (int i=0; i<primerNames.length; i++) {
-				if (primerName.trim().equalsIgnoreCase(primerNames[i])) {
-					if (forward[i])
-						stLouisString.setValue("b.");
-					else
-						stLouisString.setValue("g.");
-					return fragmentNames[i];
+			if (getUseDatabaseForPrimers()) {
+				String urlPrefix = getDatabaseURL();
+				Map args = new Hashtable();
+				args.put(RequestParameters.PRIMER_NAME, primerName);
+				Document doc = HttpRequestMaker.getTap4ExternalUrlDocument(urlPrefix, "btolxml/PrimerService", args);
+				// problems contacting the db!
+				if (doc == null || doc.getRootElement() == null || doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
+					// TODO: There should be some kind of dialog error message here, how do we make it
+					//		 popup at this point?
+					return "";
+				} else {
+					Element root = doc.getRootElement();
+					String geneName = root.getAttributeValue(XMLConstants.genename);
+					boolean isForward = XMLReader.getBooleanValue(root, XMLConstants.forward);
+					assignStLouisString(stLouisString, isForward);
+					return geneName;
+				}
+			} else {
+				for (int i=0; i<primerNames.length; i++) {
+					if (primerName.trim().equalsIgnoreCase(primerNames[i])) {
+						assignStLouisString(stLouisString, forward[i]);
+						String returnVal = fragmentNames[i];
+						return returnVal;
+					}
 				}
 			}
 		}
 		return "";
+	}
+	private void assignStLouisString(MesquiteString stLouisString, boolean isForward) {
+		if (isForward)
+			stLouisString.setValue("b.");
+		else
+			stLouisString.setValue("g.");		
 	}
 	/*.................................................................................................................*/
 	int getNumPrimers(String oneFragment) {
@@ -193,6 +235,15 @@ public class PrimerList {
 			}
 		}
 		return count;
+	}
+	public boolean getUseDatabaseForPrimers() {
+		return !StringUtil.blank(getDatabaseURL());
+	}
+	public String getDatabaseURL() {
+		return databaseURL;
+	}
+	public void setDatabaseURL(String databaseURL) {
+		this.databaseURL = databaseURL;
 	}
 }
 
