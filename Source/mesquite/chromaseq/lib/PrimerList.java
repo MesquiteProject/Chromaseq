@@ -10,6 +10,7 @@ import org.tolweb.treegrow.main.RequestParameters;
 import org.tolweb.treegrow.main.XMLConstants;
 import org.tolweb.treegrow.main.XMLReader;
 
+import mesquite.Mesquite;
 import mesquite.lib.*;
 
 /* ======================================================================== */
@@ -174,6 +175,7 @@ public class PrimerList {
 				if (doc == null || doc.getRootElement() == null || doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
 					// TODO: There should be some kind of dialog error message here, how do we make it
 					//		 popup at this point?
+					Debugg.println("primer name not found in database: " + primerName);
 					return "";
 				} else {
 					Element root = doc.getRootElement();
