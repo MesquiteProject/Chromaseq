@@ -13,27 +13,32 @@ package mesquite.chromaseq.lib;
 
 import mesquite.lib.*;
 
+/* 
+ * This class contains two arrays, as well as methods for accessing them.
+ * These two arrays specify the mapping between the master registry of bases and a linked array of bases.
+ */
+
 public class RegistryMapper {
 	int[] linkedRegistryOfMasterBases;  //length of linked; for each element, contains which array element within master
-	int[] masterRegistryOfLinkedBases;  //length of master; for each element, contains the which linked element resides there; MesquiteInteger.unassigned if none.
+	int[] masterRegistryOfLinkedBases;  //length of master; for each element, contains which linked element resides there; MesquiteInteger.unassigned if none.
 	//Thus, masterRegistry[linkedRegistry[i]] ==i
 	
 	String name="";
 	
-	public RegistryMapper(int numMasters, int numLinked){
-		initRegistry(numMasters,numLinked);
+	public RegistryMapper(int lengthMaster, int lengthLinked){
+		initRegistry(lengthMaster,lengthLinked);
 	}
-	public RegistryMapper(int numMasters, int numLinked, String name){
+	public RegistryMapper(int lengthMaster, int lengthLinked, String name){
 		this.name = name;
-		initRegistry(numMasters,numLinked);
+		initRegistry(lengthMaster,lengthLinked);
 	}
 
-	public void initRegistry(int numMasters, int numLinked){
-		masterRegistryOfLinkedBases = new int[numMasters];
-		for (int i = 0; i<numMasters; i++)
+	public void initRegistry(int lengthMaster, int lengthLinked){
+		masterRegistryOfLinkedBases = new int[lengthMaster];
+		for (int i = 0; i<lengthMaster; i++)
 			masterRegistryOfLinkedBases[i] = MesquiteInteger.unassigned;
-		linkedRegistryOfMasterBases = new int[numLinked];
-		for (int i = 0; i<numLinked; i++)
+		linkedRegistryOfMasterBases = new int[lengthLinked];
+		for (int i = 0; i<lengthLinked; i++)
 			linkedRegistryOfMasterBases[i] = MesquiteInteger.unassigned;
 	}
 

@@ -100,7 +100,7 @@ public class PrimerList {
 		int numPrimers = 0;
 		String tempList = primerList;
 
-		while (!StringUtil.blank(tempList) && tempList.length() > 10) {
+		while (!StringUtil.blank(tempList) && tempList.length() > 10 && tempList.indexOf(";")>=0) {
 			oneFragment = tempList.substring(0,tempList.indexOf(";"));
 			numPrimers += getNumPrimers(oneFragment);
 			tempList = tempList.substring(tempList.indexOf(";")+1, tempList.length());
