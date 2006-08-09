@@ -170,12 +170,24 @@ public class PrimerList {
 				String urlPrefix = getDatabaseURL();
 				Map args = new Hashtable();
 				args.put(RequestParameters.PRIMER_NAME, primerName);
-				Document doc = HttpRequestMaker.getTap4ExternalUrlDocument(urlPrefix, "btolxml/PrimerService", args);
+				Document doc = null;
+//				try {
+					doc = HttpRequestMaker.getTap4ExternalUrlDocument(urlPrefix, "btolxml/PrimerService", args);
+//				}
+/*
+ * 				catch (ExceptionInInitializerError e) {
+		Debugg.println("\n********************\nExceptionInInitializerError in HttpRequestMaker.getTap4ExternalUrlDocument\n********************\n");
+				}
+				catch (NoClassDefFoundError e) {
+		Debugg.println("\n********************\nNoClassDefFoundError in HttpRequestMaker.getTap4ExternalUrlDocument\n********************\n");
+				}
+*/
 				// problems contacting the db!
 				if (doc == null || doc.getRootElement() == null || doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
 					// TODO: There should be some kind of dialog error message here, how do we make it
 					//		 popup at this point?
-					Debugg.println("primer name not found in database: " + primerName);
+					MesquiteMessage.warnUser("Primer name not found in database: " + primerName+"\n" + doc);
+//					Debugg.println("Primer name not found in database: " + primerName);
 					return "";
 				} else {
 					Element root = doc.getRootElement();
