@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.tolweb.treegrow.main.HttpRequestMaker;
+import org.tolweb.base.http.BaseHttpRequestMaker;
+import org.tolweb.base.xml.BaseXMLReader;
 import org.tolweb.treegrow.main.RequestParameters;
 import org.tolweb.treegrow.main.XMLConstants;
-import org.tolweb.treegrow.main.XMLReader;
 
 import mesquite.Mesquite;
 import mesquite.lib.*;
@@ -172,7 +172,7 @@ public class PrimerList {
 				args.put(RequestParameters.PRIMER_NAME, primerName);
 				Document doc = null;
 //				try {
-					doc = HttpRequestMaker.getTap4ExternalUrlDocument(urlPrefix, "btolxml/PrimerService", args);
+				doc = XMLUtilities.getDocumentFromTapestryPageName("btolxml/PrimerService", args);
 //				}
 /*
  * 				catch (ExceptionInInitializerError e) {
@@ -183,7 +183,7 @@ public class PrimerList {
 				}
 */
 				// problems contacting the db!
-				if (doc == null || doc.getRootElement() == null || doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
+				if (doc == null) {
 					// TODO: There should be some kind of dialog error message here, how do we make it
 					//		 popup at this point?
 					MesquiteMessage.warnUser("Primer name not found in database: " + primerName+"\n" + doc);
@@ -192,7 +192,7 @@ public class PrimerList {
 				} else {
 					Element root = doc.getRootElement();
 					String geneName = root.getAttributeValue(XMLConstants.genename);
-					boolean isForward = XMLReader.getBooleanValue(root, XMLConstants.forward);
+					boolean isForward = BaseXMLReader.getBooleanValue(root, XMLConstants.forward);
 					assignStLouisString(stLouisString, isForward);
 					return geneName;
 				}

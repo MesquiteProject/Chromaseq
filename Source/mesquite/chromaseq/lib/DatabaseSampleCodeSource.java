@@ -6,14 +6,14 @@ import java.util.Map;
 import mesquite.lib.MesquiteMessage;
 
 import org.jdom.Document;
-import org.tolweb.treegrow.main.HttpRequestMaker;
+import org.tolweb.base.http.BaseHttpRequestMaker;
 import org.tolweb.treegrow.main.RequestParameters;
 import org.tolweb.treegrow.main.XMLConstants;
 
-public class SampleCodeDatabaseSource {
+public class DatabaseSampleCodeSource {
 	private String databaseURL;
 	
-	public SampleCodeDatabaseSource(String databaseUrl) {
+	public DatabaseSampleCodeSource(String databaseUrl) {
 		this.databaseURL = databaseUrl;
 	}
 	
@@ -26,14 +26,12 @@ public class SampleCodeDatabaseSource {
 	 * and the second being the fullSequenceName
 	 */
 	public String[] getSequenceNamesFromCode(String code, int sourceDatabase) {
-		String urlPrefix = getDatabaseURL();
 		Map args = new Hashtable();
 		args.put(RequestParameters.SOURCE_DB, new Integer(sourceDatabase));
 		args.put(RequestParameters.CODE, code);
-		Document doc = HttpRequestMaker.getTap4ExternalUrlDocument(urlPrefix, "btolxml/XMLService", args);
+		Document doc = XMLUtilities.getDocumentFromTapestryPageName("btolxml/XMLService", args);
 		String sequenceName = "";
-		if (doc == null || doc.getRootElement() == null || 
-				doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
+		if (doc == null) {
 			MesquiteMessage.warnUser("No dna extraction found matching code: " + 
 					code + " in database: " + sourceDatabase);
 			return new String[] {"", ""};
