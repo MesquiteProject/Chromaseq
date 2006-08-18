@@ -264,6 +264,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 			primerNamePiece = getStringPiece(ownerModule, remainder.getValue(), primerStartToken, primerEndToken, remainder, logBuffer, "primer name");
 		}		
 		else	if (sampleCodeFirst) {
+			// TODO: DRM FIX THIS
 			primerNamePiece = getStringPiece(ownerModule, fileName, primerStartToken, primerEndToken, remainder, logBuffer, "primer name");
 			if (primerNamePiece==null)
 				return false;
