@@ -14,9 +14,11 @@ package mesquite.chromaseq.lib;
 import java.awt.*;
 import java.awt.event.*;
 
+import org.jdom.CDATA;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.tolweb.base.xml.BaseXMLReader;
+import org.tolweb.base.xml.BaseXMLWriter;
 
 import mesquite.lib.*;
 
@@ -75,7 +77,24 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		return s;
 	}
 	public String getXML(){
-		StringBuffer buffer = new StringBuffer(1000);
+		Element mesquiteElement = new Element("mesquite");
+		Document doc = new Document(mesquiteElement);
+		Element nameRules = new Element("chromFileNameParsingRules");
+		mesquiteElement.addContent(nameRules);
+		Element versionElement = new Element("version").addContent("1");
+		nameRules.addContent(versionElement);
+		Element boundedByTokensElement = new Element("boundedByTokens");
+		nameRules.addContent(boundedByTokensElement);
+		boundedByTokensElement.addContent(new Element("name").addContent(name));
+		boundedByTokensElement.addContent(new Element("sampleCodeFirst").addContent(MesquiteBoolean.toTrueFalseString(sampleCodeFirst)));
+		boundedByTokensElement.addContent(new Element("dnaCodeStartToken").addContent(new CDATA(dnaCodeStartToken)));
+		boundedByTokensElement.addContent(new Element("dnaCodeEndToken").addContent(new CDATA(dnaCodeEndToken)));
+		boundedByTokensElement.addContent(new Element("dnaCodeSuffixToken").addContent(new CDATA(dnaCodeSuffixToken)));
+		boundedByTokensElement.addContent(new Element("dnaCodeRemovalToken").addContent(new CDATA(dnaCodeRemovalToken)));
+		boundedByTokensElement.addContent(new Element("primerStartToken").addContent(new CDATA(primerStartToken)));		
+		boundedByTokensElement.addContent(new Element("primerEndToken").addContent(new CDATA(primerEndToken)));		
+		return BaseXMLWriter.getDocumentAsString(doc);
+		/*StringBuffer buffer = new StringBuffer(1000);
 		buffer.append("<?xml version=\"1.0\"?>\n");
 		buffer.append("<mesquite>\n");
 		buffer.append("\t<chromFileNameParsingRules>\n");
@@ -94,11 +113,11 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		StringUtil.appendXMLTag(buffer, 3, "primerListPath", primerListPath);  
 		StringUtil.appendXMLTag(buffer, 3, "requiresExtension", requiresExtension);  
 		StringUtil.appendXMLTag(buffer, 3, "dnaNumberListPath", dnaNumberListPath);  
-*/
+/
 		buffer.append("\t\t</boundedByTokens>\n");
 		buffer.append("\t</chromFileNameParsingRules>\n");
 		buffer.append("</mesquite>\n");
-		return buffer.toString();
+		return buffer.toString();*/
 	}
 	public void save(String path, String name){
 		this.name = name;
