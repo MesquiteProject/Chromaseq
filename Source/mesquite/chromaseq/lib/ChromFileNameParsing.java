@@ -14,6 +14,10 @@ package mesquite.chromaseq.lib;
 import java.awt.*;
 import java.awt.event.*;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.tolweb.base.xml.BaseXMLReader;
+
 import mesquite.lib.*;
 
 public class ChromFileNameParsing implements Listable, Explainable {
@@ -109,7 +113,38 @@ public class ChromFileNameParsing implements Listable, Explainable {
 
 	/*.................................................................................................................*/
 	public boolean readXML(String contents, CommandRecord commandRec) {
-		Parser parser = new Parser();
+		Document doc = BaseXMLReader.getDocumentFromString(contents);
+		if (doc == null || doc.getRootElement() == null) {
+			return false;
+		} else if (!doc.getRootElement().getName().equals("mesquite")) {
+			return false;
+		}
+		Element chromFileNameParsingRules = doc.getRootElement().getChild("chromFileNameParsingRules");
+		if (chromFileNameParsingRules != null) {
+			Element versionElement = chromFileNameParsingRules.getChild("version");
+			if (versionElement == null || !versionElement.getText().equals("1")) {
+				return false;
+			}
+			Element boundedByTokens = chromFileNameParsingRules.getChild("boundedByTokens");
+			if (boundedByTokens == null) {
+				return false;
+			}
+			name = boundedByTokens.getChildText("name");
+			dnaCodeStartToken = boundedByTokens.getChildText("dnaCodeStartToken");
+			dnaCodeEndToken = boundedByTokens.getChildText("dnaCodeEndToken");
+			dnaCodeSuffixToken = boundedByTokens.getChildText("dnaCodeSuffixToken");
+			dnaCodeRemovalToken = boundedByTokens.getChildText("dnaCodeRemovalToken");			
+			primerStartToken = boundedByTokens.getChildText("primerStartToken");			
+			primerEndToken = boundedByTokens.getChildText("primerEndToken");
+			sampleCodeFirst = MesquiteBoolean.fromTrueFalseString(boundedByTokens.getChildText("sampleCodeFirst"));
+			//primerListPath = boundedByTokens.getChildTextTrim("primerListPath");
+			//dnaNumberListPath = boundedByTokens.getChildTextTrim("dnaNumberListPath");
+			//translateSampleCodes = MesquiteBoolean.fromTrueFalseString(boundedByTokens.getChildTextTrim("translateSampleCodes"));
+		} else {
+			return false;
+		}
+		return true;
+		/*Parser parser = new Parser();
 		Parser subParser = new Parser();
 		parser.setString(contents);
 		boolean acceptableVersion = false;
@@ -156,7 +191,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 							dnaNumberListPath = StringUtil.cleanXMLEscapeCharacters(subTagContent);
 						else if ("translateSampleCodes".equalsIgnoreCase(nextTag.getValue()))
 							translateSampleCodes = MesquiteBoolean.fromTrueFalseString(subTagContent);
-						*/
+						/
 						subTagContent = subParser.getNextXMLTaggedContent(nextTag);
 					}
 				}
@@ -164,7 +199,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 			}
 		} else
 			return false;
-		return true;
+		return true;*/
 	}
 	
 	/*.................................................................................................................*/
