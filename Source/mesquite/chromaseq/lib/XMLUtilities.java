@@ -3,9 +3,11 @@ package mesquite.chromaseq.lib;
 import java.util.Map;
 
 import mesquite.lib.Debugg;
+import mesquite.lib.MesquiteFile;
 
 import org.jdom.Document;
 import org.tolweb.base.http.BaseHttpRequestMaker;
+import org.tolweb.base.xml.BaseXMLReader;
 import org.tolweb.treegrow.main.XMLConstants;
 
 public class XMLUtilities {
@@ -25,6 +27,11 @@ public class XMLUtilities {
 			Debugg.println(error);
 		}
 		return returnDoc;
+	}
+	
+	public static Document getDocumentFromFilePath(String path) {
+		String docString = MesquiteFile.getFileContentsAsString(path);
+		return BaseXMLReader.getDocumentFromString(docString);
 	}
 	
 	private static boolean checkConnection() {
