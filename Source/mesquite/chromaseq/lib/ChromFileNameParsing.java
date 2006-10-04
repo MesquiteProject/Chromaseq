@@ -313,7 +313,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		//	Finding and processing the sample code 
 		if (sampleCodeFirst) {
 			sampleCodePiece = getStringPiece(ownerModule, fileName, dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code");
-			if (sampleCodePiece==null)
+		if (sampleCodePiece==null)
 				return false;
 			primerNamePiece = getStringPiece(ownerModule, remainder.getValue(), primerStartToken, primerEndToken, remainder, logBuffer, "primer name");
 		}		
