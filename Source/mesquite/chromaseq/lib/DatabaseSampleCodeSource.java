@@ -25,15 +25,14 @@ public class DatabaseSampleCodeSource {
 	 * @return a string array with the first element being the sequenceName
 	 * and the second being the fullSequenceName
 	 */
-	public String[] getSequenceNamesFromCode(String code, int sourceDatabase) {
+	public String[] getSequenceNamesFromCode(String code) {
 		Map args = new Hashtable();
-		args.put(RequestParameters.SOURCE_DB, new Integer(sourceDatabase));
 		args.put(RequestParameters.CODE, code);
 		Document doc = XMLUtilities.getDocumentFromTapestryPageName("btolxml/XMLService", args);
 		String sequenceName = "";
 		if (doc == null) {
 			MesquiteMessage.warnUser("No dna extraction found matching code: " + 
-					code + " in database: " + sourceDatabase);
+					code);
 			return new String[] {"", ""};
 		} else {
 			sequenceName = doc.getRootElement().getChildText(XMLConstants.SEQUENCE);
