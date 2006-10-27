@@ -13,11 +13,31 @@ import org.tolweb.treegrow.main.XMLConstants;
 public class XMLUtilities {
 	private static String checkConnectionURL = "http://google.com";
 	private static String databaseURL = "http://btol.tolweb.org/onlinecontributors/app?service=external&page=";
+	private static String testDatabaseURL = "http://zissou.cals.arizona.edu:8080/onlinecontributors/app?service=external&page=";
 	
 	public static Document getDocumentFromTapestryPageName(String pageName, Map args) {
+		return getDocumentFromTapestryPageName(pageName, args, false);
+	}
+	public static Document getDocumentFromTapestryPageNameMultipart(String pageName, Map stringArgs, 
+			Map fileArgs) {
+		String url = testDatabaseURL;
+		// need this here so tapestry will call the external service
+		stringArgs.put("service", "external");
+		stringArgs.put("page", pageName);
+		Document returnDoc = BaseHttpRequestMaker.getTap4ExternalUrlDocumentMultipart(url, pageName, 
+	    		stringArgs, fileArgs);
+		return returnDoc;
+	}
+	public static Document getDocumentFromTapestryPageName(String pageName, Map args, boolean isPost) {
 		Document returnDoc = null;
+		args.put("service", "external");
 		if (checkConnection()) {
-			returnDoc = BaseHttpRequestMaker.getTap4ExternalUrlDocument(getDatabaseURL(), pageName, args);
+			String url = getDatabaseURL();
+			if (isPost) {
+				url = testDatabaseURL;
+			}
+			returnDoc = BaseHttpRequestMaker.getTap4ExternalUrlDocument(url, 
+					pageName, args, isPost);
 			if (returnDoc == null || returnDoc.getRootElement() == null || 
 					returnDoc.getRootElement().getName().equals(XMLConstants.ERROR)) {
 				returnDoc = null;
