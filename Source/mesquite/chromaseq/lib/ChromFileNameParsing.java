@@ -13,6 +13,9 @@ package mesquite.chromaseq.lib;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.jdom.CDATA;
 import org.jdom.Document;
@@ -274,7 +277,8 @@ public class ChromFileNameParsing implements Listable, Explainable {
 	}
 	
 	/*.................................................................................................................*/
-	public String getStringPiece(MesquiteModule ownerModule, String s, String startToken, String endToken, MesquiteString remainder, StringBuffer logBuffer, String message){
+	public String getStringPiece(MesquiteModule ownerModule, String s, String startToken, String endToken, MesquiteString remainder, StringBuffer logBuffer, String message, 
+			MesquiteString startTokenResult){
 		String piece="";
 		if (remainder!=null)
 			remainder.setValue(s);
@@ -282,47 +286,87 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		if (!StringUtil.blank(startToken) || " ".equals(startToken)) {
 			if (s.indexOf(startToken)>-1) {
 				piece = s.substring(s.indexOf(startToken)+startToken.length(), s.length());  // getting substring that starts with DNA number
+				if (startTokenResult != null) {
+					startTokenResult.setValue(startToken);
+				}
 			}
 			else {
-				if (ownerModule!=null)
-					ownerModule.echoStringToFile(" ** Can't extract " + message + " from file name: " + s, logBuffer);
-				return null;
+				// check to see if it's a regex and if it matches the string
+				try {
+					Pattern startTokenPattern = Pattern.compile(startToken);
+					Matcher matcher = startTokenPattern.matcher(s);
+					if (matcher.find()) {
+						// get the part of the match after the dna
+						int matchIndex = matcher.end();
+						piece = s.substring(matchIndex, s.length());
+						String group = matcher.group();
+						if (startTokenResult != null) {
+							startTokenResult.setValue(group);
+						}
+					}
+				} catch (Exception e) {
+					// don't do anything, fall through to error 
+				}
+				// didn't find it via regex so return
+				if (StringUtil.blank(piece)) {
+					if (ownerModule!=null)
+						ownerModule.echoStringToFile(" ** Can't extract " + message + " from file name: " + s, logBuffer);					
+					return null;
+				}
 			}
 		} 
 		else
 			piece = s;
 		remainder.setValue(piece);
+		int regexMatchIndex = -1;
+		try {
+			Pattern endTokenPattern = Pattern.compile(endToken);
+			Matcher endTokenMatcher = endTokenPattern.matcher(piece);
+			if (endTokenMatcher.find()) {
+				regexMatchIndex = endTokenMatcher.start();
+			}
+		} catch (Exception e) {}
 		if (!StringUtil.blank(endToken) || " ".equals(endToken)) {
 			if (remainder!=null)
-				if (piece.indexOf(endToken)>=0)
+				if (piece.indexOf(endToken)>=0) {
 					remainder.setValue(piece.substring(piece.indexOf(endToken), piece.length())); // now wiping out rest, but NOT endToken   +endToken.length()
-			if (piece.indexOf(endToken)>=0)
+				} else if (regexMatchIndex > 0) {
+					remainder.setValue(piece.substring(piece.indexOf(regexMatchIndex), piece.length()));
+				}
+			if (piece.indexOf(endToken)>=0) {
 				return piece.substring(0,piece.indexOf(endToken));
-			else
+			} else if (regexMatchIndex > 0) {
+				return piece.substring(0, regexMatchIndex);
+			} else {
 				return piece;
+			}
 		} 
 		
 		return null;
 	}
-	/*.................................................................................................................*/
-	public boolean parseFileName(MesquiteModule ownerModule, String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer){
+	/*.................................................................................................................
+	 * 
+	 * DANNY -- added startTokenResult to store what actually is matched in the case of regexes
+	 * */
+	public boolean parseFileName(MesquiteModule ownerModule, String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, 
+			MesquiteString startTokenResult){
 		String primerNamePiece="";
 		String sampleCodePiece = "";
 		MesquiteString remainder = new MesquiteString();
 		
 		//	Finding and processing the sample code 
 		if (sampleCodeFirst) {
-			sampleCodePiece = getStringPiece(ownerModule, fileName, dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code");
+			sampleCodePiece = getStringPiece(ownerModule, fileName, dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code", startTokenResult);
 		if (sampleCodePiece==null)
 				return false;
-			primerNamePiece = getStringPiece(ownerModule, remainder.getValue(), primerStartToken, primerEndToken, remainder, logBuffer, "primer name");
+			primerNamePiece = getStringPiece(ownerModule, remainder.getValue(), primerStartToken, primerEndToken, remainder, logBuffer, "primer name", null);
 		}		
 		else	if (sampleCodeFirst) {
 			// TODO: DRM FIX THIS
-			primerNamePiece = getStringPiece(ownerModule, fileName, primerStartToken, primerEndToken, remainder, logBuffer, "primer name");
+			primerNamePiece = getStringPiece(ownerModule, fileName, primerStartToken, primerEndToken, remainder, logBuffer, "primer name", startTokenResult);
 			if (primerNamePiece==null)
 				return false;
-			sampleCodePiece = getStringPiece(ownerModule, remainder.getValue(), dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code");
+			sampleCodePiece = getStringPiece(ownerModule, remainder.getValue(), dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code", startTokenResult);
 		}		
 		if (sampleCodePiece==null || primerNamePiece==null)
 			return false;

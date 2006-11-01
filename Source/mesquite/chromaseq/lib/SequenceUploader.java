@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Hashtable;
 
 import mesquite.lib.MesquiteMessage;
+import mesquite.lib.StringUtil;
 
 import org.jdom.Document;
 import org.tolweb.treegrow.main.RequestParameters;
@@ -13,17 +14,37 @@ public class SequenceUploader {
 	private String tapestryPageName = "btolxml/SequenceUploadService";
 	
 	public void uploadAB1ToServer(String sampleCode, String filename, File abiFile) {
+		if (!abiFile.exists()) {
+			MesquiteMessage.warnUser("File: " + abiFile + " doesn't exist.");
+		}
 		Hashtable stringArgs = new Hashtable();
 		stringArgs.put(RequestParameters.CODE, sampleCode);
-		stringArgs.put(RequestParameters.FILENAME, filename);
+		// optional filename arg if we want the file to be named something
+		// different on the server
+		String filenameArg = filename;
+		if (filename == null) {
+			filenameArg = abiFile.getName();
+		}
+		stringArgs.put(RequestParameters.FILENAME, filenameArg);
 		Hashtable fileArgs = new Hashtable();
 		fileArgs.put(RequestParameters.FILE, abiFile);
 		Document doc = XMLUtilities.getDocumentFromTapestryPageNameMultipart(tapestryPageName, 
 				stringArgs, fileArgs);
 		if (doc == null || doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
-			MesquiteMessage.warnUser("Problems uploading abi file: " + filename + " to server.");
+			if (doc == null) {
+				MesquiteMessage.warnUser("Problems uploading abi file: " + filenameArg + " to server.");
+			} else {
+				if (doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
+					String errorNum = doc.getRootElement().getAttributeValue(XMLConstants.ERRORNUM); 
+					if (!StringUtil.blank(errorNum)) {
+						if (errorNum.equals("404")) {
+							MesquiteMessage.warnUser("Abi file: " + filenameArg + " not uploaded to srever because PCR Reaction #" + sampleCode + " not found.");
+						}
+					}
+				}
+			}
 		} else {
-			MesquiteMessage.warnUser("Successfully uploaded abi file : " + filename + " to server.");
+			MesquiteMessage.warnProgrammer("Successfully uploaded abi file : " + filenameArg + " to server.");
 		}
 	}
 	
