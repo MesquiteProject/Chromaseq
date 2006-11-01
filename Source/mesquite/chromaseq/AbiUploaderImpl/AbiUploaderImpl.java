@@ -1,34 +1,23 @@
 package mesquite.chromaseq.AbiUploaderImpl;
 
-import java.awt.Button;
-import java.awt.Choice;
-import java.awt.GridBagConstraints;
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 
 import mesquite.chromaseq.lib.AbiUploader;
+import mesquite.chromaseq.lib.ChromFileNameDialog;
 import mesquite.chromaseq.lib.ChromFileNameParsing;
 import mesquite.chromaseq.lib.NameParserManager;
 import mesquite.chromaseq.lib.SequenceUploader;
 import mesquite.lib.CommandRecord;
-import mesquite.lib.ExtensibleDialog;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteMessage;
-import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.StringUtil;
 
-public class AbiUploaderImpl extends AbiUploader implements ItemListener, ActionListener {
+public class AbiUploaderImpl extends AbiUploader {
 	private NameParserManager nameParserManager;
-	private ChromFileNameParsing nameParsingRule;
-	private Choice nameRulesChoice;	
-	private String nameParsingRulesName="";	
+	private ChromFileNameParsing nameParsingRule;	
 	
 	public Class getDutyClass() {
 		return AbiUploaderImpl.class;
@@ -98,69 +87,13 @@ public class AbiUploaderImpl extends AbiUploader implements ItemListener, Action
 		}
 	}
 	
-	public void itemStateChanged(ItemEvent e) {
-		if (e.getItemSelectable() == nameRulesChoice){
-			getNameRuleFromChoice();
-		}
-	}	
-	
-	public void getNameRuleFromChoice() {
-		nameParsingRule=null;
-		if (nameRulesChoice!=null) {
-			nameParsingRulesName = nameRulesChoice.getSelectedItem();
-			boolean noChoiceItems = (nameRulesChoice.getItemCount()<=0);
-			int sL = nameRulesChoice.getSelectedIndex();
-			if (sL <0) {
-				sL = 0;
-			}		
-			if (!noChoiceItems) {
-				nameParsingRule = (ChromFileNameParsing)(nameParserManager.nameParsingRules.elementAt(sL));
-			}
-		}
-		if (nameParsingRule==null)
-			nameParsingRule = new ChromFileNameParsing();  //make default one	}
-	}	
-	
-	public  void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equalsIgnoreCase("editNameParsersButton")) {
-			if (nameParserManager!=null) {
-				nameParsingRule = nameParserManager.chooseNameParsingRules(nameParsingRule);
-			}
-		}	
-	}
-	
 	private boolean queryNames() {
-		MesquiteInteger buttonPressed = new MesquiteInteger(1);
-		ExtensibleDialog dialog = new ExtensibleDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), "Run Phred Phrap Options",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
-		dialog.addLabel("Abi Upload Options");
-		dialog.addHorizontalLine(2);
-		
-		nameRulesChoice = dialog.addPopUpMenu ("File Naming Rules", nameParserManager.nameParsingRules.getElementArray(), 0);
-		nameParserManager.setChoice(nameRulesChoice);
-		nameRulesChoice.addItemListener(this);
-		if (nameRulesChoice!=null) {
-			boolean noChoiceItems = (nameRulesChoice.getItemCount()<=0);
-			int sL = nameParserManager.nameParsingRules.indexOfByName(nameParsingRulesName);
-			if (sL <0) {
-				sL = 0;
-			}		
-			if (!noChoiceItems) {
-				nameRulesChoice.select(sL); 
-				nameParsingRule = (ChromFileNameParsing)(nameParserManager.nameParsingRules.elementAt(sL));
-			}
-		}	
-		dialog.suppressNewPanel();
-		GridBagConstraints gridConstraints;
-		gridConstraints = dialog.getGridBagConstraints();
-		gridConstraints.fill = GridBagConstraints.NONE;
-		dialog.setGridBagConstraints(gridConstraints);
-		Panel panel = dialog.addNewDialogPanel(gridConstraints);
-		String editNameParserButtonString = "Edit Naming Rules...";
-		Button editNameParsersButton = dialog.addAButton(editNameParserButtonString, panel);
-		editNameParsersButton.addActionListener(this);
-		editNameParsersButton.setActionCommand("editNameParsersButton");		
+		MesquiteInteger buttonPressed = new MesquiteInteger(ChromFileNameDialog.CANCEL);
+		ChromFileNameDialog dialog = new ChromFileNameDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
+				"Upload ABI Options", buttonPressed, nameParserManager, "");  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 		dialog.completeAndShowDialog(true);
-		boolean success=(buttonPressed.getValue()==0);
+		nameParsingRule = dialog.getNameParsingRule();
+		boolean success=(buttonPressed.getValue()== ChromFileNameDialog.OK);
 		return success;
 	}
 }

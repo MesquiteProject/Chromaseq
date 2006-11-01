@@ -1,6 +1,8 @@
 package mesquite.chromaseq.lib;
 
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.jdom.Document;
@@ -96,7 +98,54 @@ public class PrimerList {
 		
 	}
 
+	/**
+	 * format:
+	 * <primers>
+	 * 	<primer name="SSU4F" genename="18S" forward="1"/>
+	 * 	<primer name="SS1554R" genename="18S" forward="0"/>
+	 *  ...
+	 * </primers>
+	 * @param doc
+	 */
+	private void parsePrimerXML(Document doc) {
+		String primerTagName = "primer";
+		String rootTagName = "primers";
+		Element root = doc.getRootElement();
+		if (!root.getName().equals(rootTagName)) {
+			MesquiteMessage.warnUser("Malformed primer xml file, cannot parse.");
+		}
+		List primerChildren = doc.getRootElement().getChildren(primerTagName);
+		int numPrimers = primerChildren.size();
+		initializeArrays(numPrimers);
+		MesquiteString primerName = new MesquiteString();
+		MesquiteBoolean isForward = new MesquiteBoolean(false);
+		MesquiteString geneName = new MesquiteString();
+		int i = 0;
+		for (Iterator iter = primerChildren.iterator(); iter.hasNext();) {
+			// init for this time around the loop
+			primerName.setValue("");
+			isForward.setValue(false);
+			geneName.setValue("");
+			Element nextPrimerElement = (Element) iter.next();
+			parseSinglePrimerElement(nextPrimerElement, geneName, primerName, isForward);
+			primerNames[i] = primerName.getValue();
+			fragmentNames[i] = geneName.getValue();
+			forward[i++] = isForward.getValue();
+		}
+	}
+
+	private void initializeArrays(int numPrimers) {
+		primerNames = new String[numPrimers];
+		fragmentNames = new String[numPrimers];
+		forward = new boolean[numPrimers];
+	}
 	public void readTabbedPrimerFile(String primerList) {
+		Document doc = XMLUtilities.getDocumentFromString(primerList);
+		if (doc != null) {
+			// xml format so parse accordingly
+			parsePrimerXML(doc);
+			return;
+		}
 		String oneFragment;
 		int numPrimers = 0;
 		String tempList = primerList;
@@ -107,9 +156,7 @@ public class PrimerList {
 			tempList = tempList.substring(tempList.indexOf(";")+1, tempList.length());
 			tempList.trim();
 		}
-		primerNames = new String[numPrimers];
-		fragmentNames = new String[numPrimers];
-		forward = new boolean[numPrimers];
+		initializeArrays(numPrimers);
 		
 		int count = -1;
 		while (!StringUtil.blank(primerList) && primerList.length() > 10 && count < numPrimers) {
@@ -191,10 +238,11 @@ public class PrimerList {
 					return "";
 				} else {
 					Element root = doc.getRootElement();
-					String geneName = root.getAttributeValue(XMLConstants.genename);
-					boolean isForward = BaseXMLReader.getBooleanValue(root, XMLConstants.forward);
-					assignStLouisString(stLouisString, isForward);
-					return geneName;
+					MesquiteBoolean isForward = new MesquiteBoolean(false);
+					MesquiteString geneName = new MesquiteString();
+					parseSinglePrimerElement(root, geneName, null, isForward);
+					assignStLouisString(stLouisString, isForward.getValue());
+					return geneName.getValue();
 				}
 			} else {
 				for (int i=0; i<primerNames.length; i++) {
@@ -207,6 +255,30 @@ public class PrimerList {
 			}
 		}
 		return "";
+	}
+	/**
+	 * gets the gene name and whether the primer is forward
+	 * format:
+	 * <primer name="SSU4F" genename="18S" forward="1"/>
+	 *  
+	 * @param primerElement the element to parse
+	 * @param isForward whether the primer is forward
+	 * @return the gene name
+	 */
+	private void parseSinglePrimerElement(Element primerElement, MesquiteString geneName, MesquiteString primerName, MesquiteBoolean isForward) {
+		if (primerElement == null) {
+			geneName.setValue("");
+		} else {
+			if (isForward != null) {
+				isForward.setValue(BaseXMLReader.getBooleanValue(primerElement, XMLConstants.forward));
+			}
+			if (geneName != null) {
+				geneName.setValue(primerElement.getAttributeValue(XMLConstants.genename));
+			}
+			if (primerName != null) {
+				primerName.setValue(primerElement.getAttributeValue(XMLConstants.name));
+			}
+		}
 	}
 	private void assignStLouisString(MesquiteString stLouisString, boolean isForward) {
 		if (isForward)

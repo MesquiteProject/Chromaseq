@@ -24,9 +24,14 @@ public class XMLUtilities {
 		// need this here so tapestry will call the external service
 		stringArgs.put("service", "external");
 		stringArgs.put("page", pageName);
-		Document returnDoc = BaseHttpRequestMaker.getTap4ExternalUrlDocumentMultipart(url, pageName, 
-	    		stringArgs, fileArgs);
-		return returnDoc;
+		try {
+			Document returnDoc = BaseHttpRequestMaker.getTap4ExternalUrlDocumentMultipart(url, pageName, 
+		    		stringArgs, fileArgs);
+			return returnDoc;
+		} catch (Exception e) {
+			// error in communication, likely a dead connection on one end or the other
+			return null;
+		}
 	}
 	public static Document getDocumentFromTapestryPageName(String pageName, Map args, boolean isPost) {
 		Document returnDoc = null;
@@ -36,8 +41,12 @@ public class XMLUtilities {
 			if (isPost) {
 				url = testDatabaseURL;
 			}
-			returnDoc = BaseHttpRequestMaker.getTap4ExternalUrlDocument(url, 
-					pageName, args, isPost);
+			try {
+				returnDoc = BaseHttpRequestMaker.getTap4ExternalUrlDocument(url, 
+						pageName, args, isPost);
+			} catch (Exception e) {
+				// communication error, allow doc to remain null
+			}
 			if (returnDoc == null || returnDoc.getRootElement() == null || 
 					returnDoc.getRootElement().getName().equals(XMLConstants.ERROR)) {
 				returnDoc = null;
@@ -49,9 +58,13 @@ public class XMLUtilities {
 		return returnDoc;
 	}
 	
+	public static Document getDocumentFromString(String docString) {
+		return BaseXMLReader.getDocumentFromString(docString);		
+	}
+	
 	public static Document getDocumentFromFilePath(String path) {
 		String docString = MesquiteFile.getFileContentsAsString(path);
-		return BaseXMLReader.getDocumentFromString(docString);
+		return getDocumentFromString(docString);
 	}
 	
 	private static boolean checkConnection() {
