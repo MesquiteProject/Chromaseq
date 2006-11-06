@@ -4,6 +4,7 @@ import java.util.Map;
 
 import mesquite.lib.Debugg;
 import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteMessage;
 
 import org.jdom.Document;
 import org.tolweb.base.http.BaseHttpRequestMaker;
@@ -12,8 +13,11 @@ import org.tolweb.treegrow.main.XMLConstants;
 
 public class XMLUtilities {
 	private static String checkConnectionURL = "http://google.com";
-	private static String databaseURL = "http://btol.tolweb.org/onlinecontributors/app?service=external&page=";
-	private static String testDatabaseURL = "http://zissou.cals.arizona.edu:8080/onlinecontributors/app?service=external&page=";
+	//private static String baseDatabaseURL = "http://btol.tolweb.org/onlinecontributors/app?service="; 
+	private static String baseDatabaseURL = "http://zissou.cals.arizona.edu:8080/onlinecontributors/app?";	
+	private static String databaseURL = baseDatabaseURL + "service=external&page=";
+	public static String baseTestDatabaseURL = "http://zissou.cals.arizona.edu:8080/onlinecontributors/app?"; 
+	private static String testDatabaseURL = baseTestDatabaseURL + "service=external&page=";
 	
 	public static Document getDocumentFromTapestryPageName(String pageName, Map args) {
 		return getDocumentFromTapestryPageName(pageName, args, false);
@@ -65,6 +69,12 @@ public class XMLUtilities {
 	public static Document getDocumentFromFilePath(String path) {
 		String docString = MesquiteFile.getFileContentsAsString(path);
 		return getDocumentFromString(docString);
+	}
+	
+	public static void outputRequestXMLError() {
+		String errorMessage = "A network error has occurred, this usually means one of two things:\n(1) You don't have an internet connection" + 
+			"\n(2)The server you are attempting to contact is having problems\nPlease make sure you have an internet connection and try again.";
+		MesquiteMessage.warnUser(errorMessage);
 	}
 	
 	private static boolean checkConnection() {

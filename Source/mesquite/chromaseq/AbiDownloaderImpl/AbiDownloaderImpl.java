@@ -1,0 +1,231 @@
+package mesquite.chromaseq.AbiDownloaderImpl;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Random;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.tolweb.base.http.BaseHttpRequestMaker;
+import org.tolweb.treegrow.main.RequestParameters;
+import org.tolweb.treegrow.main.StringUtils;
+import org.tolweb.treegrow.main.XMLConstants;
+
+import mesquite.chromaseq.PhredPhrap.PhredPhrap;
+import mesquite.chromaseq.lib.AbiDownloader;
+import mesquite.chromaseq.lib.XMLUtilities;
+import mesquite.lib.CommandRecord;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.StringUtil;
+
+public class AbiDownloaderImpl extends AbiDownloader {
+	private String geneName = "Arginine Kinase";
+	private String extractionName = "";
+	private PhredPhrap phredPhrap;
+
+	public Class getDutyClass() {
+		return AbiDownloaderImpl.class;
+	}
+	public String getName() {
+		return "Abi Downloader";
+	}
+	public boolean startJob(String arguments, Object condition, CommandRecord commandRec, boolean hiredByName) {
+		if (phredPhrap == null) {
+			phredPhrap = (PhredPhrap) hireEmployee(commandRec, PhredPhrap.class, "#PhredPhrap");// findEmployeeWithName("#PhredPhrap");
+		}
+		if (phredPhrap != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean downloadAbiFilesFromDb(CommandRecord record) {
+		// general plan:
+		// (1) query for gene and specimen info
+		
+		// (2) check for results (give number)
+		Hashtable args = new Hashtable();
+		args.put(RequestParameters.EXTRACTION, extractionName);
+		args.put(RequestParameters.GENE, geneName);
+		Document results = XMLUtilities.getDocumentFromTapestryPageName("btolxml/ChromatogramSearchService", args);
+		if (results == null) {
+			XMLUtilities.outputRequestXMLError();
+			return false;
+		}
+		if (results.getRootElement().getName().equals(XMLConstants.ERROR)) {
+			// error with the search on the server
+			MesquiteMessage.warnUser(results.getRootElement().getText());
+			return false;
+		} 
+		// search succeeded -- see how many results
+		Element rootElement = results.getRootElement();
+		String numResultsString = rootElement.getAttributeValue(XMLConstants.COUNT);
+		int numResults = 0;
+		if (!StringUtil.blank(numResultsString)) {
+			boolean hasResults = false;
+			if (StringUtils.getIsNumeric(numResultsString)) {
+				numResults = Integer.parseInt(numResultsString);
+				if (numResults > 0) {
+					hasResults = true;
+				}
+			}
+			if (!hasResults) {
+				MesquiteMessage.warnUser("There were no chromatograms found matching your search criteria.");
+			}
+		}
+		MesquiteMessage.warnUser("Your search found " + numResults + " chromatograms.");
+		// (3) ask for directory to download results
+		String directoryPath = MesquiteFile.chooseDirectory("Choose directory to download ABI files:");
+		//String directoryPath = "/home/dmandel/pptest/";
+		if (StringUtil.blank(directoryPath)) {
+			return false;
+		}
+		// (4) make http request, download, unzip
+		boolean downloadOk = downloadAndUnzipChromatograms(args, directoryPath);
+		if (downloadOk) {
+			// (5) run p/p on that directory
+			phredPhrap.doPhredPhrap(null, false, null, directoryPath);
+		} else {
+			MesquiteMessage.warnUser("Problems downloading and unzipping chromatograms, phred/phrap will not proceed.");
+		}
+
+		return false;
+	}
+	private boolean downloadAndUnzipChromatograms(Hashtable args, String directoryPath) {
+		String url = XMLUtilities.baseTestDatabaseURL;
+		args.put("service", "chromatogramdownload");
+		Object[] results = BaseHttpRequestMaker.makeHttpRequestAsStream(url, args);
+		InputStream zipStream = (InputStream) results[0];
+		GetMethod getMethod = (GetMethod) results[1];
+		Random randomGen = new Random(System.currentTimeMillis());
+		int filenameInt = randomGen.nextInt();
+		filenameInt = Math.abs(filenameInt);
+		String fullFilePath = directoryPath + MesquiteFile.fileSeparator + filenameInt + ".zip";
+		File file = null;
+		FileOutputStream outStream = null; 
+		try {
+			file = new File(fullFilePath);
+			boolean fileCreated = file.createNewFile();
+			outStream = new FileOutputStream(file);
+		} catch (Exception e) {
+			// can't create the file, we definitely can't download it!
+			return false;
+		}
+		int totalBytesRead = 0;
+		int bytesRead = -1; 
+		final int BUF_SIZE = 4096; 
+		byte[] buf = new byte[BUF_SIZE];		
+		try {
+			while ((bytesRead = zipStream.read(buf, 0, BUF_SIZE)) > -1) { 
+				outStream.write(buf, 0, bytesRead);
+				totalBytesRead += bytesRead;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (outStream != null) {
+				try {
+					outStream.flush();
+					outStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (zipStream != null) {
+				try {
+					zipStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			// all done reading from the connection, so release it
+			getMethod.releaseConnection();
+		}
+
+		
+		// at this point we should have the zip downloaded and on the local filesystem
+		// now we want to unzip it
+		try {
+			ZipFile zf = new ZipFile(fullFilePath);
+		    Enumeration list = zf.entries();
+		    while (list.hasMoreElements()) {
+		        ZipEntry ze = (ZipEntry)list.nextElement();
+		        if (ze.isDirectory()) {
+		            continue;
+		        }
+		        try {
+		            dumpZipEntry(directoryPath, zf, ze);
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		            System.out.println("problem dumping zip entry: " + ze);
+		        }                    
+		    }
+		    // Clean up the zip file once the individual entries have been written out.
+		    File zip = new File(fullFilePath);
+		    if (zip.exists()) {
+		        zip.delete();
+		    }
+		} catch (ZipException e1) {
+		    e1.printStackTrace();
+		} catch (IOException e2) {
+		    e2.printStackTrace();
+		}
+		return true;
+	}
+
+	private void dumpZipEntry(String directory, ZipFile zf, ZipEntry ze) throws IOException {
+		InputStream istr = zf.getInputStream(ze);
+		String filename = ze.getName();
+		filename = StringUtils.cleanStringForFilename(filename);
+		BufferedInputStream bis = null;
+		FileOutputStream fos = null;
+		try {
+			bis = new BufferedInputStream(istr);        	
+		    fos = new FileOutputStream(directory + filename);
+		    int sz = (int)ze.getSize();
+		    final int N = 1024;
+		    byte buf[] = new byte[N];
+		    int ln = 0;
+		    while (sz > 0 &&  // workaround for bug
+		      (ln = bis.read(buf, 0, Math.min(N, sz))) != -1) {
+		        fos.write(buf, 0, ln);
+		        sz -= ln;
+		     }
+		} catch (Exception e) {
+			
+		} finally {
+			if (bis != null) {
+				bis.close();
+			}
+			if (fos != null) {
+				fos.flush();
+				fos.close();
+			}
+			if (istr != null) {
+				istr.close();
+			}
+		}
+	}
+	
+	/* TEST CODE!!
+	 * public static void main(String[] args) {
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+		System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+		System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
+		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");		
+		AbiDownloaderImpl downloader = new AbiDownloaderImpl();
+		downloader.downloadAbiFilesFromDb();
+	}*/
+}
