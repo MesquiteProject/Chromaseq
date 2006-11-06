@@ -28,6 +28,7 @@ import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.StringUtil;
+import mesquite.lib.ZipUtil;
 
 public class AbiDownloaderImpl extends AbiDownloader {
 	private String geneName = "Arginine Kinase";
@@ -42,7 +43,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 	}
 	public boolean startJob(String arguments, Object condition, CommandRecord commandRec, boolean hiredByName) {
 		if (phredPhrap == null) {
-			phredPhrap = (PhredPhrap) hireEmployee(commandRec, PhredPhrap.class, "#PhredPhrap");// findEmployeeWithName("#PhredPhrap");
+			phredPhrap = (PhredPhrap) hireEmployee(commandRec, PhredPhrap.class, "#PhredPhrap");
 		}
 		if (phredPhrap != null) {
 			return true;
@@ -157,66 +158,9 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		
 		// at this point we should have the zip downloaded and on the local filesystem
 		// now we want to unzip it
-		try {
-			ZipFile zf = new ZipFile(fullFilePath);
-		    Enumeration list = zf.entries();
-		    while (list.hasMoreElements()) {
-		        ZipEntry ze = (ZipEntry)list.nextElement();
-		        if (ze.isDirectory()) {
-		            continue;
-		        }
-		        try {
-		            dumpZipEntry(directoryPath, zf, ze);
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		            System.out.println("problem dumping zip entry: " + ze);
-		        }                    
-		    }
-		    // Clean up the zip file once the individual entries have been written out.
-		    File zip = new File(fullFilePath);
-		    if (zip.exists()) {
-		        zip.delete();
-		    }
-		} catch (ZipException e1) {
-		    e1.printStackTrace();
-		} catch (IOException e2) {
-		    e2.printStackTrace();
-		}
-		return true;
-	}
+		ZipUtil.unzipFileToDirectory(fullFilePath, directoryPath, true);
 
-	private void dumpZipEntry(String directory, ZipFile zf, ZipEntry ze) throws IOException {
-		InputStream istr = zf.getInputStream(ze);
-		String filename = ze.getName();
-		filename = StringUtils.cleanStringForFilename(filename);
-		BufferedInputStream bis = null;
-		FileOutputStream fos = null;
-		try {
-			bis = new BufferedInputStream(istr);        	
-		    fos = new FileOutputStream(directory + filename);
-		    int sz = (int)ze.getSize();
-		    final int N = 1024;
-		    byte buf[] = new byte[N];
-		    int ln = 0;
-		    while (sz > 0 &&  // workaround for bug
-		      (ln = bis.read(buf, 0, Math.min(N, sz))) != -1) {
-		        fos.write(buf, 0, ln);
-		        sz -= ln;
-		     }
-		} catch (Exception e) {
-			
-		} finally {
-			if (bis != null) {
-				bis.close();
-			}
-			if (fos != null) {
-				fos.flush();
-				fos.close();
-			}
-			if (istr != null) {
-				istr.close();
-			}
-		}
+		return true;
 	}
 	
 	/* TEST CODE!!
