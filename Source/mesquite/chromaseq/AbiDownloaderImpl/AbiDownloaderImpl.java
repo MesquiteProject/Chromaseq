@@ -31,7 +31,7 @@ import mesquite.lib.StringUtil;
 import mesquite.lib.ZipUtil;
 
 public class AbiDownloaderImpl extends AbiDownloader {
-	private String geneName = "Arginine Kinase";
+	private String geneName = "Wingless";
 	private String extractionName = "";
 	private PhredPhrap phredPhrap;
 

@@ -13,9 +13,9 @@ import org.tolweb.treegrow.main.XMLConstants;
 
 public class XMLUtilities {
 	private static String checkConnectionURL = "http://google.com";
-	private static String baseDatabaseURL = "http://btol.tolweb.org/onlinecontributors/app"; 
+	private static String baseDatabaseURL = "http://localhost/onlinecontributors/app"; 
 	//private static String baseDatabaseURL = "http://zissou.cals.arizona.edu/onlinecontributors/app?";	
-	private static String databaseURL = baseDatabaseURL + "page=";
+	private static String databaseURL = baseDatabaseURL + "?page=";
 	public static String baseTestDatabaseURL = "http://zissou.cals.arizona.edu/onlinecontributors/app?"; 
 	private static String testDatabaseURL = baseTestDatabaseURL + "page=";
 	

@@ -38,7 +38,7 @@ public class SequenceUploader {
 					String errorNum = doc.getRootElement().getAttributeValue(XMLConstants.ERRORNUM); 
 					if (!StringUtil.blank(errorNum)) {
 						if (errorNum.equals("404")) {
-							MesquiteMessage.warnUser("Abi file: " + filenameArg + " not uploaded to srever because PCR Reaction #" + sampleCode + " not found.");
+							MesquiteMessage.warnUser("Abi file: " + filenameArg + " not uploaded to server because PCR Reaction #" + sampleCode + " not found.");
 						}
 					}
 				}
