@@ -7,17 +7,35 @@ import mesquite.lib.MesquiteMessage;
 import mesquite.lib.StringUtil;
 
 import org.jdom.Document;
+import org.jdom.Element;
 import org.tolweb.treegrow.main.RequestParameters;
 import org.tolweb.treegrow.main.XMLConstants;
 
 public class SequenceUploader {
-	private String tapestryPageName = "btolxml/SequenceUploadService";
+	private String abiUploadPageName = "btolxml/SequenceUploadService";
+	private String batchCreationPageName = "btolxml/AbiBatchCreationService"; 
 	
-	public void uploadAB1ToServer(String sampleCode, String filename, File abiFile) {
+	public Long createAB1BatchOnServer(String name, String description) {
+		Hashtable stringArgs = new Hashtable();
+		stringArgs.put(RequestParameters.NAME, name);
+		stringArgs.put(RequestParameters.DESCRIPTION, description);
+		Document responseDoc = XMLUtilities.getDocumentFromTapestryPageNameMultipart(batchCreationPageName, stringArgs, new Hashtable());
+		if (responseDoc == null) {
+			MesquiteMessage.warnUser("Cannot create abi upload batch on the server.  Upload will not proceed");
+			return null;
+		} else {
+			Element rootElement = responseDoc.getRootElement();
+			String batchIdString = rootElement.getAttributeValue(XMLConstants.ID);
+			return new Long(batchIdString);
+		}
+	}
+	
+	public void uploadAB1ToServer(String sampleCode, String filename, File abiFile, Long batchId) {
 		if (!abiFile.exists()) {
 			MesquiteMessage.warnUser("File: " + abiFile + " doesn't exist.");
 		}
 		Hashtable stringArgs = new Hashtable();
+		stringArgs.put(RequestParameters.BATCH_ID, batchId);
 		stringArgs.put(RequestParameters.CODE, sampleCode);
 		// optional filename arg if we want the file to be named something
 		// different on the server
@@ -28,7 +46,7 @@ public class SequenceUploader {
 		stringArgs.put(RequestParameters.FILENAME, filenameArg);
 		Hashtable fileArgs = new Hashtable();
 		fileArgs.put(RequestParameters.FILE, abiFile);
-		Document doc = XMLUtilities.getDocumentFromTapestryPageNameMultipart(tapestryPageName, 
+		Document doc = XMLUtilities.getDocumentFromTapestryPageNameMultipart(abiUploadPageName, 
 				stringArgs, fileArgs);
 		if (doc == null || doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
 			if (doc == null) {
