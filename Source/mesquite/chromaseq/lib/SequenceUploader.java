@@ -13,13 +13,13 @@ import org.tolweb.treegrow.main.XMLConstants;
 
 public class SequenceUploader {
 	private String abiUploadPageName = "btolxml/SequenceUploadService";
-	private String batchCreationPageName = "btolxml/AbiBatchCreationService"; 
+	private String batchCreationPageName = "btolxml/ChromatogramBatchCreationService"; 
 	
 	public Long createAB1BatchOnServer(String name, String description) {
 		Hashtable stringArgs = new Hashtable();
 		stringArgs.put(RequestParameters.NAME, name);
 		stringArgs.put(RequestParameters.DESCRIPTION, description);
-		Document responseDoc = XMLUtilities.getDocumentFromTapestryPageNameMultipart(batchCreationPageName, stringArgs, new Hashtable());
+		Document responseDoc = XMLUtilities.getDocumentFromTapestryPageName(batchCreationPageName, stringArgs, true);
 		if (responseDoc == null) {
 			MesquiteMessage.warnUser("Cannot create abi upload batch on the server.  Upload will not proceed");
 			return null;

@@ -13,18 +13,15 @@ import org.tolweb.treegrow.main.XMLConstants;
 
 public class XMLUtilities {
 	private static String checkConnectionURL = "http://google.com";
-	private static String baseDatabaseURL = "http://localhost/onlinecontributors/app"; 
-	//private static String baseDatabaseURL = "http://zissou.cals.arizona.edu/onlinecontributors/app?";	
+	public static String baseDatabaseURL = "http://localhost/onlinecontributors/app"; 	
 	private static String databaseURL = baseDatabaseURL + "?page=";
-	public static String baseTestDatabaseURL = "http://zissou.cals.arizona.edu/onlinecontributors/app?"; 
-	private static String testDatabaseURL = baseTestDatabaseURL + "page=";
 	
 	public static Document getDocumentFromTapestryPageName(String pageName, Map args) {
 		return getDocumentFromTapestryPageName(pageName, args, false);
 	}
 	public static Document getDocumentFromTapestryPageNameMultipart(String pageName, Map stringArgs, 
 			Map fileArgs) {
-		String url = testDatabaseURL;
+		String url = databaseURL;
 		// need this here so tapestry will call the external service
 		stringArgs.put("service", "external");
 		stringArgs.put("page", pageName);
@@ -33,6 +30,7 @@ public class XMLUtilities {
 		    		stringArgs, fileArgs);
 			return returnDoc;
 		} catch (Exception e) {
+			e.printStackTrace();
 			// error in communication, likely a dead connection on one end or the other
 			return null;
 		}
@@ -42,9 +40,6 @@ public class XMLUtilities {
 		args.put("service", "external");
 		if (checkConnection()) {
 			String url = getDatabaseURL();
-			if (isPost) {
-				url = testDatabaseURL;
-			}
 			try {
 				returnDoc = BaseHttpRequestMaker.getTap4ExternalUrlDocument(url, 
 						pageName, args, isPost);

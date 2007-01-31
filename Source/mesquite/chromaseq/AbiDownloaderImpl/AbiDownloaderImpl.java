@@ -105,7 +105,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		return false;
 	}
 	private boolean downloadAndUnzipChromatograms(Hashtable args, String directoryPath) {
-		String url = XMLUtilities.baseTestDatabaseURL;
+		String url = XMLUtilities.baseDatabaseURL;
 		args.put("service", "chromatogramdownload");
 		Object[] results = BaseHttpRequestMaker.makeHttpRequestAsStream(url, args);
 		InputStream zipStream = (InputStream) results[0];
