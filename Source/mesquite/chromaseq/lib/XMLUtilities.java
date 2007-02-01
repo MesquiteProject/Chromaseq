@@ -13,7 +13,8 @@ import org.tolweb.treegrow.main.XMLConstants;
 
 public class XMLUtilities {
 	private static String checkConnectionURL = "http://google.com";
-	public static String baseDatabaseURL = "http://localhost/onlinecontributors/app"; 	
+	public static String baseDatabaseURL = "http://btol.tolweb.org/onlinecontributors/app"; 	
+	//public static String baseDatabaseURL = "http://zissou.cals.arizona.edu/onlinecontributors/app";	
 	private static String databaseURL = baseDatabaseURL + "?page=";
 	
 	public static Document getDocumentFromTapestryPageName(String pageName, Map args) {
@@ -46,8 +47,7 @@ public class XMLUtilities {
 			} catch (Exception e) {
 				// communication error, allow doc to remain null
 			}
-			if (returnDoc == null || returnDoc.getRootElement() == null || 
-					returnDoc.getRootElement().getName().equals(XMLConstants.ERROR)) {
+			if (returnDoc == null || returnDoc.getRootElement() == null) {
 				returnDoc = null;
 			}
 		} else {

@@ -4,6 +4,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import mesquite.lib.MesquiteMessage;
+import mesquite.lib.StringUtil;
 
 import org.jdom.Document;
 import org.tolweb.base.http.BaseHttpRequestMaker;
@@ -21,7 +22,6 @@ public class DatabaseSampleCodeSource {
 	 * Makes a remote call to the database to return the sequenceName
 	 * and fullSequenceName based on the sample code
 	 * @param code The code of the sequence
-	 * @param sourceDatabase 0 for DRM, 1 for BTOL -- more in the future
 	 * @return a string array with the first element being the sequenceName
 	 * and the second being the fullSequenceName
 	 */
@@ -31,14 +31,22 @@ public class DatabaseSampleCodeSource {
 		Document doc = XMLUtilities.getDocumentFromTapestryPageName("btolxml/XMLService", args);
 		String sequenceName = "";
 		if (doc == null) {
-			MesquiteMessage.warnUser("No dna extraction found matching code: " + 
-					code);
+			outputCodeError(code);
 			return new String[] {"", ""};
 		} else {
 			sequenceName = doc.getRootElement().getChildText(XMLConstants.SEQUENCE);
+			if (StringUtil.blank(sequenceName) || sequenceName.equals("null")) {
+				outputCodeError(code);
+			}
 			return new String[] {sequenceName, sequenceName};			
 		}
 	}
+
+	private void outputCodeError(String code) {
+		MesquiteMessage.warnUser("No dna extraction found matching code: " + 
+				code);
+	}
+
 
 	public String getDatabaseURL() {
 		return databaseURL;

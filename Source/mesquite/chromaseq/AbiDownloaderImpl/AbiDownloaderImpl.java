@@ -1,5 +1,6 @@
 package mesquite.chromaseq.AbiDownloaderImpl;
 
+import java.awt.Label;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,18 +23,26 @@ import org.tolweb.treegrow.main.XMLConstants;
 
 import mesquite.chromaseq.PhredPhrap.PhredPhrap;
 import mesquite.chromaseq.lib.AbiDownloader;
+import mesquite.chromaseq.lib.ChromFileNameDialog;
+import mesquite.chromaseq.lib.PhPhRunner;
 import mesquite.chromaseq.lib.XMLUtilities;
 import mesquite.lib.CommandRecord;
+import mesquite.lib.ExtensibleDialog;
 import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteProject;
 import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.SingleLineTextField;
 import mesquite.lib.StringUtil;
 import mesquite.lib.ZipUtil;
 
 public class AbiDownloaderImpl extends AbiDownloader {
-	private String geneName = "Wingless";
-	private String extractionName = "";
-	private PhredPhrap phredPhrap;
+	private PhPhRunner phredPhrap;
+	private SingleLineTextField geneField;
+	private SingleLineTextField taxonField;
+	private SingleLineTextField batchNameField;
+	private SingleLineTextField extractionField;
 
 	public Class getDutyClass() {
 		return AbiDownloaderImpl.class;
@@ -43,7 +52,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 	}
 	public boolean startJob(String arguments, Object condition, CommandRecord commandRec, boolean hiredByName) {
 		if (phredPhrap == null) {
-			phredPhrap = (PhredPhrap) hireEmployee(commandRec, PhredPhrap.class, "#PhredPhrap");
+			phredPhrap = (PhPhRunner)hireEmployee(commandRec, PhPhRunner.class, "Module to run Phred & Phrap");
 		}
 		if (phredPhrap != null) {
 			return true;
@@ -51,15 +60,24 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			return false;
 		}
 	}
-
 	public boolean downloadAbiFilesFromDb(CommandRecord record) {
+		return downloadAbiFilesFromDb(record, null);
+	}
+	public boolean downloadAbiFilesFromDb(CommandRecord record, MesquiteProject project) {
 		// general plan:
 		// (1) query for gene and specimen info
-		
+		if (!queryOptions()) {
+			return false;
+		}
 		// (2) check for results (give number)
 		Hashtable args = new Hashtable();
-		args.put(RequestParameters.EXTRACTION, extractionName);
-		args.put(RequestParameters.GENE, geneName);
+		conditionallyAddQueryArg(args, geneField, RequestParameters.GENE);
+		conditionallyAddQueryArg(args, taxonField, RequestParameters.TAXON);		
+		conditionallyAddQueryArg(args, batchNameField, RequestParameters.NAME);
+		conditionallyAddQueryArg(args, extractionField, RequestParameters.EXTRACTION);		
+		
+		/*args.put(RequestParameters.EXTRACTION, extractionName);
+		args.put(RequestParameters.GENE, geneName);*/
 		Document results = XMLUtilities.getDocumentFromTapestryPageName("btolxml/ChromatogramSearchService", args);
 		if (results == null) {
 			XMLUtilities.outputRequestXMLError();
@@ -85,6 +103,9 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			if (!hasResults) {
 				MesquiteMessage.warnUser("There were no chromatograms found matching your search criteria.");
 			}
+		} else {
+			// error occurred, warn the user
+			MesquiteMessage.warnUser("There was an error searching for chromatograms on the server, the error was: " + rootElement.getText());
 		}
 		MesquiteMessage.warnUser("Your search found " + numResults + " chromatograms.");
 		// (3) ask for directory to download results
@@ -97,16 +118,21 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		boolean downloadOk = downloadAndUnzipChromatograms(args, directoryPath);
 		if (downloadOk) {
 			// (5) run p/p on that directory
-			phredPhrap.doPhredPhrap(null, false, null, directoryPath);
+			return phredPhrap.doPhredPhrap(project, false, null, directoryPath);
 		} else {
 			MesquiteMessage.warnUser("Problems downloading and unzipping chromatograms, phred/phrap will not proceed.");
 		}
-
 		return false;
+	}
+	private void conditionallyAddQueryArg(Hashtable args, SingleLineTextField field, String queryKey) {
+		if (!StringUtil.blank(field.getText())) {
+			args.put(queryKey, field.getText());
+		}
 	}
 	private boolean downloadAndUnzipChromatograms(Hashtable args, String directoryPath) {
 		String url = XMLUtilities.baseDatabaseURL;
 		args.put("service", "chromatogramdownload");
+		MesquiteMessage.warnUser("Contacting server to download chromatograms");
 		Object[] results = BaseHttpRequestMaker.makeHttpRequestAsStream(url, args);
 		InputStream zipStream = (InputStream) results[0];
 		GetMethod getMethod = (GetMethod) results[1];
@@ -132,6 +158,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			while ((bytesRead = zipStream.read(buf, 0, BUF_SIZE)) > -1) { 
 				outStream.write(buf, 0, bytesRead);
 				totalBytesRead += bytesRead;
+				//MesquiteMessage.warnUser("read " + totalBytesRead + " bytes of chromatogram zip file");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -154,13 +181,27 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			// all done reading from the connection, so release it
 			getMethod.releaseConnection();
 		}
-
+		MesquiteMessage.warnUser("Zip file of chromatograms downloaded.  Unzipping will proceed.");
 		
 		// at this point we should have the zip downloaded and on the local filesystem
 		// now we want to unzip it
 		ZipUtil.unzipFileToDirectory(fullFilePath, directoryPath, true);
 
 		return true;
+	}
+	
+	private boolean queryOptions() {
+		MesquiteInteger buttonPressed = new MesquiteInteger(ChromFileNameDialog.CANCEL);		
+		ExtensibleDialog dialog = new ExtensibleDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
+				"Download ABI Options", buttonPressed);
+		int fieldLength = 26;
+		dialog.addLabel("Enter one or more options to find the chromatograms you'd like to use.", Label.CENTER);
+		geneField = dialog.addTextField("Gene", "", fieldLength);
+		taxonField = dialog.addTextField("Taxon", "", fieldLength);
+		batchNameField = dialog.addTextField("ABI Batch", "", fieldLength);
+		extractionField = dialog.addTextField("Extraction", "", fieldLength);		
+		dialog.completeAndShowDialog(true);
+		return (buttonPressed.getValue()== ChromFileNameDialog.OK);
 	}
 	
 	/* TEST CODE!!

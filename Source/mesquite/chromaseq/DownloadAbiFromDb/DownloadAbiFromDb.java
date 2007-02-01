@@ -48,6 +48,7 @@ public class DownloadAbiFromDb extends UtilitiesAssistant {
 			} else {
 				MesquiteMessage.warnProgrammer("Can't find ABI downloader module.");
 			}
+			fireEmployee(downloader);
 		} else {
 			return super.doCommand(commandName, arguments, commandRec, checker);
 		}
