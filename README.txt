@@ -3,7 +3,6 @@ A template is:
 
 <?xml version="1.0"?>
 <mesquite>
-        <classpath>../../Chromaseq/jars/ToLBaseClasses.jar</classpath>
         <classpath>../../Chromaseq/Mesquite_Folder</classpath>
 </mesquite>
 

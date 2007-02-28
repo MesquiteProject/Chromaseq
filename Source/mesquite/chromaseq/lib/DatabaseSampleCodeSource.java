@@ -5,22 +5,30 @@ import java.util.Map;
 
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.StringUtil;
+import mesquite.lib.XMLUtilities;
 
 import org.jdom.Document;
 import org.tolweb.base.http.BaseHttpRequestMaker;
 import org.tolweb.treegrow.main.RequestParameters;
 import org.tolweb.treegrow.main.XMLConstants;
 
+/**
+ * Class that looks up sequences in a database based on a sample code 
+ * @author dmandel
+ *
+ */
 public class DatabaseSampleCodeSource {
-	private String databaseURL;
 	
-	public DatabaseSampleCodeSource(String databaseUrl) {
-		this.databaseURL = databaseUrl;
+	public DatabaseSampleCodeSource() {
 	}
 	
 	/**
 	 * Makes a remote call to the database to return the sequenceName
 	 * and fullSequenceName based on the sample code
+	 * 
+	 * Assumes XMLUtilities.setDatabaseURL() has been called previously
+	 * with the correct url
+	 * 
 	 * @param code The code of the sequence
 	 * @return a string array with the first element being the sequenceName
 	 * and the second being the fullSequenceName
@@ -45,14 +53,5 @@ public class DatabaseSampleCodeSource {
 	private void outputCodeError(String code) {
 		MesquiteMessage.warnUser("No dna extraction found matching code: " + 
 				code);
-	}
-
-
-	public String getDatabaseURL() {
-		return databaseURL;
-	}
-
-	public void setDatabaseURL(String databaseURL) {
-		this.databaseURL = databaseURL;
 	}
 }

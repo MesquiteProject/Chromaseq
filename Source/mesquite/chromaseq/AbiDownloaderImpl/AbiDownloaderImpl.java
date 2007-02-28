@@ -25,7 +25,6 @@ import mesquite.chromaseq.PhredPhrap.PhredPhrap;
 import mesquite.chromaseq.lib.AbiDownloader;
 import mesquite.chromaseq.lib.ChromFileNameDialog;
 import mesquite.chromaseq.lib.PhPhRunner;
-import mesquite.chromaseq.lib.XMLUtilities;
 import mesquite.lib.CommandRecord;
 import mesquite.lib.ExtensibleDialog;
 import mesquite.lib.MesquiteFile;
@@ -35,14 +34,16 @@ import mesquite.lib.MesquiteProject;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.SingleLineTextField;
 import mesquite.lib.StringUtil;
+import mesquite.lib.XMLUtilities;
 import mesquite.lib.ZipUtil;
 
 public class AbiDownloaderImpl extends AbiDownloader {
 	private PhPhRunner phredPhrap;
-	private SingleLineTextField geneField;
-	private SingleLineTextField taxonField;
-	private SingleLineTextField batchNameField;
-	private SingleLineTextField extractionField;
+	private String gene;
+	private String taxon;
+	private String batchName;
+	private String extraction;
+	private String dbUrl;
 
 	public Class getDutyClass() {
 		return AbiDownloaderImpl.class;
@@ -64,6 +65,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		return downloadAbiFilesFromDb(record, null);
 	}
 	public boolean downloadAbiFilesFromDb(CommandRecord record, MesquiteProject project) {
+		loadPreferences();
 		// general plan:
 		// (1) query for gene and specimen info
 		if (!queryOptions()) {
@@ -71,13 +73,14 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		}
 		// (2) check for results (give number)
 		Hashtable args = new Hashtable();
-		conditionallyAddQueryArg(args, geneField, RequestParameters.GENE);
-		conditionallyAddQueryArg(args, taxonField, RequestParameters.TAXON);		
-		conditionallyAddQueryArg(args, batchNameField, RequestParameters.NAME);
-		conditionallyAddQueryArg(args, extractionField, RequestParameters.EXTRACTION);		
+		conditionallyAddQueryArg(args, getGene(), RequestParameters.GENE);
+		conditionallyAddQueryArg(args, getTaxon(), RequestParameters.TAXON);		
+		conditionallyAddQueryArg(args, getBatchName(), RequestParameters.NAME);
+		conditionallyAddQueryArg(args, getExtraction(), RequestParameters.EXTRACTION);		
 		
 		/*args.put(RequestParameters.EXTRACTION, extractionName);
 		args.put(RequestParameters.GENE, geneName);*/
+		XMLUtilities.setDatabaseURL(getDbUrl());
 		Document results = XMLUtilities.getDocumentFromTapestryPageName("btolxml/ChromatogramSearchService", args);
 		if (results == null) {
 			XMLUtilities.outputRequestXMLError();
@@ -124,9 +127,9 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		}
 		return false;
 	}
-	private void conditionallyAddQueryArg(Hashtable args, SingleLineTextField field, String queryKey) {
-		if (!StringUtil.blank(field.getText())) {
-			args.put(queryKey, field.getText());
+	private void conditionallyAddQueryArg(Hashtable args, String value, String queryKey) {
+		if (!StringUtil.blank(value)) {
+			args.put(queryKey, value);
 		}
 	}
 	private boolean downloadAndUnzipChromatograms(Hashtable args, String directoryPath) {
@@ -191,17 +194,61 @@ public class AbiDownloaderImpl extends AbiDownloader {
 	}
 	
 	private boolean queryOptions() {
+		loadPreferences();
 		MesquiteInteger buttonPressed = new MesquiteInteger(ChromFileNameDialog.CANCEL);		
 		ExtensibleDialog dialog = new ExtensibleDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
 				"Download ABI Options", buttonPressed);
 		int fieldLength = 26;
 		dialog.addLabel("Enter one or more options to find the chromatograms you'd like to use.", Label.CENTER);
-		geneField = dialog.addTextField("Gene", "", fieldLength);
-		taxonField = dialog.addTextField("Taxon", "", fieldLength);
-		batchNameField = dialog.addTextField("ABI Batch", "", fieldLength);
-		extractionField = dialog.addTextField("Extraction", "", fieldLength);		
+		SingleLineTextField urlField = dialog.addTextField("Url", getDbUrl(), fieldLength);
+		SingleLineTextField geneField = dialog.addTextField("Gene", getGene(), fieldLength);
+		SingleLineTextField taxonField = dialog.addTextField("Taxon", getTaxon(), fieldLength);
+		SingleLineTextField batchNameField = dialog.addTextField("ABI Batch", getBatchName(), fieldLength);
+		SingleLineTextField extractionField = dialog.addTextField("Extraction", getExtraction(), fieldLength);		
 		dialog.completeAndShowDialog(true);
-		return (buttonPressed.getValue()== ChromFileNameDialog.OK);
+		boolean success = buttonPressed.getValue()== ChromFileNameDialog.OK; 
+		if (success) {
+			setDbUrl(urlField.getText());
+			setGene(geneField.getText());
+			setTaxon(taxonField.getText());
+			setBatchName(batchNameField.getText());
+			setExtraction(extractionField.getText());
+			storePreferences();
+		}
+		return success;
+	}
+	public String[] getPreferencePropertyNames() {
+		return new String[] {"batchName", "dbUrl", "extraction", "gene", "taxon"};
+	}
+	public String getBatchName() {
+		return batchName;
+	}
+	public void setBatchName(String batchName) {
+		this.batchName = batchName;
+	}
+	public String getDbUrl() {
+		return dbUrl;
+	}
+	public void setDbUrl(String dbUrl) {
+		this.dbUrl = dbUrl;
+	}
+	public String getExtraction() {
+		return extraction;
+	}
+	public void setExtraction(String extraction) {
+		this.extraction = extraction;
+	}
+	public String getGene() {
+		return gene;
+	}
+	public void setGene(String gene) {
+		this.gene = gene;
+	}
+	public String getTaxon() {
+		return taxon;
+	}
+	public void setTaxon(String taxon) {
+		this.taxon = taxon;
 	}
 	
 	/* TEST CODE!!

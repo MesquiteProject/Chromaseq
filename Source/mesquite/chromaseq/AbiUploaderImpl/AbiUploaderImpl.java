@@ -4,24 +4,37 @@ import java.awt.Label;
 import java.awt.TextArea;
 import java.io.File;
 
+import mesquite.chromaseq.ChromaseqAuthorDefaults.ChromaseqAuthorDefaults;
 import mesquite.chromaseq.lib.AbiUploader;
 import mesquite.chromaseq.lib.ChromFileNameDialog;
 import mesquite.chromaseq.lib.ChromFileNameParsing;
 import mesquite.chromaseq.lib.NameParserManager;
+import mesquite.chromaseq.lib.ProjectAuthorDefaultsDialog;
 import mesquite.chromaseq.lib.SequenceUploader;
 import mesquite.lib.CommandRecord;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteDialog;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.SingleLineTextField;
 import mesquite.lib.StringUtil;
 
+/**
+ * Class that uploads a directory of abi files up to a server
+ * @author dmandel
+ *
+ */
 public class AbiUploaderImpl extends AbiUploader {
 	private NameParserManager nameParserManager;
-	private ChromFileNameParsing nameParsingRule;	
+	private ChromFileNameParsing nameParsingRule;
+	private ChromaseqAuthorDefaults authorDefaults;
+	private String url;
 	private SingleLineTextField uploadBatchNameField;
+	private SingleLineTextField urlField;
 	private TextArea uploadBatchDescriptionArea;
 	
 	public Class getDutyClass() {
@@ -31,10 +44,14 @@ public class AbiUploaderImpl extends AbiUploader {
 		return "Abi Uploader";
 	}
 	public boolean startJob(String arguments, Object condition, CommandRecord commandRec, boolean hiredByName) {
+		loadPreferences();
 		if (nameParserManager == null) {
 			nameParserManager = (NameParserManager)MesquiteTrunk.mesquiteTrunk.findEmployeeWithName("#ChromFileNameParsManager");
 		}
-		if (nameParserManager != null) {
+		if (authorDefaults == null) {
+			authorDefaults = (ChromaseqAuthorDefaults)MesquiteTrunk.mesquiteTrunk.findEmployeeWithName("#ChromaseqAuthorDefaults");
+		}
+		if (nameParserManager != null && authorDefaults != null) {
 			return true;
 		} else {
 			return false;
@@ -50,6 +67,8 @@ public class AbiUploaderImpl extends AbiUploader {
 			if (!queryNames()) {
 				// they cancelled, so don't upload
 				return false;
+			} else {
+				setUrl(urlField.getText());
 			}
 		}
 		String directoryPath = MesquiteFile.chooseDirectory("Choose directory containing ABI files:", null);
@@ -66,9 +85,20 @@ public class AbiUploaderImpl extends AbiUploader {
 					StringBuffer logBuffer = new StringBuffer();
 					SequenceUploader uploader = new SequenceUploader();
 					
+					if (MesquiteModule.author.hasDefaultSettings()) {
+						authorDefaults.setProjectAuthor();
+						// don't allow the upload to proceed unless they chose a person
+						if (MesquiteModule.author.hasDefaultSettings()) {
+							MesquiteMessage.notifyUser("You may not upload chromatograms unless you choose your username.");
+							// they didn't choose their author so upload cannot proceed
+							return false;
+						}
+					}
+					storePreferences();
 					// create the upload batch on the server					
-					Long batchId = uploader.createAB1BatchOnServer(uploadBatchNameField.getText(), uploadBatchDescriptionArea.getText());
+					Long batchId = uploader.createAB1BatchOnServer(uploadBatchNameField.getText(), uploadBatchDescriptionArea.getText(), MesquiteModule.author.getCode());
 					if (batchId == null) {
+						MesquiteMessage.warnUser("Unable to create chromatogram batch on the server.  Chromatogram upload will not continue.");
 						return false;
 					}
 					for (int i = 0; i < files.length; i++) {
@@ -103,6 +133,7 @@ public class AbiUploaderImpl extends AbiUploader {
 		MesquiteInteger buttonPressed = new MesquiteInteger(ChromFileNameDialog.CANCEL);
 		ChromFileNameDialog dialog = new ChromFileNameDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
 				"Upload ABI Options", buttonPressed, nameParserManager, "");  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
+		urlField = dialog.addTextField("URL", getUrl(), 26);
 		uploadBatchNameField = dialog.addTextField("ABI Batch Name", "", 26);
 		dialog.addLabel("ABI Batch Description", Label.LEFT);
 		uploadBatchDescriptionArea = dialog.addTextArea("", 4);
@@ -110,5 +141,14 @@ public class AbiUploaderImpl extends AbiUploader {
 		nameParsingRule = dialog.getNameParsingRule();
 		boolean success=(buttonPressed.getValue()== ChromFileNameDialog.OK);
 		return success;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public String[] getPreferencePropertyNames() {
+		return new String[] {"url"};
 	}
 }

@@ -23,15 +23,18 @@ public class PrimerList {
 	boolean [] forward;
 	String fragName;
 	int numPrimers;
-	private String databaseURL;
+	private boolean useDb;
 	
 	public PrimerList(String primerList) {
 		this(primerList, false);
 	}
+	public PrimerList(boolean useDb) {
+		this(null, useDb);
+	}
 	
 	public PrimerList(String primerListPathOrDbUrl, boolean useDb) {
 		if (useDb) {
-			setDatabaseURL(primerListPathOrDbUrl);
+			this.useDb = useDb;
 		} else {
 			readTabbedPrimerFile(primerListPathOrDbUrl);
 		}
@@ -213,8 +216,7 @@ public class PrimerList {
 	/*.................................................................................................................*/
 	public String getFragmentName(String primerName, MesquiteString stLouisString) {
 		if (!StringUtil.blank(primerName)) {
-			if (getUseDatabaseForPrimers()) {
-				String urlPrefix = getDatabaseURL();
+			if (getUseDb()) {
 				Map args = new Hashtable();
 				args.put(RequestParameters.PRIMER_NAME, primerName);
 				Document doc = null;
@@ -322,14 +324,12 @@ public class PrimerList {
 		}
 		return count;
 	}
-	public boolean getUseDatabaseForPrimers() {
-		return !StringUtil.blank(getDatabaseURL());
+
+	public boolean getUseDb() {
+		return useDb;
 	}
-	public String getDatabaseURL() {
-		return databaseURL;
-	}
-	public void setDatabaseURL(String databaseURL) {
-		this.databaseURL = databaseURL;
+	public void setUseDb(boolean useDb) {
+		this.useDb = useDb;
 	}
 }
 

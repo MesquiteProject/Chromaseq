@@ -1,8 +1,9 @@
 package mesquite.chromaseq.lib;
 
 import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteXMLPreferencesModule;
 
-public abstract class AbiUploader extends MesquiteModule {
+public abstract class AbiUploader extends MesquiteXMLPreferencesModule {
 	public Class getDutyClass() {
 		return AbiUploader.class;
 	}
