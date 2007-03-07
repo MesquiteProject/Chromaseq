@@ -10,8 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import mesquite.lib.ExtensibleDialog;
-import mesquite.lib.MesquiteInteger;
+import mesquite.lib.*;
+
 
 /**
  * Subclass of extensible dialog that knows how to deal with
@@ -28,7 +28,7 @@ public class ChromFileNameDialog extends ExtensibleDialog {
 	private Choice nameRulesChoice;	
 	private String nameParsingRulesName="";	
 	
-	public ChromFileNameDialog(Frame parent, String title, MesquiteInteger buttonPressed,
+	public ChromFileNameDialog(MesquiteWindow parent, String title, MesquiteInteger buttonPressed,
 			NameParserManager nameParserManager, String defaultRuleName) {
 		super(parent, title, buttonPressed);
 		this.nameParserManager = nameParserManager;

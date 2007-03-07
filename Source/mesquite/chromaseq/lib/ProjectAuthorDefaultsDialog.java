@@ -1,12 +1,6 @@
 package mesquite.chromaseq.lib;
 
-import java.awt.Choice;
-import java.awt.Cursor;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Label;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -18,16 +12,7 @@ import org.jdom.Element;
 import org.tolweb.base.http.BaseHttpRequestMaker;
 import org.tolweb.treegrow.main.XMLConstants;
 
-import mesquite.lib.AlertDialog;
-import mesquite.lib.ExtensibleDialog;
-import mesquite.lib.Listable;
-import mesquite.lib.MesquiteBoolean;
-import mesquite.lib.MesquiteInteger;
-import mesquite.lib.MesquiteMessage;
-import mesquite.lib.MesquiteModule;
-import mesquite.lib.MesquiteString;
-import mesquite.lib.SingleLineTextField;
-import mesquite.lib.StringUtil;
+import mesquite.lib.*;
 
 /**
  * Dialog to choose an author from a list of project collaborators
@@ -45,7 +30,7 @@ public class ProjectAuthorDefaultsDialog extends ExtensibleDialog {
 	private String projectUrl;
 	private static final String END_URL = "onlinecontributors/app?service=page&page=btolxml/ContributorList";
 	
-	public ProjectAuthorDefaultsDialog(Frame parent, MesquiteBoolean okSelected, String url) {
+	public ProjectAuthorDefaultsDialog(MesquiteWindow parent, MesquiteBoolean okSelected, String url) {
 		super(parent, "Set Author Information");
 		this.okSelected = okSelected;
 		this.projectUrl = url;
