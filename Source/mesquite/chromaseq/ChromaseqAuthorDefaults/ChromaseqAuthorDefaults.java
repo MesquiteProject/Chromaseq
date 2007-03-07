@@ -6,6 +6,7 @@ import mesquite.lib.Author;
 import mesquite.lib.CommandChecker;
 import mesquite.lib.CommandRecord;
 import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.MesquiteTrunk;
@@ -54,6 +55,19 @@ public class ChromaseqAuthorDefaults extends AuthorDefaults implements PropertyN
 		// DANNY: this should probably happen but this method is private in superclass
 		// and my svn is showing something wrong with the superclass
 		//setCurrentAllProjects();		
+	}
+	
+	public boolean verifyAuthorIsntDefault() {
+		if (MesquiteModule.author.hasDefaultSettings()) {
+			setProjectAuthor();
+			// don't allow the upload to proceed unless they chose a person
+			if (MesquiteModule.author.hasDefaultSettings()) {
+				MesquiteMessage.notifyUser("You may not proceed until you choose your username.");
+				// they didn't choose their author so upload cannot proceed
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/* ................................................................................................................. */

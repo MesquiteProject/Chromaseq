@@ -2,8 +2,11 @@ package mesquite.chromaseq.lib;
 
 import java.io.File;
 import java.util.Hashtable;
+import java.util.Iterator;
 
+import mesquite.lib.CommandRecord;
 import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteModule;
 import mesquite.lib.StringUtil;
 import mesquite.lib.XMLUtilities;
 
@@ -14,7 +17,8 @@ import org.tolweb.treegrow.main.XMLConstants;
 
 public class SequenceUploader {
 	private String abiUploadPageName = "btolxml/SequenceUploadService";
-	private String batchCreationPageName = "btolxml/ChromatogramBatchCreationService"; 
+	private String batchCreationPageName = "btolxml/ChromatogramBatchCreationService";
+	private String fasUploadPageName = "btolxml/FastaUpload";
 	
 	public Long createAB1BatchOnServer(String name, String description, String contributorId) {
 		Hashtable stringArgs = new Hashtable();
@@ -50,7 +54,7 @@ public class SequenceUploader {
 		fileArgs.put(RequestParameters.FILE, abiFile);
 		Document doc = XMLUtilities.getDocumentFromTapestryPageNameMultipart(abiUploadPageName, 
 				stringArgs, fileArgs);
-		if (doc == null || doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
+		if (XMLUtilities.getIsError(doc)) {
 			if (doc == null) {
 				MesquiteMessage.warnUser("Problems uploading abi file: " + filenameArg + " to server.");
 			} else {
@@ -65,6 +69,33 @@ public class SequenceUploader {
 			}
 		} else {
 			MesquiteMessage.warnProgrammer("Successfully uploaded abi file : " + filenameArg + " to server.");
+		}
+	}
+	
+	public void uploadAceFileToServer(AceFile ace, boolean processPolymorphisms, int qualThresholdForTrim) {
+		for (int i = 0; i < ace.getNumContigs(); i++) {
+			Contig nextContig = ace.getContig(i);
+			String name = ace.getContigNameForFASTAFile(i);
+			String fastaString = nextContig.toFASTAString(processPolymorphisms, qualThresholdForTrim, name);
+			String commaSeparatedFilenames = "";
+			int numReads = nextContig.getNumReadsInContig();
+			for (int j = 0; j < numReads; j++) {
+				Read read = nextContig.getRead(j);
+				commaSeparatedFilenames += read.getOriginalName();
+				if (j < numReads - 1) {
+					commaSeparatedFilenames += ",";
+				}
+			}
+			Hashtable args = new Hashtable();
+			args.put(RequestParameters.FAS, fastaString);
+			args.put(RequestParameters.FILENAME, commaSeparatedFilenames);
+			args.put(RequestParameters.CONTRIBUTOR_ID, MesquiteModule.author.getCode());
+			Document doc = XMLUtilities.getDocumentFromTapestryPageName(fasUploadPageName, args, true);
+			if (XMLUtilities.getIsError(doc)) {
+				MesquiteMessage.warnProgrammer("Unable to upload fasta file for chromatograms : " + commaSeparatedFilenames);
+			} else {
+				MesquiteMessage.warnProgrammer("Successfully uploaded fasta file for chromatograms : " + commaSeparatedFilenames);
+			}
 		}
 	}
 	

@@ -85,14 +85,9 @@ public class AbiUploaderImpl extends AbiUploader {
 					StringBuffer logBuffer = new StringBuffer();
 					SequenceUploader uploader = new SequenceUploader();
 					
-					if (MesquiteModule.author.hasDefaultSettings()) {
-						authorDefaults.setProjectAuthor();
-						// don't allow the upload to proceed unless they chose a person
-						if (MesquiteModule.author.hasDefaultSettings()) {
-							MesquiteMessage.notifyUser("You may not upload chromatograms unless you choose your username.");
-							// they didn't choose their author so upload cannot proceed
-							return false;
-						}
+					boolean result = authorDefaults.verifyAuthorIsntDefault();
+					if (!result) {
+						return false;
 					}
 					storePreferences();
 					// create the upload batch on the server					
