@@ -236,13 +236,13 @@ public ChromFileNameParsing duplicateNameRule(ChromFileNameParsing chromFileName
 				addNewElement(chromFileNameParsing,name);  //add name to list
 				ownerModule.addNameRule(chromFileNameParsing, name);
 				if (success!=null) success.setValue(true);
-				show();
+				setVisible(true);
 				return chromFileNameParsing;
 				
 			}
 			else  {
 				if (success!=null) success.setValue(false);
-				show();
+				setVisible(true);
 				return null;
 			}
 		}
@@ -250,7 +250,7 @@ public ChromFileNameParsing duplicateNameRule(ChromFileNameParsing chromFileName
 		public void deleteElement(int item, int newSelectedItem){
 			hide();
 			ownerModule.deleteNameRule(item);
-			show();
+			setVisible(true);
 		}
 	/*.................................................................................................................*/
 		public void renameElement(int item, Listable element, String newName){
@@ -271,7 +271,7 @@ public ChromFileNameParsing duplicateNameRule(ChromFileNameParsing chromFileName
 			ChromFileNameParsing rule = ((ChromFileNameParsing)ownerModule.nameParsingRules.elementAt(item));
 			if (rule.queryOptions(rule.getName()))
 				rule.save();
-			show();
+			setVisible(true);
 		}
 	
 	
