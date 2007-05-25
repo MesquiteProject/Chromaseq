@@ -38,7 +38,7 @@ public class PrimerList {
 		} else {
 			readTabbedPrimerFile(primerListPathOrDbUrl);
 		}
-	}
+}
 	
 	public void readXMLPrimerFile(String primerList) {  // this does not work; just started to build this.
 		String oneFragment;
@@ -235,7 +235,7 @@ public class PrimerList {
 				if (doc == null) {
 					// TODO: There should be some kind of dialog error message here, how do we make it
 					//		 popup at this point?
-					MesquiteMessage.warnUser("Primer name not found in database: " + primerName+"\n" + doc);
+					MesquiteMessage.warnUser("Primer name not found in database: " + primerName+"\n");
 //					Debugg.println("Primer name not found in database: " + primerName);
 					return "";
 				} else {
