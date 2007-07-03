@@ -295,7 +295,9 @@ html>body #navBar li {border-bottom: none;}
 
 
 #menu {
-	font-family:Georgia, "Times New Roman", Times, serif;
+	font-family:Trebuchet MS, Georgia, "Times New Roman", Times, serif;
+	text-decoration:underline;
+	font-size:small;
 	color: #000000;
-	font-weight:600;
+	/* font-weight:600; */
 	}

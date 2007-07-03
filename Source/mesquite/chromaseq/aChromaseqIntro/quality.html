@@ -1,1 +1,90 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd"><html><!-- InstanceBegin template="/Templates/standard.dwt" codeOutsideHTMLIsLocked="false" --><head><meta http-equiv="Content-Type" content="text/html; charset="><!-- InstanceBeginEditable name="doctitle" --><title>Quality Scores</title><!-- InstanceEndEditable --><link rel="stylesheet" href="styles/mesquitePackage.css" type="text/css"><!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable --></head><body><div id="masthead">  <div id="banner"><img src="splash.gif" width="164" height="64"></div>  <div id="mainTitle"><font id="packageName"><b>Chromaseq</b></font><BR><font id="version">Test Version 0.9<br>30 October 2005</font><BR>         David R. Maddison and Wayne P. Maddison</div>  <div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Quality Scores <!-- InstanceEndEditable --></div> </div><div><!-- end masthead --><div id="content"><!-- InstanceBeginEditable name="content" -->Quality scores provided by Phred and Phrap <!-- InstanceEndEditable --></div><!--end content --><div id="navBar">  <div id="sectionLinks">    <ul>      <li><a href="index.html">Home</a></li>      <li><a href="overview.html">Overview</a></li>      <li><a href="quickstart.html">Quickstart</a></li>	  <li><a href="phredphrap.html">Phred / Phrap with Chromaseq</a></li>	  <ul id="subUL">	  	<li><a href="installingPP.html">Installing Phred &amp; Phrap </a></li>  		<li><a href="primers.html">Primer File</a></li>  		<li><a href="sampleCode.html">Sample Codes &amp; Names File</a></li>  		<li><a href="runningPP.html">Running Phred/Phrap</a></li>	  	<li><a href="namingRules.html">Chromatogram File Naming Rules </a></li>		<li><a href="quality.html">Quality Scores</a></li>		<li><a href="postPhrap.html">Post-Phrap Options</a></li>	  </ul>      <li><a href="viewer.html">Chromatogram Viewer</a></li>  		<ul id="subUL">	  		<li><a href="navigation.html">Navigation</a></li>  			<li><a href="display.html">Display Options</a></li>  			<li><a href="callingBases.html">Calling Bases</a></li>		</ul>      <li><a href="otherPrograms.html">Sequencher &amp; Others </a></li>      <li><a href="acknowledgements.html">Acknowledgements</a></li>      <li><a href="citation.html">Citation</a></li>      <li><a href="faq.html">FAQs</a></li>      <li><a href="future.html">Future Directions</a></li>      <li style="margin-top: 20px;"><a href="download.html">Download</a></li>      <li><a href="sourceCode.html">Source Code</a></li>    </ul>	<p>&nbsp;</p>	<ul><li> <a href="http://mesquiteproject.org"  style="border: 0px;"><img src="images/mesquiteIcon.gif" alt="Mesquite Home" width="32" height="32"> Mesquite Home</a> </li>    </ul>  </div></div></div><div id="navBarExtension">&nbsp;</div><!--end navbar --><div id="siteInfo"> Copyright &copy; 2005 <a href="http://david.bembidion.org">David R. Maddison</a> and <a href="http://salticidae.org/wpm/home.html">Wayne P. Maddison</a> </div><br></body><!-- InstanceEnd --></html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html><!-- InstanceBegin template="/Templates/standard.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Quality Scores</title>
+<!-- InstanceEndEditable -->
+<link rel="stylesheet" href="styles/mesquitePackage.css" type="text/css">
+<!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+</head>
+
+
+<body>
+<div id="masthead">
+  <div id="banner"><img src="splash.gif" width="164" height="64"></div>
+  <div id="mainTitle"><font id="packageName"><b>Chromaseq</b></font><BR><font id="version">Test Version 0.9<br>30 October 2005</font><BR>
+         David R. Maddison and Wayne P. Maddison</div>
+  <div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Quality Scores <!-- InstanceEndEditable --></div>
+ 
+</div>
+<div>
+<!-- end masthead -->
+<div id="content"><!-- InstanceBeginEditable name="content" -->
+  
+  <p>Mesquite can color cells based on quality from Phred/Phrap.  Each called base is assigned 
+	  a score, reflecting the error probability of the call.  Quality coloring can be toggled on/off by touching
+	  on the <img src="images/showLegendButton.jpg"> button below the taxon names or 	  
+	  from the Matrix menu: <font id="menu">Matrix &gt; Color Cells &gt; Quality from Phred/Phrap</font>.  
+	  Higher quality base calls are paler (white), while low quality calls are darker (blue).  Sites with ambiguous
+	  base calls are colored grey.</p>
+  <table width="100%">
+    <tr>
+	  <td width="50%"><p align="center"><img src="images/qualityColorExample.gif" alt="Quality Color Example"></p>
+	    <p><font size="-1">An example of quality-colored cells.  The first sequence has high quality base calls for
+		all characters shown.  The second sequence has multiple low-quality calls and two ambiguous sites 
+		(Y = C or T, R = A or G).</font></p>
+	  </td>
+	  <td align="center"><img src="images/qualityColorLegend.gif" alt="Quality Color Legend"></td>
+	</tr>
+  </table>
+  <p>In addition to coloring the cells, Mesquite colors the background of the taxon name based on a composite 
+    quality score for the entire sequence.  Higher qualilty sequences are paler, while lower quality 
+    sequences are darker.</p>
+  <p align="left"><img src="images/qualityTaxonColor.gif" alt="Taxon Quality Color"></p>
+
+<!-- InstanceEndEditable --></div>
+<!--end content -->
+<div id="navBar">
+  <div id="sectionLinks">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="overview.html">Overview</a></li>
+      <li><a href="quickstart.html">Quickstart</a></li>
+	  <li><a href="phredphrap.html">Phred / Phrap with Chromaseq</a></li>
+	  <ul id="subUL">
+	  	<li><a href="installingPP.html">Installing Phred &amp; Phrap </a></li>
+  		<li><a href="primers.html">Primer File</a></li>
+  		<li><a href="sampleCode.html">Sample Codes &amp; Names File</a></li>
+  		<li><a href="runningPP.html">Running Phred/Phrap</a></li>
+	  	<li><a href="namingRules.html">Chromatogram File Naming Rules </a></li>
+		<li><a href="quality.html">Quality Scores</a></li>
+		<li><a href="postPhrap.html">Post-Phrap Options</a></li>
+	  </ul>
+      <li><a href="viewer.html">Chromatogram Viewer</a></li>
+  		<ul id="subUL">
+	  		<li><a href="navigation.html">Navigation</a></li>
+  			<li><a href="display.html">Display Options</a></li>
+  			<li><a href="callingBases.html">Calling Bases</a></li>
+		</ul>
+      <li><a href="otherPrograms.html">Sequencher &amp; Others </a></li>
+      <li><a href="acknowledgements.html">Acknowledgements</a></li>
+      <li><a href="citation.html">Citation</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="future.html">Future Directions</a></li>
+      <li style="margin-top: 20px;"><a href="download.html">Download</a></li>
+      <li><a href="sourceCode.html">Source Code</a></li>
+    </ul>
+	<p>&nbsp;</p>
+	<ul><li> <a href="http://mesquiteproject.org"  style="border: 0px;"><img src="images/mesquiteIcon.gif" alt="Mesquite Home" width="32" height="32"> Mesquite Home</a> </li>
+    </ul>
+  </div>
+</div>
+</div>
+<div id="navBarExtension">&nbsp;</div>
+<!--end navbar -->
+<div id="siteInfo"> Copyright &copy; 2005 <a href="http://david.bembidion.org">David R. Maddison</a> and <a href="http://salticidae.org/wpm/home.html">Wayne P. Maddison</a> </div>
+<br>
+</body>
+<!-- InstanceEnd --></html>
