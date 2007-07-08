@@ -13,6 +13,7 @@ package mesquite.chromaseq.lib;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -135,7 +136,13 @@ public class ChromFileNameParsing implements Listable, Explainable {
 
 	/*.................................................................................................................*/
 	public boolean readXML(String contents, CommandRecord commandRec) {
-		Document doc = BaseXMLReader.getDocumentFromString(contents);
+		Document doc = null;
+		try { doc = BaseXMLReader.getDocumentFromString(contents); 
+		} catch (Exception e) {
+			return false;
+			// don't do anything, fall through to error 
+		}
+
 		if (doc == null || doc.getRootElement() == null) {
 			return false;
 		} else if (!doc.getRootElement().getName().equals("mesquite")) {
@@ -166,7 +173,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 			return false;
 		}
 		return true;
-		/*Parser parser = new Parser();
+	/*Parser parser = new Parser();
 		Parser subParser = new Parser();
 		parser.setString(contents);
 		boolean acceptableVersion = false;
