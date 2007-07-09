@@ -140,7 +140,6 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		try { doc = BaseXMLReader.getDocumentFromString(contents); 
 		} catch (Exception e) {
 			return false;
-			// don't do anything, fall through to error 
 		}
 
 		if (doc == null || doc.getRootElement() == null) {
