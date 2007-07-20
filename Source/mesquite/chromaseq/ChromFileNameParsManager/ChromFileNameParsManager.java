@@ -10,13 +10,11 @@ import mesquite.lib.*;
 
 public class ChromFileNameParsManager extends NameParserManager {
 	public String prefDirectoryName = "ChromNameParsingRules";
-	CommandRecord commandRec;
 	String nameParsingRulesName;
 	ChooseNameParsingRuleDLOG chooseNameParsingRuleDialog;
 
-	public boolean startJob(String arguments, Object condition, CommandRecord commandRec, boolean hiredByName) {
+	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		this.commandRec = commandRec;
 		nameParsingRules = new ListableVector();
 		loadNameParsingRules();
 		if (getNumRules()<=0) {
@@ -45,7 +43,7 @@ public class ChromFileNameParsManager extends NameParserManager {
 			if (!StringUtil.blank(contents)) {
 				ChromFileNameParsing localNameParsingRules = new ChromFileNameParsing();
 				localNameParsingRules.path = cPath;
-				if  (localNameParsingRules.readXML(contents, commandRec)) {
+				if  (localNameParsingRules.readXML(contents)){
 					nameParsingRules.addElement(localNameParsingRules, false);
 					return localNameParsingRules;
 				}

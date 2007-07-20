@@ -12,6 +12,6 @@ public abstract class AbiDownloader extends MesquiteXMLPreferencesModule {
 	public String getDutyName() {
 		return "Abi Downloader";
 	}
-	public abstract boolean downloadAbiFilesFromDb(CommandRecord record);
-	public abstract boolean downloadAbiFilesFromDb(CommandRecord commandRec, MesquiteProject project);
+	public abstract boolean downloadAbiFilesFromDb();
+	public abstract boolean downloadAbiFilesFromDb( MesquiteProject project);
 }

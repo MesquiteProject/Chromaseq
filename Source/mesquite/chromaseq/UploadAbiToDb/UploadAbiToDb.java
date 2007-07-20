@@ -12,7 +12,7 @@ public class UploadAbiToDb extends UtilitiesAssistant {
 
 	/* ................................................................................................................. */
 	public boolean startJob(String arguments, Object condition,
-			CommandRecord commandRec, boolean hiredByName) {
+			boolean hiredByName) {
 		addMenuItem(null, "Upload ABI files to database...", makeCommand(
 				COMMAND_NAME, this));
 		return true;
@@ -36,11 +36,11 @@ public class UploadAbiToDb extends UtilitiesAssistant {
 
 	/* ................................................................................................................. */
 	public Object doCommand(String commandName, String arguments,
-			CommandRecord commandRec, CommandChecker checker) {
+			 CommandChecker checker) {
 		if (checker.compare(this.getClass(),
 				"Uploads a folder of abi files to a database.", null,
 				commandName, COMMAND_NAME)) {
-			AbiUploader uploader = (AbiUploader) hireEmployee(commandRec,
+			AbiUploader uploader = (AbiUploader) hireEmployee(
 					AbiUploader.class, "Abi Uploader");
 			if (uploader != null) {
 				uploader.uploadAbiFilesToDb();
@@ -48,7 +48,7 @@ public class UploadAbiToDb extends UtilitiesAssistant {
 				MesquiteMessage.warnProgrammer("Can't find ABI uploader module.");
 			}
 		} else {
-			return super.doCommand(commandName, arguments, commandRec, checker);
+			return  super.doCommand(commandName, arguments, checker);
 		}
 		return null;
 	}

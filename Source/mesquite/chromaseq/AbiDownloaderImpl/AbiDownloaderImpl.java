@@ -51,9 +51,9 @@ public class AbiDownloaderImpl extends AbiDownloader {
 	public String getName() {
 		return "Abi Downloader";
 	}
-	public boolean startJob(String arguments, Object condition, CommandRecord commandRec, boolean hiredByName) {
+	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		if (phredPhrap == null) {
-			phredPhrap = (PhPhRunner)hireEmployee(commandRec, PhPhRunner.class, "Module to run Phred & Phrap");
+			phredPhrap = (PhPhRunner)hireEmployee(PhPhRunner.class, "Module to run Phred & Phrap");
 		}
 		if (phredPhrap != null) {
 			return true;
@@ -61,10 +61,10 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			return false;
 		}
 	}
-	public boolean downloadAbiFilesFromDb(CommandRecord record) {
-		return downloadAbiFilesFromDb(record, null);
+	public boolean downloadAbiFilesFromDb() {
+		return downloadAbiFilesFromDb(null);
 	}
-	public boolean downloadAbiFilesFromDb(CommandRecord record, MesquiteProject project) {
+	public boolean downloadAbiFilesFromDb(MesquiteProject project) {
 		loadPreferences();
 		// general plan:
 		// (1) query for gene and specimen info
@@ -121,7 +121,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		boolean downloadOk = downloadAndUnzipChromatograms(args, directoryPath);
 		if (downloadOk) {
 			// (5) run p/p on that directory
-			return phredPhrap.doPhredPhrap(project, false, null, directoryPath);
+			return phredPhrap.doPhredPhrap(project, false, directoryPath);
 		} else {
 			MesquiteMessage.warnUser("Problems downloading and unzipping chromatograms, phred/phrap will not proceed.");
 		}

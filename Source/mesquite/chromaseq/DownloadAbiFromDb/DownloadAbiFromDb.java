@@ -13,7 +13,7 @@ public class DownloadAbiFromDb extends UtilitiesAssistant {
 
 	/* ................................................................................................................. */
 	public boolean startJob(String arguments, Object condition,
-			CommandRecord commandRec, boolean hiredByName) {
+			boolean hiredByName) {
 		addMenuItem(null, "Run Phred/Phrap on database...", makeCommand(
 				COMMAND_NAME, this));
 		return true;
@@ -37,20 +37,20 @@ public class DownloadAbiFromDb extends UtilitiesAssistant {
 
 	/* ................................................................................................................. */
 	public Object doCommand(String commandName, String arguments,
-			CommandRecord commandRec, CommandChecker checker) {
+			 CommandChecker checker) {
 		if (checker.compare(this.getClass(),
 				EXPLANATION, null,
 				commandName, COMMAND_NAME)) {
-			AbiDownloader downloader = (AbiDownloader) hireEmployee(commandRec,
+			AbiDownloader downloader = (AbiDownloader) hireEmployee(
 					AbiDownloader.class, "Abi Downloader");
 			if (downloader != null) {
-				downloader.downloadAbiFilesFromDb(commandRec);
+				downloader.downloadAbiFilesFromDb();
 			} else {
 				MesquiteMessage.warnProgrammer("Can't find ABI downloader module.");
 			}
 			fireEmployee(downloader);
 		} else {
-			return super.doCommand(commandName, arguments, commandRec, checker);
+			return  super.doCommand(commandName, arguments, checker);
 		}
 		return null;
 	}

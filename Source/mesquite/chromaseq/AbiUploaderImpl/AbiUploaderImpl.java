@@ -43,7 +43,7 @@ public class AbiUploaderImpl extends AbiUploader {
 	public String getName() {
 		return "Abi Uploader";
 	}
-	public boolean startJob(String arguments, Object condition, CommandRecord commandRec, boolean hiredByName) {
+	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
 		if (nameParserManager == null) {
 			nameParserManager = (NameParserManager)MesquiteTrunk.mesquiteTrunk.findEmployeeWithName("#ChromFileNameParsManager");

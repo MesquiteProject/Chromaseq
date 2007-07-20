@@ -135,7 +135,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 	}
 
 	/*.................................................................................................................*/
-	public boolean readXML(String contents, CommandRecord commandRec) {
+	public boolean readXML(String contents) {
 		Document doc = null;
 		try { doc = BaseXMLReader.getDocumentFromString(contents); 
 		} catch (Exception e) {

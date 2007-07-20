@@ -23,13 +23,13 @@ import mesquite.lib.PropertyNamesProvider;
 public class ChromaseqAuthorDefaults extends AuthorDefaults implements PropertyNamesProvider {
 	private String url;
 	
-	public boolean startJob(String arguments, Object condition, CommandRecord commandRec, boolean hiredByName) {
+	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		addMenuItem( "Set Project Author...", makeCommand("setProjectAuthor",  this));	
 		return true;
 	}	
 	
 	public Object doCommand(String commandName, String arguments,
-			CommandRecord commandRec, CommandChecker checker) {
+			 CommandChecker checker) {
 		if (checker.compare(MesquiteWindow.class,
 				"Sets the project author for this machine.", null,
 				commandName, "setProjectAuthor")) {
@@ -37,7 +37,7 @@ public class ChromaseqAuthorDefaults extends AuthorDefaults implements PropertyN
 			return null;
 
 		} else {
-			return super.doCommand(commandName, arguments, commandRec, checker);
+			return  super.doCommand(commandName, arguments, checker);
 		}
 	}
 	
