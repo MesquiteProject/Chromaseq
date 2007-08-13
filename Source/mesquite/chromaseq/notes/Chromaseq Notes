@@ -46,7 +46,7 @@ Chromatogram Viewer
 	
 	Ã selection offset away from center
 	Ã can't select or manipulate inserted bases; they act as if they belong to prior base
-	Ã URGENT: if multpile contigs, touching on taxon should ONLY BRING UP window for that contig, and it should be named correctly
+	Ã URGENT: if multiple contigs, touching on taxon should ONLY BRING UP window for that contig, and it should be named correctly
 	Ã- shift select region of matrix; currently selects only one site in chrom viewer window
 	Ã permit thumbs up/down/etc cursors chromat. window
 
