@@ -223,20 +223,11 @@ public class PrimerList {
 //				try {
 				doc = XMLUtilities.getDocumentFromTapestryPageName("btolxml/PrimerService", args);
 //				}
-/*
- * 				catch (ExceptionInInitializerError e) {
-		Debugg.println("\n********************\nExceptionInInitializerError in HttpRequestMaker.getTap4ExternalUrlDocument\n********************\n");
-				}
-				catch (NoClassDefFoundError e) {
-		Debugg.println("\n********************\nNoClassDefFoundError in HttpRequestMaker.getTap4ExternalUrlDocument\n********************\n");
-				}
-*/
 				// problems contacting the db!
 				if (doc == null) {
 					// TODO: There should be some kind of dialog error message here, how do we make it
 					//		 popup at this point?
 					MesquiteMessage.warnUser("Primer name not found in database: " + primerName+"\n");
-//					Debugg.println("Primer name not found in database: " + primerName);
 					return "";
 				} else {
 					Element root = doc.getRootElement();

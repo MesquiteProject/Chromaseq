@@ -58,12 +58,9 @@ public class RegistryMapper {
 	public void trimLinked(int numTrimmedFromStart, int numTrimmedFromEnd){
 		if (numTrimmedFromStart<=0 && numTrimmedFromEnd<=0)
 			return;
-//		Debugg.println("\nnumTrimmedFromStart: " + numTrimmedFromStart + ", numTrimmedFromEnd: " + numTrimmedFromEnd);
 		if (numTrimmedFromEnd>0) {
 	//		int i1 = getMasterBaseAtLinkedBaseRegistryPosition(getLinkedLength()-numTrimmedFromEnd);
 	//		int i2 = getMasterBaseAtLinkedBaseRegistryPosition(getLinkedLength()-1);
-	//		Debugg.println("getLinkedLength(): " + getLinkedLength() + ", numTrimmedFromEnd: " + numTrimmedFromEnd);
-	//		Debugg.println("i1: " + i1 + ", i2: " + i2);
 			for (int i = getMasterBaseAtLinkedBaseRegistryPosition(getLinkedLength()-numTrimmedFromEnd); i<=getMasterBaseAtLinkedBaseRegistryPosition(getLinkedLength()-1) && i<masterRegistryOfLinkedBases.length; i++)
 				if (i>=0)
 					masterRegistryOfLinkedBases[i] = MesquiteInteger.unassigned;
@@ -158,7 +155,7 @@ public class RegistryMapper {
 					sb.append("" + linkedRegistryOfMasterBases[i]);
 			sb.append("\n");
 		}
-		Debugg.println(sb.toString());
+		MesquiteMessage.println(sb.toString());
 	}
 	
 }
