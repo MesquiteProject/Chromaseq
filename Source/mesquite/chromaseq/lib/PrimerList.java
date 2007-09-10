@@ -143,7 +143,7 @@ public class PrimerList {
 		forward = new boolean[numPrimers];
 	}
 	public void readTabbedPrimerFile(String primerList) {
-		Document doc = XMLUtilities.getDocumentFromString(primerList);
+		Document doc = MesquiteXMLUtilities.getDocumentFromString(primerList);
 		if (doc != null) {
 			// xml format so parse accordingly
 			parsePrimerXML(doc);
@@ -221,7 +221,7 @@ public class PrimerList {
 				args.put(RequestParameters.PRIMER_NAME, primerName);
 				Document doc = null;
 //				try {
-				doc = XMLUtilities.getDocumentFromTapestryPageName("btolxml/PrimerService", args);
+				doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName("btolxml/PrimerService", args);
 //				}
 				// problems contacting the db!
 				if (doc == null) {

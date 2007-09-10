@@ -1,3 +1,33 @@
+Necessary pre-beta
+
+	- moving front end of a read to matrix if longer than original sequence causes graphic wrap around
+	- moving to matrix at front and end of matrix
+		- can't edit bases in these region
+	- moving to matrix at front of read
+		- causes problems editing end of sequence
+
+	* don't lose focus on main panel 
+		
+		
+		
+	* if no phred phrap on Windows, just spins its wheels with periods coming out
+	
+	- DRM have it so have matrix colors in chromatogram window
+	- DRM move to XML for all support files structure
+	- DRM key entry tool in chromatogram window the same as the key tool in the data matrix editor
+			
+	
+	- data corruption if things at front moved to matrix?
+	
+
+	
+
+
+	Ã store sample code info  (now done as sampleCodeForTaxon)
+	Ã add sequence title on right if extra sequences shown
+
+=============
+
 PhredPhrap
 	- change PrimerList file structure
 	- explore flipping sequence but not chromatogram
@@ -25,7 +55,6 @@ Chromatogram Viewer
 	* reverse complement
 	* change the internal numbering system so that it uses a deeper, universal numbering that is independent of any existing numbering
 	- double-clicking on matrix line at times zeros horizontal scroll bar
-	- Notiophilus biguttatus 589 28S offset
 	
 	- move to matrix if all gaps in matrix (Wayne)
 	- move to matrix set to lower case, or at least pay attention to case in import
@@ -41,7 +70,7 @@ Chromatogram Viewer
 	- highlighting of regions where good forward and backward reads
 	- conservative mode that marks To Check all cells for which there is conflict among reads
 	- adjust trace heights individually, or have non-proportional mode in which they are individually autoscaled
-	- Restore from Original, fills selected region with states form original matrix.  If beyond original, don't touch
+	- Restore from Original, fills selected region with states from original matrix.  If beyond original, don't touch
 	- shift highlight colors to darker
 	
 	Ã selection offset away from center
@@ -58,11 +87,14 @@ Chromatogram Viewer
 	
 	
 	
-	
 QualityData, originalData
 	- shift other to match selected in align has to move qualityData too!
 	- ?? set special identifier keys in originalData, etc. not only for cross linking but also for later fusion (i.e. "28S")
 	
+=====
+Seems to be fixed
+	- Notiophilus biguttatus 589 28S offset
+
 =====
 AFTER VERSION 1	
 PhredPhrap
@@ -76,5 +108,6 @@ PhredPhrap
 	- can excise file from contig
 	
 Chromatogram Viewer
+	- Reverse Complement
 	- bird's eye view showing read patterns
 	

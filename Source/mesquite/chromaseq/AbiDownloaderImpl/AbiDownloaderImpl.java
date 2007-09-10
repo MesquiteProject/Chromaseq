@@ -34,7 +34,7 @@ import mesquite.lib.MesquiteProject;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.SingleLineTextField;
 import mesquite.lib.StringUtil;
-import mesquite.lib.XMLUtilities;
+import mesquite.lib.MesquiteXMLUtilities;
 import mesquite.lib.ZipUtil;
 
 public class AbiDownloaderImpl extends AbiDownloader {
@@ -80,10 +80,10 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		
 		/*args.put(RequestParameters.EXTRACTION, extractionName);
 		args.put(RequestParameters.GENE, geneName);*/
-		XMLUtilities.setDatabaseURL(getDbUrl());
-		Document results = XMLUtilities.getDocumentFromTapestryPageName("btolxml/ChromatogramSearchService", args);
+		MesquiteXMLUtilities.setDatabaseURL(getDbUrl());
+		Document results = MesquiteXMLUtilities.getDocumentFromTapestryPageName("btolxml/ChromatogramSearchService", args);
 		if (results == null) {
-			XMLUtilities.outputRequestXMLError();
+			MesquiteXMLUtilities.outputRequestXMLError();
 			return false;
 		}
 		if (results.getRootElement().getName().equals(XMLConstants.ERROR)) {
@@ -133,7 +133,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		}
 	}
 	private boolean downloadAndUnzipChromatograms(Hashtable args, String directoryPath) {
-		String url = XMLUtilities.baseDatabaseURL;
+		String url = MesquiteXMLUtilities.baseDatabaseURL;
 		args.put("service", "chromatogramdownload");
 		MesquiteMessage.warnUser("Contacting server to download chromatograms");
 		Object[] results = BaseHttpRequestMaker.makeHttpRequestAsStream(url, args);

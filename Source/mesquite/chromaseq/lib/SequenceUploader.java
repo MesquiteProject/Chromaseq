@@ -8,7 +8,7 @@ import mesquite.lib.CommandRecord;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.StringUtil;
-import mesquite.lib.XMLUtilities;
+import mesquite.lib.MesquiteXMLUtilities;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -25,7 +25,7 @@ public class SequenceUploader {
 		stringArgs.put(RequestParameters.NAME, name);
 		stringArgs.put(RequestParameters.DESCRIPTION, description);
 		stringArgs.put(RequestParameters.CONTRIBUTOR_ID, contributorId);
-		Document responseDoc = XMLUtilities.getDocumentFromTapestryPageName(batchCreationPageName, stringArgs, true);
+		Document responseDoc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(batchCreationPageName, stringArgs, true);
 		if (responseDoc == null) {
 			MesquiteMessage.warnUser("Cannot create abi upload batch on the server.  Upload will not proceed");
 			return null;
@@ -52,9 +52,9 @@ public class SequenceUploader {
 		stringArgs.put(RequestParameters.FILENAME, filenameArg);
 		Hashtable fileArgs = new Hashtable();
 		fileArgs.put(RequestParameters.FILE, abiFile);
-		Document doc = XMLUtilities.getDocumentFromTapestryPageNameMultipart(abiUploadPageName, 
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageNameMultipart(abiUploadPageName, 
 				stringArgs, fileArgs);
-		if (XMLUtilities.getIsError(doc)) {
+		if (MesquiteXMLUtilities.getIsError(doc)) {
 			if (doc == null) {
 				MesquiteMessage.warnUser("Problems uploading abi file: " + filenameArg + " to server.");
 			} else {
@@ -90,8 +90,8 @@ public class SequenceUploader {
 			args.put(RequestParameters.FAS, fastaString);
 			args.put(RequestParameters.FILENAME, commaSeparatedFilenames);
 			args.put(RequestParameters.CONTRIBUTOR_ID, MesquiteModule.author.getCode());
-			Document doc = XMLUtilities.getDocumentFromTapestryPageName(fasUploadPageName, args, true);
-			if (XMLUtilities.getIsError(doc)) {
+			Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(fasUploadPageName, args, true);
+			if (MesquiteXMLUtilities.getIsError(doc)) {
 				MesquiteMessage.warnProgrammer("Unable to upload fasta file for chromatograms : " + commaSeparatedFilenames);
 			} else {
 				MesquiteMessage.warnProgrammer("Successfully uploaded fasta file for chromatograms : " + commaSeparatedFilenames);

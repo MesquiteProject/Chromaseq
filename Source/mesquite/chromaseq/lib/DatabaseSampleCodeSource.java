@@ -5,7 +5,7 @@ import java.util.Map;
 
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.StringUtil;
-import mesquite.lib.XMLUtilities;
+import mesquite.lib.MesquiteXMLUtilities;
 
 import org.jdom.Document;
 import org.tolweb.base.http.BaseHttpRequestMaker;
@@ -36,7 +36,7 @@ public class DatabaseSampleCodeSource {
 	public String[] getSequenceNamesFromCode(String code) {
 		Map args = new Hashtable();
 		args.put(RequestParameters.CODE, code);
-		Document doc = XMLUtilities.getDocumentFromTapestryPageName("btolxml/XMLService", args);
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName("btolxml/XMLService", args);
 		String sequenceName = "";
 		if (doc == null) {
 			outputCodeError(code);
