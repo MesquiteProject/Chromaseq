@@ -6,16 +6,16 @@ Necessary pre-beta
 	- moving to matrix at front of read
 		- causes problems editing end of sequence
 
-	* don't lose focus on main panel 
-		
-		
-		
-	* if no phred phrap on Windows, just spins its wheels with periods coming out
+
+
+
+
+	- WPM don't lose focus on main panel 
 	
-	- DRM have it so have matrix colors in chromatogram window
 	- DRM move to XML for all support files structure
 	- DRM key entry tool in chromatogram window the same as the key tool in the data matrix editor
 			
+	- rename Open Other menu items 
 	
 	- data corruption if things at front moved to matrix?
 	
@@ -25,6 +25,7 @@ Necessary pre-beta
 
 	Ã store sample code info  (now done as sampleCodeForTaxon)
 	Ã add sequence title on right if extra sequences shown
+	- DRM have it so have matrix colors in chromatogram window
 
 =============
 
