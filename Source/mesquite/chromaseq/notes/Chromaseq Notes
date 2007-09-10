@@ -1,31 +1,38 @@
 Necessary pre-beta
 
-	- moving front end of a read to matrix if longer than original sequence causes graphic wrap around
-	- moving to matrix at front and end of matrix
-		- can't edit bases in these region
-	- moving to matrix at front of read
-		- causes problems editing end of sequence
 
-
-
-
-
-	- WPM don't lose focus on main panel 
-	
-	- DRM move to XML for all support files structure
-	- DRM key entry tool in chromatogram window the same as the key tool in the data matrix editor
-			
 	- rename Open Other menu items 
 	
 	- data corruption if things at front moved to matrix?
 	
+=== WPM
 
+	- WPM don't lose focus on main panel 
 	
+	
+=== DRM
 
+	- DRM move to XML for all support files structure
+	- DRM key entry tool in chromatogram window the same as the key tool in the data matrix editor
+	
+	- DRM move to matrix in which there is a pad in the consensus
+		- at start, doesn't move bases down
+		- in middle, adds a !
+		
+	
+======
+COMPLETED
+
+	- moving front end of a read to matrix if longer than original sequence causes graphic wrap around
+	- moving to matrix at end of matrix - can't edit bases in these region
+	- moving to matrix at front of read
+		- causes problems editing end of sequence
+
+	Ã moving to matrix at front of matrix - can't edit bases in these region
 
 	Ã store sample code info  (now done as sampleCodeForTaxon)
 	Ã add sequence title on right if extra sequences shown
-	- DRM have it so have matrix colors in chromatogram window
+	Ã DRM have it so have matrix colors in chromatogram window
 
 =============
 
