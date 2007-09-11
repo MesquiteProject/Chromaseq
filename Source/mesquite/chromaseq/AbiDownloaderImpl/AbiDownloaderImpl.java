@@ -137,6 +137,10 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		args.put("service", "chromatogramdownload");
 		MesquiteMessage.warnUser("Contacting server to download chromatograms");
 		Object[] results = BaseHttpRequestMaker.makeHttpRequestAsStream(url, args);
+		if (results==null) {
+			MesquiteMessage.println("No results from HTTP request");
+			return false;
+		}
 		InputStream zipStream = (InputStream) results[0];
 		GetMethod getMethod = (GetMethod) results[1];
 		Random randomGen = new Random(System.currentTimeMillis());
@@ -150,7 +154,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			boolean fileCreated = file.createNewFile();
 			outStream = new FileOutputStream(file);
 		} catch (Exception e) {
-			// can't create the file, we definitely can't download it!
+			MesquiteMessage.println("Can't create the file, we definitely can't download it!");
 			return false;
 		}
 		int totalBytesRead = 0;

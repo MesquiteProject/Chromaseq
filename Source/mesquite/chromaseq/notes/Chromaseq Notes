@@ -11,7 +11,6 @@ Necessary pre-beta
 === DRM
 
 	- DRM move to XML for all support files structure
-	- DRM key entry tool in chromatogram window the same as the key tool in the data matrix editor
 	
 	- DRM move to matrix in which there is a pad in the consensus
 		- at start, doesn't move bases down
@@ -116,4 +115,5 @@ PhredPhrap
 Chromatogram Viewer
 	- Reverse Complement
 	- bird's eye view showing read patterns
+	- key entry tool in chromatogram window the same as the key tool in the data matrix editor
 	
