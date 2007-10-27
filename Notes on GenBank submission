@@ -1,0 +1,31 @@
+Notes on GenBank submission
+----------
+
+
+Have a tab-delimited file with the information you want to attach to the FASTA files.
+
+The file should have the first line be a title line, and should use the official modifiers for FASTA files
+(see http://www.ncbi.nlm.nih.gov/Sequin/modifiers.html).  
+
+The first column should be the sample code:
+
+code	organism	authority	identified-by	country	lat-lon	specimen-voucher
+0050	Bembidion (Bracteon) balli	Bembidion balli Lindroth, 1962		Canada: Saskatchewan: Paynton Ferry	53.1027 N 108.9309 W	DRMaddison DNA0050
+
+
+Then, in the Mesquite file, open up the taxon list window, and under the Columns menu, choose
+
+	Voucher ID Code
+
+and 
+
+	Voucher Database
+	
+to display a column for each of these.
+
+In the Voucher ID code, enter the code (must match the equivalent code in the 
+first column of the tab delimited text file.
+
+In the Voucher Database, select the entire list, and touch on the title to browse for the 
+tab-delimited text file.
+
