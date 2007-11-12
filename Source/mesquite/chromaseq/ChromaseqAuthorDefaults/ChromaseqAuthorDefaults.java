@@ -107,10 +107,4 @@ public class ChromaseqAuthorDefaults extends AuthorDefaults implements PropertyN
 	protected boolean parseFullXMLDocument(String prefsXML) {
 		return MesquiteXMLPreferencesModule.parseFullXMLDocument(prefsXML, this, getVersionInt(), xmlPrefsVersionMustMatch());
 	}
-	// don't do anything here --  we are using xml
-	public void processPreferencesFromFile (String[] prefs) {
-	}
-	public String[] preparePreferencesForFile () {
-		return null;
-	}
 }
