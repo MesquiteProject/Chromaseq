@@ -24,7 +24,7 @@ public class ChromaseqAuthorDefaults extends AuthorDefaults implements PropertyN
 	private String url;
 	
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
-		addMenuItem( "Set Project Author...", makeCommand("setProjectAuthor",  this));	
+		addMenuItemToDefaults( "Set Project Author...", makeCommand("setProjectAuthor",  this));	
 		return true;
 	}	
 	
