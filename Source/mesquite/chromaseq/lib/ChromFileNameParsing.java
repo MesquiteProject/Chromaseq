@@ -12,17 +12,9 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.lib;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import java.util.regex.*;
 
-import org.jdom.CDATA;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.tolweb.base.xml.BaseXMLReader;
-import org.tolweb.base.xml.BaseXMLWriter;
+import org.dom4j.*;
 
 import mesquite.lib.*;
 
@@ -81,47 +73,22 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		return s;
 	}
 	public String getXML(){
-		Element mesquiteElement = new Element("mesquite");
-		Document doc = new Document(mesquiteElement);
-		Element nameRules = new Element("chromFileNameParsingRules");
-		mesquiteElement.addContent(nameRules);
-		Element versionElement = new Element("version").addContent("1");
-		nameRules.addContent(versionElement);
-		Element boundedByTokensElement = new Element("boundedByTokens");
-		nameRules.addContent(boundedByTokensElement);
-		boundedByTokensElement.addContent(new Element("name").addContent(name));
-		boundedByTokensElement.addContent(new Element("sampleCodeFirst").addContent(MesquiteBoolean.toTrueFalseString(sampleCodeFirst)));
-		boundedByTokensElement.addContent(new Element("dnaCodeStartToken").addContent(new CDATA(dnaCodeStartToken)));
-		boundedByTokensElement.addContent(new Element("dnaCodeEndToken").addContent(new CDATA(dnaCodeEndToken)));
-		boundedByTokensElement.addContent(new Element("dnaCodeSuffixToken").addContent(new CDATA(dnaCodeSuffixToken)));
-		boundedByTokensElement.addContent(new Element("dnaCodeRemovalToken").addContent(new CDATA(dnaCodeRemovalToken)));
-		boundedByTokensElement.addContent(new Element("primerStartToken").addContent(new CDATA(primerStartToken)));		
-		boundedByTokensElement.addContent(new Element("primerEndToken").addContent(new CDATA(primerEndToken)));		
-		return BaseXMLWriter.getDocumentAsString(doc);
-		/*StringBuffer buffer = new StringBuffer(1000);
-		buffer.append("<?xml version=\"1.0\"?>\n");
-		buffer.append("<mesquite>\n");
-		buffer.append("\t<chromFileNameParsingRules>\n");
-		buffer.append("\t\t<version>1</version>\n");
-		buffer.append("\t\t<boundedByTokens>\n");
-		StringUtil.appendXMLTag(buffer, 3, "name", name);  
-		StringUtil.appendXMLTag(buffer, 3, "sampleCodeFirst", sampleCodeFirst);  
-		StringUtil.appendXMLTag(buffer, 3, "dnaCodeStartToken", getProcessedTokenForWrite(dnaCodeStartToken));  
-		StringUtil.appendXMLTag(buffer, 3, "dnaCodeEndToken", getProcessedTokenForWrite(dnaCodeEndToken));  
-		StringUtil.appendXMLTag(buffer, 3, "dnaCodeSuffixToken", getProcessedTokenForWrite(dnaCodeSuffixToken));  
-		StringUtil.appendXMLTag(buffer, 3, "dnaCodeRemovalToken", getProcessedTokenForWrite(dnaCodeRemovalToken));  
-		StringUtil.appendXMLTag(buffer, 3, "primerStartToken", getProcessedTokenForWrite(primerStartToken));  
-		StringUtil.appendXMLTag(buffer, 3, "primerEndToken", getProcessedTokenForWrite(primerEndToken));  
-/*
- * 		StringUtil.appendXMLTag(buffer, 3, "translateSampleCodes", translateSampleCodes);  
-		StringUtil.appendXMLTag(buffer, 3, "primerListPath", primerListPath);  
-		StringUtil.appendXMLTag(buffer, 3, "requiresExtension", requiresExtension);  
-		StringUtil.appendXMLTag(buffer, 3, "dnaNumberListPath", dnaNumberListPath);  
-/
-		buffer.append("\t\t</boundedByTokens>\n");
-		buffer.append("\t</chromFileNameParsingRules>\n");
-		buffer.append("</mesquite>\n");
-		return buffer.toString();*/
+		Element mesquiteElement = DocumentHelper.createElement("mesquite");
+		Document doc = DocumentHelper.createDocument(mesquiteElement);
+		Element nameRules = DocumentHelper.createElement("chromFileNameParsingRules");
+		mesquiteElement.add(nameRules);
+		XMLUtil.addFilledElement(nameRules, "version","1");
+		Element boundedByTokensElement = DocumentHelper.createElement("boundedByTokens");
+		nameRules.add(boundedByTokensElement);
+		XMLUtil.addFilledElement(boundedByTokensElement, "name",name);
+		XMLUtil.addFilledElement(boundedByTokensElement, "sampleCodeFirst",MesquiteBoolean.toTrueFalseString(sampleCodeFirst));
+		XMLUtil.addFilledElement(boundedByTokensElement, "dnaCodeStartToken",DocumentHelper.createCDATA(dnaCodeStartToken));
+		XMLUtil.addFilledElement(boundedByTokensElement, "dnaCodeEndToken",DocumentHelper.createCDATA(dnaCodeEndToken));
+		XMLUtil.addFilledElement(boundedByTokensElement, "dnaCodeSuffixToken",DocumentHelper.createCDATA(dnaCodeSuffixToken));
+		XMLUtil.addFilledElement(boundedByTokensElement, "dnaCodeRemovalToken",DocumentHelper.createCDATA(dnaCodeRemovalToken));
+		XMLUtil.addFilledElement(boundedByTokensElement, "primerStartToken",DocumentHelper.createCDATA(primerStartToken));		
+		XMLUtil.addFilledElement(boundedByTokensElement, "primerEndToken",DocumentHelper.createCDATA(primerEndToken));		
+		return XMLUtil.getDocumentAsXMLString(doc);
 	}
 	public void save(String path, String name){
 		this.name = name;
@@ -136,38 +103,31 @@ public class ChromFileNameParsing implements Listable, Explainable {
 
 	/*.................................................................................................................*/
 	public boolean readXML(String contents) {
-		Document doc = null;
-		try { doc = BaseXMLReader.getDocumentFromString(contents); 
-		} catch (Exception e) {
+		Element root = XMLUtil.getRootXMLElementFromString("mesquite", contents);
+		if (root==null)
 			return false;
-		}
-
-		if (doc == null || doc.getRootElement() == null) {
-			return false;
-		} else if (!doc.getRootElement().getName().equals("mesquite")) {
-			return false;
-		}
-		Element chromFileNameParsingRules = doc.getRootElement().getChild("chromFileNameParsingRules");
+		
+		Element chromFileNameParsingRules = root.element("chromFileNameParsingRules");
 		if (chromFileNameParsingRules != null) {
-			Element versionElement = chromFileNameParsingRules.getChild("version");
+			Element versionElement = chromFileNameParsingRules.element("version");
 			if (versionElement == null || !versionElement.getText().equals("1")) {
 				return false;
 			}
-			Element boundedByTokens = chromFileNameParsingRules.getChild("boundedByTokens");
+			Element boundedByTokens = chromFileNameParsingRules.element("boundedByTokens");
 			if (boundedByTokens == null) {
 				return false;
 			}
-			name = boundedByTokens.getChildText("name");
-			dnaCodeStartToken = boundedByTokens.getChildText("dnaCodeStartToken");
-			dnaCodeEndToken = boundedByTokens.getChildText("dnaCodeEndToken");
-			dnaCodeSuffixToken = boundedByTokens.getChildText("dnaCodeSuffixToken");
-			dnaCodeRemovalToken = boundedByTokens.getChildText("dnaCodeRemovalToken");			
-			primerStartToken = boundedByTokens.getChildText("primerStartToken");			
-			primerEndToken = boundedByTokens.getChildText("primerEndToken");
-			sampleCodeFirst = MesquiteBoolean.fromTrueFalseString(boundedByTokens.getChildText("sampleCodeFirst"));
-			//primerListPath = boundedByTokens.getChildTextTrim("primerListPath");
-			//dnaNumberListPath = boundedByTokens.getChildTextTrim("dnaNumberListPath");
-			//translateSampleCodes = MesquiteBoolean.fromTrueFalseString(boundedByTokens.getChildTextTrim("translateSampleCodes"));
+			name = boundedByTokens.elementText("name");
+			dnaCodeStartToken = boundedByTokens.elementText("dnaCodeStartToken");
+			dnaCodeEndToken = boundedByTokens.elementText("dnaCodeEndToken");
+			dnaCodeSuffixToken = boundedByTokens.elementText("dnaCodeSuffixToken");
+			dnaCodeRemovalToken = boundedByTokens.elementText("dnaCodeRemovalToken");			
+			primerStartToken = boundedByTokens.elementText("primerStartToken");			
+			primerEndToken = boundedByTokens.elementText("primerEndToken");
+			sampleCodeFirst = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementText("sampleCodeFirst"));
+			//primerListPath = boundedByTokens.elementTextTrim("primerListPath");
+			//dnaNumberListPath = boundedByTokens.elementTextTrim("dnaNumberListPath");
+			//translateSampleCodes = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementTextTrim("translateSampleCodes"));
 		} else {
 			return false;
 		}

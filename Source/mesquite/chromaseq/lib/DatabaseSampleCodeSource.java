@@ -8,7 +8,6 @@ import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
 
 import org.jdom.Document;
-import org.tolweb.base.http.BaseHttpRequestMaker;
 import org.tolweb.treegrow.main.RequestParameters;
 import org.tolweb.treegrow.main.XMLConstants;
 
