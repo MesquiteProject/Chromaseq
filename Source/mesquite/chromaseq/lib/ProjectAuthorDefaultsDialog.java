@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.tolweb.base.http.BaseHttpRequestMaker;
-import org.tolweb.treegrow.main.XMLConstants;
+import org.dom4j.*;
+
+import mesquite.tol.lib.*;
 
 import mesquite.lib.*;
 
@@ -64,11 +63,11 @@ public class ProjectAuthorDefaultsDialog extends ExtensibleDialog {
 				if (doc != null) {
 					serverErrorLabel.setVisible(false);
 					popupMenu.removeAll();					
-					for (Iterator iter = doc.getRootElement().getChildren(XMLConstants.CONTRIBUTOR).iterator(); iter.hasNext();) {
+					for (Iterator iter = doc.getRootElement().elements(XMLConstants.CONTRIBUTOR).iterator(); iter.hasNext();) {
 						Element element = (Element) iter.next();
-						String firstName = element.getChildText(XMLConstants.FIRSTNAME);
-						String lastName = element.getChildText(XMLConstants.LASTNAME);
-						String idString = element.getAttributeValue(XMLConstants.ID);
+						String firstName = element.elementText(XMLConstants.FIRSTNAME);
+						String lastName = element.elementText(XMLConstants.LASTNAME);
+						String idString = element.attributeValue(XMLConstants.ID);
 						Contributor contr = new Contributor(firstName + " " + lastName, Integer.parseInt(idString));
 						contributors.add(contr);
 						popupMenu.add(contr.getName());

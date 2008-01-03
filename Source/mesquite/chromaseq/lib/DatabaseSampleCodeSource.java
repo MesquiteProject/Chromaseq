@@ -7,9 +7,8 @@ import mesquite.lib.MesquiteMessage;
 import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
 
-import org.jdom.Document;
-import org.tolweb.treegrow.main.RequestParameters;
-import org.tolweb.treegrow.main.XMLConstants;
+import org.dom4j.*;
+import mesquite.tol.lib.*;
 
 /**
  * Class that looks up sequences in a database based on a sample code 
@@ -41,7 +40,7 @@ public class DatabaseSampleCodeSource {
 			outputCodeError(code);
 			return new String[] {"", ""};
 		} else {
-			sequenceName = doc.getRootElement().getChildText(XMLConstants.SEQUENCE);
+			sequenceName = doc.getRootElement().elementText(XMLConstants.SEQUENCE);
 			if (StringUtil.blank(sequenceName) || sequenceName.equals("null")) {
 				outputCodeError(code);
 			}

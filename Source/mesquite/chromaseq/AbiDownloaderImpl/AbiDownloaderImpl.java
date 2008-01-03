@@ -10,12 +10,8 @@ import java.util.Hashtable;
 import java.util.Random;
 
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.tolweb.base.http.BaseHttpRequestMaker;
-import org.tolweb.treegrow.main.RequestParameters;
-import org.tolweb.treegrow.main.StringUtils;
-import org.tolweb.treegrow.main.XMLConstants;
+import org.dom4j.*;
+import mesquite.tol.lib.*;
 
 import mesquite.chromaseq.PhredPhrap.PhredPhrap;
 import mesquite.chromaseq.lib.AbiDownloader;
@@ -89,11 +85,11 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		} 
 		// search succeeded -- see how many results
 		Element rootElement = results.getRootElement();
-		String numResultsString = rootElement.getAttributeValue(XMLConstants.COUNT);
+		String numResultsString = rootElement.attributeValue(XMLConstants.COUNT);
 		int numResults = 0;
 		if (!StringUtil.blank(numResultsString)) {
 			boolean hasResults = false;
-			if (StringUtils.getIsNumeric(numResultsString)) {
+			if (StringUtil.getIsNumeric(numResultsString)) {
 				numResults = Integer.parseInt(numResultsString);
 				if (numResults > 0) {
 					hasResults = true;

@@ -5,14 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.tolweb.base.xml.BaseXMLReader;
-import org.tolweb.treegrow.main.RequestParameters;
-import org.tolweb.treegrow.main.XMLConstants;
+import org.dom4j.*;
+import mesquite.tol.lib.*;
 
 import mesquite.Mesquite;
 import mesquite.lib.*;
+import mesquite.tol.lib.XMLConstants;
 
 /* ======================================================================== */
 public class PrimerList { 
@@ -116,7 +114,7 @@ public class PrimerList {
 		if (!root.getName().equals(rootTagName)) {
 			MesquiteMessage.warnUser("Malformed primer xml file, cannot parse.");
 		}
-		List primerChildren = doc.getRootElement().getChildren(primerTagName);
+		List primerChildren = doc.getRootElement().elements(primerTagName);
 		int numPrimers = primerChildren.size();
 		initializeArrays(numPrimers);
 		MesquiteString primerName = new MesquiteString();
@@ -257,18 +255,28 @@ public class PrimerList {
 	 * @param isForward whether the primer is forward
 	 * @return the gene name
 	 */
+    public static boolean getBooleanValue(Element nodeElement, String attributeName) {
+        boolean returnValue = false;
+        String attrValue = nodeElement.attributeValue(attributeName);
+        if (!StringUtil.blank(attrValue)) {
+            if (attrValue.equalsIgnoreCase(XMLConstants.ONE) || attrValue.equalsIgnoreCase(XMLConstants.TRUE) || attrValue.equalsIgnoreCase(XMLConstants.y)) {
+                returnValue = true;
+            }
+        }
+        return returnValue;
+    }    
 	private void parseSinglePrimerElement(Element primerElement, MesquiteString geneName, MesquiteString primerName, MesquiteBoolean isForward) {
 		if (primerElement == null) {
 			geneName.setValue("");
 		} else {
 			if (isForward != null) {
-				isForward.setValue(BaseXMLReader.getBooleanValue(primerElement, XMLConstants.forward));
+				isForward.setValue(getBooleanValue(primerElement, XMLConstants.forward));
 			}
 			if (geneName != null) {
-				geneName.setValue(primerElement.getAttributeValue(XMLConstants.genename));
+				geneName.setValue(primerElement.attributeValue(XMLConstants.genename));
 			}
 			if (primerName != null) {
-				primerName.setValue(primerElement.getAttributeValue(XMLConstants.name));
+				primerName.setValue(primerElement.attributeValue(XMLConstants.name));
 			}
 		}
 	}

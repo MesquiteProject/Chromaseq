@@ -10,10 +10,10 @@ import mesquite.lib.MesquiteModule;
 import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.tolweb.treegrow.main.RequestParameters;
-import org.tolweb.treegrow.main.XMLConstants;
+import org.dom4j.*;
+
+import mesquite.tol.lib.*;
+
 
 public class SequenceUploader {
 	private String abiUploadPageName = "btolxml/SequenceUploadService";
@@ -31,7 +31,7 @@ public class SequenceUploader {
 			return null;
 		} else {
 			Element rootElement = responseDoc.getRootElement();
-			String batchIdString = rootElement.getAttributeValue(XMLConstants.ID);
+			String batchIdString = rootElement.attributeValue(XMLConstants.ID);
 			return new Long(batchIdString);
 		}
 	}
@@ -59,7 +59,7 @@ public class SequenceUploader {
 				MesquiteMessage.warnUser("Problems uploading abi file: " + filenameArg + " to server.");
 			} else {
 				if (doc.getRootElement().getName().equals(XMLConstants.ERROR)) {
-					String errorNum = doc.getRootElement().getAttributeValue(XMLConstants.ERRORNUM); 
+					String errorNum = doc.getRootElement().attributeValue(XMLConstants.ERRORNUM); 
 					if (!StringUtil.blank(errorNum)) {
 						if (errorNum.equals("404")) {
 							MesquiteMessage.warnUser("Abi file: " + filenameArg + " not uploaded to server because PCR Reaction #" + sampleCode + " not found.");
