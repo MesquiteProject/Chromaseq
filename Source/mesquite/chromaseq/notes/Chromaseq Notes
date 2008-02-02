@@ -1,5 +1,28 @@
 Necessary pre-beta
 
+====
+notes from talking to Bets:
+
+- option not to show the quality scores on the sequence with each chromatograms
+- make base peaks wider
+- can hide phred.phrap.Mesquite and Original Import (separate controls)
+- default to have no conversion to lower case based upon quality score?  or at least have a check box
+
+- reorganize so that is more sequencher like.  i.e., have optional panel that has all of the read's calls.
+
+- have N regions be much paler
+- don't have the strong boundaries between reads
+
+- option to have lock standard height for reads that doesn't change as you grow the window
+
+- Sequencher:  edited in matrix locked with each read's calls, but not with chromatograms.
+when touch on base, chromatograms immediately center.
+
+- options to have sequences at top of window rather than at bottom
+
+====
+
+
 	
 	- data corruption if things at front moved to matrix?
 	
