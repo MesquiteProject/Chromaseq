@@ -3,13 +3,19 @@ package mesquite.chromaseq.lib;
 import mesquite.lib.*;
 
 public class ChromatogramPanel extends MesquitePanel {
-	protected Chromatogram chromatogram;
+	protected Chromatogram[] chromatograms;
+	protected int numChromatograms = 1;
 	protected ContigDisplay panel;
+	
+	protected	int width = 0;
+	protected int height = 0;
+	protected int top = 0;
+
 	
 	protected int centerBase = 0;
 	protected int centerPixel = 0;
 	protected int verticalPosition = 0;
-	protected int contigID;
+	public int contigID;
 	boolean scrollToTouched = false;
 
 	
@@ -52,11 +58,17 @@ public class ChromatogramPanel extends MesquitePanel {
 	public ContigDisplay getContigDisplay() {
 		return panel;
 	}
+	public Chromatogram getChromatogram(int i) {
+		return chromatograms[i];
+	}
 	public Chromatogram getChromatogram() {
-		return chromatogram;
+		return chromatograms[0];
 	}
 	public void setChromatogram(Chromatogram chromatogram) {
-		this.chromatogram = chromatogram;
+		this.chromatograms[0] = chromatogram;
+	}
+	public void setChromatogram(int i, Chromatogram chromatogram) {
+		this.chromatograms[i] = chromatogram;
 	}
 
 	public int getCenterBase() {
@@ -93,6 +105,12 @@ public class ChromatogramPanel extends MesquitePanel {
 	}
 	public void setContigID(int contigID) {
 		this.contigID = contigID;
+	}
+	public int getNumChromatograms() {
+		return numChromatograms;
+	}
+	public void setNumChromatograms(int numChromatograms) {
+		this.numChromatograms = numChromatograms;
 	}
 
 	

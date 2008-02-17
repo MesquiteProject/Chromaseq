@@ -8,18 +8,55 @@ import java.awt.*;
 
 public class MultiReadCallsPanel extends ChromatogramPanel {
 	MultiReadCallsCanvas multiReadCanvas = null;
+	boolean colorByQuality = true;
 
-	public MultiReadCallsPanel(int id) {
-		chromatogram.setWindow(panel);
+	public MultiReadCallsPanel(int id, ContigDisplay panel, Chromatogram[] chromatograms) {
+//		chromatogram.setWindow(panel);
+		this.chromatograms = chromatograms;
+		this.panel = panel;
+		this.numChromatograms = chromatograms.length;
 		multiReadCanvas = new MultiReadCallsCanvas(this, id);
-		//this.setLayout(new BorderLayout(0,0));
 		multiReadCanvas.setBounds(0, 0, getWidth(), getHeight());
 		this.add("Center",multiReadCanvas);
-		if (chromatogram.getRead().getComplemented()) 
-			setBackground(ColorDistribution.veryVeryLightGray);
-		else
-			setBackground(Color.white);
+		multiReadCanvas.setVisible(true);
+
 	}
+
+	public void repaintPanel(){
+		if (multiReadCanvas != null ) {
+			multiReadCanvas.repaint();
+		}
+	}
+	public  void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x,y,width,height);
+		this.width = width;
+		this.height = height;
+		multiReadCanvas.setBounds(0, 0, getWidth(), getHeight());
+		//chromArea.repaint();
+	}
+	public  void setSize( int width, int height) {
+		super.setSize(width,height);
+		this.width = width;
+		this.height = height;
+		multiReadCanvas.setBounds(0, 0, getWidth(), getHeight());
+		multiReadCanvas.repaint();
+	}
+	public void centerPanelAtOverallPosition(int i){
+		centerBase = i;
+		multiReadCanvas.repaint();
+	}
+
+	public boolean getColorByQuality() {
+		return colorByQuality;
+	}
+
+	public void setColorByQuality(boolean colorByQuality) {
+		this.colorByQuality = colorByQuality;
+	}
+	public int getAllReadHeight() {
+		return numChromatograms * (MultiReadCallsCanvas.readBaseHeight + MultiReadCallsCanvas.spacer);
+	}
+
 
 }
 
@@ -27,33 +64,72 @@ public class MultiReadCallsPanel extends ChromatogramPanel {
 //=======================================================================================
 
 class MultiReadCallsCanvas extends ChromatogramCanvas {
-	MultiReadCallsPanel chromatogramPanel;
+//	MultiReadCallsPanel chromatogramPanel;
+	static int readBaseHeight = 18;
+	static int spacer = 2;
+
 
 	boolean blackBackground=false;
 	boolean simplerGraphics=true;
+	int count = 0;
 
 	static final double NONSOURCEDIMFRACTION = 0.2;
 	static final double NONSOURCELOWERQUALITYDIMFRACTION = 0.15;
 
 
 	/*..........................*/
-	public MultiReadCallsCanvas(MultiReadCallsPanel parentV, int id) {
+	public MultiReadCallsCanvas(ChromatogramPanel parentV, int id) {
 		super(parentV,  id);
-		chromatogramPanel = parentV;
+//		chromatogramPanel = parentV;
+
 		addKeyListener(panel);
+	}
+
+	public boolean canShowTraces() {
+		return false;
 	}
 
 	/*...........................................................................*/
 	public void paint(Graphics g) {	
-		int v = -verticalPosition;
-		Read read = chromatogram.getRead();
-		int cheight = getBounds().height;
-		int shadowHeight = 5;
-		int labelHeight = 18;
-		int labelBottom = v+cheight-shadowHeight;
-		int labelTop = labelBottom-labelHeight+1;
+		for (int i = 0; i<numChromatograms; i++) 
+			paintRead(g,i);
+
+			int cheight = getBounds().height;
+			int cwidth = getBounds().width;
+			g.setColor(ColorDistribution.veryLightGray);
+			g.fillRect(0,cheight-3,cwidth,3);
+
+	}	
+	/*...........................................................................*/
+	public int findRead(int y) {
+		for (int i = 0; i<numChromatograms; i++) {
+			if (y>=getTopOfRead(i) && y<=getTopOfRead(i)+readBaseHeight)
+				return i;
+		}
+
+		return -1;
+	}
+
+	/*...........................................................................*/
+	public int getTopOfRead(int whichRead) {
+		int allReadHeight = numChromatograms*(readBaseHeight+spacer);
+		int topOfReads = (getBounds().height - allReadHeight)/2-4;
+		int bottomOfRead = topOfReads + (int)(whichRead+1)*(readBaseHeight+spacer)-spacer;
+		return  bottomOfRead-readBaseHeight;
+
+	}
+
+	/*...........................................................................*/
+	public void paintRead(Graphics g, int whichRead) {	
+		int topOfRead = getTopOfRead(whichRead);
+		int bottomOfRead = topOfRead+readBaseHeight;
+		int v = bottomOfRead;
+		int cheight = bottomOfRead;
+
 		int cwidth = getBounds().width;
-		double scale = 1.0*maxValue / cheight / magnification;
+
+		
+		Read read = chromatograms[whichRead].getRead();
 		int halfPeaks = panel.getApproximateNumberOfPeaksVisible()/2;
 		if (blackBackground)
 			setBackground(Color.black);
@@ -62,7 +138,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 
 		reCalcCenterBase();
 		int centerConsensusBase = centerBase-panel.getContig().getReadExcessAtStart();
-		int centerReadBase = getReadBaseFromConsensusBase(centerConsensusBase);
+		int centerReadBase = getReadBaseFromConsensusBase(whichRead,centerConsensusBase);
 
 		int firstReadBase = centerReadBase - halfPeaks;
 		int lastReadBase = centerReadBase+halfPeaks;
@@ -85,53 +161,30 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		lastReadBase++;
 
 		int i;
-		double fadeMax = 0.5;
 
 		int offsetForInserted = 0;
 		int firstSel = MesquiteInteger.unassigned;
 		int cmid = 0;
 
-
-
-
 		Color inverseBlackColor = Color.white;
 
+		g.setColor(Color.lightGray);
+		g.drawLine(cwidth/2,0,cwidth/2,v+cheight);
 
-
-
-//		=====================  DRAWING THE PEAKS ==============================
-		int peakBottom = labelBottom - labelHeight; //+lines;
-		int prevCons = 0;
-		int lostSpaceByInsert = 0;
-		int lastReadPos = MesquiteInteger.unassigned;
-		int start= 0;
-		int end = cwidth-2;
-
-
-
-
-//		=====================  DRAWING THE READ NAME ==============================
-		if (!StringUtil.blank(chromatogram.getTitle())) {
-			if (chromatogram.getRead().getComplemented())
-				g.setColor(Color.red);
-			else
-				g.setColor(Color.black);
-			g.drawString(chromatogram.getTitle(),10,v+30);
-		}
 
 		VChromWindow window = (VChromWindow)chromatogramPanel.getMesquiteWindow();
 
-		if (isShownComplemented())
-			g.drawString("COMPLEMENTED", 10,v+64);
+		//	if (isShownComplemented())
+		//v-spacer		g.drawString("COMPLEMENTED", 10,v+64);
 
 		offsetForInserted = 0;
 
 
 
 //		=====================  COLOR THE BASES UNDER THE READ ==============================
-		for (i=firstReadBase;i < chromatogram.getBaseNumber() && i<=lastReadBase;i++) {
+		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
-				int consensusBase = getConsensusBaseFromReadBase(i);
+				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
 				int space = panel.getSpaceInsertedBeforeConsensusBase(consensusBase);
 
 				offsetForInserted += space;
@@ -142,12 +195,12 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 
 				cmid = getFontMetrics(g.getFont()).charWidth(c) / 2;
 				int w = 0;
-				if (i+1< chromatogram.getBaseNumber())
+				if (i+1< chromatograms[whichRead].getBaseNumber())
 					//w = chromatogram.getReadBaseLocationAligned(i+1) - chromatogram.getReadBaseLocationAligned(i) + 1;
 					w = getPhdLocation(read, cwidth, i+1, panel,true) - getPhdLocation(read, cwidth, i, panel,true) + 1;
 				else
 					w =  (int)panel.getAveragePeakDistance();
-				if (qual>=0 && panel.getColorReadCallsByQuality()) {
+				if (qual>=0 && panel.getColorMultiReadByQuality()) {
 					if (qual==0)
 						g.setColor(Color.white);
 					//g.setColor(ColorDistribution.brighter(AceFile.getColorOfQuality(qual),0.2));
@@ -156,35 +209,35 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 					/*	char cc= panel.getMatrixStateAtConsensusPosition(consensusBase);
 		Color tempC = panel.getBaseColor(cc);
 		g.setColor(tempC);*/
-					fillRect(g, cwidth, getPhdLocation(read, cwidth, i, panel,true)- firstReadLocation - cmid - 2 + offsetForInserted, labelTop, w, labelHeight);
+					fillRect(g, cwidth, getPhdLocation(read, cwidth, i, panel,true)- firstReadLocation - cmid - 2 + offsetForInserted, topOfRead, w, readBaseHeight);
 				}
 
-
+/*
 
 				if (selected[overallBase]){
 					w = 0;
-					if (i+1< chromatogram.getBaseNumber())
+					if (i+1< chromatograms[whichRead].getBaseNumber())
 						//w = chromatogram.getReadBaseLocationAligned(i+1) - chromatogram.getReadBaseLocationAligned(i) + 1;
 						w = getPhdLocation(read, cwidth, i+1, panel,true) - getPhdLocation(read, cwidth, i, panel,true) + 1;
 					else
 						w =  (int)panel.getAveragePeakDistance();
 					g.setColor(Color.gray);
-					fillRect(g, cwidth, getPhdLocation(read, cwidth, i, panel,true)- firstReadLocation - cmid - 2 + offsetForInserted, labelTop, w, labelHeight);
+					fillRect(g, cwidth, getPhdLocation(read, cwidth, i, panel,true)- firstReadLocation - cmid - 2 + offsetForInserted, topOfRead, w, readBaseHeight);
 				}
-
+*/
 
 			}
 		}
 
 		offsetForInserted = 0;
-//		=====================  SHOW THE SELECTION ==============================
+/*		=====================  SHOW THE SELECTION ==============================
 		firstSel = MesquiteInteger.unassigned;
 		ColorDistribution.setTransparentGraphics(g);		
 		g.setColor(Color.gray);
 		cmid = 0;
 		for (i=firstReadBase-1; i<=lastReadBase+1;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
-				int consensusBase = getConsensusBaseFromReadBase(i);
+				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
 				offsetForInserted += panel.getSpaceInsertedBeforeConsensusBase(consensusBase);
 				int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);
 
@@ -209,14 +262,15 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 			firstSel = MesquiteInteger.unassigned;
 		}
 		ColorDistribution.setOpaqueGraphics(g);		
-
+*/
+		
 		offsetForInserted = 0;
 
 //		=====================  DRAW THE BASES UNDER THE READ ==============================
 
-		for (i=firstReadBase;i < chromatogram.getBaseNumber() && i<=lastReadBase;i++) {
+		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
-				int consensusBase = getConsensusBaseFromReadBase(i);
+				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
 				offsetForInserted += panel.getSpaceInsertedBeforeConsensusBase(consensusBase);
 				int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);
 				char c = read.getPhdBaseChar(i);
@@ -229,10 +283,10 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 				Color textC = panel.getBaseColor(c,panel.getBackgroundColor());
 				int pixels = panel.getHorizontalPixels(getPhdLocation(read, cwidth, i, panel,true) - firstReadLocation) + offsetForInserted;
 
-				if (selected[overallBase]){
-					StringUtil.highlightString(g, String.valueOf(c), pixels - cmid, labelBottom-3, textC, Color.white);
-				}
-				else {
+				//if (selected[overallBase]){
+				//	StringUtil.highlightString(g, String.valueOf(c), pixels - cmid, bottomOfRead, textC, Color.white);
+				//}
+				//else {
 					if (c=='N') 
 						g.setColor(Color.lightGray);
 					else {
@@ -243,31 +297,36 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 						GraphicsUtil.setFontStyle(Font.BOLD,g);
 					}
 					GraphicsUtil.setFontSize(12,g);
-					drawString(g, cwidth, ""+c,pixels - cmid, labelBottom-3);
-					String aaa = chromatogram.getTitle();
+					drawString(g, cwidth, ""+c,pixels - cmid, bottomOfRead-3);
+					String aaa = chromatograms[whichRead].getTitle();
 
 //					Drawing primers					
 					GraphicsUtil.setFontStyle(Font.PLAIN,g);
-				}
+				//}
 
 
 
 			}
 		}
+//		=====================  DRAWING THE READ NAME ==============================
+		String s = chromatograms[whichRead].getTitle();
+		if (!StringUtil.blank(s)) {
+			GraphicsUtil.setFontSize(10,g);
+			GraphicsUtil.setFontStyle(Font.BOLD, g);
+			int length = getFontMetrics(g.getFont()).stringWidth(s);
+			ColorDistribution.setTransparentGraphics(g,0.92f);		
+			g.setColor(Color.white);
+			g.fillRect(0,v-spacer-11, length+12, 12);
+			ColorDistribution.setOpaqueGraphics(g);		
 
-//		=====================  DRAW THE BOTTOM LINES ==============================
-		if (!simplerGraphics) {
-			g.setColor(Color.black);
-			g.drawLine(0,cheight-5,cwidth,v+cheight-5);
-			g.drawLine(0,cheight-4,cwidth,v+cheight-4);
-			g.setColor(Color.gray);
-			g.drawLine(0,cheight-3,cwidth,v+cheight-3);
-			g.setColor(Color.lightGray);
-			g.drawLine(0,cheight-2,cwidth,v+cheight-2);
-			g.setColor(ColorDistribution.veryLightGray);
-			g.drawLine(0,cheight-1,cwidth,v+cheight-1);
+
+			if (chromatograms[whichRead].getRead().getComplemented())
+				g.setColor(Color.red);
+			else
+				g.setColor(Color.black);
+			g.drawString(s,10,v-spacer-1);
 		}
-//		Debugg.println("end of paint, "+chromatogram.getTitle());
+
 	}
 
 
@@ -275,11 +334,13 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
-		int ic = findOverallBaseNumber(x); 
+		int whichRead = findRead(y);
+		if (whichRead<0) return;
+		int ic = findOverallBaseNumber(whichRead, x); 
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels() &&!onRequiredSelection){
-			int cons = findConsensusBaseNumber(x);
-			((ChromatogramTool)tool).touched(cons, cons, true, id, chromatogramPanel.getContigID(), modifiers);
+			int cons = findConsensusBaseNumber(whichRead,x);
+			((ChromatogramTool)tool).touched(cons, cons, true, id, chromatogramPanel.contigID, modifiers);
 			/*		MesquiteWindow w = chromatogramPanel.getMesquiteWindow();
 		if (w!=null)
 			w.showQuickMessage(chromatogramPanel,null,x,y,"testing");
@@ -327,11 +388,13 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 	}
 	public void mouseDrag (int modifiers, int x, int y, MesquiteTool tool) {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
-		int ic = findOverallBaseNumber(x); 
+		int whichRead = findRead(y);
+		if (whichRead<0) return;
+		int ic = findOverallBaseNumber(whichRead,x); 
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels() && !onRequiredSelection){
-			int cons = findConsensusBaseNumber(x);
-			((ChromatogramTool)tool).dragged(cons, cons, true, id, chromatogramPanel.getContigID(), modifiers);
+			int cons = findConsensusBaseNumber(whichRead,x);
+			((ChromatogramTool)tool).dragged(cons, cons, true, id, chromatogramPanel.contigID, modifiers);
 			return;
 		}
 		if (MesquiteInteger.isCombinable(ic)){
@@ -340,7 +403,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 				if (panel.getFirstTouchedOverall()>ic){
 					if (MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()) && panel.getSecondTouchedOverall()<panel.getFirstTouchedOverall() && ic>panel.getSecondTouchedOverall()){ //retracting
 						for (int i = panel.getSecondTouchedOverall()+1; i<=ic; i++) 
-							deselectOverallBase(i);
+							deselectOverallBase(whichRead,i);
 					}
 					else for (int i = ic; i<=panel.getFirstTouchedOverall(); i++) //adding
 						selectOverallBase(i);
@@ -348,7 +411,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 				else {
 					if (MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()) && panel.getSecondTouchedOverall()>panel.getFirstTouchedOverall() && ic<panel.getSecondTouchedOverall()){ //retracting
 						for (int i = ic+1; i<=panel.getSecondTouchedOverall(); i++) 
-							deselectOverallBase(i);
+							deselectOverallBase(whichRead,i);
 					}
 					else for (int i = panel.getFirstTouchedOverall(); i<=ic; i++)
 						selectOverallBase(i);
@@ -365,9 +428,11 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseUp(int modifiers, int x, int y, MesquiteTool tool) {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
+		int whichRead = findRead(y);
+		if (whichRead<0) return;
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels()){
-			int cons = findConsensusBaseNumber(x);
-			((ChromatogramTool)tool).dropped(cons, cons, true, id, chromatogramPanel.getContigID(), modifiers);
+			int cons = findConsensusBaseNumber(whichRead,x);
+			((ChromatogramTool)tool).dropped(cons, cons, true, id, chromatogramPanel.contigID, modifiers);
 			return;
 		}
 		if (MesquiteInteger.isCombinable(panel.getFirstTouchedOverall())){
@@ -377,10 +442,10 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 				panel.focusMatrixOn(panel.getConsensusBaseFromOverallBase(panel.getFirstTouchedOverall()), panel.getConsensusBaseFromOverallBase(panel.getSecondTouchedOverall()));
 		}
 		if (chromatogramPanel.getScrollToTouched()) {
-			int ic = findConsensusBaseNumber(x);
+			int ic = findConsensusBaseNumber(whichRead,x);
 			if (ic>=0) {
 				panel.scrollToConsensusBase(ic);
-		//		panel.deselectAllReads();
+				//		panel.deselectAllReads();
 
 			}
 		}
@@ -388,21 +453,23 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 	}
 	/*_________________________________________________*/
 	public void mouseMoved(int modifiers, int x, int y, MesquiteTool tool) {
-		int ic = findConsensusBaseNumber(x);
-		int readBaseNumber = read.getReadBaseFromConsensusBase(ic);
-		int quality = read.getPhdBaseQuality(readBaseNumber);
-		double averageQuality = read.getAverageQuality();
-		int numBasesHighQuality = read.getNumBasesHighQuality();
+		int whichRead = findRead(y);
+		if (whichRead<0) return;
+		int ic = findConsensusBaseNumber(whichRead,x);
+		int readBaseNumber = reads[whichRead].getReadBaseFromConsensusBase(ic);
+		int quality = reads[whichRead].getPhdBaseQuality(readBaseNumber);
+		double averageQuality = reads[whichRead].getAverageQuality();
+		int numBasesHighQuality = reads[whichRead].getNumBasesHighQuality();
 		String s = "";
 		if (quality>=0)
-			s+= "Base quality: " + quality + ",   Peak heights: " + getPeakHeightsOfBase(readBaseNumber);
-		s+= "\n# Bases with Quality ³ " + read.getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatogram.getTitle()+")";
+			s+= "Base quality: " + quality + ",   Peak heights: " + getPeakHeightsOfBase(whichRead,readBaseNumber);
+		s+= "\n# Bases with Quality ³ " + reads[whichRead].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[whichRead].getTitle()+")";
 		panel.setExplanation( s);
 		if (tool == null)
 			return;
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (chromTool.getWorksOnlyOnSelection())
-			if (!getSelected(findOverallBaseNumber(x)))
+			if (!getSelected(findOverallBaseNumber(whichRead,x)))
 				setCursor(Cursor.getDefaultCursor());
 			else
 				setCurrentCursor(modifiers, x, y, chromTool);
@@ -418,4 +485,5 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 			return;
 		setCurrentCursor(modifiers, x, y, (ChromatogramTool)tool);
 	}
+
 }
