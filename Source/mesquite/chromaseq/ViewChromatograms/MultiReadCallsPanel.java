@@ -311,7 +311,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		String s = chromatograms[whichRead].getTitle();
 		if (!StringUtil.blank(s)) {
 			GraphicsUtil.setFontSize(10,g);
-			GraphicsUtil.setFontStyle(Font.BOLD, g);
+			//GraphicsUtil.setFontStyle(Font.BOLD, g);
 			int length = getFontMetrics(g.getFont()).stringWidth(s);
 			ColorDistribution.setTransparentGraphics(g,0.92f);		
 			g.setColor(Color.white);

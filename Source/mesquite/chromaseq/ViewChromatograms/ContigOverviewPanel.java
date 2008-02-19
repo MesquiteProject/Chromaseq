@@ -138,7 +138,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 
 class ContigOverviewCanvas extends ChromatogramCanvas {
 //	MultiReadCallsPanel chromatogramPanel;
-	static int readBaseHeight = 6;
+	static int readBaseHeight = 7;
 	static int spacer = 2;
 
 	VChromWindow window = null;
@@ -282,14 +282,14 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		else
 			setBackground(panel.getBackgroundColor());
 
-		int i;
 		Color baseColor;
 
 //		=====================  COLOR THE BASES UNDER THE READ ==============================
-		for (i=firstBase;i < numBases;i++) {
+		int firstLocation = -1;
+		int lastLocation = -1;
+		for (int i=firstBase;i < numBases;i++) {
 			int readBase = getReadBaseFromOverallBase(whichRead, i);
 			if (readBase>=0 && readBase<read.getBasesLength()) {
-				int consensusBase = i;
 
 				char c = read.getPhdBaseChar(readBase);
 				char matrixC= panel.getMatrixStateAtConsensusPosition(read.getConsensusBaseFromReadBase(readBase));
@@ -302,14 +302,16 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 						g.setColor(ColorDistribution.brighter(AceFile.getColorOfQuality(qual),0.5));
 					else 
 						g.setColor(Color.red);
-					fillRect(g, cwidth, left+(i)*singleBaseWidth, topOfRead, singleBaseWidth, readBaseHeight);
 				}
 				else  {
 					baseColor = panel.getBaseColor(c,window.getBackgroundColor());
 					
 					g.setColor(baseColor);
-					fillRect(g, cwidth, left+(i)*singleBaseWidth, topOfRead, singleBaseWidth, readBaseHeight);
 				}
+				if (firstLocation<0)
+					firstLocation = left+(i)*singleBaseWidth;
+				fillRect(g, cwidth, left+(i)*singleBaseWidth, topOfRead, singleBaseWidth, readBaseHeight);
+				lastLocation = left+(i)*singleBaseWidth+singleBaseWidth;
 			} 
 		}
 
@@ -327,6 +329,30 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 				g.setColor(Color.black);
 			g.drawString(s,8,bottomOfRead-spacer+2);
 		}
+		
+		final int lineLength = 8;
+		g.setColor(Color.lightGray);
+		if (chromatograms[whichRead].getRead().getComplemented()){
+			if (firstLocation>lineLength+getLeftBoundaryOfOverview(g)) {
+				g.drawLine(firstLocation-2, topOfRead + readBaseHeight/2, firstLocation-2-lineLength, topOfRead + readBaseHeight/2);
+				g.drawLine(firstLocation-2-lineLength, topOfRead + readBaseHeight/2, firstLocation-2-lineLength+readBaseHeight/2, topOfRead);
+				g.drawLine(firstLocation-2-lineLength, topOfRead + readBaseHeight/2, firstLocation-2-lineLength+readBaseHeight/2, topOfRead+readBaseHeight);
+			}
+			g.drawLine(lastLocation+2, topOfRead + readBaseHeight/2, lastLocation+lineLength, topOfRead + readBaseHeight/2);
+			g.drawLine(lastLocation+lineLength, topOfRead + readBaseHeight/2, lastLocation+lineLength+readBaseHeight/2, topOfRead);
+			g.drawLine(lastLocation+lineLength, topOfRead + readBaseHeight/2, lastLocation+lineLength+readBaseHeight/2, topOfRead+readBaseHeight);
+		} else {
+			if (firstLocation>lineLength+getLeftBoundaryOfOverview(g)) {
+				g.drawLine(firstLocation-2, topOfRead + readBaseHeight/2, firstLocation-lineLength, topOfRead + readBaseHeight/2);
+				g.drawLine(firstLocation-lineLength, topOfRead + readBaseHeight/2, firstLocation-lineLength-readBaseHeight/2, topOfRead);
+				g.drawLine(firstLocation-lineLength, topOfRead + readBaseHeight/2, firstLocation-lineLength-readBaseHeight/2, topOfRead+readBaseHeight);
+			}
+			g.drawLine(lastLocation+2, topOfRead + readBaseHeight/2, lastLocation+2+lineLength, topOfRead + readBaseHeight/2);
+			g.drawLine(lastLocation+2+lineLength, topOfRead + readBaseHeight/2, lastLocation+2+lineLength-readBaseHeight/2, topOfRead);
+			g.drawLine(lastLocation+2+lineLength, topOfRead + readBaseHeight/2, lastLocation+2+lineLength-readBaseHeight/2, topOfRead+readBaseHeight);
+
+		}
+
 
 	}
 
@@ -338,7 +364,6 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 	/*--------------------------------------*/
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
-		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		mouseDownInBox = false;
 		int offsetInBox = 0;
 		Rectangle box = getFieldOfView(getGraphics());
@@ -357,7 +382,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		}
 	}
 	public void mouseDrag (int modifiers, int x, int y, MesquiteTool tool) {
-		ChromatogramTool chromTool = (ChromatogramTool)tool;
+		//ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (mouseDownInBox) {
 			setCursor(window.getHandCursor());
 			int numBases = panel.getTotalNumPeaks();
@@ -372,7 +397,6 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 	}
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseUp(int modifiers, int x, int y, MesquiteTool tool) {
-		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		int whichRead = findRead(y);
 		if (whichRead<0) return;
 		setCursor(Cursor.getDefaultCursor());
