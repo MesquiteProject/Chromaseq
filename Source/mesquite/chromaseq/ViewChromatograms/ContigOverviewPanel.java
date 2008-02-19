@@ -266,6 +266,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 			setBackground(panel.getBackgroundColor());
 
 		int i;
+		Color baseColor;
 
 //		=====================  COLOR THE BASES UNDER THE READ ==============================
 		for (i=firstBase;i < numBases;i++) {
@@ -274,20 +275,22 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 				int consensusBase = i;
 
 				char c = read.getPhdBaseChar(readBase);
+				char matrixC= panel.getMatrixStateAtConsensusPosition(read.getConsensusBaseFromReadBase(readBase));
 				int qual = read.getPhdBaseQuality(readBase);
 
 				if (qual>=0 && panel.getColorOverviewByQuality()) {
 					if (qual==0)
 						g.setColor(Color.black);
-					else
+					else if (matrixC == c || matrixC=='X' || matrixC=='x' || matrixC=='-')
 						g.setColor(ColorDistribution.brighter(AceFile.getColorOfQuality(qual),0.5));
+					else 
+						g.setColor(Color.red);
 					fillRect(g, cwidth, left+(i)*singleBaseWidth, topOfRead, singleBaseWidth, readBaseHeight);
 				}
 				else  {
-					char cc= panel.getMatrixStateAtConsensusPosition(consensusBase);
-					Color tempC = panel.getBaseColor(c,window.getBackgroundColor());
-
-					g.setColor(tempC);
+					baseColor = panel.getBaseColor(c,window.getBackgroundColor());
+					
+					g.setColor(baseColor);
 					fillRect(g, cwidth, left+(i)*singleBaseWidth, topOfRead, singleBaseWidth, readBaseHeight);
 				}
 			} 
@@ -310,6 +313,8 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 
 	}
 
+	
+	
 	boolean mouseDownInBox = false;
 	int offsetInBox = 0;
 //	int mouseDownRead = -1;

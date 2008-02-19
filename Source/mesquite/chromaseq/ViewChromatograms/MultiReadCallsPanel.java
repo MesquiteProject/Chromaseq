@@ -180,7 +180,6 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		offsetForInserted = 0;
 
 
-
 //		=====================  COLOR THE BASES UNDER THE READ ==============================
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
