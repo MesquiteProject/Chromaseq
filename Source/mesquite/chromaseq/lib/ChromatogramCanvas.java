@@ -381,6 +381,16 @@ public class ChromatogramCanvas extends MousePanel {
 			return i;
 	}
 	/*--------------------------------------*/
+	/*This returns for overall position i, what is the position in the read. */
+	public int getReadBaseFromOverallBase(int whichRead,int i){
+		int consensusBase = panel.getConsensusBaseFromOverallBase(i);
+		Read read = chromatograms[whichRead].getRead();
+		if (read!=null)
+			return read.getReadBaseFromConsensusBase(consensusBase);  
+		else
+			return i;
+	}
+	/*--------------------------------------*/
 	/** Given the overall base number overallBase, this method selects that base within this chromatogram.
 	 * Note that it does NOT translate to the base number within the read, as selection can now happen even if 
 	 * there is no read there */
