@@ -83,6 +83,18 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 	}
 	public void centerPanelAtOverallPosition(int i){
 		centerBase = i;
+		if (i<firstBase) {
+			if (i-2<0)
+				positionOverview(i);
+			else
+				positionOverview(i-2);
+		}
+		else if (i>firstBase+numBasesVisible) {
+			if (i+2>numBases)
+				positionOverview(i-numBasesVisible);
+			else 
+				positionOverview(i-numBasesVisible+2);
+		}
 		contigOverviewCanvas.repaint();
 	}
 
@@ -210,7 +222,12 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int left = getLeftBoundaryOfOverview(g);
 		int top = getTopOfRead(0)-5;
 		int bottom = getTopOfRead(numChromatograms-1)+readBaseHeight + 5;
-		return new Rectangle(left+firstConsensusBase*singleBaseWidth, top, panel.getApproximateNumberOfPeaksVisible()*singleBaseWidth,bottom-top);
+		int width = panel.getApproximateNumberOfPeaksVisible();
+		if (firstConsensusBase+panel.getApproximateNumberOfPeaksVisible()> panel.getTotalNumPeaks()){
+			width =  panel.getTotalNumPeaks()-firstConsensusBase;
+			if (width<0) width=0;
+		}
+		return new Rectangle(left+firstConsensusBase*singleBaseWidth, top, width*singleBaseWidth,bottom-top);
 	}	
 
 	/*...........................................................................*/
@@ -343,10 +360,12 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (mouseDownInBox) {
 			setCursor(window.getHandCursor());
+			int numBases = panel.getTotalNumPeaks();
 			int ic = getOverallBaseFromLocation(x-offsetInBox,getGraphics()); 
-			 ic = panel.getConsensusBaseFromOverallBase(ic)+firstBase;
-			if (MesquiteInteger.isCombinable(ic)){
-				panel.scrollToConsensusBase(ic);
+			int overallBase = ic+firstBase;
+			int consensus = panel.getConsensusBaseFromOverallBase(ic)+firstBase;
+			if (MesquiteInteger.isCombinable(consensus) && overallBase>=0 && overallBase<numBases){
+				panel.scrollToConsensusBase(consensus);
 				panel.repaintPanels();
 			}
 		}
