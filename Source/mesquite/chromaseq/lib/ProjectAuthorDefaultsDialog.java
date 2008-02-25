@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JLabel;
+
 import org.dom4j.*;
 
 import mesquite.tol.lib.*;
@@ -19,8 +21,8 @@ import mesquite.lib.*;
  *
  */
 public class ProjectAuthorDefaultsDialog extends ExtensibleDialog {
-	private Label serverErrorLabel;
-	private Label selectNameLabel;
+	private JLabel serverErrorLabel;
+	private JLabel selectNameLabel;
 	private String[] choiceStrings;
 	private Choice popupMenu;
 	private List contributors;
@@ -90,7 +92,7 @@ public class ProjectAuthorDefaultsDialog extends ExtensibleDialog {
 		addHorizontalLine(1);
 		choiceStrings = new String[1];
 		choiceStrings[0] = "";
-		selectNameLabel = new Label("Select your name:");
+		selectNameLabel = new JLabel("Select your name:");
 		popupMenu = addPopUpMenu(selectNameLabel, choiceStrings, 0);
 		popupMenu.setVisible(false);
 		selectNameLabel.setVisible(false);
