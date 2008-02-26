@@ -1,6 +1,10 @@
 Necessary pre-beta
 
 ====
+notes from talking to Alex W
+- have phred (not phrap) process a single chromatogram, including via drag and drop
+- insert gaps on individual Read
+====
 notes from talking to Bets:
 
 - option not to show the quality scores on the sequence with each chromatograms
