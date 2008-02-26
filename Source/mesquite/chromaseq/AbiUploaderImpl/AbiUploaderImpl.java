@@ -91,7 +91,7 @@ public class AbiUploaderImpl extends AbiUploader {
 					}
 					storePreferences();
 					// create the upload batch on the server					
-					Long batchId = uploader.createAB1BatchOnServer(uploadBatchNameField.getText(), uploadBatchDescriptionArea.getText(), MesquiteModule.author.getCode());
+					Long batchId = uploader.createAB1BatchOnServer(getUrl(), uploadBatchNameField.getText(), uploadBatchDescriptionArea.getText(), MesquiteModule.author.getCode());
 					if (batchId == null) {
 						MesquiteMessage.warnUser("Unable to create chromatogram batch on the server.  Chromatogram upload will not continue.");
 						return false;
@@ -111,7 +111,7 @@ public class AbiUploaderImpl extends AbiUploader {
 								MesquiteMessage.warnUser("Going to upload file: " + nextAbi + " to server.");
 								String totalCode = dnaCodeResult + sampleCode.toString();
 								// totalCode -- eg. DNA1200 or BP1502
-								uploader.uploadAB1ToServer(totalCode, null, nextAbi, batchId);
+								uploader.uploadAB1ToServer(getUrl(),totalCode, null, nextAbi, batchId);
 							}
 						}
 					}

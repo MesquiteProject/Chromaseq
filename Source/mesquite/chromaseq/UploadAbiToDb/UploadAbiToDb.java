@@ -2,19 +2,15 @@ package mesquite.chromaseq.UploadAbiToDb;
 
 import mesquite.chromaseq.lib.AbiUploader;
 import mesquite.chromaseq.lib.PhPhRunner;
-import mesquite.lib.CommandChecker;
-import mesquite.lib.CommandRecord;
-import mesquite.lib.MesquiteMessage;
+import mesquite.lib.*;
 import mesquite.lib.duties.UtilitiesAssistant;
 
 public class UploadAbiToDb extends UtilitiesAssistant {
 	private static final String COMMAND_NAME = "uploadAbiToDb";
 
 	/* ................................................................................................................. */
-	public boolean startJob(String arguments, Object condition,
-			boolean hiredByName) {
-		addMenuItem(null, "Upload ABI files to database...", makeCommand(
-				COMMAND_NAME, this));
+	public boolean startJob(String arguments, Object condition,boolean hiredByName) {
+		addMenuItem(null, "Upload ABI files to database...", makeCommand(COMMAND_NAME, this));
 		return true;
 	}
 
@@ -35,13 +31,10 @@ public class UploadAbiToDb extends UtilitiesAssistant {
 	}
 
 	/* ................................................................................................................. */
-	public Object doCommand(String commandName, String arguments,
-			 CommandChecker checker) {
-		if (checker.compare(this.getClass(),
-				"Uploads a folder of abi files to a database.", null,
-				commandName, COMMAND_NAME)) {
-			AbiUploader uploader = (AbiUploader) hireEmployee(
-					AbiUploader.class, "Abi Uploader");
+	public Object doCommand(String commandName, String arguments,CommandChecker checker) {
+		if (checker.compare(this.getClass(), "Uploads a folder of abi files to a database.", null, commandName, COMMAND_NAME)) {
+			//String databaseURL = MesquiteString.queryShortString(null, "Database URL, message, current);
+			AbiUploader uploader = (AbiUploader) hireEmployee(AbiUploader.class, "Abi Uploader");
 			if (uploader != null) {
 				uploader.uploadAbiFilesToDb();
 			} else {

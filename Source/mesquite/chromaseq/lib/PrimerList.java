@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dom4j.*;
+
 import mesquite.tol.lib.*;
 
 import mesquite.Mesquite;
@@ -17,26 +18,30 @@ public class PrimerList {
 	String [] primerNames;
 	String token;
 	String [] fragmentNames;
+	String [] sequences;
 	boolean [] forward;
 	String fragName;
 	int numPrimers;
 	private boolean useDb;
-	
+	private String databaseURL;
+
 	public PrimerList(String primerList) {
-		this(primerList, false);
+		this(primerList, false, null);
 	}
-	public PrimerList(boolean useDb) {
-		this(null, useDb);
+	public PrimerList(boolean useDb, String databaseURL) {
+		this(null, useDb, databaseURL);
 	}
-	
-	public PrimerList(String primerListPathOrDbUrl, boolean useDb) {
+
+	public PrimerList(String primerListPathOrDbUrl, boolean useDb, String databaseURL) {
+		this.databaseURL = databaseURL;
 		if (useDb) {
 			this.useDb = useDb;
 		} else {
 			readTabbedPrimerFile(primerListPathOrDbUrl);
 		}
-}
-	
+	}
+
+	/*
 	public void readXMLPrimerFile(String primerList) {  // this does not work; just started to build this.
 		String oneFragment;
 		int numPrimers = 0;
@@ -51,7 +56,7 @@ public class PrimerList {
 			return;
 		MesquiteString nextTag = new MesquiteString();
 		String tagContent = parser.getNextXMLTaggedContent(nextTag);
-		
+
 		while (!StringUtil.blank(tagContent)) {
 			if ("primers".equalsIgnoreCase(nextTag.getValue())) {  //make sure it has the right root tag
 				subParser.setString(tagContent);
@@ -80,10 +85,10 @@ public class PrimerList {
 										}
 										subTagContent = subParser.getNextXMLTaggedContent(nextTag);
 									}
-							}
+								}
 								tagContent = subParser.getNextXMLTaggedContent(nextTag);
 							}
-							
+
 						}
 						else
 							return;
@@ -93,11 +98,12 @@ public class PrimerList {
 			}
 			tagContent = parser.getNextXMLTaggedContent(nextTag);
 		}
-			
-			
-		
+
+
+
 	}
 
+	 */
 	/**
 	 * format:
 	 * <primers>
@@ -115,11 +121,13 @@ public class PrimerList {
 			MesquiteMessage.warnUser("Malformed primer xml file, cannot parse.");
 		}
 		List primerChildren = doc.getRootElement().elements(primerTagName);
-		int numPrimers = primerChildren.size();
-		initializeArrays(numPrimers);
+		//int numPrimers = primerChildren.size();
+		initializeArrays(primerChildren.size());
 		MesquiteString primerName = new MesquiteString();
 		MesquiteBoolean isForward = new MesquiteBoolean(false);
 		MesquiteString geneName = new MesquiteString();
+		MesquiteString sequence = new MesquiteString();
+		numPrimers=0;
 		int i = 0;
 		for (Iterator iter = primerChildren.iterator(); iter.hasNext();) {
 			// init for this time around the loop
@@ -127,18 +135,33 @@ public class PrimerList {
 			isForward.setValue(false);
 			geneName.setValue("");
 			Element nextPrimerElement = (Element) iter.next();
-			parseSinglePrimerElement(nextPrimerElement, geneName, primerName, isForward);
+			parseSinglePrimerElement(nextPrimerElement, geneName, primerName, sequence, isForward);
 			primerNames[i] = primerName.getValue();
 			fragmentNames[i] = geneName.getValue();
+			sequences[i] = sequence.getValue();
 			forward[i++] = isForward.getValue();
+			numPrimers++;
 		}
 	}
 
 	private void initializeArrays(int numPrimers) {
 		primerNames = new String[numPrimers];
 		fragmentNames = new String[numPrimers];
+		sequences = new String[numPrimers];
 		forward = new boolean[numPrimers];
 	}
+	public void readPrimerInfoFromDatabase() {
+		Map args = new Hashtable();
+		args.put("key", "archostemataarec00L");
+
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,"btolxml/PrimerService", args);
+		if (doc != null) {
+			// xml format so parse accordingly
+			parsePrimerXML(doc);
+			return;
+		}
+	}
+
 	public void readTabbedPrimerFile(String primerList) {
 		Document doc = MesquiteXMLUtilities.getDocumentFromString(primerList);
 		if (doc != null) {
@@ -157,11 +180,11 @@ public class PrimerList {
 			tempList.trim();
 		}
 		initializeArrays(numPrimers);
-		
+
 		int count = -1;
 		while (!StringUtil.blank(primerList) && primerList.length() > 10 && count < numPrimers) {
 			oneFragment = primerList.substring(0,primerList.indexOf(";"));
-			
+
 			Parser parser = new Parser(oneFragment);
 			fragName = parser.getNextToken(); 
 			if (parser.getNextToken().equalsIgnoreCase("Forward")) {
@@ -216,9 +239,10 @@ public class PrimerList {
 			if (getUseDb()) {
 				Map args = new Hashtable();
 				args.put(RequestParameters.PRIMER_NAME, primerName);
+				args.put("key", "archostemataarec00L");
 				Document doc = null;
 //				try {
-				doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName("btolxml/PrimerService", args);
+				doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,"btolxml/PrimerService", args);
 //				}
 				// problems contacting the db!
 				if (doc == null) {
@@ -227,12 +251,18 @@ public class PrimerList {
 					MesquiteMessage.warnUser("Primer name not found in database: " + primerName+"\n");
 					return "";
 				} else {
+					String s = doc.toString();
 					Element root = doc.getRootElement();
-					MesquiteBoolean isForward = new MesquiteBoolean(false);
-					MesquiteString geneName = new MesquiteString();
-					parseSinglePrimerElement(root, geneName, null, isForward);
-					assignStLouisString(stLouisString, isForward.getValue());
-					return geneName.getValue();
+					if (root!=null) {
+						Element primer = root.element("primer");
+						if (primer!=null) {
+							MesquiteBoolean isForward = new MesquiteBoolean(false);
+							MesquiteString geneName = new MesquiteString();
+							parseSinglePrimerElement(primer, geneName, null, null,isForward);
+							assignStLouisString(stLouisString, isForward.getValue());
+							return geneName.getValue();
+						}
+					}
 				}
 			} else {
 				for (int i=0; i<primerNames.length; i++) {
@@ -255,17 +285,17 @@ public class PrimerList {
 	 * @param isForward whether the primer is forward
 	 * @return the gene name
 	 */
-    public static boolean getBooleanValue(Element nodeElement, String attributeName) {
-        boolean returnValue = false;
-        String attrValue = nodeElement.attributeValue(attributeName);
-        if (!StringUtil.blank(attrValue)) {
-            if (attrValue.equalsIgnoreCase(XMLConstants.ONE) || attrValue.equalsIgnoreCase(XMLConstants.TRUE) || attrValue.equalsIgnoreCase(XMLConstants.y)) {
-                returnValue = true;
-            }
-        }
-        return returnValue;
-    }    
-	private void parseSinglePrimerElement(Element primerElement, MesquiteString geneName, MesquiteString primerName, MesquiteBoolean isForward) {
+	public static boolean getBooleanValue(Element nodeElement, String attributeName) {
+		boolean returnValue = false;
+		String attrValue = nodeElement.attributeValue(attributeName);
+		if (!StringUtil.blank(attrValue)) {
+			if (attrValue.equalsIgnoreCase(XMLConstants.ONE) || attrValue.equalsIgnoreCase(XMLConstants.TRUE) || attrValue.equalsIgnoreCase(XMLConstants.y)) {
+				returnValue = true;
+			}
+		}
+		return returnValue;
+	}    
+	private void parseSinglePrimerElement(Element primerElement, MesquiteString geneName, MesquiteString primerName, MesquiteString sequence, MesquiteBoolean isForward) {
 		if (primerElement == null) {
 			geneName.setValue("");
 		} else {
@@ -277,6 +307,9 @@ public class PrimerList {
 			}
 			if (primerName != null) {
 				primerName.setValue(primerElement.attributeValue(XMLConstants.name));
+			}
+			if (sequence != null) {
+				sequence.setValue(primerElement.attributeValue(XMLConstants.sequence));
 			}
 		}
 	}
@@ -322,12 +355,28 @@ public class PrimerList {
 		}
 		return count;
 	}
-
+	/*.................................................................................................................*/
+	public String[][] getPrimerSequences() {
+		if (primerNames==null || sequences==null)
+			return null;
+		String[][] sequenceList = new String[numPrimers][2];
+		for (int i=0; i<numPrimers&& i<primerNames.length && i<sequences.length; i++) {
+			sequenceList[i][0] = primerNames[i];
+			sequenceList[i][1] = sequences[i];
+		}
+		return sequenceList;
+	}
 	public boolean getUseDb() {
 		return useDb;
 	}
 	public void setUseDb(boolean useDb) {
 		this.useDb = useDb;
+	}
+	public String getDatabaseURL() {
+		return databaseURL;
+	}
+	public void setDatabaseURL(String databaseURL) {
+		this.databaseURL = databaseURL;
 	}
 }
 

@@ -20,12 +20,12 @@ public class SequenceUploader {
 	private String batchCreationPageName = "btolxml/ChromatogramBatchCreationService";
 	private String fasUploadPageName = "btolxml/FastaUpload";
 	
-	public Long createAB1BatchOnServer(String name, String description, String contributorId) {
+	public Long createAB1BatchOnServer(String databaseURL, String name, String description, String contributorId) {
 		Hashtable stringArgs = new Hashtable();
 		stringArgs.put(RequestParameters.NAME, name);
 		stringArgs.put(RequestParameters.DESCRIPTION, description);
 		stringArgs.put(RequestParameters.CONTRIBUTOR_ID, contributorId);
-		Document responseDoc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(batchCreationPageName, stringArgs, true);
+		Document responseDoc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,batchCreationPageName, stringArgs, true);
 		if (responseDoc == null) {
 			MesquiteMessage.warnUser("Cannot create abi upload batch on the server.  Upload will not proceed");
 			return null;
@@ -36,7 +36,7 @@ public class SequenceUploader {
 		}
 	}
 	
-	public void uploadAB1ToServer(String sampleCode, String filename, File abiFile, Long batchId) {
+	public void uploadAB1ToServer(String databaseURL, String sampleCode, String filename, File abiFile, Long batchId) {
 		if (!abiFile.exists()) {
 			MesquiteMessage.warnUser("File: " + abiFile + " doesn't exist.");
 		}
@@ -52,7 +52,7 @@ public class SequenceUploader {
 		stringArgs.put(RequestParameters.FILENAME, filenameArg);
 		Hashtable fileArgs = new Hashtable();
 		fileArgs.put(RequestParameters.FILE, abiFile);
-		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageNameMultipart(abiUploadPageName, 
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageNameMultipart(databaseURL, abiUploadPageName, 
 				stringArgs, fileArgs);
 		if (MesquiteXMLUtilities.getIsError(doc)) {
 			if (doc == null) {
@@ -72,7 +72,7 @@ public class SequenceUploader {
 		}
 	}
 	
-	public void uploadAceFileToServer(AceFile ace, boolean processPolymorphisms, int qualThresholdForTrim) {
+	public void uploadAceFileToServer(String databaseURL, AceFile ace, boolean processPolymorphisms, int qualThresholdForTrim) {
 		for (int i = 0; i < ace.getNumContigs(); i++) {
 			Contig nextContig = ace.getContig(i);
 			String name = ace.getContigNameForFASTAFile(i);
@@ -90,7 +90,7 @@ public class SequenceUploader {
 			args.put(RequestParameters.FAS, fastaString);
 			args.put(RequestParameters.FILENAME, commaSeparatedFilenames);
 			args.put(RequestParameters.CONTRIBUTOR_ID, MesquiteModule.author.getCode());
-			Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(fasUploadPageName, args, true);
+			Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL, fasUploadPageName, args, true);
 			if (MesquiteXMLUtilities.getIsError(doc)) {
 				MesquiteMessage.warnProgrammer("Unable to upload fasta file for chromatograms : " + commaSeparatedFilenames);
 			} else {

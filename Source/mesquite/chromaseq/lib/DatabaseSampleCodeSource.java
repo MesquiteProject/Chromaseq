@@ -31,10 +31,10 @@ public class DatabaseSampleCodeSource {
 	 * @return a string array with the first element being the sequenceName
 	 * and the second being the fullSequenceName
 	 */
-	public String[] getSequenceNamesFromCode(String code) {
+	public String[] getSequenceNamesFromCode(String databaseURL, String code) {
 		Map args = new Hashtable();
 		args.put(RequestParameters.CODE, code);
-		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName("btolxml/XMLService", args);
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL, "btolxml/XMLService", args);
 		String sequenceName = "";
 		if (doc == null) {
 			outputCodeError(code);
