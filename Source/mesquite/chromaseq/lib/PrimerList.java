@@ -9,10 +9,10 @@ import org.dom4j.*;
 
 import mesquite.tol.lib.*;
 
-import mesquite.Mesquite;
 import mesquite.lib.*;
+import mesquite.molec.lib.*;
 import mesquite.tol.lib.XMLConstants;
-import mesquite.BTOL.lib.*;
+//import mesquite.BTOL.lib.*;
 
 /* ======================================================================== */
 public class PrimerList { 
@@ -25,13 +25,32 @@ public class PrimerList {
 	int numPrimers;
 	private boolean useDb;
 	private String databaseURL;
+	private DNADatabaseURLSource databaseURLSource =null;
 
 	public PrimerList(String primerList) {
 		this(primerList, false, null);
 	}
-	public PrimerList(boolean useDb, String databaseURL) {
-		this(null, useDb, databaseURL);
+	public PrimerList(boolean useDb, DNADatabaseURLSource databaseURLSource) {
+		this.databaseURLSource = databaseURLSource;
+		if (databaseURLSource!=null)
+			databaseURL = databaseURLSource.getBaseURL();
+		this.databaseURL = databaseURL;
+		if (useDb) {
+			this.useDb = useDb;
+		} else {
+			readTabbedPrimerFile(null);
+		}
 	}
+	
+	public PrimerList(boolean useDb, String databaseURL) {
+		this.databaseURL = databaseURL;
+		if (useDb) {
+			this.useDb = useDb;
+		} else {
+			readTabbedPrimerFile(null);
+		}
+	}
+
 
 	public PrimerList(String primerListPathOrDbUrl, boolean useDb, String databaseURL) {
 		this.databaseURL = databaseURL;
@@ -152,10 +171,12 @@ public class PrimerList {
 		forward = new boolean[numPrimers];
 	}
 	public void readPrimerInfoFromDatabase() {
+		if (databaseURLSource==null)
+			return;
 		Map args = new Hashtable();
 		args.put("key", "archostemataarec00L");
 
-		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,"btolxml/PrimerService", args);
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(),databaseURLSource.getPage(DNADatabaseURLSource.PRIMER_SERVICE), args);
 		if (doc != null) {
 			// xml format so parse accordingly
 			parsePrimerXML(doc);
@@ -239,11 +260,13 @@ public class PrimerList {
 		if (!StringUtil.blank(primerName)) {
 			if (getUseDb()) {
 				Map args = new Hashtable();
-				args.put(BTOLRequestParameters.PRIMER_NAME, primerName);
+				if (databaseURLSource!=null)
+					args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.PRIMER_NAME), primerName);
 				args.put("key", "archostemataarec00L");
 				Document doc = null;
 //				try {
-				doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,"btolxml/PrimerService", args);
+				doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(),databaseURLSource.getPage(DNADatabaseURLSource.PRIMER_SERVICE), args);
+				//doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,"btolxml/PrimerService", args);
 //				}
 				// problems contacting the db!
 				if (doc == null) {
