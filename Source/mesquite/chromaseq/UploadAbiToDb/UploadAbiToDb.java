@@ -14,9 +14,6 @@ public class UploadAbiToDb extends UtilitiesAssistant {
 	/* ................................................................................................................. */
 	public boolean startJob(String arguments, Object condition,boolean hiredByName) {
 		addMenuItem(null, "Upload ABI files to database...", makeCommand(COMMAND_NAME, this));
-		databaseURLSource= (DNADatabaseURLSource)hireEmployee(DNADatabaseURLSource.class, "Source of Database Connectivity");
-		if (databaseURLSource==null)
-			return sorry(getName() + " couldn't start because no source of database information");
 
 		return true;
 	}
@@ -43,6 +40,11 @@ public class UploadAbiToDb extends UtilitiesAssistant {
 			//String databaseURL = MesquiteString.queryShortString(null, "Database URL, message, current);
 			AbiUploader uploader = (AbiUploader) hireEmployee(AbiUploader.class, "Abi Uploader");
 			if (uploader != null) {
+				databaseURLSource= (DNADatabaseURLSource)hireEmployee(DNADatabaseURLSource.class, "Source of Database Connectivity");
+				if (databaseURLSource==null){
+					MesquiteMessage.warnProgrammer("Couldn't get no source of database information");
+					return null;
+				}
 				uploader.uploadAbiFilesToDb(databaseURLSource);
 			} else {
 				MesquiteMessage.warnProgrammer("Can't find ABI uploader module.");

@@ -64,7 +64,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 
 		/*args.put(RequestParameters.EXTRACTION, extractionName);
 		args.put(RequestParameters.GENE, geneName);*/
-		;
+		
 		Document results = MesquiteXMLUtilities.getDocumentFromTapestryPageName(MesquiteXMLToLUtilities.getTOLPageDatabaseURL(getDbUrl()),"btolxml/ChromatogramSearchService", args);
 		if (results == null) {
 			MesquiteXMLUtilities.outputRequestXMLError();
