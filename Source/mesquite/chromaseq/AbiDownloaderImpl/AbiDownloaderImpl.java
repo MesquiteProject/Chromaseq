@@ -13,22 +13,10 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.dom4j.*;
 import mesquite.tol.lib.*;
 
-import mesquite.chromaseq.PhredPhrap.PhredPhrap;
-import mesquite.chromaseq.lib.AbiDownloader;
-import mesquite.chromaseq.lib.ChromFileNameDialog;
-import mesquite.chromaseq.lib.PhPhRunner;
-import mesquite.lib.CommandRecord;
-import mesquite.lib.ExtensibleDialog;
-import mesquite.lib.MesquiteFile;
-import mesquite.lib.MesquiteInteger;
-import mesquite.lib.MesquiteMessage;
-import mesquite.lib.MesquiteProject;
-import mesquite.lib.MesquiteTrunk;
-import mesquite.lib.SingleLineTextField;
-import mesquite.lib.StringUtil;
-import mesquite.lib.MesquiteXMLUtilities;
-import mesquite.lib.ZipUtil;
-import mesquite.BTOL.lib.*;
+import mesquite.chromaseq.lib.*;
+import mesquite.lib.*;
+//import mesquite.BTOL.lib.*;
+import mesquite.molec.lib.DNADatabaseURLSource;
 
 public class AbiDownloaderImpl extends AbiDownloader {
 	private PhPhRunner phredPhrap;
@@ -66,11 +54,14 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		}
 		// (2) check for results (give number)
 		Hashtable args = new Hashtable();
-		conditionallyAddQueryArg(args, getGene(), BTOLRequestParameters.GENE);
-		conditionallyAddQueryArg(args, getTaxon(), BTOLRequestParameters.TAXON);		
-		conditionallyAddQueryArg(args, getBatchName(), BTOLRequestParameters.NAME);
-		conditionallyAddQueryArg(args, getExtraction(), BTOLRequestParameters.EXTRACTION);		
-		
+		DNADatabaseURLSource databaseURLSource = phredPhrap.getDatabaseURLSource();
+		if (databaseURLSource!=null) {
+			conditionallyAddQueryArg(args, getGene(), databaseURLSource.getKeyString(DNADatabaseURLSource.GENE));
+			conditionallyAddQueryArg(args, getTaxon(), databaseURLSource.getKeyString(DNADatabaseURLSource.TAXON));		
+			conditionallyAddQueryArg(args, getBatchName(), databaseURLSource.getKeyString(DNADatabaseURLSource.NAME));
+			conditionallyAddQueryArg(args, getExtraction(), databaseURLSource.getKeyString(DNADatabaseURLSource.EXTRACTION));		
+		}
+
 		/*args.put(RequestParameters.EXTRACTION, extractionName);
 		args.put(RequestParameters.GENE, geneName);*/
 		;
@@ -182,14 +173,14 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			getMethod.releaseConnection();
 		}
 		MesquiteMessage.warnUser("Zip file of chromatograms downloaded.  Unzipping will proceed.");
-		
+
 		// at this point we should have the zip downloaded and on the local filesystem
 		// now we want to unzip it
 		ZipUtil.unzipFileToDirectory(fullFilePath, directoryPath, true);
 
 		return true;
 	}
-	
+
 	private boolean queryOptions() {
 		loadPreferences();
 		MesquiteInteger buttonPressed = new MesquiteInteger(ChromFileNameDialog.CANCEL);		
@@ -247,7 +238,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 	public void setTaxon(String taxon) {
 		this.taxon = taxon;
 	}
-	
+
 	/* TEST CODE!!
 	 * public static void main(String[] args) {
 		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
