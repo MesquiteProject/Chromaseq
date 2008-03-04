@@ -174,7 +174,8 @@ public class PrimerList {
 		if (databaseURLSource==null)
 			return;
 		Map args = new Hashtable();
-		args.put("key", "archostemataarec00L");
+		if (databaseURLSource.needsKeyValuePairAuthorization())
+			args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.AUTHORIZATION_KEY), databaseURLSource.getKey());
 
 		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(),databaseURLSource.getPage(DNADatabaseURLSource.PRIMER_SERVICE), args);
 		if (doc != null) {
@@ -262,7 +263,8 @@ public class PrimerList {
 				Map args = new Hashtable();
 				if (databaseURLSource!=null)
 					args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.PRIMER_NAME), primerName);
-				args.put("key", "archostemataarec00L");
+				if (databaseURLSource!=null && databaseURLSource.needsKeyValuePairAuthorization())
+					args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.AUTHORIZATION_KEY), databaseURLSource.getKey());
 				Document doc = null;
 //				try {
 				doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(),databaseURLSource.getPage(DNADatabaseURLSource.PRIMER_SERVICE), args);

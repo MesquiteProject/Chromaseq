@@ -31,10 +31,12 @@ public class DatabaseSampleCodeSource {
 	 * @return a string array with the first element being the sequenceName
 	 * and the second being the fullSequenceName
 	 */
-	public String[] getSequenceNamesFromCode(DNADatabaseURLSource databaseURLSource, String code) {
+	public String[] getSequenceNamesFromCode(DNADatabaseURLSource databaseURLSource, String prefix, String code) {
 		if (databaseURLSource==null)
 			return null;
 		Map args = new Hashtable();
+		if (databaseURLSource.includeSampleCodePrefixInSampleCode())
+			code= prefix+code;
 		args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.SAMPLE_CODE), code);
 		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(), databaseURLSource.getPage(DNADatabaseURLSource.SEQUENCE_NAME_SERVICE), args);
 		String sequenceName = "";
@@ -43,6 +45,8 @@ public class DatabaseSampleCodeSource {
 			return new String[] {"", ""};
 		} else {
 			sequenceName = doc.getRootElement().elementText(databaseURLSource.getElementName(DNADatabaseURLSource.SEQUENCE_ELEMENT));
+			if (sequenceName!=null)
+				sequenceName=sequenceName.trim();
 			if (StringUtil.blank(sequenceName) || sequenceName.equals("null")) {
 				outputCodeError(code);
 			}
