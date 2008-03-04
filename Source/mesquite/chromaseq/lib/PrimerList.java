@@ -12,6 +12,7 @@ import mesquite.tol.lib.*;
 import mesquite.Mesquite;
 import mesquite.lib.*;
 import mesquite.tol.lib.XMLConstants;
+import mesquite.BTOL.lib.*;
 
 /* ======================================================================== */
 public class PrimerList { 
@@ -238,7 +239,7 @@ public class PrimerList {
 		if (!StringUtil.blank(primerName)) {
 			if (getUseDb()) {
 				Map args = new Hashtable();
-				args.put(RequestParameters.PRIMER_NAME, primerName);
+				args.put(BTOLRequestParameters.PRIMER_NAME, primerName);
 				args.put("key", "archostemataarec00L");
 				Document doc = null;
 //				try {
@@ -300,7 +301,15 @@ public class PrimerList {
 			geneName.setValue("");
 		} else {
 			if (isForward != null) {
-				isForward.setValue(getBooleanValue(primerElement, XMLConstants.forward));
+				//isForward.setValue(getBooleanValue(primerElement, "forward"));
+
+				String direction = primerElement.attributeValue(XMLConstants.direction);
+				if (!StringUtil.blank(direction)) {
+					if (direction.equalsIgnoreCase("F"))
+						isForward.setValue(true);
+					else if (direction.equalsIgnoreCase("R"))
+						isForward.setValue(false);
+				}
 			}
 			if (geneName != null) {
 				geneName.setValue(primerElement.attributeValue(XMLConstants.genename));

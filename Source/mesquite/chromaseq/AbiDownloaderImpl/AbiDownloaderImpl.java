@@ -28,6 +28,7 @@ import mesquite.lib.SingleLineTextField;
 import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
 import mesquite.lib.ZipUtil;
+import mesquite.BTOL.lib.*;
 
 public class AbiDownloaderImpl extends AbiDownloader {
 	private PhPhRunner phredPhrap;
@@ -65,10 +66,10 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		}
 		// (2) check for results (give number)
 		Hashtable args = new Hashtable();
-		conditionallyAddQueryArg(args, getGene(), RequestParameters.GENE);
-		conditionallyAddQueryArg(args, getTaxon(), RequestParameters.TAXON);		
-		conditionallyAddQueryArg(args, getBatchName(), RequestParameters.NAME);
-		conditionallyAddQueryArg(args, getExtraction(), RequestParameters.EXTRACTION);		
+		conditionallyAddQueryArg(args, getGene(), BTOLRequestParameters.GENE);
+		conditionallyAddQueryArg(args, getTaxon(), BTOLRequestParameters.TAXON);		
+		conditionallyAddQueryArg(args, getBatchName(), BTOLRequestParameters.NAME);
+		conditionallyAddQueryArg(args, getExtraction(), BTOLRequestParameters.EXTRACTION);		
 		
 		/*args.put(RequestParameters.EXTRACTION, extractionName);
 		args.put(RequestParameters.GENE, geneName);*/

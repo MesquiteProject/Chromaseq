@@ -9,6 +9,8 @@ import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
+import mesquite.BTOL.lib.*;
+
 
 import org.dom4j.*;
 
@@ -22,9 +24,9 @@ public class SequenceUploader {
 	
 	public Long createAB1BatchOnServer(String databaseURL, String name, String description, String contributorId) {
 		Hashtable stringArgs = new Hashtable();
-		stringArgs.put(RequestParameters.NAME, name);
-		stringArgs.put(RequestParameters.DESCRIPTION, description);
-		stringArgs.put(RequestParameters.CONTRIBUTOR_ID, contributorId);
+		stringArgs.put(ToLRequestParameters.NAME, name);
+		stringArgs.put(ToLRequestParameters.DESCRIPTION, description);
+		stringArgs.put(ToLRequestParameters.CONTRIBUTOR_ID, contributorId);
 		Document responseDoc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,batchCreationPageName, stringArgs, true);
 		if (responseDoc == null) {
 			MesquiteMessage.warnUser("Cannot create abi upload batch on the server.  Upload will not proceed");
@@ -41,19 +43,18 @@ public class SequenceUploader {
 			MesquiteMessage.warnUser("File: " + abiFile + " doesn't exist.");
 		}
 		Hashtable stringArgs = new Hashtable();
-		stringArgs.put(RequestParameters.BATCH_ID, batchId);
-		stringArgs.put(RequestParameters.CODE, sampleCode);
+		stringArgs.put(ToLRequestParameters.BATCH_ID, batchId);
+		stringArgs.put(BTOLRequestParameters.CODE, sampleCode);
 		// optional filename arg if we want the file to be named something
 		// different on the server
 		String filenameArg = filename;
 		if (filename == null) {
 			filenameArg = abiFile.getName();
 		}
-		stringArgs.put(RequestParameters.FILENAME, filenameArg);
+		stringArgs.put(ToLRequestParameters.FILENAME, filenameArg);
 		Hashtable fileArgs = new Hashtable();
-		fileArgs.put(RequestParameters.FILE, abiFile);
-		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageNameMultipart(databaseURL, abiUploadPageName, 
-				stringArgs, fileArgs);
+		fileArgs.put(ToLRequestParameters.FILE, abiFile);
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageNameMultipart(databaseURL, abiUploadPageName, stringArgs, fileArgs);
 		if (MesquiteXMLUtilities.getIsError(doc)) {
 			if (doc == null) {
 				MesquiteMessage.warnUser("Problems uploading abi file: " + filenameArg + " to server.");
@@ -87,9 +88,9 @@ public class SequenceUploader {
 				}
 			}
 			Hashtable args = new Hashtable();
-			args.put(RequestParameters.FAS, fastaString);
-			args.put(RequestParameters.FILENAME, commaSeparatedFilenames);
-			args.put(RequestParameters.CONTRIBUTOR_ID, MesquiteModule.author.getCode());
+			args.put(BTOLRequestParameters.FAS, fastaString);
+			args.put(ToLRequestParameters.FILENAME, commaSeparatedFilenames);
+			args.put(ToLRequestParameters.CONTRIBUTOR_ID, MesquiteModule.author.getCode());
 			Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL, fasUploadPageName, args, true);
 			if (MesquiteXMLUtilities.getIsError(doc)) {
 				MesquiteMessage.warnProgrammer("Unable to upload fasta file for chromatograms : " + commaSeparatedFilenames);

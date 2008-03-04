@@ -6,6 +6,8 @@ import java.util.Map;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
+import mesquite.BTOL.lib.*;
+import mesquite.molec.lib.*;
 
 import org.dom4j.*;
 import mesquite.tol.lib.*;
@@ -31,10 +33,12 @@ public class DatabaseSampleCodeSource {
 	 * @return a string array with the first element being the sequenceName
 	 * and the second being the fullSequenceName
 	 */
-	public String[] getSequenceNamesFromCode(String databaseURL, String code) {
+	public String[] getSequenceNamesFromCode(DNADatabaseURLSource databaseURLSource, String code) {
+		if (databaseURLSource==null)
+			return null;
 		Map args = new Hashtable();
-		args.put(RequestParameters.CODE, code);
-		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL, "btolxml/XMLService", args);
+		args.put(BTOLRequestParameters.CODE, code);
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(), databaseURLSource.getPage(DNADatabaseURLSource.SEQUENCE_NAME_SERVICE), args);
 		String sequenceName = "";
 		if (doc == null) {
 			outputCodeError(code);
