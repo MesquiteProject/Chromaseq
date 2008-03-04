@@ -6,11 +6,9 @@ import java.util.Map;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
-import mesquite.BTOL.lib.*;
 import mesquite.molec.lib.*;
 
 import org.dom4j.*;
-import mesquite.tol.lib.*;
 
 /**
  * Class that looks up sequences in a database based on a sample code 
@@ -37,14 +35,14 @@ public class DatabaseSampleCodeSource {
 		if (databaseURLSource==null)
 			return null;
 		Map args = new Hashtable();
-		args.put(BTOLRequestParameters.CODE, code);
+		args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.SAMPLE_CODE), code);
 		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(), databaseURLSource.getPage(DNADatabaseURLSource.SEQUENCE_NAME_SERVICE), args);
 		String sequenceName = "";
 		if (doc == null) {
 			outputCodeError(code);
 			return new String[] {"", ""};
 		} else {
-			sequenceName = doc.getRootElement().elementText(XMLConstants.SEQUENCE);
+			sequenceName = doc.getRootElement().elementText(databaseURLSource.getElementName(DNADatabaseURLSource.SEQUENCE_ELEMENT));
 			if (StringUtil.blank(sequenceName) || sequenceName.equals("null")) {
 				outputCodeError(code);
 			}
@@ -53,7 +51,6 @@ public class DatabaseSampleCodeSource {
 	}
 
 	private void outputCodeError(String code) {
-		MesquiteMessage.warnUser("No dna extraction found matching code: " + 
-				code);
+		MesquiteMessage.warnUser("No sequence name could be found that matches the sample code: " + code);
 	}
 }
