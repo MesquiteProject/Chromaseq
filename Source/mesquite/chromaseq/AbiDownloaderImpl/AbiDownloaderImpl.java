@@ -11,6 +11,7 @@ import java.util.Random;
 
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.dom4j.*;
+
 import mesquite.tol.lib.*;
 
 import mesquite.chromaseq.lib.*;
@@ -65,7 +66,8 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		/*args.put(RequestParameters.EXTRACTION, extractionName);
 		args.put(RequestParameters.GENE, geneName);*/
 		
-		Document results = MesquiteXMLUtilities.getDocumentFromTapestryPageName(MesquiteXMLToLUtilities.getTOLPageDatabaseURL(getDbUrl()),"btolxml/ChromatogramSearchService", args);
+		Document results = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(), databaseURLSource.getPage(DNADatabaseURLSource.CHROMATOGRAM_SEARCH_SERVICE), args);
+
 		if (results == null) {
 			MesquiteXMLUtilities.outputRequestXMLError();
 			return false;

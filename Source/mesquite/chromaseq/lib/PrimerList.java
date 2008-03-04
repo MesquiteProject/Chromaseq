@@ -268,7 +268,6 @@ public class PrimerList {
 				Document doc = null;
 //				try {
 				doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(),databaseURLSource.getPage(DNADatabaseURLSource.PRIMER_SERVICE), args);
-				//doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,"btolxml/PrimerService", args);
 //				}
 				// problems contacting the db!
 				if (doc == null) {

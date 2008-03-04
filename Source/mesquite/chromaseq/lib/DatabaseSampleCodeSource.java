@@ -38,6 +38,8 @@ public class DatabaseSampleCodeSource {
 		if (databaseURLSource.includeSampleCodePrefixInSampleCode())
 			code= prefix+code;
 		args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.SAMPLE_CODE), code);
+		if (databaseURLSource.needsKeyValuePairAuthorization())
+			args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.AUTHORIZATION_KEY), databaseURLSource.getKey());
 		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(), databaseURLSource.getPage(DNADatabaseURLSource.SEQUENCE_NAME_SERVICE), args);
 		String sequenceName = "";
 		if (doc == null) {

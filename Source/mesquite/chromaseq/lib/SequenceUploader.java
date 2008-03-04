@@ -20,9 +20,6 @@ import mesquite.tol.lib.*;
 
 public class SequenceUploader {
 	DNADatabaseURLSource databaseURLSource;
-	private String abiUploadPageName = "btolxml/SequenceUploadService";
-	private String batchCreationPageName = "btolxml/ChromatogramBatchCreationService";
-	private String fasUploadPageName = "btolxml/FastaUpload";
 	
 	public SequenceUploader(DNADatabaseURLSource databaseURLSource) {
 		this.databaseURLSource = databaseURLSource;
@@ -33,7 +30,9 @@ public class SequenceUploader {
 		stringArgs.put(ToLRequestParameters.NAME, name);
 		stringArgs.put(ToLRequestParameters.DESCRIPTION, description);
 		stringArgs.put(ToLRequestParameters.CONTRIBUTOR_ID, contributorId);
-		Document responseDoc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,batchCreationPageName, stringArgs, true);
+
+		Document responseDoc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(), databaseURLSource.getPage(DNADatabaseURLSource.CHROMATOGRAM_BATCH_CREATION_SERVICE), stringArgs, true);
+		//Document responseDoc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL,batchCreationPageName, stringArgs, true);
 		if (responseDoc == null) {
 			MesquiteMessage.warnUser("Cannot create abi upload batch on the server.  Upload will not proceed");
 			return null;
@@ -60,9 +59,14 @@ public class SequenceUploader {
 			filenameArg = abiFile.getName();
 		}
 		stringArgs.put(ToLRequestParameters.FILENAME, filenameArg);
+		stringArgs.put("service", "external");  //BTOL ONLY!!!!
+
 		Hashtable fileArgs = new Hashtable();
 		fileArgs.put(ToLRequestParameters.FILE, abiFile);
-		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageNameMultipart(databaseURL, abiUploadPageName, stringArgs, fileArgs);
+		
+		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageNameMultipart(databaseURLSource.getBaseURL(), databaseURLSource.getPage(DNADatabaseURLSource.SEQUENCE_UPLOAD_SERVICE), stringArgs, fileArgs);
+
+		//Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageNameMultipart(databaseURL, abiUploadPageName, stringArgs, fileArgs);
 		if (MesquiteXMLUtilities.getIsError(doc)) {
 			if (doc == null) {
 				MesquiteMessage.warnUser("Problems uploading abi file: " + filenameArg + " to server.");
@@ -99,7 +103,9 @@ public class SequenceUploader {
 			args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.FASTA), fastaString);
 			args.put(ToLRequestParameters.FILENAME, commaSeparatedFilenames);
 			args.put(ToLRequestParameters.CONTRIBUTOR_ID, MesquiteModule.author.getCode());
-			Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL, fasUploadPageName, args, true);
+
+			Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(), databaseURLSource.getPage(DNADatabaseURLSource.FASTA_UPLOAD_SERVICE), args, true);
+			//Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL, fasUploadPageName, args, true);
 			if (MesquiteXMLUtilities.getIsError(doc)) {
 				MesquiteMessage.warnProgrammer("Unable to upload fasta file for chromatograms : " + commaSeparatedFilenames);
 			} else {
