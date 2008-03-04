@@ -9,7 +9,8 @@ import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
-import mesquite.BTOL.lib.*;
+import mesquite.molec.lib.DNADatabaseURLSource;
+//import mesquite.BTOL.lib.*;
 
 
 import org.dom4j.*;
@@ -18,9 +19,14 @@ import mesquite.tol.lib.*;
 
 
 public class SequenceUploader {
+	DNADatabaseURLSource databaseURLSource;
 	private String abiUploadPageName = "btolxml/SequenceUploadService";
 	private String batchCreationPageName = "btolxml/ChromatogramBatchCreationService";
 	private String fasUploadPageName = "btolxml/FastaUpload";
+	
+	public SequenceUploader(DNADatabaseURLSource databaseURLSource) {
+		this.databaseURLSource = databaseURLSource;
+	}
 	
 	public Long createAB1BatchOnServer(String databaseURL, String name, String description, String contributorId) {
 		Hashtable stringArgs = new Hashtable();
@@ -39,12 +45,14 @@ public class SequenceUploader {
 	}
 	
 	public void uploadAB1ToServer(String databaseURL, String sampleCode, String filename, File abiFile, Long batchId) {
+		if (databaseURLSource==null)
+			return;
 		if (!abiFile.exists()) {
 			MesquiteMessage.warnUser("File: " + abiFile + " doesn't exist.");
 		}
 		Hashtable stringArgs = new Hashtable();
 		stringArgs.put(ToLRequestParameters.BATCH_ID, batchId);
-		stringArgs.put(BTOLRequestParameters.CODE, sampleCode);
+		stringArgs.put(databaseURLSource.getKeyString(DNADatabaseURLSource.SAMPLE_CODE), sampleCode);
 		// optional filename arg if we want the file to be named something
 		// different on the server
 		String filenameArg = filename;
@@ -88,7 +96,7 @@ public class SequenceUploader {
 				}
 			}
 			Hashtable args = new Hashtable();
-			args.put(BTOLRequestParameters.FAS, fastaString);
+			args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.FASTA), fastaString);
 			args.put(ToLRequestParameters.FILENAME, commaSeparatedFilenames);
 			args.put(ToLRequestParameters.CONTRIBUTOR_ID, MesquiteModule.author.getCode());
 			Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURL, fasUploadPageName, args, true);

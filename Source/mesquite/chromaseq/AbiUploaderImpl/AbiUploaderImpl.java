@@ -22,6 +22,7 @@ import mesquite.lib.MesquiteString;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.SingleLineTextField;
 import mesquite.lib.StringUtil;
+import mesquite.molec.lib.DNADatabaseURLSource;
 
 /**
  * Class that uploads a directory of abi files up to a server
@@ -61,7 +62,7 @@ public class AbiUploaderImpl extends AbiUploader {
 	 * loops through a user-specified directory on the filesystem
 	 * and uploads abi files to a database url
 	 */
-	public boolean uploadAbiFilesToDb() {
+	public boolean uploadAbiFilesToDb(DNADatabaseURLSource databaseURLSource) {
 		if (nameParserManager!=null) {
 			//nameParsingRule = nameParserManager.chooseNameParsingRules(nameParsingRule);
 			if (!queryNames()) {
@@ -83,7 +84,7 @@ public class AbiUploaderImpl extends AbiUploader {
 					MesquiteMessage.warnUser("There are no files in the selected directory.");
 				} else {
 					StringBuffer logBuffer = new StringBuffer();
-					SequenceUploader uploader = new SequenceUploader();
+					SequenceUploader uploader = new SequenceUploader(databaseURLSource);
 					
 					boolean result = authorDefaults.verifyAuthorIsntDefault();
 					if (!result) {
