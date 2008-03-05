@@ -61,6 +61,8 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			conditionallyAddQueryArg(args, getTaxon(), databaseURLSource.getKeyString(DNADatabaseURLSource.TAXON));		
 			conditionallyAddQueryArg(args, getBatchName(), databaseURLSource.getKeyString(DNADatabaseURLSource.NAME));
 			conditionallyAddQueryArg(args, getExtraction(), databaseURLSource.getKeyString(DNADatabaseURLSource.EXTRACTION));		
+			if (databaseURLSource.needsKeyValuePairAuthorization())
+				args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.AUTHORIZATION_KEY), databaseURLSource.getKey());
 		}
 
 		/*args.put(RequestParameters.EXTRACTION, extractionName);
