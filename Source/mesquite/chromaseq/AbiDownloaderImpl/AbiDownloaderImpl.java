@@ -81,7 +81,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		} 
 		// search succeeded -- see how many results
 		Element rootElement = results.getRootElement();
-		String numResultsString = rootElement.attributeValue(XMLConstants.COUNT);
+		String numResultsString = rootElement.attributeValue(XMLConstants.COUNT.toLowerCase());
 		int numResults = 0;
 		if (!StringUtil.blank(numResultsString)) {
 			boolean hasResults = false;
@@ -106,7 +106,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			return false;
 		}
 		// (4) make http request, download, unzip
-		boolean downloadOk = downloadAndUnzipChromatograms(args, directoryPath);
+		boolean downloadOk = downloadAndUnzipChromatograms(databaseURLSource,args, directoryPath);
 		if (downloadOk) {
 			// (5) run p/p on that directory
 			return phredPhrap.doPhredPhrap(project, false, directoryPath);
@@ -120,9 +120,12 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			args.put(queryKey, value);
 		}
 	}
-	private boolean downloadAndUnzipChromatograms(Hashtable args, String directoryPath) {
-		String url = MesquiteXMLToLUtilities.getTOLBaseDatabaseURL(getDbUrl());
-		args.put("service", "chromatogramdownload");
+	private boolean downloadAndUnzipChromatograms(DNADatabaseURLSource databaseURLSource, Hashtable args, String directoryPath) {
+		if (databaseURLSource== null)
+			return false;
+		
+		String url = databaseURLSource.getChromatogramDownloadURL(args);
+		
 		MesquiteMessage.warnUser("Contacting server to download chromatograms");
 		Object[] results = BaseHttpRequestMaker.makeHttpRequestAsStream(url, args);
 		if (results==null) {
