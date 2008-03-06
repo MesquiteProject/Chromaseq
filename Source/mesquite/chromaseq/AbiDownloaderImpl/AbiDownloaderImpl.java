@@ -124,7 +124,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		if (databaseURLSource== null)
 			return false;
 		
-		String url = databaseURLSource.getChromatogramDownloadURL(args);
+		String url = databaseURLSource.getChromatogramDownloadURL(null);
 		
 		MesquiteMessage.warnUser("Contacting server to download chromatograms");
 		Object[] results = BaseHttpRequestMaker.makeHttpRequestAsStream(url, args);
