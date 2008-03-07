@@ -81,7 +81,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		} 
 		// search succeeded -- see how many results
 		Element rootElement = results.getRootElement();
-		String numResultsString = rootElement.attributeValue(XMLConstants.COUNT.toLowerCase());
+		String numResultsString = rootElement.attributeValue(databaseURLSource.getKeyString(DNADatabaseURLSource.COUNT));
 		int numResults = 0;
 		if (!StringUtil.blank(numResultsString)) {
 			boolean hasResults = false;
@@ -124,7 +124,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		if (databaseURLSource== null)
 			return false;
 		
-		String url = databaseURLSource.getChromatogramDownloadURL(null);
+		String url = databaseURLSource.getChromatogramDownloadURL(args);
 		
 		MesquiteMessage.warnUser("Contacting server to download chromatograms");
 		Object[] results = BaseHttpRequestMaker.makeHttpRequestAsStream(url, args);
