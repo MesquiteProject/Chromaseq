@@ -2,6 +2,10 @@ Necessary pre-beta
 
 NumberOfReads deal with better
 
+BUGS
+- insert base.  touch on new ? base.  immediately scrolls to start of sequence.
+
+
 ====
 notes from talking to Alex W
 - have phred (not phrap) process a single chromatogram, including via drag and drop
