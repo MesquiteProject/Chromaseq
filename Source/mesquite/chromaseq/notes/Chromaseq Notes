@@ -33,6 +33,44 @@ when touch on base, chromatograms immediately center.
 ====
 
 
+I got it to work. I don't know how to "use it" yet, but that will come. The major hold up was a  problem with the "environmental variable" as described below. I had to add this path by right-clicking "My Computer" and going to the advanced tab, were there is a button for "environmental variables" then add it like below. I then could run phred in the cygwin shell and but had to fix the Phredpar.dat file to match the sequencer used here (the information is associated with the chromatogram file) and then I went back and reset the paths to the programs by browsing via the Mesquite dialogs.
+
+from the Phred.doc
+
+Copy the phred parameter file, called 'phredpar.dat', to a
+    directory that is accessible by phred users and set the environment
+    variable 'PHRED_PARAMETER_FILE' to the full path name of the file.
+    For example, if you copy 'phredpar.dat' to '/usr/local/etc/PhredPar'
+    and you are using the C shell then issue the command
+
+      % setenv PHRED_PARAMETER_FILE /usr/local/etc/PhredPar/phredpar.dat
+
+    It is most convenient to set the environment variable in the system-
+    wide shell startup (cshrc or equivalent) file.
+
+    You can rename the phred parameter file but the PHRED_PARAMETER_FILE
+    environment variable must reflect the new name.
+
+    With Windows NT you give the command
+
+      % set PHRED_PARAMETER_FILE=\usr\local\etc\PhredPar\phredpar.dat
+
+    in the DOS command window in which you will run phred.
+
+
+-- 
+Kipling W. Will
+
+
+
+
+
+
+
+
+
+
+
 	
 	- data corruption if things at front moved to matrix?
 	
