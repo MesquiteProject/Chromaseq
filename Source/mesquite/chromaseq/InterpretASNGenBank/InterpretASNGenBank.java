@@ -371,22 +371,31 @@ public class InterpretASNGenBank extends FileInterpreterI {
 		ASNNode toolNode = baseNode.addChild("tool");
 		toolNode.setStringContent("Mesquite " + getMesquiteVersion() + getBuildVersion(), true);
 	}
+	
+	/*.................................................................................................................*/
+	String sequenceClass = "nuc-prot";
+	String genome = "genomic";
+	String  biomol = "genomic";
+	String mol = "dna";
+	String repr = "raw";
+	String seqDataFormat = "iupacna";
+	int geneticCode = 1;
 	/*.................................................................................................................*/
 
 	public  boolean addSequence(ASNNode baseNode,CharacterData data, int it) {
 		ASNNode setNode = baseNode.addChild("set");
-		ASNNode classNode = setNode.addChild("class", "nuc-prot", false);
+		ASNNode classNode = setNode.addChild("class", sequenceClass, false);
 
 		ASNNode descrNode = setNode.addChild("descr");
 		ASNNode sourceNode = descrNode.addChild("source");
-		sourceNode.addChild("genome", "genomic", false);
+		sourceNode.addChild("genome", genome, false);
 		ASNNode orgNode = sourceNode.addChild("org");
 		ASNNode taxNameNode = orgNode.addChild("taxname", getGenBankFieldOfTaxon(data.getTaxa(),  it,  "organism"), true);
 		ASNNode orgNameNode = orgNode.addChild("orgname");
 		ASNNode modNode = orgNameNode.addChild("mod");
 		addSubType(modNode, "specimen-voucher", "subname", getGenBankFieldOfTaxon(data.getTaxa(),  it,  "specimen-voucher"), false);		
 		addSubType(modNode, "authority", "subname", getGenBankFieldOfTaxon(data.getTaxa(),  it,  "authority"), false);
-		ASNNode gCodeNode = orgNameNode.addChild("gcode", 1);  // genetic code
+		ASNNode gCodeNode = orgNameNode.addChild("gcode", geneticCode);  // genetic code
 		ASNNode subTypeNode = sourceNode.addChild("subtype");
 		addSubType(subTypeNode, "country", "name",  getGenBankFieldOfTaxon(data.getTaxa(),  it,  "country"), false);
 		addSubType(subTypeNode, "lat-lon", "name", getGenBankFieldOfTaxon(data.getTaxa(),  it,  "lat-lon"), false);
@@ -402,14 +411,14 @@ public class InterpretASNGenBank extends FileInterpreterI {
 		ASNNode descNode = seqNode.addChild("descr");
 		descNode.addChild("title", getFullSequenceTitle(data.getTaxa(),it), true);
 		ASNNode molinfoNode = descNode.addChild("molinfo");
-		molinfoNode.addChild("biomol", "genomic", false);  //
+		molinfoNode.addChild("biomol", biomol, false);  //
 
 		ASNNode instNode = seqNode.addChild("inst");
-		instNode.addChild("repr", "raw", false); //
-		instNode.addChild("mol", "dna", false); //
+		instNode.addChild("repr", repr, false); //
+		instNode.addChild("mol", mol, false); //
 		instNode.addChild("length", data.getNumberApplicableInTaxon(it, false));  // check
 		ASNNode seqDataNode = instNode.addChild("seq-data");
-		ASNNode iupacNode = seqDataNode.addChild("iupacna"); //
+		ASNNode iupacNode = seqDataNode.addChild(seqDataFormat); //
 
 		StringBuffer sb = new StringBuffer();
 		int counter = 1;
