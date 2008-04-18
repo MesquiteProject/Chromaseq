@@ -2,10 +2,12 @@ package mesquite.chromaseq.lib;
 
 import mesquite.lib.*;
 
-public class ChromatogramPanel extends MesquitePanel {
+public class ChromatogramPanel extends MesquitePanel{
+	protected boolean open=true;  // REMOVE ONCE CONVERT TO CLOSABLEPANEL; same for isOpen()
 	protected Chromatogram[] chromatograms;
 	protected int numChromatograms = 1;
 	protected ContigDisplay panel;
+	
 	
 	protected	int width = 0;
 	protected int height = 0;
@@ -24,6 +26,13 @@ public class ChromatogramPanel extends MesquitePanel {
 
 	
 	protected boolean listen = true;
+	
+
+	public boolean isOpen() {
+		return open;
+	}
+	
+	
 	//this is consensus position
 	public void exportSelectConsensusPosition(int i){
 		listen = false;
@@ -54,6 +63,7 @@ public class ChromatogramPanel extends MesquitePanel {
 	public boolean getScrollToTouched() {
 		return scrollToTouched;
 	}
+	
 
 	public ContigDisplay getContigDisplay() {
 		return panel;
@@ -112,6 +122,7 @@ public class ChromatogramPanel extends MesquitePanel {
 	public void setNumChromatograms(int numChromatograms) {
 		this.numChromatograms = numChromatograms;
 	}
+
 
 	
 }

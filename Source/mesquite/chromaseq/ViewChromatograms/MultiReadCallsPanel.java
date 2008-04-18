@@ -10,7 +10,7 @@ public class MultiReadCallsPanel extends ChromatogramPanel {
 	MultiReadCallsCanvas multiReadCanvas = null;
 	boolean colorByQuality = true;
 
-	public MultiReadCallsPanel(int id, ContigDisplay panel, Chromatogram[] chromatograms) {
+	public MultiReadCallsPanel(ClosablePanelContainer container, int id, ContigDisplay panel, Chromatogram[] chromatograms) {
 //		chromatogram.setWindow(panel);
 		this.chromatograms = chromatograms;
 		this.panel = panel;
@@ -57,6 +57,13 @@ public class MultiReadCallsPanel extends ChromatogramPanel {
 		return numChromatograms * (MultiReadCallsCanvas.readBaseHeight + MultiReadCallsCanvas.spacer);
 	}
 
+	public int getRequestedHeight(int width){
+		if (open) {
+			return getAllReadHeight()+30;
+		}
+		else
+			return ClosablePanel.MINHEIGHT;
+	}
 
 }
 
@@ -89,6 +96,9 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		return false;
 	}
 
+	public  void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x,y,width,height);
+	}
 	/*...........................................................................*/
 	public void paint(Graphics g) {	
 		for (int i = 0; i<numChromatograms; i++) 

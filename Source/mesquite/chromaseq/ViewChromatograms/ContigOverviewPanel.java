@@ -19,10 +19,11 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 	int numBasesVisible ;
 
 
-	public ContigOverviewPanel(int id, ContigDisplay panel, Chromatogram[] chromatograms) {
+	public ContigOverviewPanel(ClosablePanelContainer container, int id, ContigDisplay panel, Chromatogram[] chromatograms) {
 //		chromatogram.setWindow(panel);
 		this.chromatograms = chromatograms;
 		this.panel = panel;
+		open = true;
 		this.numChromatograms = chromatograms.length;
 		contigOverviewCanvas = new ContigOverviewCanvas(this, id);
 		contigOverviewCanvas.setBounds(0, 0, getWidth(), getHeight()-scrollDepth);
@@ -108,8 +109,12 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 	public int getAllReadHeight() {
 		return numChromatograms * (ContigOverviewCanvas.readBaseHeight + ContigOverviewCanvas.spacer);
 	}
-	public int getOverviewPanelHeight() {
-		return getAllReadHeight()+28 + scrollDepth;
+	public int getRequestedHeight(int width){
+		if (open) {
+			return getAllReadHeight()+28 + scrollDepth;
+		}
+		else
+			return ClosablePanel.MINHEIGHT;
 	}
 	public void positionOverview(int pos){
 		firstBase=pos;
