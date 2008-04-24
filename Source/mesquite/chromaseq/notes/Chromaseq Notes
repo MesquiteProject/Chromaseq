@@ -1,7 +1,10 @@
 Necessary pre-beta
 
 - not showing all bases in read at ends
-- selection problems when base is being edited and select around it; selects whole sequence
+
+-fixed height chromato not saved to defaults
+- also same for show primer sequences
+ 	file not found message turn off check first
 
 
 =====

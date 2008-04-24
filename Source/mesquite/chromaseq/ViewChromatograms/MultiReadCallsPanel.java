@@ -271,10 +271,10 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 			firstSel = MesquiteInteger.unassigned;
 		}
 		ColorDistribution.setOpaqueGraphics(g);		
-*/
+
 		
 		offsetForInserted = 0;
-
+*/
 //		=====================  DRAW THE BASES UNDER THE READ ==============================
 
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
@@ -338,7 +338,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 
 	}
 
-
+	int localFirstTouched = MesquiteInteger.unassigned;
 	/*--------------------------------------*/
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
@@ -346,6 +346,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		int whichRead = findRead(y);
 		if (whichRead<0) return;
 		int ic = findOverallBaseNumber(whichRead, x); 
+		localFirstTouched = findConsensusBaseNumber(whichRead,x);
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels() &&!onRequiredSelection){
 			int cons = findConsensusBaseNumber(whichRead,x);
@@ -411,7 +412,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 			if (MesquiteInteger.isCombinable(panel.getFirstTouchedOverall())) {
 				if (panel.getFirstTouchedOverall()>ic){
 					if (MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()) && panel.getSecondTouchedOverall()<panel.getFirstTouchedOverall() && ic>panel.getSecondTouchedOverall()){ //retracting
-						for (int i = panel.getSecondTouchedOverall()+1; i<=ic; i++) 
+						for (int i = panel.getSecondTouchedOverall(); i<=ic; i++) 
 							deselectOverallBase(whichRead,i);
 					}
 					else for (int i = ic; i<=panel.getFirstTouchedOverall(); i++) //adding
@@ -452,7 +453,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		}
 		if (chromatogramPanel.getScrollToTouched()) {
 			int ic = findConsensusBaseNumber(whichRead,x);
-			if (ic>=0) {
+			if (ic>=0 && ic==localFirstTouched) {
 				panel.scrollToConsensusBase(ic);
 				//		panel.deselectAllReads();
 
