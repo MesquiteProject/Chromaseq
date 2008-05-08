@@ -1,6 +1,14 @@
 Necessary pre-beta
 
-- not showing all bases in read at ends
+- have move to matrix tool deal with double peaks
+
+- still problems with focus after use move to matrix tool
+
+- option to maintain tool as go to new chromatogram
+- quickKeys like tool for making calls;
+- have keyboard toggle for one base at a time versus jump to next problem
+
+
 
 - save as into different directory problems.
 
