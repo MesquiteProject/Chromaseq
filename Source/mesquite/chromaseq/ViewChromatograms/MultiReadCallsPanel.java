@@ -323,10 +323,11 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 			GraphicsUtil.setFontSize(10,g);
 			//GraphicsUtil.setFontStyle(Font.BOLD, g);
 			int length = getFontMetrics(g.getFont()).stringWidth(s);
+	 		Composite composite = ColorDistribution.getComposite(g);
 			ColorDistribution.setTransparentGraphics(g,0.92f);		
 			g.setColor(Color.white);
 			g.fillRect(0,v-spacer-11, length+12, 12);
-			ColorDistribution.setOpaqueGraphics(g);		
+			ColorDistribution.setComposite(g,composite);		
 
 
 			if (chromatograms[whichRead].getRead().getComplemented())
