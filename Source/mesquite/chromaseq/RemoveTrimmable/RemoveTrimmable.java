@@ -43,8 +43,12 @@ public class RemoveTrimmable extends DataAlterer {
 	/*.................................................................................................................*/
    	/** Called to alter data in those cells selected in table*/
    	public void alterCell(CharacterData data, int ic, int it){
-   		if (fillState!= null && ChromaseqUtil.isTrimmable(ic,it,data))
+   		if (fillState!= null && ChromaseqUtil.isTrimmable(ic,it,data)){
    			data.setState(ic,it, fillState);
+   			if (!MesquiteLong.isCombinable(numCellsAltered))
+   				numCellsAltered = 0;
+   			numCellsAltered++;
+ 		}
    	}
 	/*.................................................................................................................*/
    	/** Called to alter data in those cells selected in table*/

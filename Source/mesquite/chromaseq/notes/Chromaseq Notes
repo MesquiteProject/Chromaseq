@@ -13,6 +13,14 @@ Necessary pre-beta
 - save as into different directory problems.
 
 
+------------------------------------------
+ not sure, but phred/phrap processing might not be possible if filenames or taxon names have ! in them.  
+ Maybe other characters as well.  Will try to find case, but you might write it down.
+ 
+1.4 chromaseq crash
+1.4 bug grow window size in chromaseq 
+ 
+
 =====
 
 
