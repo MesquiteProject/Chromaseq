@@ -484,7 +484,7 @@ public class InterpretASNGenBank extends FileInterpreterI {
 	}
 
 	/*.................................................................................................................*/
-	public void exportFile(MesquiteFile file, String arguments) { //if file is null, consider whole project open to export
+	public boolean exportFile(MesquiteFile file, String arguments) { //if file is null, consider whole project open to export
 		Arguments args = new Arguments(new Parser(arguments), true);
 		boolean usePrevious = args.parameterExists("usePrevious");
 
@@ -492,18 +492,21 @@ public class InterpretASNGenBank extends FileInterpreterI {
 		if (data ==null) {
 			showLogWindow(true);
 			logln("WARNING: No suitable data available for export to a file of format \"" + getName() + "\".  The file will not be written.\n");
-			return;
+			return false;
 		}
 		Taxa taxa = data.getTaxa();
 		if (!MesquiteThread.isScripting() && !usePrevious)
 			if (!getExportOptions(data.anySelected(), taxa.anySelected()))
-				return;
+				return false;
 
 		StringBuffer outputBuffer = getDataAsFileText(data);
 
-		if (outputBuffer!=null)
+		if (outputBuffer!=null) {
 			saveExportedFileWithExtension(outputBuffer, arguments, "sqn");
+			return true;
+		}
 		saveExtraFiles(data);
+		return false;
 	}
 
 	/*.................................................................................................................*/

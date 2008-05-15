@@ -1,5 +1,8 @@
 Necessary pre-beta
 
+	- try to get biojava working.
+	fix problem with deleting bases and then moving bases over top of those.
+
 - have move to matrix tool deal with double peaks
 
 - still problems with focus after use move to matrix tool
@@ -8,7 +11,7 @@ Necessary pre-beta
 - quickKeys like tool for making calls;
 - have keyboard toggle for one base at a time versus jump to next problem
 
-
+- reopen file with chromato showing but file has been moved into other directory
 
 - save as into different directory problems.
 
