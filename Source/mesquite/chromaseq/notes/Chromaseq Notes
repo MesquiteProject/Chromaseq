@@ -12,6 +12,8 @@ Necessary pre-beta
 - have keyboard toggle for one base at a time versus jump to next problem
 
 - reopen file with chromato showing but file has been moved into other directory
+¥¥¥¥ chromaseq: memory leak with extensive editing???
+¥¥¥¥ FEATURE: chromaseq: revert to original
 
 - save as into different directory problems.
 
