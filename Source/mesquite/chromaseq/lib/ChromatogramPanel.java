@@ -21,7 +21,8 @@ public class ChromatogramPanel extends MesquitePanel{
 	boolean scrollToTouched = false;
 
 	
-	public static final boolean THICKTRACEDEFAULT = true;
+	public static boolean SHOWREADMATRIXCONFLICTDEFAULT = false;
+	public static final boolean THICKTRACEDEFAULT = false;
 	protected boolean thickTrace = THICKTRACEDEFAULT;
 
 	
