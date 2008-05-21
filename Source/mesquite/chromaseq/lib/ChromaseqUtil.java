@@ -70,6 +70,22 @@ public class ChromaseqUtil{
    	}
 
    	
+   	public static String getPHPHDataType(CharacterData data) {
+   		Object obj = data.getAttachment(PHPHIMPORTMATRIXTYPEREF);
+   		if (obj instanceof MesquiteString)
+   			return ((MesquiteString)obj).getValue();
+   		return null;
+   	}
+   	
+   	public static boolean isPHPHDataType(CharacterData data, String candidate) {
+   		String s = getPHPHDataType(data);
+   		if (StringUtil.notEmpty(s))
+   			return s.equalsIgnoreCase(candidate);
+   		return false;
+   	}
+
+
+   	
    	public static ContinuousData getQualityData(CharacterData data) {
 		String uid = "";
 		Object obj = data.getAttachment(PHPHIMPORTIDREF);
@@ -195,7 +211,7 @@ public class ChromaseqUtil{
 		if (registryData==null)
 			return;
 		for (int it=0; it<reverseRegistryData.getNumTaxa(); it++) 
-			for (int ic=0; ic<registryData.getNumChars(); ic++){
+			for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
 				reverseRegistryData.setToInapplicable(ic, it);
 			}
 		for (int it=0; it<registryData.getNumTaxa() && it<reverseRegistryData.getNumTaxa(); it++) 
@@ -237,9 +253,24 @@ public class ChromaseqUtil{
 		reverseRegistryData.setWritable(false);
 		
 		fillReverseRegistryData(reverseRegistryData);
-				
+		reverseRegistryData.setEditorInhibition(true);
+
 		return reverseRegistryData;
    	}
+   	
+   	public static void prepareOriginalAndQualityData (CharacterData data) {
+		ContinuousData qualityData = getQualityData(data);
+		if (qualityData!=null) {
+			qualityData.resignFromLinkageGroup();
+			qualityData.setLocked(true);
+		}
+		DNAData originalData = getOriginalData(data);
+		if (originalData!=null) {
+			originalData.resignFromLinkageGroup();
+			originalData.setLocked(true);
+		}
+   	}
+
 
    	public static MeristicData createRegistryData(CharacterData data) {
 		MesquiteString uid = null;
@@ -272,13 +303,9 @@ public class ChromaseqUtil{
 			for (int ic=0; ic<registrationData.getNumChars(); ic++){
 				registrationData.setState(ic, it, 0, ic);
 			}
-			
-		ContinuousData qualityData = getQualityData(data);
-		if (qualityData!=null)
-			qualityData.resignFromLinkageGroup();
-		DNAData originalData = getOriginalData(data);
-		if (originalData!=null)
-			originalData.resignFromLinkageGroup();
+		registrationData.setEditorInhibition(true);
+
+		prepareOriginalAndQualityData(data);
 
 	//	createReverseRegistryData(registrationData, originalData);
 		

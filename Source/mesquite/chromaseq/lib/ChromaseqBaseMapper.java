@@ -59,8 +59,12 @@ public class ChromaseqBaseMapper {
 					return ic;
 			}
 		}
-		else 
-			return reverseRegistryData.getState(originalPos, it) ;
+		else  {
+			int pos = reverseRegistryData.getState(originalPos, it) ;
+			if (!MesquiteInteger.isCombinable(pos))
+				return originalPos;
+			return pos;
+		}
 		return -1;
 
 	}

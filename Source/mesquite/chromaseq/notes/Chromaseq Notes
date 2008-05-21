@@ -1,5 +1,8 @@
 Necessary pre-beta
 
+- lock matrices
+- registration matrix - fill end with inapplicable
+
 - why ignore called bases reset between each chromatogram
 - original import sequence not shown
 

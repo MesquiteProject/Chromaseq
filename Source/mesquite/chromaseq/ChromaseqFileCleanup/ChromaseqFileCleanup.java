@@ -86,10 +86,11 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
 				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 				if (registryData==null) {
-					ChromaseqUtil.createRegistryData(data);			
+					ChromaseqUtil.createRegistryData(data);		
 				}
 				DNAData originalData = ChromaseqUtil.getOriginalData(data);
-				MeristicData reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);			
+				MeristicData reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);		
+				ChromaseqUtil.prepareOriginalAndQualityData(data);
 				storeReverseRegistry(reverseRegistryData);
 			}
 		}
