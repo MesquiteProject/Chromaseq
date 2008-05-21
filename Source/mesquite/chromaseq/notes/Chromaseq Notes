@@ -2,6 +2,9 @@ Necessary pre-beta
 
 - lock matrices
 - registration matrix - fill end with inapplicable
+- disappearing base problem at end of first aenulum after clustal align
+
+
 
 - why ignore called bases reset between each chromatogram
 - original import sequence not shown

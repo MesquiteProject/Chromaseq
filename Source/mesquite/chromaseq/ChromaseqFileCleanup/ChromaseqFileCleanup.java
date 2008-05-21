@@ -88,10 +88,36 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				if (registryData==null) {
 					ChromaseqUtil.createRegistryData(data);		
 				}
-				DNAData originalData = ChromaseqUtil.getOriginalData(data);
-				MeristicData reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);		
+				MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);		
+				if (reverseRegistryData==null) {
+					DNAData originalData = ChromaseqUtil.getOriginalData(data);
+					registryData = ChromaseqUtil.getRegistryData(data);
+					reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);		
+					storeReverseRegistry(reverseRegistryData);
+
+				} else if (reverseRegistryVector.indexOf(reverseRegistryData)<0)
+					storeReverseRegistry(reverseRegistryData);
+
 				ChromaseqUtil.prepareOriginalAndQualityData(data);
-				storeReverseRegistry(reverseRegistryData);
+
+			}
+		}
+	}
+	/*.................................................................................................................*/
+	public void createReverseRegistryDataIfNeeded(MesquiteFile f) {
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+				MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
+				if (registryData!=null && reverseRegistryData==null) {
+					DNAData originalData = ChromaseqUtil.getOriginalData(data);
+					reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);		
+					ChromaseqUtil.prepareOriginalAndQualityData(data);
+					storeReverseRegistry(reverseRegistryData);
+
+				}
 			}
 		}
 	}
