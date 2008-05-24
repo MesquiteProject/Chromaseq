@@ -27,7 +27,8 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	public void storeReverseRegistry(MeristicData reverseRegistryData) {
 		reverseRegistryVector.add(reverseRegistryData);
 		DNAData data = ChromaseqUtil.getEditedData(reverseRegistryData);
-		data.addListener(this);
+		if (data!=null)
+			data.addListener(this);
 	}
 	/*.................................................................................................................*/
 	public MeristicData findReverseRegistry(CharacterData otherData) {
@@ -73,8 +74,10 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		int i = findReverseRegistryIndex((MeristicData)obj);
 		if (i>=0) {
 			MeristicData reverseRegistryData = (MeristicData)reverseRegistryVector.elementAt(i);
-			reverseRegistryData.dispose();
-			reverseRegistryVector.remove(i);
+			if (reverseRegistryData!=null) {
+				reverseRegistryData.dispose();
+				reverseRegistryVector.remove(i);
+			}
 		}
 	}
 
@@ -92,8 +95,10 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				if (reverseRegistryData==null) {
 					DNAData originalData = ChromaseqUtil.getOriginalData(data);
 					registryData = ChromaseqUtil.getRegistryData(data);
-					reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);		
-					storeReverseRegistry(reverseRegistryData);
+					if (originalData!=null && registryData!=null) {
+						reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);		
+						storeReverseRegistry(reverseRegistryData);
+					}
 
 				} else if (reverseRegistryVector.indexOf(reverseRegistryData)<0)
 					storeReverseRegistry(reverseRegistryData);

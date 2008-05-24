@@ -192,6 +192,8 @@ public class ChromaseqUtil{
 			}
 		DNAData originalData = getOriginalData(registryData);
 		DNAData editedData = getEditedData(registryData);
+		if(originalData==null || editedData==null)
+			return;
 		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
 		for (int it=0; it<registryData.getNumTaxa(); it++)  {
 			int lengthDifference = originalData.numApplicable(it)-editedData.numApplicable(it);
