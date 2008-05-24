@@ -257,7 +257,7 @@ public class ChromaseqUtil{
 								diffEdited++;
 							}
 
-							if (it==0 && icEdited<60) {
+						/*	if (it==0 && icEdited<60) {
 								if (editedIsApplicable)
 									Debugg.print("editedIsApplicable (editedCount: " + editedCount + ", diffEdited: " + diffEdited + ") ||" );
 								if (originalIsApplicable)
@@ -265,6 +265,7 @@ public class ChromaseqUtil{
 								Debugg.println("|| icEdited: " + icEdited + ", icOriginal: " + icOriginal + ") " );
 							}
 
+*/
 							if (editedIsApplicable && originalIsApplicable) {
 								for (int i = 0;i<diffEdited && icEdited>=0; i++) {
 									icEdited = editedData.nextApplicable(it, icEdited, false); 
