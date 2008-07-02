@@ -2,7 +2,7 @@ package mesquite.chromaseq.lib;
 
 import mesquite.lib.*;
 
-public class ChromatogramPanel extends MesquitePanel{
+public  class ChromatogramPanel extends MesquitePanel{
 	protected boolean open=true;  // REMOVE ONCE CONVERT TO CLOSABLEPANEL; same for isOpen()
 	protected Chromatogram[] chromatograms;
 	protected int numChromatograms = 1;
@@ -28,7 +28,10 @@ public class ChromatogramPanel extends MesquitePanel{
 	
 	protected boolean listen = true;
 	
-
+	public ChromatogramPanel() {
+		super();
+	}
+	
 	public boolean isOpen() {
 		return open;
 	}

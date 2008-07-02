@@ -3,6 +3,8 @@ package mesquite.chromaseq.ViewChromatograms;
 import mesquite.categ.lib.*;
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
+import mesquite.chromaseq.lib.ChromatogramPanel;
+import mesquite.chromaseq.lib.ChromatogramCanvas;
 
 import java.awt.*;
 
