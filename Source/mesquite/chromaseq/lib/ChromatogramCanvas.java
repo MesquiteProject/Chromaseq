@@ -218,7 +218,7 @@ public class ChromatogramCanvas extends MousePanel {
 			for (int i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
 					int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
-					int space = panel.getSpaceInsertedBeforeConsensusBase(consensusBase);
+					int space = panel.getSpaceInsertedBeforeDisplayBase(consensusBase);
 					offsetForInserted += space;
 
 					int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);
@@ -255,7 +255,7 @@ public class ChromatogramCanvas extends MousePanel {
 			for (int i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
 					int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
-					int space = panel.getSpaceInsertedBeforeConsensusBase(consensusBase);
+					int space = panel.getSpaceInsertedBeforeDisplayBase(consensusBase);
 					offsetForInserted += space;
 
 					int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);

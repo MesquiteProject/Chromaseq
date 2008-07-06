@@ -377,7 +377,8 @@ public class ChromaseqUtil{
 		MesquiteFile file = data.getProject().getHomeFile();
 		CharactersManager manageCharacters = (CharactersManager)coord.findElementManager(mesquite.lib.characters.CharacterData.class);
 		MeristicData registryData;	
-		registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.lastApplicable()+1, MeristicData.DATATYPENAME);  //
+		registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.getNumChars(), MeristicData.DATATYPENAME);  //
+		//registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.lastApplicable()+1, MeristicData.DATATYPENAME);  //
 		registryData.saveChangeHistory = false;
 		registryData.addToFile(file, data.getProject(), manageCharacters);  
 		data.addToLinkageGroup(registryData); //link matrices!

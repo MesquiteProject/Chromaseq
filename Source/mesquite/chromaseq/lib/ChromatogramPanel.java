@@ -40,16 +40,16 @@ public  class ChromatogramPanel extends MesquitePanel{
 	//this is consensus position
 	public void exportSelectConsensusPosition(int i){
 		listen = false;
-		panel.selectConsensusPositionInTable(i);
+		panel.selectDisplayPositionInTable(i);
 
-		panel.setSelectedConsensusPositionInChrom(i, true, true);
+		panel.setSelectedDisplayPositionInChrom(i, true, true);
 		listen = true;
 	}
 	//this is consensus position
 	public void exportDeselectConsensusPosition(int i){
 		listen = false;
-		panel.deselectConsensusPositionInTable(i);
-		panel.setSelectedConsensusPositionInChrom(i, false, true);
+		panel.deselectDisplayPositionInTable(i);
+		panel.setSelectedDisplayPositionInChrom(i, false, true);
 		listen = true;
 	}
 	public void exportDeselectAll(){

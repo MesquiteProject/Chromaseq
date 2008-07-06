@@ -196,7 +196,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
 				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
-				int space = panel.getSpaceInsertedBeforeConsensusBase(consensusBase);
+				int space = panel.getSpaceInsertedBeforeDisplayBase(consensusBase);
 
 				offsetForInserted += space;
 
@@ -282,7 +282,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
 				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
-				offsetForInserted += panel.getSpaceInsertedBeforeConsensusBase(consensusBase);
+				offsetForInserted += panel.getSpaceInsertedBeforeDisplayBase(consensusBase);
 				int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);
 				char c = read.getPhdBaseChar(i);
 				int qual = read.getPhdBaseQuality(i);

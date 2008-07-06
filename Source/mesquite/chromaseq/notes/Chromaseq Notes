@@ -2,14 +2,10 @@ Necessary pre-beta
 
 - lock matrices
 - registration matrix - fill end with inapplicable
-- disappearing base problem at end of first aenulum after clustal align
-
 
 
 - why ignore called bases reset between each chromatogram
-- original import sequence not shown
 
-	- try to get biojava working.
 	fix problem with deleting bases and then moving bases over top of those.
 
 - have move to matrix tool deal with double peaks
