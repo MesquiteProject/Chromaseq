@@ -36,7 +36,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 		scrollPanel.setBackground(Color.blue);
 		scrollBar = new Scrollbar(Scrollbar.HORIZONTAL);
 		scrollBar.addAdjustmentListener(this);
-		numBases = panel.getTotalNumPeaks();
+		numBases = panel.getTotalNumOverallBases();
 		numBasesVisible = panel.getApproximateNumberOfPeaksVisible();
 
 		scrollBar.setUnitIncrement(10);
@@ -61,7 +61,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 		//chromArea.repaint();
 	}
 	public  void setScrollPosition( ){
-		numBases = panel.getTotalNumPeaks();
+		numBases = panel.getTotalNumOverallBases();
 		int left = contigOverviewCanvas.getLeftBoundaryOfOverview(contigOverviewCanvas.getGraphics());
 		numBasesVisible = getBounds().width-left;
 
@@ -230,8 +230,8 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int top = getTopOfRead(0)-5;
 		int bottom = getTopOfRead(numChromatograms-1)+readBaseHeight + 5;
 		int width = panel.getApproximateNumberOfPeaksVisible();
-		if (firstConsensusBase+panel.getApproximateNumberOfPeaksVisible()> panel.getTotalNumPeaks()){
-			width =  panel.getTotalNumPeaks()-firstConsensusBase;
+		if (firstConsensusBase+panel.getApproximateNumberOfPeaksVisible()> panel.getTotalNumOverallBases()){
+			width =  panel.getTotalNumOverallBases()-firstConsensusBase;
 			if (width<0) width=0;
 		}
 		return new Rectangle(left+firstConsensusBase*singleBaseWidth, top, width*singleBaseWidth,bottom-top);
@@ -282,7 +282,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int cwidth = getBounds().width-left;
 		
 		Read read = chromatograms[whichRead].getRead();
-		int numBases = panel.getTotalNumPeaks();
+		int numBases = panel.getTotalNumOverallBases();
 
 		if (blackBackground)
 			setBackground(Color.black);
@@ -397,7 +397,7 @@ if (i>500 && i<520 && false) {
 		//ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (mouseDownInBox) {
 			setCursor(window.getHandCursor());
-			int numBases = panel.getTotalNumPeaks();
+			int numBases = panel.getTotalNumOverallBases();
 			int ic = getOverallBaseFromLocation(x-offsetInBox,getGraphics()); 
 			int overallBase = ic+firstBase;
 			int consensus = panel.getConsensusBaseFromOverallBase(ic)+firstBase;

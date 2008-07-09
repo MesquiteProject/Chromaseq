@@ -63,9 +63,9 @@ public class ChromatogramCanvas extends MousePanel {
 		maxValue = 0;
 		if (canShowTraces())
 			initTraces(0);
-		selected = new boolean[panel.getTotalNumPeaks()];   // uses local read as index
+		selected = new boolean[panel.getTotalNumOverallBases()];   // uses local read as index
 
-		for (i=0;i<panel.getTotalNumPeaks();i++) {
+		for (i=0;i<panel.getTotalNumOverallBases();i++) {
 			selected[i] = false;
 		}
 

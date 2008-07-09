@@ -11,6 +11,18 @@ import mesquite.meristic.lib.*;
  
  For more information, see ChromaseqUtil, which contains the methods to create the registries
  
+ There are effectively three systems:
+ 	(1) the system of coordination established by Phrap, and that is stored in Contig and Read, that establishes links between the original Contig and the original Reads, with padding, etc.
+ 	(2) the registration system, which connects the various matrices within Mesquite
+ 	(3) the connection between the original Contig numbering and the number of the OverallBase, which is just like the Contig numbering but it is offset, 
+ 		as there are some Reads that extend before the start of the original Contig.  The Read that extends furthest to the left (furthest upstream) extends 
+ 		contig.getReadExcessAtStart() to the left, and thus, in OverallBase numbering, the first base of the Contig is numbered getReadExcessAtStart().  The OverallBase numbering 
+ 		exactly matches the Contig numbering, except that it is offset. 
+ 	(4) The DisplayBase is very similar to the OverallBase, but may have additional bases inserted into it.   There thus needs to be a mapping between the two.  There also needs to be 
+		mapping between one of these and the matrix registration system, presumably via either originalData or editedData. 
+ 	
+ 	
+ 
  * */
 public class ChromaseqBaseMapper {
 	CharacterData editedData;  // this is the active, edited (and editable) matrix
