@@ -83,6 +83,10 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 
 	/*.................................................................................................................*/
 	public void createRegistryDataIfNeeded(MesquiteFile f) {
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
 		ListableVector matrices = f.getProject().getCharacterMatrices();
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
@@ -110,6 +114,10 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	}
 	/*.................................................................................................................*/
 	public void createReverseRegistryDataIfNeeded(MesquiteFile f) {
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
 		ListableVector matrices = f.getProject().getCharacterMatrices();
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
