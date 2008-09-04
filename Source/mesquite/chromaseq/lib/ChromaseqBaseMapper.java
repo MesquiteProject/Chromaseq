@@ -11,7 +11,7 @@ import mesquite.meristic.lib.*;
  
  For more information, see ChromaseqUtil, which contains the methods to create the registries
  
- There are effectively three systems:
+ These are the systems that connect bases:
  	(1) the system of coordination established by Phrap, and that is stored in Contig and Read, that establishes links between the original Contig and the original Reads, with padding, etc.
  	(2) the registration system, which connects the various matrices within Mesquite (original matrix, quality data, edited matrix)
  	(3) the connection between the original Contig numbering and the number of the OverallBase, which is just like the Contig numbering but it is offset, 
