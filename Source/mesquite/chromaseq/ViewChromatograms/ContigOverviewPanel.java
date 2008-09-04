@@ -291,7 +291,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 
 		Color baseColor;
 		
-		int displayBaseFromConsensusBase= panel.getDisplayPositionOfConsensusBase(0);
+//		int trim= panel.getDisplayPositionOfConsensusBase(0);
 
 //		=====================  COLOR THE BASES OF THE READ ==============================
 		int firstLocation = -1;
@@ -303,12 +303,12 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 				char c = read.getPhdBaseChar(readBase);
 				char matrixC= panel.getMatrixStateAtDisplayPosition(read.getConsensusBaseFromReadBase(readBase));
 				int qual = read.getPhdBaseQuality(readBase);
-/*				
+		
 if (i>550 && i<570) {
 		int consensus = read.getConsensusBaseFromReadBase(readBase);
-			Debugg.println(" readC: " + c +  "     matrixC: " + matrixC + "   qual: " + qual + ",  displayBaseFromConsensusBase: " +displayBaseFromConsensusBase);
+			Debugg.println(" readC: " + c +  "     matrixC: " + matrixC);
 }
-*/
+
 				if (qual>=0 && panel.getColorOverviewByQuality()) {
 					if (qual==0)
 						g.setColor(Color.black);
