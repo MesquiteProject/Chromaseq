@@ -6,6 +6,11 @@ import mesquite.cont.lib.*;
 import mesquite.categ.lib.*;
 import mesquite.meristic.lib.*;
 
+
+/* should store numBasesAddedToStart in file
+ */
+ 
+
 /* This class manages the connections between an edited matrix to which chromatogram information is attached, 
  and the associated matrices that contain relevant information.  
  
@@ -26,7 +31,8 @@ import mesquite.meristic.lib.*;
  	
  	(3) the connection between the numbering in the original matrix/trimmed Contig numbering and what is called the Consensus base, which is the numbering in the Contig
  			that is padded and untrimmed.
- 			ConsensusBase = base in originalSequence (i.e., originalData) + numBasesOriginallyTrimmedFromStartOfPhPhContig;
+ 			ConsensusBase = base in originalSequence (i.e., originalData) + numBasesOriginallyTrimmedFromStartOfPhPhContig-numBasesAddedToStart;
+ 			numBasesAddedToStart is stored in Contig.
  			
  	(3) the connection between the original Consensus numbering and the number of the OverallBase, which is just like the Consensus numbering but it is offset, 
  		as there are some Reads that extend before the start of the original (untrimmed) Contig.  The Read that extends furthest to the left (furthest upstream) extends 
