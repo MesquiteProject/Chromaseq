@@ -1,5 +1,20 @@
 Necessary pre-beta
 
+
+1. open file, open chromat, ask to show read matrix conflict, save file, close Mesquite, open Mesquite, open file.  
+Read matrix conflict not shown (i.e. neither by autopref nor by snapshot).
+
+Doesn't help to turn on Read Matrix Conflict then select Current Settings as Defaults.  Still fails to show by default on restart.
+
+2. Sometimes when editing sites in the chromatogram window, if you have a base highlighted that you just changed, 
+and then you click to another base to edit it, there is a very long delay (maybe up to 10 seconds) before that 
+other base is selected for editing.  Maybe happens once in every 5-10 such clicks.  I tried using Shark but 
+the method that it claims is chewing up time doesn't actually seem to be. I just thought of a possible source 
+(notifyListeners?) and so I might check that out, but I thought I'd just give you a heads up on the issue.
+
+
+---------
+
 - lock matrices
 - registration matrix - fill end with inapplicable
 
