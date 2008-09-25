@@ -107,6 +107,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				} else if (reverseRegistryVector.indexOf(reverseRegistryData)<0)
 					storeReverseRegistry(reverseRegistryData);
 
+				ChromaseqUtil.fillAddedBaseData(data);
 				ChromaseqUtil.prepareOriginalAndQualityData(data);
 
 			}
