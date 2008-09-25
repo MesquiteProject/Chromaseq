@@ -173,6 +173,31 @@ public class ChromaseqUtil{
 		return null;
 	}
 
+	/*.................................................................................................................*/
+	public static void fillAddedBaseData(CharacterData data, int it) {
+		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		if (addedBaseData!=null && registryData!=null && editedData!=null)
+			for (int ic=0;ic<addedBaseData.getNumChars() && ic<registryData.getNumChars(); ic++) {
+				int state = registryData.getState(ic, it);
+				if (!MesquiteInteger.isCombinable(state)) { // then it is not in original
+					long editedState = editedData.getState(ic, it);
+					if (!CategoricalState.isInapplicable(editedState))  // nothing is in edited state
+						addedBaseData.setState(ic, it, CategoricalState.makeSet(1));
+					else
+						addedBaseData.setToUnassigned(ic, it);
+				}
+		}
+	}
+
+	/*.................................................................................................................*/
+	public static void fillAddedBaseData(CharacterData data) {
+		if (data==null)
+			return;
+		for (int it=0;it<data.getNumTaxa(); it++) 
+			fillAddedBaseData(data,it);
+	}
 
 	/*.................................................................................................................*/
 
@@ -312,6 +337,7 @@ public class ChromaseqUtil{
 				}
 			}
 		}
+		fillAddedBaseData(editedData);
 	}
 
 	/*.................................................................................................................*/
