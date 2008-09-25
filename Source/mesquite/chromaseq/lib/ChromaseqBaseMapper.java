@@ -49,6 +49,7 @@ public class ChromaseqBaseMapper {
 	CharacterData editedData;  // this is the active, edited (and editable) matrix
 	ContinuousData qualityData;  // this matrix should be structured exactly as the originalData
 	DNAData originalData;   // contains the exact matrix as originally imported.
+	CategoricalData addedBaseData;   // contains the exact matrix as originally imported.
 	MeristicData registryData;  // this should be of the same size as the edited matrix.   It contains in cell ic, it the character number in originalData that that cell's original base call is stored 
 											// (which, of course, is also the position in qualityData of the quality scores)
 	MeristicData reverseRegistryData; // this should be of the same size as the originalData.   It contains in cell ic, it the character number in editedData that that cell's edited base  is stored 
@@ -60,6 +61,7 @@ public class ChromaseqBaseMapper {
 		reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
 		qualityData = ChromaseqUtil.getQualityData(data);
 		originalData = ChromaseqUtil.getOriginalData(data);
+		addedBaseData = ChromaseqUtil.getAddedBaseData(data);
 		if (registryData!=null && qualityData!=null && originalData!=null)
 			valid=true;
 	}
@@ -90,6 +92,14 @@ public class ChromaseqBaseMapper {
 		if (mapping==MesquiteInteger.unassigned) return true;
 		return originalData.isInapplicable(mapping, it);
 	}
+	
+	public boolean isAddedBase(int ic, int it){ // ic is the position in the edited matrix
+		if (!isValid())
+			return true;
+		long state = addedBaseData.getState(ic, it);
+		return CategoricalState.isElement(state, 1) ;
+	}
+
 
 	/** This returns the nearest position within the edited matrix that is referred to by a position in the originalData 
 	 * TODO: consider reversed sequence!!! */

@@ -25,6 +25,7 @@ public class ChromaseqUtil{
 	public static final String EDITEDREF ="edited";
 	public static final String REGISTRYREF = "registration";
 	public static final String REVERSEREGISTRYREF = "reverse registration";
+	public static final String ADDEDBASEREF = "added base";
 
 
 
@@ -164,6 +165,15 @@ public class ChromaseqUtil{
 			return (MeristicData)d;
 		return null;
 	}
+	
+	public static CategoricalData getAddedBaseData(CharacterData data) {
+		CharacterData d = getAssociatedData(data,ADDEDBASEREF);
+		if (d instanceof CategoricalData)
+			return (CategoricalData)d;
+		return null;
+	}
+
+
 	/*.................................................................................................................*/
 
 	public static void fillReverseRegistryData(MeristicData reverseRegistryData) {
