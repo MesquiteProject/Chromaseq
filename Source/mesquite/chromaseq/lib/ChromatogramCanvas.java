@@ -11,6 +11,7 @@ import mesquite.categ.lib.DNAState;
 import mesquite.chromaseq.lib.*;
 import mesquite.chromaseq.ViewChromatograms.VChromWindow;
 import mesquite.lib.ColorDistribution;
+import mesquite.lib.Debugg;
 import mesquite.lib.GraphicsUtil;
 import mesquite.lib.IntegerArray;
 import mesquite.lib.MesquiteDouble;
@@ -414,10 +415,10 @@ public class ChromatogramCanvas extends MousePanel {
 //		int readBase = getReadBaseFromConsensusBase(consensusBase);
 //		if (j <0 || j>= chromatogram.getTraceLength())
 //		return;
+		Debugg.println("|||||||||||| selectOverallBase " + overallBase + " consensusBase " + consensusBase);
 		if (overallBase <0 || overallBase> selected.length)
 			return;
 		selected[overallBase] = true;
-//		Debugg.println("selectOverallBase " + overallBase + " consensusBase " + consensusBase + " readbase " + readBase);
 		chromatogramPanel.exportSelectConsensusPosition(consensusBase);
 	}
 
