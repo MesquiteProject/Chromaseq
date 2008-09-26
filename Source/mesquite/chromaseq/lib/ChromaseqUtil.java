@@ -174,6 +174,27 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
+	public static int getNumAddedToStart(CharacterData data, int it) {
+		int count=0;
+		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		if (addedBaseData!=null && registryData!=null && editedData!=null) {
+			for (int ic=0;ic<addedBaseData.getNumChars() && ic<registryData.getNumChars(); ic++) {
+
+				if (!MesquiteInteger.isCombinable(registryData.getState(ic, it))) { // we still haven't found one that is in the original
+					long addedBaseState = addedBaseData.getState(ic, it);
+					int addedBaseValue = CategoricalState.getOnlyElement(addedBaseState);
+					if (addedBaseValue==1)
+						count++;
+				} else
+					return count;
+			}
+		}
+		return 0;
+	}
+
+	/*.................................................................................................................*/
 	public static void fillAddedBaseData(CharacterData data, int it) {
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
