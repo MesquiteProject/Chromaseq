@@ -216,6 +216,47 @@ public class ChromaseqUtil{
 					reverseRegistryData.setState(mapping, it, 0, ic);
 			}
 	}
+	
+	/*.................................................................................................................*/
+
+	public static CategoricalData createAddedBaseData(CharacterData data) {
+		CategoricalData addedBaseData = getAddedBaseData(data);
+		if (addedBaseData!=null)
+			return addedBaseData;
+		MesquiteString uid = null;
+		Object obj = data.getAttachment(PHPHIMPORTIDREF);
+		if (obj!=null && obj instanceof MesquiteString) {
+			String dataUID= ((MesquiteString)obj).getValue();
+			uid = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataUID);
+		}
+		MesquiteString gN = null;
+		String dataGeneName = "";
+		obj = data.getAttachment(GENENAMEREF);
+		if (obj!=null && obj instanceof MesquiteString) {
+			dataGeneName= ((MesquiteString)obj).getValue();
+			gN = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataGeneName);
+		}
+		FileCoordinator coord = data.getProject().getCoordinatorModule();
+		MesquiteFile file = data.getProject().getHomeFile();
+		CharactersManager manageCharacters = (CharactersManager)coord.findElementManager(mesquite.lib.characters.CharacterData.class);
+		addedBaseData =  (CategoricalData)manageCharacters.newCharacterData(data.getTaxa(), data.getNumChars(), CategoricalData.DATATYPENAME);  //
+		//registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.lastApplicable()+1, MeristicData.DATATYPENAME);  //
+		addedBaseData.saveChangeHistory = false;
+		addedBaseData.addToFile(file, data.getProject(), manageCharacters);  
+		data.addToLinkageGroup(addedBaseData); //link matrices!
+
+		addedBaseData.setName("Bases added for " + dataGeneName + " from Phred/Phrap");
+		addedBaseData.setResourcePanelIsOpen(false);
+		addedBaseData.attachIfUniqueName(uid);
+		addedBaseData.attachIfUniqueName(gN);
+		addedBaseData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.ADDEDBASEREF));
+		addedBaseData.setLocked(true);
+
+		//	createReverseRegistryData(registryData, originalData);
+
+		return addedBaseData;
+	}
+
 	/*.................................................................................................................*/
 
 	public synchronized static void fillRegistryData(MeristicData registryData) {

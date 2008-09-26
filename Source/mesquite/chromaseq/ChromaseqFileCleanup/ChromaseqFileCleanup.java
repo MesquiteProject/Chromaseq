@@ -1,11 +1,11 @@
 package mesquite.chromaseq.ChromaseqFileCleanup;
 
+import mesquite.categ.lib.CategoricalData;
 import mesquite.categ.lib.DNAData;
 import mesquite.chromaseq.lib.ChromaseqUtil;
 import mesquite.lib.*;
 import mesquite.lib.duties.FileInit;
 import mesquite.lib.characters.*;
-import mesquite.lib.characters.CharacterData;
 import mesquite.meristic.lib.*;
 import java.util.*;
 
@@ -91,6 +91,10 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+				if (addedBaseData==null) {
+					ChromaseqUtil.createAddedBaseData(data);		
+				}
 				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 				if (registryData==null) {
 					ChromaseqUtil.createRegistryData(data);		
