@@ -1,5 +1,6 @@
 Necessary pre-beta
 
+- move matrix uses polybases, which will require dealing with padding in that
 
 1. open file, open chromat, ask to show read matrix conflict, save file, close Mesquite, open Mesquite, open file.  
 Read matrix conflict not shown (i.e. neither by autopref nor by snapshot).
@@ -12,6 +13,7 @@ other base is selected for editing.  Maybe happens once in every 5-10 such click
 the method that it claims is chewing up time doesn't actually seem to be. I just thought of a possible source 
 (notifyListeners?) and so I might check that out, but I thought I'd just give you a heads up on the issue.
 
+reverse complement
 
 ---------
 

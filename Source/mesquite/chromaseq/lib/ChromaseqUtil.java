@@ -165,7 +165,7 @@ public class ChromaseqUtil{
 			return (MeristicData)d;
 		return null;
 	}
-	
+
 	public static CategoricalData getAddedBaseData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,ADDEDBASEREF);
 		if (d instanceof CategoricalData)
@@ -201,15 +201,20 @@ public class ChromaseqUtil{
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
 		if (addedBaseData!=null && registryData!=null && editedData!=null)
 			for (int ic=0;ic<addedBaseData.getNumChars() && ic<registryData.getNumChars(); ic++) {
-				int state = registryData.getState(ic, it);
-				if (!MesquiteInteger.isCombinable(state)) { // then it is not in original
-					long editedState = editedData.getState(ic, it);
-					if (!CategoricalState.isInapplicable(editedState))  // nothing is in edited state
-						addedBaseData.setState(ic, it, CategoricalState.makeSet(1));
+				int registryState = registryData.getState(ic, it);
+				long editedState = editedData.getState(ic, it);
+				if (!MesquiteInteger.isCombinable(registryState)) { // then the original data doesn't have a state here
+					if (!CategoricalState.isInapplicable(editedState))  // the edited data has something in it
+						addedBaseData.setState(ic, it, CategoricalState.makeSet(1));  // mark it as having an added base
 					else
 						addedBaseData.setToUnassigned(ic, it);
 				}
-		}
+				/*else {  // the original data DOES have a state here
+					if (CategoricalState.isInapplicable(editedState))  // the edited data DOESN'T have something in it
+						addedBaseData.setState(ic, it, CategoricalState.makeSet(2));  // mark it as having a base removed
+				}
+				 */
+			}
 	}
 
 	/*.................................................................................................................*/
@@ -219,6 +224,7 @@ public class ChromaseqUtil{
 		for (int it=0;it<data.getNumTaxa(); it++) 
 			fillAddedBaseData(data,it);
 	}
+
 
 	/*.................................................................................................................*/
 
@@ -237,7 +243,20 @@ public class ChromaseqUtil{
 					reverseRegistryData.setState(mapping, it, 0, ic);
 			}
 	}
-	
+
+	/*.................................................................................................................*/
+	public static void setAddedBaseDataValues(CategoricalData addedBaseData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
+		addedBaseData.saveChangeHistory = false;
+		data.addToLinkageGroup(addedBaseData); //link matrices!
+		addedBaseData.setName("Bases added for " + name + " from Phred/Phrap");
+		addedBaseData.setResourcePanelIsOpen(false);
+		addedBaseData.attachIfUniqueName(uid);
+		addedBaseData.attachIfUniqueName(gN);
+		addedBaseData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.ADDEDBASEREF));
+		addedBaseData.setLocked(true);
+		addedBaseData.setColorCellsByDefault(true);
+		addedBaseData.setUseDiagonalCharacterNames(false);
+	}
 	/*.................................................................................................................*/
 
 	public static CategoricalData createAddedBaseData(CharacterData data) {
@@ -262,16 +281,9 @@ public class ChromaseqUtil{
 		CharactersManager manageCharacters = (CharactersManager)coord.findElementManager(mesquite.lib.characters.CharacterData.class);
 		addedBaseData =  (CategoricalData)manageCharacters.newCharacterData(data.getTaxa(), data.getNumChars(), CategoricalData.DATATYPENAME);  //
 		//registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.lastApplicable()+1, MeristicData.DATATYPENAME);  //
-		addedBaseData.saveChangeHistory = false;
 		addedBaseData.addToFile(file, data.getProject(), manageCharacters);  
-		data.addToLinkageGroup(addedBaseData); //link matrices!
 
-		addedBaseData.setName("Bases added for " + dataGeneName + " from Phred/Phrap");
-		addedBaseData.setResourcePanelIsOpen(false);
-		addedBaseData.attachIfUniqueName(uid);
-		addedBaseData.attachIfUniqueName(gN);
-		addedBaseData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.ADDEDBASEREF));
-		addedBaseData.setLocked(true);
+		setAddedBaseDataValues(addedBaseData, data, dataGeneName, uid, gN);
 
 		//	createReverseRegistryData(registryData, originalData);
 
@@ -332,16 +344,16 @@ public class ChromaseqUtil{
 								if (it==1&& ic<100) Debugg.println(""+ ic + "   " + alignment[ic][0] + "  " + alignment[ic][1]);
 						}
 						 */
-				//		int icEdited = editedData.firstApplicable(it, 0); 
-				//		int icOriginal = originalData.firstApplicable(it, 0); 
+						//		int icEdited = editedData.firstApplicable(it, 0); 
+						//		int icOriginal = originalData.firstApplicable(it, 0); 
 						int icEdited = 0;
 						int icOriginal = 0;
-						
+
 						int diffEdited=0;
 						int diffOriginal=0;
 
 						if (it==0) 
-								Debugg.println("startloop");
+							Debugg.println("startloop");
 						for (int ic=0; ic<alignment.length && icEdited>=0 && icOriginal>=0; ic++) {
 							boolean originalIsApplicable = alignment[ic][0]!=CategoricalState.inapplicable;
 							boolean editedIsApplicable = alignment[ic][1]!=CategoricalState.inapplicable;
@@ -354,7 +366,7 @@ public class ChromaseqUtil{
 								diffEdited++;
 							}
 
-						/*	if (it==0 && icEdited<60) {
+							/*	if (it==0 && icEdited<60) {
 								if (editedIsApplicable)
 									Debugg.print("editedIsApplicable (editedCount: " + editedCount + ", diffEdited: " + diffEdited + ") ||" );
 								if (originalIsApplicable)
@@ -362,7 +374,7 @@ public class ChromaseqUtil{
 								Debugg.println("|| icEdited: " + icEdited + ", icOriginal: " + icOriginal + ") " );
 							}
 
-*/
+							 */
 							if (editedIsApplicable && originalIsApplicable) {
 								for (int i = 0;i<diffEdited && icEdited>=0; i++) {
 									icEdited = editedData.nextApplicable(it, icEdited, false); 
@@ -372,7 +384,7 @@ public class ChromaseqUtil{
 								for (int i = 0;i<diffOriginal && icOriginal>=0; i++) {
 									icOriginal = originalData.nextApplicable(it, icOriginal, false);
 									if (icOriginal>=0)
-											icOriginal++;
+										icOriginal++;
 								}
 								icEdited--;
 								icOriginal--;
@@ -404,6 +416,18 @@ public class ChromaseqUtil{
 
 	/*.................................................................................................................*/
 
+	public static void setReverseRegistryDataValues(MeristicData reverseRegistryData, DNAData originalData, String name, MesquiteString uid, MesquiteString gN) {
+		originalData.addToLinkageGroup(reverseRegistryData); //link matrices!
+		reverseRegistryData.setName("Reverse Registration Data of " + name + " (for internal bookkeeping)");  //DAVID: if change name here have to change elsewhere
+		reverseRegistryData.attachIfUniqueName(uid);
+		reverseRegistryData.attachIfUniqueName(gN);
+		reverseRegistryData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REVERSEREGISTRYREF));
+		reverseRegistryData.setWritable(false);
+		reverseRegistryData.setResourcePanelIsOpen(false);
+
+	}
+	/*.................................................................................................................*/
+
 	public static MeristicData createReverseRegistryData(MeristicData registryData, DNAData originalData) {
 		MeristicData rr = getReverseRegistryData(originalData);
 		if (rr!=null)
@@ -427,13 +451,8 @@ public class ChromaseqUtil{
 		CharactersManager manageCharacters = (CharactersManager)coord.findElementManager(mesquite.lib.characters.CharacterData.class);
 		MeristicData reverseRegistryData =  (MeristicData)manageCharacters.newCharacterData(originalData.getTaxa(), originalData.getNumChars(), MeristicData.DATATYPENAME);  //
 		reverseRegistryData.addToFile(file, originalData.getProject(), manageCharacters);  
-		originalData.addToLinkageGroup(reverseRegistryData); //link matrices!
-		reverseRegistryData.setName("Reverse Registration Data of " + dataGeneName + " (for internal bookkeeping)");  //DAVID: if change name here have to change elsewhere
-		reverseRegistryData.attachIfUniqueName(uid);
-		reverseRegistryData.attachIfUniqueName(gN);
-		reverseRegistryData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REVERSEREGISTRYREF));
-		reverseRegistryData.setWritable(false);
-		reverseRegistryData.setResourcePanelIsOpen(false);
+
+		setReverseRegistryDataValues(reverseRegistryData, originalData, dataGeneName, uid, gN);
 
 		fillReverseRegistryData(reverseRegistryData);
 		reverseRegistryData.setEditorInhibition(true);
@@ -453,6 +472,19 @@ public class ChromaseqUtil{
 			originalData.resignFromLinkageGroup();
 			originalData.setLocked(true);
 		}
+	}
+
+	/*.................................................................................................................*/
+
+	public static void setRegistryDataValues(MeristicData registryData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
+		registryData.saveChangeHistory = false;
+		data.addToLinkageGroup(registryData); //link matrices!
+		registryData.setName("Registration of " + name + " from Phred/Phrap");  //DAVID: if change name here have to change elsewhere
+		registryData.attachIfUniqueName(uid);
+		registryData.attachIfUniqueName(gN);
+		registryData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REGISTRYREF));
+		registryData.setResourcePanelIsOpen(false);
+		registryData.setEditorInhibition(true);
 	}
 
 	/*.................................................................................................................*/
@@ -477,15 +509,9 @@ public class ChromaseqUtil{
 		MeristicData registryData;	
 		registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.getNumChars(), MeristicData.DATATYPENAME);  //
 		//registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.lastApplicable()+1, MeristicData.DATATYPENAME);  //
-		registryData.saveChangeHistory = false;
 		registryData.addToFile(file, data.getProject(), manageCharacters);  
-		data.addToLinkageGroup(registryData); //link matrices!
-		registryData.setName("Registration of " + dataGeneName + " from Phred/Phrap");  //DAVID: if change name here have to change elsewhere
-		registryData.attachIfUniqueName(uid);
-		registryData.attachIfUniqueName(gN);
-		registryData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REGISTRYREF));
-		registryData.setResourcePanelIsOpen(false);
-		registryData.setEditorInhibition(true);
+
+		setRegistryDataValues(registryData,  data, dataGeneName,  uid,  gN);
 
 		fillRegistryData(registryData);
 
