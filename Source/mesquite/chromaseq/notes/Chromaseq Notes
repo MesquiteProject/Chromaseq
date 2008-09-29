@@ -1,5 +1,11 @@
 Necessary pre-beta
 
+move to next base are on by default
+color taxon names on by default
+
+test for chromaseqblock version number
+
+
 - move matrix uses polybases, which will require dealing with padding in that
 
 1. open file, open chromat, ask to show read matrix conflict, save file, close Mesquite, open Mesquite, open file.  

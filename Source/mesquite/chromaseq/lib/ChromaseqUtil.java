@@ -1,3 +1,14 @@
+/* Mesquite chromaseq source code.  Copyright 2005-2008 D. Maddison and W. Maddison.
+Disclaimer:  The Mesquite source code is lengthy and we are few.  There are no doubt inefficiencies and goofs in this code. 
+The commenting leaves much to be desired. Please approach this source code with the spirit of helping out.
+Perhaps with your help we can be more than a few, and make Mesquite better.
+
+Mesquite is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.
+Mesquite's web site is http://mesquiteproject.org
+
+This source code and its compiled class files are free and modifiable under the terms of 
+GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
+ */
 package mesquite.chromaseq.lib;
 
 import java.util.Vector;
@@ -173,6 +184,13 @@ public class ChromaseqUtil{
 		return null;
 	}
 
+
+	/*.................................................................................................................*/
+	public static void resetNumAddedToStart(ContigDisplay contigDisplay, CharacterData data, int it) {
+		int numAdded = getNumAddedToStart(data,it);
+		contigDisplay.setNumBasesAddedToStart(numAdded);
+
+	}
 	/*.................................................................................................................*/
 	public static int getNumAddedToStart(CharacterData data, int it) {
 		int count=0;
@@ -195,27 +213,48 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
+	public static void fillAddedBaseData(CategoricalData addedBaseData, MeristicData registryData, DNAData editedData, int ic, int it) {
+		if (addedBaseData!=null && registryData!=null && editedData!=null) {
+			int registryState = registryData.getState(ic, it);
+			long editedState = editedData.getState(ic, it);
+			if (!MesquiteInteger.isCombinable(registryState)) { // then the original data doesn't have a state here
+				if (!CategoricalState.isInapplicable(editedState))  // the edited data has something in it
+					addedBaseData.setState(ic, it, CategoricalState.makeSet(1));  // mark it as having an added base
+				else
+					addedBaseData.setToUnassigned(ic, it);
+			}
+			/*else {  // the original data DOES have a state here
+					if (CategoricalState.isInapplicable(editedState))  // the edited data DOESN'T have something in it
+						addedBaseData.setState(ic, it, CategoricalState.makeSet(2));  // mark it as having a base removed
+				}
+			 */
+		}
+
+	}
+
+	/*.................................................................................................................*/
+	public static void fillAddedBaseData(CharacterData data, int ic, int it) {
+		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		fillAddedBaseData(addedBaseData,registryData, editedData, ic,it);
+	}
+	/*.................................................................................................................*/
 	public static void fillAddedBaseData(CharacterData data, int it) {
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
 		if (addedBaseData!=null && registryData!=null && editedData!=null)
 			for (int ic=0;ic<addedBaseData.getNumChars() && ic<registryData.getNumChars(); ic++) {
-				int registryState = registryData.getState(ic, it);
-				long editedState = editedData.getState(ic, it);
-				if (!MesquiteInteger.isCombinable(registryState)) { // then the original data doesn't have a state here
-					if (!CategoricalState.isInapplicable(editedState))  // the edited data has something in it
-						addedBaseData.setState(ic, it, CategoricalState.makeSet(1));  // mark it as having an added base
-					else
-						addedBaseData.setToUnassigned(ic, it);
-				}
-				/*else {  // the original data DOES have a state here
-					if (CategoricalState.isInapplicable(editedState))  // the edited data DOESN'T have something in it
-						addedBaseData.setState(ic, it, CategoricalState.makeSet(2));  // mark it as having a base removed
-				}
-				 */
+				fillAddedBaseData(addedBaseData,registryData, editedData, ic,it);
 			}
 	}
+	/*.................................................................................................................*/
+	public static void fillAddedBaseData(ContigDisplay contigDisplay, CharacterData data, int it) {
+		fillAddedBaseData(data, it);
+		resetNumAddedToStart(contigDisplay, data,it);
+	}
+
 
 	/*.................................................................................................................*/
 	public static void fillAddedBaseData(CharacterData data) {
