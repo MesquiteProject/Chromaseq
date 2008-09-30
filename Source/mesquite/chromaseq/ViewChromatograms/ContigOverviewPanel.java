@@ -273,6 +273,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 			g.drawRect(box.x, box.y, box.width, box.height);
 
 	}	
+	
 	/*...........................................................................*/
 	public void paintRead(Graphics g, int whichRead) {	
 		int topOfRead = getTopOfRead(whichRead);
