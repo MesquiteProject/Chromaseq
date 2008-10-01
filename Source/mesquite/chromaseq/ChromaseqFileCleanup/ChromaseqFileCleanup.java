@@ -92,8 +92,10 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
 				CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+				boolean newAddedBase = false;
 				if (addedBaseData==null) {
 					ChromaseqUtil.createAddedBaseData(data);		
+					newAddedBase = true;
 				}
 				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 				if (registryData==null) {
@@ -111,7 +113,8 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				} else if (reverseRegistryVector.indexOf(reverseRegistryData)<0)
 					storeReverseRegistry(reverseRegistryData);
 
-				ChromaseqUtil.fillAddedBaseData(data);
+				if (newAddedBase)
+					ChromaseqUtil.fillAddedBaseData(data);
 				ChromaseqUtil.prepareOriginalAndQualityData(data);
 
 			}
