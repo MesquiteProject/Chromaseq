@@ -223,7 +223,7 @@ public class ChromaseqUtil{
 				else
 					addedBaseData.setToUnassigned(ic, it);
 			}
-			else {  // the original data DOES have a state here
+			else if (false) {  // the original data DOES have a state here
 					if (CategoricalState.isInapplicable(editedState))  // the edited data DOESN'T have something in it
 						addedBaseData.setState(ic, it, CategoricalState.makeSet(2));  // mark it as having a base removed
 				}
