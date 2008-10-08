@@ -61,6 +61,7 @@ public class ManageChromaseqBlock extends FileInit {
 
 		String commandString;
 		NexusBlock b=new ChromaseqBlock(file, this);
+		((ChromaseqBlock)b).setVersion(CHROMASEQBLOCKVERSION);
 		MesquiteString comment = new MesquiteString();
 
 		while (!StringUtil.blank(commandString = block.getNextFileCommand(comment))) {
@@ -110,14 +111,15 @@ class ChromaseqBlockTest extends NexusBlockTest  {
 class ChromaseqBlock extends NexusBlock {
 	int version = 1;
 
+	public ChromaseqBlock(MesquiteFile f, ManageChromaseqBlock mb){
+		super(f, mb);
+		version = mb.CHROMASEQBLOCKVERSION;
+	}
 	public int getVersion() {
 		return version;
 	}
 	public void setVersion(int version) {
 		this.version = version;
-	}
-	public ChromaseqBlock(MesquiteFile f, MesquiteModule mb){
-		super(f, mb);
 	}
 	public boolean contains(FileElement e) {
 		return false;  
