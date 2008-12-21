@@ -28,6 +28,11 @@ the method that it claims is chewing up time doesn't actually seem to be. I just
 
 reverse complement
 
+======================
+MANUAL
+	code or sample names can't start with "."
+	
+======================
 ---------
 
 - lock matrices
