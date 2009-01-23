@@ -63,7 +63,10 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			conditionallyAddQueryArg(args, getExtraction(), databaseURLSource.getKeyString(DNADatabaseURLSource.EXTRACTION));		
 			if (databaseURLSource.needsKeyValuePairAuthorization())
 				args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.AUTHORIZATION_KEY), databaseURLSource.getKey());
-		}
+		} else {
+			MesquiteMessage.warnUser("Database Source could not be obtained.");
+			return false;
+		} 
 
 		/*args.put(RequestParameters.EXTRACTION, extractionName);
 		args.put(RequestParameters.GENE, geneName);*/
