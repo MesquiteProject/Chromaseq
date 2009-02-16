@@ -1,5 +1,7 @@
 Necessary pre-beta
 
+bugChrom001:  note how EditedInMatrix is offset by one, caused probably by padding ("*") in PhredPhrapMesquite
+
 end of first rothfelsi in enolaseDRM2
 
 regularly forgets primers, at least with topoisomeraseBP

@@ -352,7 +352,7 @@ public class ChromatogramCanvas extends MousePanel {
 	public int getConsensusBaseFromReadBase(int whichRead, int i){
 		Read read = chromatograms[whichRead].getRead();
 		if (read!=null)
-			return read.getConsensusBaseFromReadBase(i);
+			return read.getContigBaseFromReadBase(i);
 		else 
 			return i;
 
@@ -377,7 +377,7 @@ public class ChromatogramCanvas extends MousePanel {
 	public int getReadBaseFromConsensusBase(int whichRead,int i){
 		Read read = chromatograms[whichRead].getRead();
 		if (read!=null)
-			return read.getReadBaseFromConsensusBase(i);  
+			return read.getReadBaseFromContigBase(i);  
 		else
 			return i;
 	}
@@ -387,7 +387,7 @@ public class ChromatogramCanvas extends MousePanel {
 		int consensusBase = panel.getConsensusBaseFromOverallBase(i);
 		Read read = chromatograms[whichRead].getRead();
 		if (read!=null)
-			return read.getReadBaseFromConsensusBase(consensusBase);  
+			return read.getReadBaseFromContigBase(consensusBase);  
 		else
 			return i;
 	}
@@ -603,7 +603,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/*_________________________________________________*/
 	public void mouseMoved(int modifiers, int x, int y, MesquiteTool tool) {
 		int ic = findConsensusBaseNumber(SETREAD,x);
-		int readBaseNumber = reads[SETREAD].getReadBaseFromConsensusBase(ic);
+		int readBaseNumber = reads[SETREAD].getReadBaseFromContigBase(ic);
 		int quality = reads[SETREAD].getPhdBaseQuality(readBaseNumber);
 		double averageQuality = reads[SETREAD].getAverageQuality();
 		int numBasesHighQuality = reads[SETREAD].getNumBasesHighQuality();

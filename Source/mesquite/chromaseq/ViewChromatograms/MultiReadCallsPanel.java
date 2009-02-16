@@ -469,7 +469,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		int whichRead = findRead(y);
 		if (whichRead<0) return;
 		int ic = findConsensusBaseNumber(whichRead,x);
-		int readBaseNumber = reads[whichRead].getReadBaseFromConsensusBase(ic);
+		int readBaseNumber = reads[whichRead].getReadBaseFromContigBase(ic);
 		int quality = reads[whichRead].getPhdBaseQuality(readBaseNumber);
 		double averageQuality = reads[whichRead].getAverageQuality();
 		int numBasesHighQuality = reads[whichRead].getNumBasesHighQuality();

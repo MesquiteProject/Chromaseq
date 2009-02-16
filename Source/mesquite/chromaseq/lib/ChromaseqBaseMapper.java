@@ -9,47 +9,19 @@ import mesquite.meristic.lib.*;
 
 /* should store numBasesAddedToStart in file
  */
- 
+
 
 /* This class manages the connections between an edited matrix to which chromatogram information is attached, 
  and the associated matrices that contain relevant information.  
  
- For more information, see ChromaseqUtil, which contains the methods to create the registries
- 
- These are the systems that connect bases:
- 
- 	(1) the system of coordination established by Phrap, and that is stored in Contig and Read, that establishes links between the original Contig and the original Reads, with padding, etc.
- 		The Contig stores in its bases the original, UNTRIMMED sequences, corresponding to those in the m.ace file.  This contig has already had all of the other
- 			alterations on it that Mesquite performs (e.g., convert to lower case, ambiguity codes).  Contig also stores in trimmedBases the bases that remain after trimming.
- 		It also stores the padding information for the untrimmed sequences.
- 	
- 	(2) the registration system, which connects the various matrices within Mesquite (original matrix, quality data, edited matrix)
- 			The original matrix (originalData) contains the exact matrix as originally imported.  This is after Mesquite trimming etc. (convert to lower case, ambiguity codes).
- 			The quality data contains the quality scores for the original data, and there is a one-to-one mapping between cells in originalData and cells in qualityData
- 			The edited matrix contains the current, actively edited matrix.
- 			The registration system that connects these cells in these matrices one to another is managed in ChromaseqUtil.  
- 	
- 	(3) the connection between the numbering in the original matrix/trimmed Contig numbering and what is called the Consensus base, which is the numbering in the Contig
- 			that is padded and untrimmed.
- 			ConsensusBase = base in originalSequence (i.e., originalData) + numBasesOriginallyTrimmedFromStartOfPhPhContig-numBasesAddedToStart;
- 			numBasesAddedToStart is stored in Contig.
- 			
- 	(3) the connection between the original Consensus numbering and the number of the OverallBase, which is just like the Consensus numbering but it is offset, 
- 		as there are some Reads that extend before the start of the original (untrimmed) Contig.  The Read that extends furthest to the left (furthest upstream) extends 
- 		contig.getReadExcessAtStart() to the left, and thus, in OverallBase numbering, the first base of the (untrimmed) Contig is numbered getReadExcessAtStart().  The OverallBase numbering 
- 		exactly matches the Contig/Consensus numbering, except that it is offset. 
- 		
- 	(4) The DisplayBase is very similar to the OverallBase, but may have additional bases inserted into it.   There thus needs to be a mapping between the two.  There also needs to be 
-		mapping between one of these and the matrix registration system, presumably via either originalData or editedData. 
- 	
- 	
+ For more information, see SourceCodeNotes.html, in the Notes folder
  
  * */
 public class ChromaseqBaseMapper {
 	CharacterData editedData;  // this is the active, edited (and editable) matrix
 	ContinuousData qualityData;  // this matrix should be structured exactly as the originalData
 	DNAData originalData;   // contains the exact matrix as originally imported.
-	CategoricalData addedBaseData;   // contains the exact matrix as originally imported.
+	CategoricalData addedBaseData;   // contains a matrix recording bases added beyond those in the originalData
 	MeristicData registryData;  // this should be of the same size as the edited matrix.   It contains in cell ic, it the character number in originalData that that cell's original base call is stored 
 											// (which, of course, is also the position in qualityData of the quality scores)
 	MeristicData reverseRegistryData; // this should be of the same size as the originalData.   It contains in cell ic, it the character number in editedData that that cell's edited base  is stored 
