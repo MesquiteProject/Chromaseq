@@ -1,5 +1,11 @@
 Necessary pre-beta
 
+registration: use bop down tool to pull from read at front end.  If there is padding in read and/or phredphrap contig, then registration off
+registration: add bases to start using insert tool; registration off
+registration: select base  that had been added to start using insert tool; hit -; immediately registration goes back to correct, and continued hitting - makes sense!
+registration: select base that had been added to start using insert tool; hit delete; immediately registration goes even more haywire
+
+
 bugChrom001:  note how EditedInMatrix is offset by one, caused probably by padding ("*") in PhredPhrapMesquite
 
 end of first rothfelsi in enolaseDRM2
