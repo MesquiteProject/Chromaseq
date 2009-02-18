@@ -102,7 +102,7 @@ import mesquite.lib.duties.NumberForTaxon;
 	   		summ = sum;
 	   		return sum*50/linkedData.getNumChars(false);
 	   		/*
-	   		Object obj = data.getCellObject(qualityNameRef, ic, it);
+	   		Object obj = data.getCellObject(qualityNameRef, ic, it);//IF USED use  ChromaseqUtil.getIntegerCellObject
 	   		if (obj instanceof MesquiteInteger)
 	   			return ((MesquiteInteger)obj).getValue();
 	   		return 0;

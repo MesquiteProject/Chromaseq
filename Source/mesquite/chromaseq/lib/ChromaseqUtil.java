@@ -26,11 +26,10 @@ public class ChromaseqUtil{
 
 	public static final int TRIMMABLE=1;
 	public static final int BASECALLED=2;
-	public static final String PHPHIMPORTIDREF = "phphImportID";
-	public static final String GENENAMEREF ="geneName";
-	public static final String PHPHMQVERSIONREF ="phphmqVersion";
 	public static final String PHPHMQVERSION ="2";
-	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";
+
+	
+	//===========================MATRIX TYPES==============================
 	public static final String QUALITYREF ="quality";
 	public static final String ORIGINALREF ="original";
 	public static final String EDITEDREF ="edited";
@@ -38,21 +37,89 @@ public class ChromaseqUtil{
 	public static final String REVERSEREGISTRYREF = "reverse registration";
 	public static final String ADDEDBASEREF = "added base";
 
+	//===========================ATTACHABLE handling==============================
+	public static final String PHPHIMPORTIDREF = "phphImportID"; //MesquiteString: data
+	public static final String GENENAMEREF ="geneName";//MesquiteString: data
+	public static final String PHPHMQVERSIONREF ="phphmqVersion";//MesquiteString: data
+	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
+
+	public static void attachStringToMatrix(Attachable a, MesquiteString s){
+		a.attachIfUniqueName(s);
+	}
+	public static MesquiteString getStringAttached(Attachable a, String s){
+		return null;
+	}
+	//===============================================================================
 
 
 
+	//===========================ASSOCIABLE handling==============================
+	public static final NameReference voucherCodeRef = NameReference.getNameReference("VoucherCode"); //String: taxa
+	public static final NameReference voucherDBRef = NameReference.getNameReference("VoucherDB");//String: taxa
+	public static final NameReference origTaxonNameRef= NameReference.getNameReference("origName");//String: taxa
+	
+	public static final NameReference aceRef = NameReference.getNameReference("aceFile"); //String: tInfo
+	public static final NameReference chromatogramReadsRef = NameReference.getNameReference("chromatogramReads");//String: tInfo
+	
+	public static final NameReference origReadFileNamesRef= NameReference.getNameReference("readFileNames");//Strings: tInfo
+	public static final NameReference primerForEachReadNamesRef= NameReference.getNameReference("primerForEachRead");//Strings: tInfo
+	public static final NameReference sampleCodeNamesRef= NameReference.getNameReference("sampleCodeForEachRead");//Strings: tInfo
+	public static final NameReference sampleCodeRef= NameReference.getNameReference("sampleCodeForTaxon");//Strings: tInfo
+	
+	public static final NameReference chromatogramsExistRef = NameReference.getNameReference("chromatogramsExist");//long: tinfo
+	public static final NameReference startTrimRef = NameReference.getNameReference("startTrim");//long: tInfo
+	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
+	public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //long: tInfo, data(ch); MesquiteInteger: data(cells)
 
+	public static final NameReference qualityNameRef = NameReference.getNameReference("phredPhrapQuality"); //double: tinfo
 
-	static NameReference trimmableNameRef = NameReference.getNameReference("trimmable");
+	//public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //long: data(ch); MesquiteInteger: data(cells)
 
-
+	public static final NameReference paddingRef = NameReference.getNameReference("paddingBefore"); //MesquiteInteger: data(cells)
+	//public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //MesquiteInteger: data(cells)
+	
+	
+	public static String getStringAssociated(Associable a, NameReference nr, int index){
+		return (String)a.getAssociatedObject(nr, index);
+	}
+	public static void setStringAssociated(Associable a, NameReference nr, int index, String c){
+		a.setAssociatedObject(nr, index, c);
+	}
+	public static String[] getStringsAssociated(Associable a, NameReference nr, int index){
+		return (String[])a.getAssociatedObject(nr, index);
+	}
+	public static void setStringsAssociated(Associable a, NameReference nr, int index, String[] c){
+		a.setAssociatedObject(nr, index, c);
+	}
+	public static long getLongAssociated(Associable a, NameReference nr, int index){
+		return a.getAssociatedLong(nr, index);
+	}
+	public static void setLongAssociated(Associable a, NameReference nr, int index, long c){
+		a.setAssociatedLong(nr, index, c);
+	}
+	public static double getDoubleAssociated(Associable a, NameReference nr, int index){
+		return a.getAssociatedDouble(nr, index);
+	}
+	public static void setDoubleAssociated(Associable a, NameReference nr, int index, double c){
+		a.setAssociatedDouble(nr, index, c);
+	}
+	public static int getIntegerCellObject(CharacterData data, NameReference nr, int ic, int it){
+		Object obj = data.getCellObject(nr, ic, it);
+		if (obj != null && obj instanceof MesquiteInteger)
+			return ((MesquiteInteger)obj).getValue();
+		return MesquiteInteger.unassigned;
+	}
+	public static void setIntegerCellObject(CharacterData data, NameReference nr, int ic, int it, MesquiteInteger c){
+		data.setCellObject(nr, ic, it, c);
+	}
+	//===============================================================================
+	/*--------------*/
 	public static boolean isTrimmable(int ic, int it, CharacterData data){
 		if (data == null)
 			return false;
 		if (ic>=0 && it>=0){ 
-			Object obj = data.getCellObject(trimmableNameRef, ic, it);
-			if (obj != null && obj instanceof MesquiteInteger)
-				return ((MesquiteInteger)obj).getValue()==ChromaseqUtil.TRIMMABLE;
+			int trim =  ChromaseqUtil.getIntegerCellObject(data, trimmableNameRef, ic, it);
+			return trim==ChromaseqUtil.TRIMMABLE;
 		}
 		return false;
 	}
@@ -60,16 +127,15 @@ public class ChromaseqUtil{
 		if (data == null)
 			return false;
 		if (ic>=0 && it>=0){ 
-			Object obj = data.getCellObject(trimmableNameRef, ic, it);
-			if (obj != null && obj instanceof MesquiteInteger)
-				return ((MesquiteInteger)obj).getValue()==ChromaseqUtil.BASECALLED;
+			int trim =  ChromaseqUtil.getIntegerCellObject(data, trimmableNameRef, ic, it);
+			return trim==ChromaseqUtil.BASECALLED;
 		}
 		return false;
 	}
 
 	public static String getUID(CharacterData data) {
 		String uid = "";
-		Object obj = data.getAttachment(PHPHIMPORTIDREF);
+		Object obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTIDREF);
 		if (obj!=null && obj instanceof MesquiteString) {
 			uid = ((MesquiteString)obj).getValue();
 		}
@@ -78,7 +144,7 @@ public class ChromaseqUtil{
 
 	public static String getGeneName(CharacterData data) {
 		String gn = "";
-		Object obj = data.getAttachment(GENENAMEREF);
+		Object obj = ChromaseqUtil.getStringAttached(data, GENENAMEREF);
 		if (obj!=null && obj instanceof MesquiteString) {
 			gn = ((MesquiteString)obj).getValue();
 		}
@@ -89,11 +155,11 @@ public class ChromaseqUtil{
 	public static boolean isChromaseqEditedMatrix(CharacterData data) {
 		if (!(data instanceof DNAData))
 			return false;
-		Object obj = data.getAttachment(PHPHIMPORTIDREF);
+		Object obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTIDREF);
 		if (obj==null) {
 			return false;
 		}
-		obj = data.getAttachment(PHPHIMPORTMATRIXTYPEREF);
+		obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTMATRIXTYPEREF);
 		if (obj instanceof MesquiteString)
 			if (((MesquiteString)obj).getValue().equalsIgnoreCase(EDITEDREF)) {
 				return true;
@@ -103,7 +169,7 @@ public class ChromaseqUtil{
 
 
 	public static String getPHPHDataType(CharacterData data) {
-		Object obj = data.getAttachment(PHPHIMPORTMATRIXTYPEREF);
+		Object obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTMATRIXTYPEREF);
 		if (obj instanceof MesquiteString)
 			return ((MesquiteString)obj).getValue();
 		return null;
@@ -126,10 +192,10 @@ public class ChromaseqUtil{
 		ListableVector matrices = data.getProject().getCharacterMatrices();
 		for (int i= 0; i< matrices.size(); i++){
 			CharacterData d = (CharacterData)matrices.elementAt(i);
-			obj = d.getAttachment(PHPHIMPORTMATRIXTYPEREF);
+			obj = getStringAttached(d,PHPHIMPORTMATRIXTYPEREF);
 			if (obj instanceof MesquiteString)
 				if (((MesquiteString)obj).getValue().equalsIgnoreCase(dataType)) {
-					obj = d.getAttachment(PHPHIMPORTIDREF);
+					obj = getStringAttached(d,PHPHIMPORTIDREF);
 					String s = ((MesquiteString)obj).getValue();
 					if (obj instanceof MesquiteString && uid.equalsIgnoreCase(((MesquiteString)obj).getValue())) {
 						return d;
@@ -224,10 +290,10 @@ public class ChromaseqUtil{
 					addedBaseData.setToUnassigned(ic, it);
 			}
 			else if (false) {  // the original data DOES have a state here
-					if (CategoricalState.isInapplicable(editedState))  // the edited data DOESN'T have something in it
-						addedBaseData.setState(ic, it, CategoricalState.makeSet(2));  // mark it as having a base removed
-				}
-			 
+				if (CategoricalState.isInapplicable(editedState))  // the edited data DOESN'T have something in it
+					addedBaseData.setState(ic, it, CategoricalState.makeSet(2));  // mark it as having a base removed
+			}
+
 		}
 
 	}
@@ -241,7 +307,7 @@ public class ChromaseqUtil{
 	}
 	/*.................................................................................................................*/
 	public static void fillAddedBaseData(CharacterData data, int it) {
-//Debugg.println("fillAddedBaseData it: " + it);
+		//Debugg.println("fillAddedBaseData it: " + it);
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
@@ -290,9 +356,9 @@ public class ChromaseqUtil{
 		data.addToLinkageGroup(addedBaseData); //link matrices!
 		addedBaseData.setName("Bases added for " + name + " from Phred/Phrap");
 		addedBaseData.setResourcePanelIsOpen(false);
-		addedBaseData.attachIfUniqueName(uid);
-		addedBaseData.attachIfUniqueName(gN);
-		addedBaseData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.ADDEDBASEREF));
+		attachStringToMatrix(addedBaseData,uid);
+		attachStringToMatrix(addedBaseData,gN);
+		attachStringToMatrix(addedBaseData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.ADDEDBASEREF));
 		addedBaseData.setLocked(true);
 		addedBaseData.setColorCellsByDefault(true);
 		addedBaseData.setUseDiagonalCharacterNames(false);
@@ -304,14 +370,14 @@ public class ChromaseqUtil{
 		if (addedBaseData!=null)
 			return addedBaseData;
 		MesquiteString uid = null;
-		Object obj = data.getAttachment(PHPHIMPORTIDREF);
+		Object obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTIDREF);
 		if (obj!=null && obj instanceof MesquiteString) {
 			String dataUID= ((MesquiteString)obj).getValue();
 			uid = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataUID);
 		}
 		MesquiteString gN = null;
 		String dataGeneName = "";
-		obj = data.getAttachment(GENENAMEREF);
+		obj = ChromaseqUtil.getStringAttached(data, GENENAMEREF);
 		if (obj!=null && obj instanceof MesquiteString) {
 			dataGeneName= ((MesquiteString)obj).getValue();
 			gN = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataGeneName);
@@ -459,9 +525,9 @@ public class ChromaseqUtil{
 	public static void setReverseRegistryDataValues(MeristicData reverseRegistryData, DNAData originalData, String name, MesquiteString uid, MesquiteString gN) {
 		originalData.addToLinkageGroup(reverseRegistryData); //link matrices!
 		reverseRegistryData.setName("Reverse Registration Data of " + name + " (for internal bookkeeping)");  //DAVID: if change name here have to change elsewhere
-		reverseRegistryData.attachIfUniqueName(uid);
-		reverseRegistryData.attachIfUniqueName(gN);
-		reverseRegistryData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REVERSEREGISTRYREF));
+		attachStringToMatrix(reverseRegistryData,uid);
+		attachStringToMatrix(reverseRegistryData,gN);
+		attachStringToMatrix(reverseRegistryData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REVERSEREGISTRYREF));
 		reverseRegistryData.setWritable(false);
 		reverseRegistryData.setResourcePanelIsOpen(false);
 
@@ -474,14 +540,14 @@ public class ChromaseqUtil{
 			return rr;
 		MesquiteString uid = null;
 		int originalNumChars = originalData.getNumChars();
-		Object obj = originalData.getAttachment(PHPHIMPORTIDREF);
+		Object obj = getStringAttached(originalData,PHPHIMPORTIDREF);
 		if (obj!=null && obj instanceof MesquiteString) {
 			String dataUID= ((MesquiteString)obj).getValue();
 			uid = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataUID);
 		}
 		MesquiteString gN = null;
 		String dataGeneName = "";
-		obj = originalData.getAttachment(GENENAMEREF);
+		obj = getStringAttached(originalData,GENENAMEREF);
 		if (obj!=null && obj instanceof MesquiteString) {
 			dataGeneName= ((MesquiteString)obj).getValue();
 			gN = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataGeneName);
@@ -520,9 +586,9 @@ public class ChromaseqUtil{
 		registryData.saveChangeHistory = false;
 		data.addToLinkageGroup(registryData); //link matrices!
 		registryData.setName("Registration of " + name + " from Phred/Phrap");  //DAVID: if change name here have to change elsewhere
-		registryData.attachIfUniqueName(uid);
-		registryData.attachIfUniqueName(gN);
-		registryData.attachIfUniqueName(new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REGISTRYREF));
+		attachStringToMatrix(registryData,uid);
+		attachStringToMatrix(registryData,gN);
+		attachStringToMatrix(registryData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REGISTRYREF));
 		registryData.setResourcePanelIsOpen(false);
 		registryData.setEditorInhibition(true);
 	}
@@ -531,14 +597,14 @@ public class ChromaseqUtil{
 
 	public static MeristicData createRegistryData(CharacterData data) {
 		MesquiteString uid = null;
-		Object obj = data.getAttachment(PHPHIMPORTIDREF);
+		Object obj = getStringAttached(data,PHPHIMPORTIDREF);
 		if (obj!=null && obj instanceof MesquiteString) {
 			String dataUID= ((MesquiteString)obj).getValue();
 			uid = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataUID);
 		}
 		MesquiteString gN = null;
 		String dataGeneName = "";
-		obj = data.getAttachment(GENENAMEREF);
+		obj = getStringAttached(data,GENENAMEREF);
 		if (obj!=null && obj instanceof MesquiteString) {
 			dataGeneName= ((MesquiteString)obj).getValue();
 			gN = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataGeneName);

@@ -12,6 +12,7 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.PrimersListAssistant;
 
 import mesquite.categ.lib.*;
+import mesquite.chromaseq.lib.ChromaseqUtil;
 import mesquite.lists.lib.*;
 
 import mesquite.lib.*;
@@ -26,7 +27,6 @@ import mesquite.molec.lib.*;
 public class PrimersListAssistant extends TaxonListAssistant {
 	Taxa taxa;
 	MesquiteTable table=null;
-	NameReference anr = NameReference.getNameReference("primerForEachRead");
 	Taxa currentTaxa = null;
 	DNAData data = null;
 	MatrixSourceCoord matrixSourceTask;
@@ -99,7 +99,7 @@ public class PrimersListAssistant extends TaxonListAssistant {
 		if (data==null || taxa==null)
 			return "-";
 		Associable as = data.getTaxaInfo(false);
-		String[] primers = (String[])as.getAssociatedObject(anr, ic);
+		String[] primers = ChromaseqUtil.getStringsAssociated(as,ChromaseqUtil.primerForEachReadNamesRef, ic);
 		String s = "";
 
 		if (primers!=null) {
@@ -121,7 +121,7 @@ public class PrimersListAssistant extends TaxonListAssistant {
 	/** for those permitting editing, indicates user has edited to incoming string.*/
 	public void setString(int row, String s){
 		if (taxa!=null) {
-			taxa.setAssociatedObject(anr, row, s);
+			ChromaseqUtil.setStringAssociated(taxa,ChromaseqUtil.primerForEachReadNamesRef, row, s);
 		}
 
 	}

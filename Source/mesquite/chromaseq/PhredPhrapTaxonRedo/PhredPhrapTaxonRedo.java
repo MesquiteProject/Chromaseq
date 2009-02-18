@@ -1,13 +1,13 @@
 package mesquite.chromaseq.PhredPhrapTaxonRedo;
 
 import mesquite.chromaseq.lib.AceFile;
+import mesquite.chromaseq.lib.ChromaseqUtil;
 import mesquite.chromaseq.lib.ChromatogramViewer;
 import mesquite.chromaseq.lib.PhPhRunner;
 import mesquite.lib.*;
 import mesquite.categ.lib.*;
 import mesquite.charMatrices.lib.*;
 import mesquite.lib.characters.*;
-import mesquite.lib.characters.CharacterData;
 import mesquite.lib.table.CMTable;
 import mesquite.lib.table.MesquiteTable;
 
@@ -27,7 +27,6 @@ import mesquite.lib.table.MesquiteTable;
 
 /* ======================================================================== */
 public class PhredPhrapTaxonRedo extends CategDataEditorInit {
-	NameReference aceRef = NameReference.getNameReference(AceFile.ACENAMEREF);
 	MesquiteMenuItemSpec ms = null;
 	MesquiteTable table;
 	DNAData data;
@@ -53,7 +52,7 @@ public class PhredPhrapTaxonRedo extends CategDataEditorInit {
 		if (data!=null) {
 			Associable tInfo= data.getTaxaInfo(false);
 			if (tInfo!=null)
-				b = tInfo.anyAssociatedObject(aceRef);
+				b = tInfo.anyAssociatedObject(ChromaseqUtil.aceRef);
 
 		}
 		if (ms!=null)
@@ -95,7 +94,7 @@ public class PhredPhrapTaxonRedo extends CategDataEditorInit {
 			String aceFilePath = null;
 
 			if (tInfo != null) {
-				aceFilePath = (String)tInfo.getAssociatedObject(aceRef, it);
+				aceFilePath = ChromaseqUtil.getStringAssociated(tInfo, ChromaseqUtil.aceRef, it);
 				aceFilePath = MesquiteFile.composePath(getProject().getHomeFile().getDirectoryName(), aceFilePath);
 			}
 			String directoryPath = StringUtil.getAllButLastItem(aceFilePath, MesquiteFile.fileSeparator, "/"); 

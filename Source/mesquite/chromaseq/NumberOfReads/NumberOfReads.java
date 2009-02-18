@@ -2,22 +2,15 @@ package mesquite.chromaseq.NumberOfReads;
 
 import mesquite.categ.lib.*;
 import mesquite.chromaseq.lib.AceFile;
-import mesquite.lib.Associable;
 import mesquite.lib.EmployeeNeed;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteNumber;
 import mesquite.lib.MesquiteString;
-import mesquite.lib.NameReference;
 import mesquite.lib.Taxa;
 import mesquite.lib.Taxon;
-import mesquite.lib.characters.CharInclusionSet;
-import mesquite.lib.characters.CharacterData;
-import mesquite.lib.characters.CharacterState;
 import mesquite.lib.characters.MCharactersDistribution;
 import mesquite.lib.duties.MatrixSourceCoord;
 import mesquite.lib.duties.NumberForTaxon;
-import mesquite.lib.table.CMTable;
-import mesquite.lib.table.MesquiteTable;
 
 public class NumberOfReads extends NumberForTaxon {
 

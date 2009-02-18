@@ -8,7 +8,6 @@ import org.apache.commons.lang.WordUtils;
 
 import mesquite.lib.*;
 import mesquite.lib.characters.*;
-import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.*;
 import mesquite.categ.lib.*;
 import mesquite.chromaseq.ViewChromatograms.VChromWindow;
@@ -36,9 +35,6 @@ public class InterpretASNGenBank extends FileInterpreterI {
 
 
 	Class[] acceptedClasses;
-	NameReference anr = NameReference.getNameReference("VoucherCode");
-
-	NameReference vdb = NameReference.getNameReference("VoucherDB");
 	VoucherInfoCoord voucherInfoTask;
 
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
@@ -201,8 +197,8 @@ public class InterpretASNGenBank extends FileInterpreterI {
 	protected String getGenBankFieldOfTaxon(Taxa taxa, int it, String fieldName){
 		if (taxa!=null && voucherInfoTask != null) {
 			String s = " ";
-			String voucherID = (String)taxa.getAssociatedObject(anr, it);
-			VoucherInfo vi= voucherInfoTask.getVoucherInfo((String)taxa.getAssociatedObject(vdb, it), voucherID);
+			String voucherID = ChromaseqUtil.getStringAssociated(taxa, ChromaseqUtil.voucherCodeRef, it);
+			VoucherInfo vi= voucherInfoTask.getVoucherInfo(ChromaseqUtil.getStringAssociated(taxa, ChromaseqUtil.voucherDBRef, it), voucherID);
 			if (vi != null) {
 				return vi.getGenBankFieldValue(fieldName);
 			}
@@ -211,7 +207,7 @@ public class InterpretASNGenBank extends FileInterpreterI {
 	}
 	protected String getVoucherID(Taxa taxa, int it){
 		if (taxa!=null && voucherInfoTask != null) {
-			String voucherID = (String)taxa.getAssociatedObject(anr, it);
+			String voucherID = ChromaseqUtil.getStringAssociated(taxa, ChromaseqUtil.voucherCodeRef, it);
 			return voucherID;
 		}
 		return null; 

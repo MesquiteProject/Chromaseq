@@ -14,6 +14,7 @@ package mesquite.chromaseq.ManageChromaseqBlock;
 
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
+import mesquite.chromaseq.lib.*;
 
 public class ManageChromaseqBlock extends FileInit {
 	
@@ -36,15 +37,86 @@ public class ManageChromaseqBlock extends FileInit {
 	}
 	/*.................................................................................................................*
   	 public Snapshot getSnapshot(MesquiteFile file) { 
-   	 	Snapshot temp = new Snapshot();
+   	 	Snapshot temp = new Snapshot(); 
   	 	temp.addLine("addAuthorNameToMatrices");
  	 	return temp;
   	 }
+	/*.................................................................................................................*/
+	void reportAttached(Associable a, String nr){
+		if (a.getAttachment(nr) != null)
+			Debugg.println("YES attached [" + nr + " = " + a.getAttachment(nr) + "] " +   a.getName());
+		else
+			Debugg.println("NO attached [" + nr + "] " + a.getName());
+	}
+	void reportObject(Associable a, NameReference nr){
+		if (a.anyAssociatedObject(nr))
+			Debugg.println("YES object [" + nr.getValue() + " ; 0 = " + a.getAssociatedObject(nr, 0)+ "] " + a.getName());
+		else
+			Debugg.println("NO object [" + nr.getValue() + "] " + a.getName());
+	}
+	void reportLong(Associable a, NameReference nr){
+		if (a.getWhichAssociatedLong(nr) == null)
+			Debugg.println("NO long [" + nr.getValue() + " ; 0 = " + MesquiteLong.toString(a.getAssociatedLong(nr, 0))+ "] " + a.getName());
+		else
+			Debugg.println("YES long [" + nr.getValue() + "] " + a.getName());
+	}
+	void reportDouble(Associable a, NameReference nr){
+		if (a.getWhichAssociatedDouble(nr) == null)
+			Debugg.println("NO double [" + nr.getValue() + " ; 0 = " + MesquiteDouble.toString(a.getAssociatedDouble(nr, 0))+ "] " + a.getName());
+		else
+			Debugg.println("YES double [" + nr.getValue() + "] " + a.getName());
+	}
+	void reportCellObjects(mesquite.lib.characters.CharacterData data, NameReference nr){
+		if (data.getWhichCellObjects(nr) == null)
+			Debugg.println("NO cell objects [" + nr.getValue() + " ; 0,0 = " + data.getCellObject(nr, 0,0)+ "] " + data.getName());
+		else
+			Debugg.println("YES cell objects [" + nr.getValue() + "] " + data.getName());
+	}
+	void convertOldToNew(){
+		MesquiteProject proj = getProject();
+		int numT = proj.getNumberTaxas();
+		for (int i = 0; i<numT; i++){
+			Debugg.println("=====TAXA=======");
+			Taxa taxa = proj.getTaxa(i);
+			reportObject(taxa, ChromaseqUtil.voucherCodeRef);
+			reportObject(taxa, ChromaseqUtil.voucherDBRef);
+			reportObject(taxa, ChromaseqUtil.origTaxonNameRef);
+		}
+		int numM = proj.getNumberCharMatrices();
+		for (int i = 0; i<numM; i++){
+			mesquite.lib.characters.CharacterData data = proj.getCharacterMatrix(i);
+			Debugg.println("=========MATRIX=======" + data.getName());
+			reportAttached(data, ChromaseqUtil.PHPHIMPORTIDREF);
+			reportAttached(data, ChromaseqUtil.GENENAMEREF);
+			reportAttached(data, ChromaseqUtil.PHPHMQVERSIONREF);
+			reportAttached(data, ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
+			reportLong(data,ChromaseqUtil.trimmableNameRef);
+			Associable tInfo = data.getTaxaInfo(false);
+			if (tInfo == null)
+				Debugg.println("NO TINFO  " + data.getName());
+			else {
+				reportLong(tInfo, ChromaseqUtil.trimmableNameRef);
+				reportLong(tInfo, ChromaseqUtil.chromatogramsExistRef);
+				reportLong(tInfo, ChromaseqUtil.whichContigRef);
+				reportLong(tInfo, ChromaseqUtil.startTrimRef);
+				reportDouble(tInfo, ChromaseqUtil.qualityNameRef);
+				reportObject(tInfo, ChromaseqUtil.aceRef);
+				reportObject(tInfo, ChromaseqUtil.chromatogramReadsRef);
+				reportObject(tInfo, ChromaseqUtil.origReadFileNamesRef);
+				reportObject(tInfo, ChromaseqUtil.primerForEachReadNamesRef);
+				reportObject(tInfo, ChromaseqUtil.sampleCodeNamesRef);
+				reportObject(tInfo, ChromaseqUtil.sampleCodeRef);
+			}
+			reportCellObjects(data,ChromaseqUtil.paddingRef);
+			reportCellObjects(data,ChromaseqUtil.trimmableNameRef);
+		}
+	}
 	/*.................................................................................................................*/
 	/** A method called immediately after the file has been read in or completely set up (if a new file).*/
 	public void fileReadIn(MesquiteFile f) {
 		if (f== null || f.getProject() == null)
 			return;
+		convertOldToNew();
 		NexusBlock[] bs = getProject().getNexusBlocks(ChromaseqBlock.class, f); 
 		if ((bs == null || bs.length ==0)){
 			ChromaseqBlock ab = new ChromaseqBlock(f, this);
