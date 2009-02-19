@@ -111,12 +111,118 @@ public class ManageChromaseqBlock extends FileInit {
 			reportCellObjects(data,ChromaseqUtil.trimmableNameRef);
 		}
 	}
+	/*----------------------------------------*/
+	void writeAttached(StringBuffer sb, Associable a, String nr){
+		MesquiteString ms = ChromaseqUtil.getStringAttached(a,nr);
+		if (ms == null)
+			return;
+		if (ms.getValue() != null)
+			sb.append("\tattach  ref = " +  ParseUtil.tokenize(nr) + " s = " + ParseUtil.tokenize(ms.getValue()) + ";" + StringUtil.lineEnding());
+	}
+	/*----------------------------------------*/
+	void writeStrings(StringBuffer sb, Associable a, NameReference nr){
+		if (a.anyAssociatedObject(nr)){
+			for (int i= 0; i< a.getNumberOfParts(); i++){
+				String value = ChromaseqUtil.getStringAssociated(a,nr, i);
+				
+				if (value != null)
+					sb.append("\tasString  index = " + i +  " ref = " +  ParseUtil.tokenize(nr.getValue()) + " string = " + ParseUtil.tokenize(value) + ";" + StringUtil.lineEnding());
+				
+			}
+		}
+	}
+	/*----------------------------------------*/
+	void writeStringArrays(StringBuffer sb, Associable a, NameReference nr){
+		if (a.anyAssociatedObject(nr)){
+			for (int i= 0; i< a.getNumberOfParts(); i++){
+				String[] value = ChromaseqUtil.getStringsAssociated(a,nr, i);
+				
+				if (value != null){
+					sb.append("\tasStrings  index = " + i +  " ref = " +  ParseUtil.tokenize(nr.getValue()));
+					for (int k=0; k< value.length; k++)
+						sb.append(" string = " + ParseUtil.tokenize(value[k]));
+					sb.append(";" + StringUtil.lineEnding());
+				}
+				
+			}
+		}
+	}
+	/*----------------------------------------*/
+	void writeLongs(StringBuffer sb, Associable a, NameReference nr){
+		if (a.getWhichAssociatedLong(nr) != null){
+			for (int i= 0; i< a.getNumberOfParts(); i++){
+				long value = ChromaseqUtil.getLongAssociated(a,nr, i);
+
+				if (MesquiteLong.isCombinable(value))
+					sb.append("\tasLong  index = " + i +  " ref = " +  ParseUtil.tokenize(nr.getValue()) + " long = " + value + ";" + StringUtil.lineEnding());
+				
+			}
+		}
+	}
+	void writeDoubles(StringBuffer sb, Associable a, NameReference nr){
+		if (a.getWhichAssociatedDouble(nr) != null){
+			for (int i= 0; i< a.getNumberOfParts(); i++){
+				double value = ChromaseqUtil.getDoubleAssociated(a,nr, i);
+
+				if (MesquiteDouble.isCombinable(value))
+					sb.append("\tasDouble  index = " + i +  " ref = " +  ParseUtil.tokenize(nr.getValue()) + " double = " + value + ";" + StringUtil.lineEnding());
+				
+			}
+		}
+	}
+	void writeCellObjects(StringBuffer sb, mesquite.lib.characters.CharacterData data, NameReference nr){
+		if (data.getWhichCellObjects(nr) == null)
+			Debugg.println("NO cell objects [" + nr.getValue() + " ; 0,0 = " + data.getCellObject(nr, 0,0)+ "] " + data.getName());
+		else
+			Debugg.println("YES cell objects [" + nr.getValue() + "] " + data.getName());
+	}
+	/*----------------------------------------*/
+	String getBlockContents(){
+		MesquiteProject proj = getProject();
+		StringBuffer sb = new StringBuffer();
+		int numT = proj.getNumberTaxas();
+		for (int i = 0; i<numT; i++){
+			Taxa taxa = proj.getTaxa(i);
+			sb.append("\n\tTAXA = " + ParseUtil.tokenize(taxa.getName()) + " ;" + StringUtil.lineEnding());
+			writeStrings(sb, taxa, ChromaseqUtil.voucherCodeRef);
+			writeStrings(sb,taxa, ChromaseqUtil.voucherDBRef);
+			writeStrings(sb,taxa, ChromaseqUtil.origTaxonNameRef);
+		}
+		int numM = proj.getNumberCharMatrices();
+		for (int i = 0; i<numM; i++){
+			mesquite.lib.characters.CharacterData data = proj.getCharacterMatrix(i);
+			sb.append("\n\tCHARACTERS = " + ParseUtil.tokenize(data.getName()) + " ;" + StringUtil.lineEnding());
+			writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTIDREF);
+			writeAttached(sb,  data, ChromaseqUtil.GENENAMEREF);
+			writeAttached(sb,  data, ChromaseqUtil.PHPHMQVERSIONREF);
+			writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
+			writeLongs(sb, data,ChromaseqUtil.trimmableNameRef);
+			Associable tInfo = data.getTaxaInfo(false);
+			if (tInfo != null) {
+				sb.append("\n\tTAXAINFO" + " ;" + StringUtil.lineEnding());
+				writeLongs(sb, tInfo, ChromaseqUtil.trimmableNameRef);
+				writeLongs(sb, tInfo, ChromaseqUtil.chromatogramsExistRef);
+				writeLongs(sb, tInfo, ChromaseqUtil.whichContigRef);
+				writeLongs(sb, tInfo, ChromaseqUtil.startTrimRef);
+				writeDoubles(sb, tInfo, ChromaseqUtil.qualityNameRef);
+				writeStrings(sb,tInfo, ChromaseqUtil.aceRef);
+				writeStrings(sb,tInfo, ChromaseqUtil.chromatogramReadsRef);
+				writeStringArrays(sb,tInfo, ChromaseqUtil.origReadFileNamesRef);
+				writeStringArrays(sb,tInfo, ChromaseqUtil.primerForEachReadNamesRef);
+				writeStringArrays(sb,tInfo, ChromaseqUtil.sampleCodeNamesRef);
+				writeStringArrays(sb,tInfo, ChromaseqUtil.sampleCodeRef);
+			}
+			//reportCellObjects(data,ChromaseqUtil.paddingRef);
+			//reportCellObjects(data,ChromaseqUtil.trimmableNameRef);
+		}
+		return sb.toString();
+	}
 	/*.................................................................................................................*/
 	/** A method called immediately after the file has been read in or completely set up (if a new file).*/
 	public void fileReadIn(MesquiteFile f) {
 		if (f== null || f.getProject() == null)
 			return;
-		convertOldToNew();
+		//convertOldToNew();
 		NexusBlock[] bs = getProject().getNexusBlocks(ChromaseqBlock.class, f); 
 		if ((bs == null || bs.length ==0)){
 			ChromaseqBlock ab = new ChromaseqBlock(f, this);
@@ -141,8 +247,10 @@ public class ManageChromaseqBlock extends FileInit {
 
 			if (commandName.equalsIgnoreCase("VERSION")) {
 				String token  = parser.getNextToken();
+				int vers = MesquiteInteger.fromString(token);
+				if (MesquiteInteger.isCombinable(vers)){
+				}
 				
-				Debugg.println ("ChromseqBlock version: " + token);
 
 			}
 		}
@@ -182,9 +290,11 @@ class ChromaseqBlockTest extends NexusBlockTest  {
 /* ======================================================================== */
 class ChromaseqBlock extends NexusBlock {
 	int version = 1;
+	ManageChromaseqBlock ownerModule;
 
 	public ChromaseqBlock(MesquiteFile f, ManageChromaseqBlock mb){
 		super(f, mb);
+		ownerModule = mb;
 		version = mb.CHROMASEQBLOCKVERSION;
 	}
 	public int getVersion() {
@@ -211,6 +321,7 @@ class ChromaseqBlock extends NexusBlock {
 	public String getNEXUSBlock(){
 		String blocks="BEGIN CHROMASEQ;" + StringUtil.lineEnding();
 		blocks += "\tVERSION " + version+ ";" + StringUtil.lineEnding();
+		blocks += ownerModule.getBlockContents();
 		blocks += "END;" + StringUtil.lineEnding();
 		return blocks;
 	}

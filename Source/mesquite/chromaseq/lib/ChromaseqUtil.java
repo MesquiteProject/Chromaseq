@@ -47,7 +47,10 @@ public class ChromaseqUtil{
 		a.attachIfUniqueName(s);
 	}
 	public static MesquiteString getStringAttached(Attachable a, String s){
-		return (MesquiteString)a.getAttachment(s);
+		Object obj = a.getAttachment(s);
+		if (obj instanceof MesquiteString)
+			return (MesquiteString)obj;
+		return null;
 	}
 	//===============================================================================
 
