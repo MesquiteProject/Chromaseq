@@ -6,7 +6,7 @@ public  class ChromatogramPanel extends MesquitePanel{
 	protected boolean open=true;  // REMOVE ONCE CONVERT TO CLOSABLEPANEL; same for isOpen()
 	protected Chromatogram[] chromatograms;
 	protected int numChromatograms = 1;
-	protected ContigDisplay panel;
+	protected ContigDisplay contigDisplay;
 	
 	
 	protected	int width = 0;
@@ -40,22 +40,22 @@ public  class ChromatogramPanel extends MesquitePanel{
 	//this is consensus position
 	public void exportSelectConsensusPosition(int i){
 		listen = false;
-		panel.selectDisplayPositionInTable(i);
+		contigDisplay.selectDisplayPositionInTable(i);
 
-		panel.setSelectedDisplayPositionInChrom(i, true, true);
+		contigDisplay.setSelectedDisplayPositionInChrom(i, true, true);
 		listen = true;
 	}
 	//this is consensus position
 	public void exportDeselectConsensusPosition(int i){
 		listen = false;
-		panel.deselectDisplayPositionInTable(i);
-		panel.setSelectedDisplayPositionInChrom(i, false, true);
+		contigDisplay.deselectDisplayPositionInTable(i);
+		contigDisplay.setSelectedDisplayPositionInChrom(i, false, true);
 		listen = true;
 	}
 	public void exportDeselectAll(){
 		listen = false;
-		panel.deselectAllInTable();
-		panel.deselectAllInPanels();
+		contigDisplay.deselectAllInTable();
+		contigDisplay.deselectAllInPanels();
 		listen = true;
 	}
 
@@ -70,7 +70,7 @@ public  class ChromatogramPanel extends MesquitePanel{
 	
 
 	public ContigDisplay getContigDisplay() {
-		return panel;
+		return contigDisplay;
 	}
 	public Chromatogram getChromatogram(int i) {
 		return chromatograms[i];

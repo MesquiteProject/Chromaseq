@@ -15,7 +15,7 @@ public class MultiReadCallsPanel extends ChromatogramPanel {
 	public MultiReadCallsPanel(ClosablePanelContainer container, int id, ContigDisplay panel, Chromatogram[] chromatograms) {
 //		chromatogram.setWindow(panel);
 		this.chromatograms = chromatograms;
-		this.panel = panel;
+		this.contigDisplay = panel;
 		this.numChromatograms = chromatograms.length;
 		multiReadCanvas = new MultiReadCallsCanvas(this, id);
 		multiReadCanvas.setBounds(0, 0, getWidth(), getHeight());
@@ -91,7 +91,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		super(parentV,  id);
 //		chromatogramPanel = parentV;
 
-		addKeyListener(panel);
+		addKeyListener(contigDisplay);
 	}
 
 	public boolean canShowTraces() {
@@ -142,20 +142,20 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 
 		
 		Read read = chromatograms[whichRead].getRead();
-		int halfPeaks = panel.getApproximateNumberOfPeaksVisible()/2;
+		int halfPeaks = contigDisplay.getApproximateNumberOfPeaksVisible()/2;
 		if (blackBackground)
 			setBackground(Color.black);
 		else
-			setBackground(panel.getBackgroundColor());
+			setBackground(contigDisplay.getBackgroundColor());
 
 		reCalcCenterBase();
-		int centerConsensusBase = centerBase-panel.getContig().getReadExcessAtStart();
+		int centerConsensusBase = centerBase-contigDisplay.getContig().getReadExcessAtStart();
 		int centerReadBase = getReadBaseFromConsensusBase(whichRead,centerConsensusBase);
 
 		int firstReadBase = centerReadBase - halfPeaks;
 		int lastReadBase = centerReadBase+halfPeaks;
 
-		int firstReadLocation = getPhdLocation(read, cwidth, centerReadBase,panel,true) - cwidth/2;
+		int firstReadLocation = getPhdLocation(read, cwidth, centerReadBase,contigDisplay,true) - cwidth/2;
 
 		/*David: here a correction is introduced to discover what is actually the first and last read bases visible.  Previously
 		these bases were calcualted incorrectly if some reads were effectively compressed, and thus drawing didn't go all the way to the edges
@@ -164,10 +164,10 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 
 		 */
 		int count = 0;
-		while (getPhdLocation(read, cwidth, firstReadBase,panel,true)  - firstReadLocation >0 && firstReadLocation>0 && count++<200)
+		while (getPhdLocation(read, cwidth, firstReadBase,contigDisplay,true)  - firstReadLocation >0 && firstReadLocation>0 && count++<200)
 			firstReadBase--; //correcting for error in numpeaksvisible for this read
 		count = 0;
-		while (getPhdLocation(read, cwidth, lastReadBase,panel,true)  - firstReadLocation <cwidth && count++<200)
+		while (getPhdLocation(read, cwidth, lastReadBase,contigDisplay,true)  - firstReadLocation <cwidth && count++<200)
 			lastReadBase++; //correcting for error in numpeaksvisible for this read
 		firstReadBase--;
 		lastReadBase++;
@@ -196,11 +196,11 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
 				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
-				int space = panel.getSpaceInsertedBeforeDisplayBase(consensusBase);
+				int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
 
 				offsetForInserted += space;
 
-				int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);
+				int overallBase = contigDisplay.getOverallBaseFromConsensusBase(consensusBase);
 				char c = read.getPhdBaseChar(i);
 				int qual = read.getPhdBaseQuality(i);
 
@@ -208,10 +208,10 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 				int w = 0;
 				if (i+1< chromatograms[whichRead].getBaseNumber())
 					//w = chromatogram.getReadBaseLocationAligned(i+1) - chromatogram.getReadBaseLocationAligned(i) + 1;
-					w = getPhdLocation(read, cwidth, i+1, panel,true) - getPhdLocation(read, cwidth, i, panel,true) + 1;
+					w = getPhdLocation(read, cwidth, i+1, contigDisplay,true) - getPhdLocation(read, cwidth, i, contigDisplay,true) + 1;
 				else
-					w =  (int)panel.getAveragePeakDistance();
-				if (qual>=0 && panel.getColorMultiReadByQuality()) {
+					w =  (int)contigDisplay.getAveragePeakDistance();
+				if (qual>=0 && contigDisplay.getColorMultiReadByQuality()) {
 					if (qual==0)
 						g.setColor(Color.white);
 					//g.setColor(ColorDistribution.brighter(AceFile.getColorOfQuality(qual),0.2));
@@ -220,7 +220,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 					/*	char cc= panel.getMatrixStateAtConsensusPosition(consensusBase);
 		Color tempC = panel.getBaseColor(cc);
 		g.setColor(tempC);*/
-					fillRect(g, cwidth, getPhdLocation(read, cwidth, i, panel,true)- firstReadLocation - cmid - 2 + offsetForInserted, topOfRead, w, readBaseHeight);
+					fillRect(g, cwidth, getPhdLocation(read, cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2 + offsetForInserted, topOfRead, w, readBaseHeight);
 				}
 
 /*
@@ -282,8 +282,8 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
 				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
-				offsetForInserted += panel.getSpaceInsertedBeforeDisplayBase(consensusBase);
-				int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);
+				offsetForInserted += contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
+				int overallBase = contigDisplay.getOverallBaseFromConsensusBase(consensusBase);
 				char c = read.getPhdBaseChar(i);
 				int qual = read.getPhdBaseQuality(i);
 
@@ -291,8 +291,8 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 				if (isShownComplemented()){
 					c = DNAData.complementChar(c);
 				}
-				Color textC = panel.getBaseColor(c,panel.getBackgroundColor());
-				int pixels = panel.getHorizontalPixels(getPhdLocation(read, cwidth, i, panel,true) - firstReadLocation) + offsetForInserted;
+				Color textC = contigDisplay.getBaseColor(c,contigDisplay.getBackgroundColor());
+				int pixels = contigDisplay.getHorizontalPixels(getPhdLocation(read, cwidth, i, contigDisplay,true) - firstReadLocation) + offsetForInserted;
 
 				//if (selected[overallBase]){
 				//	StringUtil.highlightString(g, String.valueOf(c), pixels - cmid, bottomOfRead, textC, Color.white);
@@ -363,15 +363,15 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 
 		if (MesquiteEvent.shiftKeyDown(modifiers)){
 			if (MesquiteInteger.isCombinable(ic)){
-				panel.setSecondTouchedOverall(ic);
+				contigDisplay.setSecondTouchedOverall(ic);
 				chromatogramPanel.exportDeselectAll();
-				if (MesquiteInteger.isCombinable(panel.getFirstTouchedOverall())) {
-					if (panel.getFirstTouchedOverall()>ic){
-						for (int i = ic; i<=panel.getFirstTouchedOverall(); i++)
+				if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())) {
+					if (contigDisplay.getFirstTouchedOverall()>ic){
+						for (int i = ic; i<=contigDisplay.getFirstTouchedOverall(); i++)
 							selectOverallBase(i);
 					}
 					else {
-						for (int i = panel.getFirstTouchedOverall(); i<=ic; i++)
+						for (int i = contigDisplay.getFirstTouchedOverall(); i<=ic; i++)
 							selectOverallBase(i);
 					}
 				}
@@ -379,23 +379,23 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 					selectOverallBase(ic);
 				}
 				//chromatogramPanel.synchTableToChrom(false);
-				panel.repaintPanels();
+				contigDisplay.repaintPanels();
 			}
 		}
 		else if (MesquiteEvent.commandOrControlKeyDown(modifiers)){
 			if (MesquiteInteger.isCombinable(ic)){
 				selectOverallBase(ic);
-				panel.repaintPanels();
+				contigDisplay.repaintPanels();
 			}
 		}
 		else {
 			if (MesquiteInteger.isCombinable(ic)){
-				panel.setFirstTouchedOverall(ic);
+				contigDisplay.setFirstTouchedOverall(ic);
 				chromatogramPanel.exportDeselectAll();
 				selectOverallBase(ic);
 				if (clickCount>1)
-					panel.scrollToOverallBase(ic);
-				panel.repaintPanels();
+					contigDisplay.scrollToOverallBase(ic);
+				contigDisplay.repaintPanels();
 			}
 		}
 	}
@@ -412,21 +412,21 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		}
 		if (MesquiteInteger.isCombinable(ic)){
 			//deselectAll(); //this isn't correct behaviour!  If shift down should remember previously sleected pieces
-			if (MesquiteInteger.isCombinable(panel.getFirstTouchedOverall())) {
-				if (panel.getFirstTouchedOverall()>ic){
-					if (MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()) && panel.getSecondTouchedOverall()<panel.getFirstTouchedOverall() && ic>panel.getSecondTouchedOverall()){ //retracting
-						for (int i = panel.getSecondTouchedOverall(); i<=ic; i++) 
+			if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())) {
+				if (contigDisplay.getFirstTouchedOverall()>ic){
+					if (MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()) && contigDisplay.getSecondTouchedOverall()<contigDisplay.getFirstTouchedOverall() && ic>contigDisplay.getSecondTouchedOverall()){ //retracting
+						for (int i = contigDisplay.getSecondTouchedOverall(); i<=ic; i++) 
 							deselectOverallBase(whichRead,i);
 					}
-					else for (int i = ic; i<=panel.getFirstTouchedOverall(); i++) //adding
+					else for (int i = ic; i<=contigDisplay.getFirstTouchedOverall(); i++) //adding
 						selectOverallBase(i);
 				}
 				else {
-					if (MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()) && panel.getSecondTouchedOverall()>panel.getFirstTouchedOverall() && ic<panel.getSecondTouchedOverall()){ //retracting
-						for (int i = ic+1; i<=panel.getSecondTouchedOverall(); i++) 
+					if (MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()) && contigDisplay.getSecondTouchedOverall()>contigDisplay.getFirstTouchedOverall() && ic<contigDisplay.getSecondTouchedOverall()){ //retracting
+						for (int i = ic+1; i<=contigDisplay.getSecondTouchedOverall(); i++) 
 							deselectOverallBase(whichRead,i);
 					}
-					else for (int i = panel.getFirstTouchedOverall(); i<=ic; i++)
+					else for (int i = contigDisplay.getFirstTouchedOverall(); i<=ic; i++)
 						selectOverallBase(i);
 				}
 			}
@@ -434,8 +434,8 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 				selectOverallBase(ic);
 			}
 			//chromatogramPanel.synchTableToChrom(false);
-			panel.repaintPanels();
-			panel.setSecondTouchedOverall(ic);
+			contigDisplay.repaintPanels();
+			contigDisplay.setSecondTouchedOverall(ic);
 		}
 	}
 	/* to be used by subclasses to tell that panel touched */
@@ -448,21 +448,21 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 			((ChromatogramTool)tool).dropped(cons, cons, true, id, chromatogramPanel.contigID, modifiers);
 			return;
 		}
-		if (MesquiteInteger.isCombinable(panel.getFirstTouchedOverall())){
-			if (!MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()))
-				panel.focusMatrixOn(panel.getConsensusBaseFromOverallBase(panel.getFirstTouchedOverall()), MesquiteInteger.unassigned);
+		if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())){
+			if (!MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()))
+				contigDisplay.focusMatrixOn(contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getFirstTouchedOverall()), MesquiteInteger.unassigned);
 			else
-				panel.focusMatrixOn(panel.getConsensusBaseFromOverallBase(panel.getFirstTouchedOverall()), panel.getConsensusBaseFromOverallBase(panel.getSecondTouchedOverall()));
+				contigDisplay.focusMatrixOn(contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getFirstTouchedOverall()), contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getSecondTouchedOverall()));
 		}
 		if (chromatogramPanel.getScrollToTouched()) {
 			int ic = findConsensusBaseNumber(whichRead,x);
 			if (ic>=0 && ic==localFirstTouched) {
-				panel.scrollToConsensusBase(ic);
+				contigDisplay.scrollToConsensusBase(ic);
 				//		panel.deselectAllReads();
 
 			}
 		}
-		panel.setSecondTouchedOverall(MesquiteInteger.unassigned);
+		contigDisplay.setSecondTouchedOverall(MesquiteInteger.unassigned);
 	}
 	/*_________________________________________________*/
 	public void mouseMoved(int modifiers, int x, int y, MesquiteTool tool) {
@@ -477,7 +477,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		if (quality>=0)
 			s+= "Base quality: " + quality + ",   Peak heights: " + getPeakHeightsOfBase(whichRead,readBaseNumber);
 		s+= "\n# Bases with Quality ³ " + reads[whichRead].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[whichRead].getTitle()+")";
-		panel.setExplanation( s);
+		contigDisplay.setExplanation( s);
 		if (tool == null)
 			return;
 		ChromatogramTool chromTool = (ChromatogramTool)tool;

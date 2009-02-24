@@ -291,6 +291,8 @@ public class ChromaseqUtil{
 					addedBaseData.setState(ic, it, CategoricalState.makeSet(1));  // mark it as having an added base
 				else
 					addedBaseData.setToUnassigned(ic, it);
+				registryData.setToUnassigned(ic, it);  //set it to unassigned as a mark that it is extra
+
 			}
 			else if (false) {  // the original data DOES have a state here
 				if (CategoricalState.isInapplicable(editedState))  // the edited data DOESN'T have something in it
@@ -339,6 +341,7 @@ public class ChromaseqUtil{
 
 	public static void fillReverseRegistryData(MeristicData reverseRegistryData) {
 		MeristicData registryData = getRegistryData(reverseRegistryData);
+		DNAData editedData = getEditedData(reverseRegistryData);
 		if (registryData==null)
 			return;
 		for (int it=0; it<reverseRegistryData.getNumTaxa(); it++) 
@@ -348,8 +351,12 @@ public class ChromaseqUtil{
 		for (int it=0; it<registryData.getNumTaxa() && it<reverseRegistryData.getNumTaxa(); it++) 
 			for (int ic=0; ic<registryData.getNumChars(); ic++){
 				int mapping = registryData.getState(ic, it);
-				if (mapping>=0 && mapping<=reverseRegistryData.getNumChars())
-					reverseRegistryData.setState(mapping, it, 0, ic);
+				if (mapping>=0 && mapping<=reverseRegistryData.getNumChars()) {
+					if (editedData.isInapplicable(ic, it)) // then even though the registry points into the original data, there is no data in the edited matrix
+						reverseRegistryData.setToUnassigned(ic, it);
+					else
+						reverseRegistryData.setState(mapping, it, 0, ic);
+				}
 			}
 	}
 

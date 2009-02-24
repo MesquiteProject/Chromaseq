@@ -24,7 +24,7 @@ import mesquite.lib.StringUtil;
 public class ChromatogramCanvas extends MousePanel {
 
 	protected ChromatogramPanel chromatogramPanel;
-	protected ContigDisplay panel;
+	protected ContigDisplay contigDisplay;
 	protected Chromatogram[] chromatograms; 
 	protected Read[] reads;
 	protected int numChromatograms=1;
@@ -50,8 +50,8 @@ public class ChromatogramCanvas extends MousePanel {
 		super();
 		this.id = id;
 		chromatogramPanel = parentV;
-		panel = chromatogramPanel.panel;
-		addKeyListener(panel);
+		contigDisplay = chromatogramPanel.contigDisplay;
+		addKeyListener(contigDisplay);
 		chromatograms = parentV.chromatograms;
 		numChromatograms = parentV.getNumChromatograms();
 //		setBackground(Color.white);
@@ -64,9 +64,9 @@ public class ChromatogramCanvas extends MousePanel {
 		maxValue = 0;
 		if (canShowTraces())
 			initTraces(0);
-		selected = new boolean[panel.getTotalNumOverallBases()];   // uses local read as index
+		selected = new boolean[contigDisplay.getTotalNumOverallBases()];   // uses local read as index
 
-		for (i=0;i<panel.getTotalNumOverallBases();i++) {
+		for (i=0;i<contigDisplay.getTotalNumOverallBases();i++) {
 			selected[i] = false;
 		}
 
@@ -89,10 +89,10 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 
 	public boolean isShownReversed(){
-		return panel.isShownReversed();
+		return contigDisplay.isShownReversed();
 	}
 	public boolean isShownComplemented(){
-		return panel.isShownComplemented();
+		return contigDisplay.isShownComplemented();
 	}
 	/*...........................................................................*/
 	/** Given a pixel offset from left, returns the consensus position at that point *
@@ -109,7 +109,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/*...........................................................................*/
 	protected void reCalcCenterBase(){
 		centerBase = chromatogramPanel.centerBase;   //number of centered base
-		centerPixel = panel.getCenterPixelFromCenterBase(centerBase);   //number of pixels over this scrolled base is
+		centerPixel = contigDisplay.getCenterPixelFromCenterBase(centerBase);   //number of pixels over this scrolled base is
 		leftPixel=centerPixel-getBounds().width/2;
 		verticalPosition = chromatogramPanel.verticalPosition;
 	}
@@ -136,7 +136,7 @@ public class ChromatogramCanvas extends MousePanel {
 	 * but instead the position from the start of the main contig. Thus,  positions to the left of the main contig are -ve */
 	public int findOverallBaseNumber(int whichRead, int xPixel){ //this needs to return consensus position!
 		int cons = findConsensusBaseNumber(whichRead, xPixel);
-		int overall = panel.getOverallBaseFromConsensusBase(cons);
+		int overall = contigDisplay.getOverallBaseFromConsensusBase(cons);
 
 		return overall;
 	}
@@ -180,19 +180,19 @@ public class ChromatogramCanvas extends MousePanel {
 	public int findConsensusBaseNumber(int whichRead, int xPixel){ //this needs to return consensus position!
 		reCalcCenterBase();
 		int cwidth = getBounds().width;
-		int halfPeaks = panel.getApproximateNumberOfPeaksVisible()/2;
-		int centerConsensusBase = centerBase-panel.getContig().getReadExcessAtStart();
+		int halfPeaks = contigDisplay.getApproximateNumberOfPeaksVisible()/2;
+		int centerConsensusBase = centerBase-contigDisplay.getContig().getReadExcessAtStart();
 		int centerReadBase = getReadBaseFromConsensusBase(whichRead, centerConsensusBase);
 
 		int firstReadBase = centerReadBase - halfPeaks;
 		int lastReadBase = centerReadBase+halfPeaks;
 
-		int firstReadLocation = getPhdLocation(reads[whichRead], cwidth, centerReadBase,panel,true) - cwidth/2;
+		int firstReadLocation = getPhdLocation(reads[whichRead], cwidth, centerReadBase,contigDisplay,true) - cwidth/2;
 		int count = 0;
-		while (getPhdLocation(reads[whichRead], cwidth, firstReadBase,panel,true)  - firstReadLocation >0 && firstReadLocation>0 && count++<200)
+		while (getPhdLocation(reads[whichRead], cwidth, firstReadBase,contigDisplay,true)  - firstReadLocation >0 && firstReadLocation>0 && count++<200)
 			firstReadBase--; //correcting for error in numpeaksvisible for this read
 		count = 0;
-		while (getPhdLocation(reads[whichRead], cwidth, lastReadBase,panel,true)  - firstReadLocation <cwidth && count++<200)
+		while (getPhdLocation(reads[whichRead], cwidth, lastReadBase,contigDisplay,true)  - firstReadLocation <cwidth && count++<200)
 			lastReadBase++; //correcting for error in numpeaksvisible for this read
 		firstReadBase--;
 		lastReadBase++;
@@ -219,10 +219,10 @@ public class ChromatogramCanvas extends MousePanel {
 			for (int i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
 					int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
-					int space = panel.getSpaceInsertedBeforeDisplayBase(consensusBase);
+					int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
 					offsetForInserted += space;
 
-					int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);
+					int overallBase = contigDisplay.getOverallBaseFromConsensusBase(consensusBase);
 
 					int cmid = 10;
 					if (fm != null)
@@ -230,10 +230,10 @@ public class ChromatogramCanvas extends MousePanel {
 					int w = 0;
 					if (i+1< chromatograms[whichRead].getBaseNumber())
 						//w = chromatogram.getReadBaseLocationAligned(i+1) - chromatogram.getReadBaseLocationAligned(i) + 1;
-						w = getPhdLocation(reads[whichRead], cwidth, i+1, panel,true) - getPhdLocation(reads[whichRead], cwidth, i, panel,true) + 1;
+						w = getPhdLocation(reads[whichRead], cwidth, i+1, contigDisplay,true) - getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true) + 1;
 					else
-						w =  (int)panel.getAveragePeakDistance();
-					int h = getPhdLocation(reads[whichRead], cwidth, i, panel,true)- firstReadLocation - cmid - 2 + offsetForInserted;
+						w =  (int)contigDisplay.getAveragePeakDistance();
+					int h = getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2 + offsetForInserted;
 					/*if (reversed){
 						w = cwidth-w;
 						h = cwidth-h;
@@ -256,10 +256,10 @@ public class ChromatogramCanvas extends MousePanel {
 			for (int i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
 					int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
-					int space = panel.getSpaceInsertedBeforeDisplayBase(consensusBase);
+					int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
 					offsetForInserted += space;
 
-					int overallBase = panel.getOverallBaseFromConsensusBase(consensusBase);
+					int overallBase = contigDisplay.getOverallBaseFromConsensusBase(consensusBase);
 
 					int cmid = 10;
 					if (fm != null)
@@ -267,10 +267,10 @@ public class ChromatogramCanvas extends MousePanel {
 					int w = 0;
 					if (i+1< chromatograms[whichRead].getBaseNumber())
 						//w = chromatogram.getReadBaseLocationAligned(i+1) - chromatogram.getReadBaseLocationAligned(i) + 1;
-						w = getPhdLocation(reads[whichRead], cwidth, i+1, panel,true) - getPhdLocation(reads[whichRead], cwidth, i, panel,true) + 1;
+						w = getPhdLocation(reads[whichRead], cwidth, i+1, contigDisplay,true) - getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true) + 1;
 					else
-						w =  (int)panel.getAveragePeakDistance();
-					int h = getPhdLocation(reads[whichRead], cwidth, i, panel,true)- firstReadLocation - cmid - 2 + offsetForInserted;
+						w =  (int)contigDisplay.getAveragePeakDistance();
+					int h = getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2 + offsetForInserted;
 					/*if (reversed){
 					w = cwidth-w;
 					h = cwidth-h;
@@ -288,7 +288,7 @@ public class ChromatogramCanvas extends MousePanel {
 			}
 		if (xPixel < chromatograms[whichRead].getReadBaseLocation(chromatograms[whichRead].getBaseNumber()-1) - firstReadLocation - leftPixel - 5+30)
 			return getConsensusBaseFromReadBase(whichRead,chromatograms[whichRead].getBaseNumber()-1);
-		return -panel.getOverallBaseFromConsensusBase(0)-1;
+		return -contigDisplay.getOverallBaseFromConsensusBase(0)-1;
 
 	}
 	protected void fillRect(Graphics g, int width, int x, int y, int w, int h){
@@ -338,7 +338,7 @@ public class ChromatogramCanvas extends MousePanel {
 	public int getFirstReadLocation(int whichRead) {	
 		int cwidth = getBounds().width;
 		reCalcCenterBase();
-		int centerConsensusBase = centerBase-panel.getContig().getReadExcessAtStart();
+		int centerConsensusBase = centerBase-contigDisplay.getContig().getReadExcessAtStart();
 		int centerReadBase = getReadBaseFromConsensusBase(whichRead, centerConsensusBase);
 //		int firstReadLocation = read.getPhdLocation(centerReadBase,panel,true) - cwidth/2;
 		int firstReadLocation = chromatograms[whichRead].getReadBaseLocation(centerReadBase) - cwidth/2;
@@ -384,7 +384,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/*--------------------------------------*/
 	/*This returns for overall position i, what is the position in the read. */
 	public int getReadBaseFromOverallBase(int whichRead,int i){
-		int consensusBase = panel.getConsensusBaseFromOverallBase(i);
+		int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(i);
 		Read read = chromatograms[whichRead].getRead();
 		if (read!=null)
 			return read.getReadBaseFromContigBase(consensusBase);  
@@ -411,7 +411,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/*--------------------------------------*/
 	/** Given the overall base numbering, as given in overallBase, this method selects that base within this contig*/
 	public void selectOverallBase(int overallBase){
-		int consensusBase = panel.getConsensusBaseFromOverallBase(overallBase);
+		int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(overallBase);
 //		int readBase = getReadBaseFromConsensusBase(consensusBase);
 //		if (j <0 || j>= chromatogram.getTraceLength())
 //		return;
@@ -424,7 +424,7 @@ public class ChromatogramCanvas extends MousePanel {
 
 	//this is consensus position
 	public void deselectOverallBase(int whichRead, int overallBase){
-		int consensusBase = panel.getConsensusBaseFromOverallBase(overallBase);
+		int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(overallBase);
 		int readBase = getReadBaseFromConsensusBase(whichRead, consensusBase);
 		selected[overallBase] = false;
 		chromatogramPanel.exportDeselectConsensusPosition(consensusBase);
@@ -435,7 +435,7 @@ public class ChromatogramCanvas extends MousePanel {
 			return "";
 		else {
 			int[] traceArray = new int[5];
-			int location = getPhdLocation(reads[whichRead], getBounds().width, readBaseNumber,panel,true);
+			int location = getPhdLocation(reads[whichRead], getBounds().width, readBaseNumber,contigDisplay,true);
 			String[] baseArray = new String[5];
 			traceArray[0] = chromatograms[whichRead].getATrace(location);
 			baseArray[0]="A";
@@ -503,15 +503,15 @@ public class ChromatogramCanvas extends MousePanel {
 
 		if (MesquiteEvent.shiftKeyDown(modifiers)){
 			if (MesquiteInteger.isCombinable(ic)){
-				panel.setSecondTouchedOverall(ic);
+				contigDisplay.setSecondTouchedOverall(ic);
 				chromatogramPanel.exportDeselectAll();
-				if (MesquiteInteger.isCombinable(panel.getFirstTouchedOverall())) {
-					if (panel.getFirstTouchedOverall()>ic){
-						for (int i = ic; i<=panel.getFirstTouchedOverall(); i++)
+				if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())) {
+					if (contigDisplay.getFirstTouchedOverall()>ic){
+						for (int i = ic; i<=contigDisplay.getFirstTouchedOverall(); i++)
 							selectOverallBase(i);
 					}
 					else {
-						for (int i = panel.getFirstTouchedOverall(); i<=ic; i++)
+						for (int i = contigDisplay.getFirstTouchedOverall(); i<=ic; i++)
 							selectOverallBase(i);
 					}
 				}
@@ -519,23 +519,23 @@ public class ChromatogramCanvas extends MousePanel {
 					selectOverallBase(ic);
 				}
 				//chromatogramPanel.synchTableToChrom(false);
-				panel.repaintPanels();
+				contigDisplay.repaintPanels();
 			}
 		}
 		else if (MesquiteEvent.commandOrControlKeyDown(modifiers)){
 			if (MesquiteInteger.isCombinable(ic)){
 				selectOverallBase(ic);
-				panel.repaintPanels();
+				contigDisplay.repaintPanels();
 			}
 		}
 		else {
 			if (MesquiteInteger.isCombinable(ic)){
-				panel.setFirstTouchedOverall(ic);
+				contigDisplay.setFirstTouchedOverall(ic);
 				chromatogramPanel.exportDeselectAll();
 				selectOverallBase(ic);
 				if (clickCount>1)
-					panel.scrollToOverallBase(ic);
-				panel.repaintPanels();
+					contigDisplay.scrollToOverallBase(ic);
+				contigDisplay.repaintPanels();
 			}
 		}
 	}
@@ -550,21 +550,21 @@ public class ChromatogramCanvas extends MousePanel {
 		}
 		if (MesquiteInteger.isCombinable(ic)){
 			//deselectAll(); //this isn't correct behaviour!  If shift down should remember previously sleected pieces
-			if (MesquiteInteger.isCombinable(panel.getFirstTouchedOverall())) {
-				if (panel.getFirstTouchedOverall()>ic){
-					if (MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()) && panel.getSecondTouchedOverall()<panel.getFirstTouchedOverall() && ic>panel.getSecondTouchedOverall()){ //retracting
-						for (int i = panel.getSecondTouchedOverall()+1; i<=ic; i++) 
+			if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())) {
+				if (contigDisplay.getFirstTouchedOverall()>ic){
+					if (MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()) && contigDisplay.getSecondTouchedOverall()<contigDisplay.getFirstTouchedOverall() && ic>contigDisplay.getSecondTouchedOverall()){ //retracting
+						for (int i = contigDisplay.getSecondTouchedOverall()+1; i<=ic; i++) 
 							deselectOverallBase(SETREAD,i);
 					}
-					else for (int i = ic; i<=panel.getFirstTouchedOverall(); i++) //adding
+					else for (int i = ic; i<=contigDisplay.getFirstTouchedOverall(); i++) //adding
 						selectOverallBase(i);
 				}
 				else {
-					if (MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()) && panel.getSecondTouchedOverall()>panel.getFirstTouchedOverall() && ic<panel.getSecondTouchedOverall()){ //retracting
-						for (int i = ic+1; i<=panel.getSecondTouchedOverall(); i++) 
+					if (MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()) && contigDisplay.getSecondTouchedOverall()>contigDisplay.getFirstTouchedOverall() && ic<contigDisplay.getSecondTouchedOverall()){ //retracting
+						for (int i = ic+1; i<=contigDisplay.getSecondTouchedOverall(); i++) 
 							deselectOverallBase(SETREAD,i);
 					}
-					else for (int i = panel.getFirstTouchedOverall(); i<=ic; i++)
+					else for (int i = contigDisplay.getFirstTouchedOverall(); i<=ic; i++)
 						selectOverallBase(i);
 				}
 			}
@@ -572,8 +572,8 @@ public class ChromatogramCanvas extends MousePanel {
 				selectOverallBase(ic);
 			}
 			//chromatogramPanel.synchTableToChrom(false);
-			panel.repaintPanels();
-			panel.setSecondTouchedOverall(ic);
+			contigDisplay.repaintPanels();
+			contigDisplay.setSecondTouchedOverall(ic);
 		}
 	}
 	/* to be used by subclasses to tell that panel touched */
@@ -584,21 +584,21 @@ public class ChromatogramCanvas extends MousePanel {
 			((ChromatogramTool)tool).dropped(cons, cons, true, id, chromatogramPanel.contigID, modifiers);
 			return;
 		}
-		if (MesquiteInteger.isCombinable(panel.getFirstTouchedOverall())){
-			if (!MesquiteInteger.isCombinable(panel.getSecondTouchedOverall()))
-				panel.focusMatrixOn(panel.getConsensusBaseFromOverallBase(panel.getFirstTouchedOverall()), MesquiteInteger.unassigned);
+		if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())){
+			if (!MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()))
+				contigDisplay.focusMatrixOn(contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getFirstTouchedOverall()), MesquiteInteger.unassigned);
 			else
-				panel.focusMatrixOn(panel.getConsensusBaseFromOverallBase(panel.getFirstTouchedOverall()), panel.getConsensusBaseFromOverallBase(panel.getSecondTouchedOverall()));
+				contigDisplay.focusMatrixOn(contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getFirstTouchedOverall()), contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getSecondTouchedOverall()));
 		}
 		if (chromatogramPanel.getScrollToTouched()) {
 			int ic = findConsensusBaseNumber(SETREAD,x);
 			if (ic>=0) {
-				panel.scrollToConsensusBase(ic);
+				contigDisplay.scrollToConsensusBase(ic);
 		//		panel.deselectAllReads();
 
 			}
 		}
-		panel.setSecondTouchedOverall(MesquiteInteger.unassigned);
+		contigDisplay.setSecondTouchedOverall(MesquiteInteger.unassigned);
 	}
 	/*_________________________________________________*/
 	public void mouseMoved(int modifiers, int x, int y, MesquiteTool tool) {
@@ -611,7 +611,7 @@ public class ChromatogramCanvas extends MousePanel {
 		if (quality>=0)
 			s+= "Base quality: " + quality + ",   Peak heights: " + getPeakHeightsOfBase(SETREAD,readBaseNumber);
 		s+= "\n# Bases with Quality ³ " + reads[SETREAD].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[SETREAD].getTitle()+")";
-		panel.setExplanation( s);
+		contigDisplay.setExplanation( s);
 		if (tool == null)
 			return;
 		ChromatogramTool chromTool = (ChromatogramTool)tool;

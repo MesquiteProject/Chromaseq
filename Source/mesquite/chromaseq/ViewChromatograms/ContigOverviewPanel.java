@@ -24,7 +24,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 	public ContigOverviewPanel(ClosablePanelContainer container, int id, ContigDisplay panel, Chromatogram[] chromatograms) {
 //		chromatogram.setWindow(panel);
 		this.chromatograms = chromatograms;
-		this.panel = panel;
+		this.contigDisplay = panel;
 		open = true;
 		this.numChromatograms = chromatograms.length;
 		contigOverviewCanvas = new ContigOverviewCanvas(this, id);
@@ -47,6 +47,10 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 		setScrollPosition();
 
 	}
+	
+	public ContigDisplay getContigDisplay() {
+		return contigDisplay;
+	}
 
 	public void repaintPanel(){
 		if (contigOverviewCanvas != null ) {
@@ -61,7 +65,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 		//chromArea.repaint();
 	}
 	public  void setScrollPosition( ){
-		numBases = panel.getTotalNumOverallBases();
+		numBases = contigDisplay.getTotalNumOverallBases();
 		int left = contigOverviewCanvas.getLeftBoundaryOfOverview(contigOverviewCanvas.getGraphics());
 		numBasesVisible = getBounds().width-left;
 
@@ -157,13 +161,14 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 
 	static final double NONSOURCEDIMFRACTION = 0.2;
 	static final double NONSOURCELOWERQUALITYDIMFRACTION = 0.15;
+	static Color CONFLICTCOLOR = Color.red;
 
 
 	/*..........................*/
 	public ContigOverviewCanvas(ChromatogramPanel parentV, int id) {
 		super(parentV,  id);
 //		chromatogramPanel = parentV;
-		addKeyListener(panel);
+		addKeyListener(contigDisplay);
 	}
 
 	public boolean canShowTraces() {
@@ -221,7 +226,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 	public Rectangle getFieldOfView(Graphics g) {	
 		window = (VChromWindow)chromatogramPanel.getMesquiteWindow();
 
-		int halfPeaks = panel.getApproximateNumberOfPeaksVisible()/2;
+		int halfPeaks = contigDisplay.getApproximateNumberOfPeaksVisible()/2;
 		int centerConsensusBase = window.getCenterBase()-firstBase;//-panel.getContig().getReadExcessAtStart();
 		int firstConsensusBase = centerConsensusBase-halfPeaks;
 		//	firstConsensusBase = panel.getOverallBaseFromConsensusBase(firstConsensusBase);
@@ -229,9 +234,9 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int left = getLeftBoundaryOfOverview(g);
 		int top = getTopOfRead(0)-5;
 		int bottom = getTopOfRead(numChromatograms-1)+readBaseHeight + 5;
-		int width = panel.getApproximateNumberOfPeaksVisible();
-		if (firstConsensusBase+panel.getApproximateNumberOfPeaksVisible()> panel.getTotalNumOverallBases()){
-			width =  panel.getTotalNumOverallBases()-firstConsensusBase;
+		int width = contigDisplay.getApproximateNumberOfPeaksVisible();
+		if (firstConsensusBase+contigDisplay.getApproximateNumberOfPeaksVisible()> contigDisplay.getTotalNumOverallBases()){
+			width =  contigDisplay.getTotalNumOverallBases()-firstConsensusBase;
 			if (width<0) width=0;
 		}
 		return new Rectangle(left+firstConsensusBase*singleBaseWidth, top, width*singleBaseWidth,bottom-top);
@@ -283,12 +288,12 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int cwidth = getBounds().width-left;
 		
 		Read read = chromatograms[whichRead].getRead();
-		int numBases = panel.getTotalNumOverallBases();
+		int numBases = contigDisplay.getTotalNumOverallBases();
 
 		if (blackBackground)
 			setBackground(Color.black);
 		else
-			setBackground(panel.getBackgroundColor());
+			setBackground(contigDisplay.getBackgroundColor());
 
 		Color baseColor;
 		
@@ -299,27 +304,28 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int lastLocation = -1;
 		for (int i=firstBase;i < numBases;i++) {   //as it now stands, this is the overallBase
 			int readBase = getReadBaseFromOverallBase(whichRead, i);
+			int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(i);
 			if (readBase>=0 && readBase<read.getBasesLength()) {
 
 				char c = read.getPhdBaseChar(readBase);
-				char matrixC= panel.getMatrixStateAtConsensusBase(read.getContigBaseFromReadBase(readBase));
+				char matrixC= contigDisplay.getMatrixStateAtConsensusBase(consensusBase);
 				int qual = read.getPhdBaseQuality(readBase);
 		
-if (i>950 && i<975 && false) {
+if (i>450 && i<475) {
 		int consensus = read.getContigBaseFromReadBase(readBase);
-			Debugg.println(" readC: " + c +  "     matrixC: " + matrixC + ", panel.getNumBasesAddedToStart(): "+panel.getNumBasesAddedToStart());
+			Debugg.println("" + i + "    readC: " + c +  "     matrixC: " + matrixC);// + ", panel.getNumBasesAddedToStart(): "+panel.getNumBasesAddedToStart());
 }
 
-				if (qual>=0 && panel.getColorOverviewByQuality()) {
+				if (qual>=0 && contigDisplay.getColorOverviewByQuality()) {
 					if (qual==0)
 						g.setColor(Color.black);
-					else if (matrixC == c || matrixC=='X' || matrixC=='x' || matrixC=='-')
+					else if (matrixC == c || matrixC=='X' || matrixC=='x' || matrixC=='-')  // they match
 						g.setColor(ColorDistribution.brighter(AceFile.getColorOfQuality(qual),0.5));
-					else 
-						g.setColor(Color.red);
+					else  // they don't match
+						g.setColor(CONFLICTCOLOR);
 				}
 				else  {
-					baseColor = panel.getBaseColor(c,window.getBackgroundColor());
+					baseColor = contigDisplay.getBaseColor(c,window.getBackgroundColor());
 					
 					g.setColor(baseColor);
 				}
@@ -389,10 +395,10 @@ if (i>950 && i<975 && false) {
 
 		} else {
 			int ic = getOverallBaseFromLocation(x-offsetInBox,getGraphics()); 
-			 ic = panel.getConsensusBaseFromOverallBase(ic)+firstBase;
+			 ic = contigDisplay.getConsensusBaseFromOverallBase(ic)+firstBase;
 			if (MesquiteInteger.isCombinable(ic)){
-				panel.scrollToConsensusBase(ic);
-				panel.repaintPanels();
+				contigDisplay.scrollToConsensusBase(ic);
+				contigDisplay.repaintPanels();
 			}
 		}
 	}
@@ -400,13 +406,13 @@ if (i>950 && i<975 && false) {
 		//ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (mouseDownInBox) {
 			setCursor(window.getHandCursor());
-			int numBases = panel.getTotalNumOverallBases();
+			int numBases = contigDisplay.getTotalNumOverallBases();
 			int ic = getOverallBaseFromLocation(x-offsetInBox,getGraphics()); 
 			int overallBase = ic+firstBase;
-			int consensus = panel.getConsensusBaseFromOverallBase(ic)+firstBase;
+			int consensus = contigDisplay.getConsensusBaseFromOverallBase(ic)+firstBase;
 			if (MesquiteInteger.isCombinable(consensus) && overallBase>=0 && overallBase<numBases){
-				panel.scrollToConsensusBase(consensus);
-				panel.repaintPanels();
+				contigDisplay.scrollToConsensusBase(consensus);
+				contigDisplay.repaintPanels();
 			}
 		}
 	}
