@@ -311,7 +311,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 				char matrixC= contigDisplay.getMatrixStateAtConsensusBase(consensusBase);
 				int qual = read.getPhdBaseQuality(readBase);
 		
-if (i>450 && i<475) {
+if (i>450 && i<475 && false) {
 		int consensus = read.getContigBaseFromReadBase(readBase);
 			Debugg.println("" + i + "    readC: " + c +  "     matrixC: " + matrixC);// + ", panel.getNumBasesAddedToStart(): "+panel.getNumBasesAddedToStart());
 }
