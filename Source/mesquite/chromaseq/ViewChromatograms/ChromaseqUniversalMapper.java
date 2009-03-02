@@ -146,7 +146,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int numAddedBases = 0;
 		int numDeletedBases = 0;
 		int startingUniversalBase = contigDisplay.getOverallBaseFromConsensusBase(contigDisplay.getNumBasesOriginallyTrimmedFromStartOfPhPhContig()-contigDisplay.getNumBasesAddedToStart());
-		//Debugg.println("startingUniversalBase2: " + startingUniversalBase);
+		Debugg.println("startingUniversalBase3: " + startingUniversalBase);
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
 			int positionInOriginal = registryData.getState(ic, it);
@@ -182,6 +182,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 					if (matrixBase>=0 && matrixBase<otherBaseFromUniversalBase[MATRIXSEQUENCE].length)
 						otherBaseFromUniversalBase[EDITEDMATRIX][universalBase] = matrixBase;
 
+					
 					if (ic>lastIC)
 						lastIC = ic;
 
