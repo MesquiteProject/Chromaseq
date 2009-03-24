@@ -190,6 +190,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			} 
 
 		}
+		
 /*
 	if (numBasesFound<0) { //all gaps in original
 			for (int i=0; i<universalBaseFromOtherBase[MATRIXSEQUENCE].length; i++) {
@@ -235,7 +236,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		if (otherBase<0 || otherBase>=universalBaseFromOtherBase[otherBaseSystem].length)
 			return 0;
 		int universalBase = universalBaseFromOtherBase[otherBaseSystem][otherBase];
-		if (universalBase<0 || universalBase>=universalBaseFromOtherBase[EDITEDMATRIX].length)
+		if (universalBase<0 || universalBase>=otherBaseFromUniversalBase[EDITEDMATRIX].length)
 			return 0;
 		return otherBaseFromUniversalBase[EDITEDMATRIX][universalBase];
 	}
@@ -245,7 +246,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		if (matrixBase<0 || matrixBase>=universalBaseFromOtherBase[EDITEDMATRIX].length)
 			return 0;
 		int universalBase = universalBaseFromOtherBase[EDITEDMATRIX][matrixBase];
-		if (universalBase<0 || universalBase>=universalBaseFromOtherBase[otherBaseSystem].length)
+		if (universalBase<0 || universalBase>=otherBaseFromUniversalBase[otherBaseSystem].length)
 			return 0;
 		return otherBaseFromUniversalBase[otherBaseSystem][universalBase];
 	}
