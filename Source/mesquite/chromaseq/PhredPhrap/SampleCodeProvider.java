@@ -48,6 +48,32 @@ public class SampleCodeProvider {
 		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code xml file.");
 		return new String[]{"", ""};
 	}
+	
+	public static String[] getSeqNamesFromTabDelimitedFile(MesquiteString sampleCode, Parser sampleCodeListParser) {
+		String sampleCodeString  = sampleCode.getValue();
+		
+		sampleCodeListParser.setPosition(0);
+		Parser subParser = new Parser();
+		String line = sampleCodeListParser.getRawNextDarkLine();
+		while (StringUtil.notEmpty(line)) {
+			subParser.setString(line);
+			String code = subParser.getFirstToken();
+			if (sampleCodeString.equalsIgnoreCase(code)) {
+				String seq = subParser.getNextToken();
+				if (seq.equals(";") || StringUtil.blank(seq))
+					seq="";
+				String fullseq = subParser.getNextToken();
+				if (fullseq.equals(";") || StringUtil.blank(fullseq))
+					fullseq="";
+				return new String[]{seq, fullseq};
+			}
+			line = sampleCodeListParser.getRawNextDarkLine();
+			
+		}
+		// got here and no match found -- log an error
+		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code xml file.");
+		return new String[]{"", ""};
+	}
 
 /*
 	public static boolean getSequenceName(PhPhRunner phphRunner, String sampleCode, MesquiteString seqName, MesquiteString fullSeqName) {
