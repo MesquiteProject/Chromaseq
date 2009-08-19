@@ -112,27 +112,35 @@ public class ManageChromaseqBlock extends FileInit {
 		}
 	}
 	/*----------------------------------------*/
-	void writeAttached(StringBuffer sb, Associable a, String nr){
+	boolean writeAttached(StringBuffer sb, Associable a, String nr){
 		MesquiteString ms = ChromaseqUtil.getStringAttached(a,nr);
 		if (ms == null)
-			return;
-		if (ms.getValue() != null)
+			return false;
+		if (ms.getValue() != null){
 			sb.append("\tattach  ref = " +  ParseUtil.tokenize(nr) + " s = " + ParseUtil.tokenize(ms.getValue()) + ";" + StringUtil.lineEnding());
+			return true;
+		}
+		return false;
 	}
 	/*----------------------------------------*/
-	void writeStrings(StringBuffer sb, Associable a, NameReference nr){
+	boolean writeStrings(StringBuffer sb, Associable a, NameReference nr){
+		boolean some = false;
 		if (a.anyAssociatedObject(nr)){
 			for (int i= 0; i< a.getNumberOfParts(); i++){
 				String value = ChromaseqUtil.getStringAssociated(a,nr, i);
 				
-				if (value != null)
+				if (value != null){
 					sb.append("\tasString  index = " + i +  " ref = " +  ParseUtil.tokenize(nr.getValue()) + " string = " + ParseUtil.tokenize(value) + ";" + StringUtil.lineEnding());
+					some = true;
+				}
 				
 			}
 		}
+		return some;
 	}
 	/*----------------------------------------*/
-	void writeStringArrays(StringBuffer sb, Associable a, NameReference nr){
+	boolean writeStringArrays(StringBuffer sb, Associable a, NameReference nr){
+		boolean some = false;
 		if (a.anyAssociatedObject(nr)){
 			for (int i= 0; i< a.getNumberOfParts(); i++){
 				String[] value = ChromaseqUtil.getStringsAssociated(a,nr, i);
@@ -142,33 +150,43 @@ public class ManageChromaseqBlock extends FileInit {
 					for (int k=0; k< value.length; k++)
 						sb.append(" string = " + ParseUtil.tokenize(value[k]));
 					sb.append(";" + StringUtil.lineEnding());
+					some = true;
 				}
 				
 			}
 		}
+		return some;
 	}
 	/*----------------------------------------*/
-	void writeLongs(StringBuffer sb, Associable a, NameReference nr){
+	boolean writeLongs(StringBuffer sb, Associable a, NameReference nr){
+		boolean some = false;
 		if (a.getWhichAssociatedLong(nr) != null){
 			for (int i= 0; i< a.getNumberOfParts(); i++){
 				long value = ChromaseqUtil.getLongAssociated(a,nr, i);
 
-				if (MesquiteLong.isCombinable(value))
+				if (MesquiteLong.isCombinable(value)){
 					sb.append("\tasLong  index = " + i +  " ref = " +  ParseUtil.tokenize(nr.getValue()) + " long = " + value + ";" + StringUtil.lineEnding());
+					some = true;
+				}
 				
 			}
 		}
+		return some;
 	}
-	void writeDoubles(StringBuffer sb, Associable a, NameReference nr){
+	boolean writeDoubles(StringBuffer sb, Associable a, NameReference nr){
+		boolean some = false;
 		if (a.getWhichAssociatedDouble(nr) != null){
 			for (int i= 0; i< a.getNumberOfParts(); i++){
 				double value = ChromaseqUtil.getDoubleAssociated(a,nr, i);
 
-				if (MesquiteDouble.isCombinable(value))
+				if (MesquiteDouble.isCombinable(value)){
 					sb.append("\tasDouble  index = " + i +  " ref = " +  ParseUtil.tokenize(nr.getValue()) + " double = " + value + ";" + StringUtil.lineEnding());
+					some = true;
+				}
 				
 			}
 		}
+		return some;
 	}
 	void writeCellObjects(StringBuffer sb, mesquite.lib.characters.CharacterData data, NameReference nr){
 		if (data.getWhichCellObjects(nr) == null)
@@ -181,40 +199,62 @@ public class ManageChromaseqBlock extends FileInit {
 		MesquiteProject proj = getProject();
 		StringBuffer sb = new StringBuffer();
 		int numT = proj.getNumberTaxas();
+		boolean some = false;
 		for (int i = 0; i<numT; i++){
 			Taxa taxa = proj.getTaxa(i);
 			sb.append("\n\tTAXA = " + ParseUtil.tokenize(taxa.getName()) + " ;" + StringUtil.lineEnding());
-			writeStrings(sb, taxa, ChromaseqUtil.voucherCodeRef);
-			writeStrings(sb,taxa, ChromaseqUtil.voucherDBRef);
-			writeStrings(sb,taxa, ChromaseqUtil.origTaxonNameRef);
+			boolean here = writeStrings(sb, taxa, ChromaseqUtil.voucherCodeRef);
+			some  |= here;
+			here = writeStrings(sb,taxa, ChromaseqUtil.voucherDBRef);
+			some  |= here;
+			here = writeStrings(sb,taxa, ChromaseqUtil.origTaxonNameRef);
+			some  |= here;
 		}
 		int numM = proj.getNumberCharMatrices();
 		for (int i = 0; i<numM; i++){
 			mesquite.lib.characters.CharacterData data = proj.getCharacterMatrix(i);
 			sb.append("\n\tCHARACTERS = " + ParseUtil.tokenize(data.getName()) + " ;" + StringUtil.lineEnding());
-			writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTIDREF);
-			writeAttached(sb,  data, ChromaseqUtil.GENENAMEREF);
-			writeAttached(sb,  data, ChromaseqUtil.PHPHMQVERSIONREF);
-			writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
-			writeLongs(sb, data,ChromaseqUtil.trimmableNameRef);
+			boolean here = writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTIDREF);
+			some  |= here;
+			here = writeAttached(sb,  data, ChromaseqUtil.GENENAMEREF);
+			some  |= here;
+			here = writeAttached(sb,  data, ChromaseqUtil.PHPHMQVERSIONREF);
+			some  |= here;
+			here = writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
+			some  |= here;
+			here = writeLongs(sb, data,ChromaseqUtil.trimmableNameRef);
+			some  |= here;
 			Associable tInfo = data.getTaxaInfo(false);
 			if (tInfo != null) {
 				sb.append("\n\tTAXAINFO" + " ;" + StringUtil.lineEnding());
-				writeLongs(sb, tInfo, ChromaseqUtil.trimmableNameRef);
-				writeLongs(sb, tInfo, ChromaseqUtil.chromatogramsExistRef);
-				writeLongs(sb, tInfo, ChromaseqUtil.whichContigRef);
-				writeLongs(sb, tInfo, ChromaseqUtil.startTrimRef);
-				writeDoubles(sb, tInfo, ChromaseqUtil.qualityNameRef);
-				writeStrings(sb,tInfo, ChromaseqUtil.aceRef);
-				writeStrings(sb,tInfo, ChromaseqUtil.chromatogramReadsRef);
-				writeStringArrays(sb,tInfo, ChromaseqUtil.origReadFileNamesRef);
-				writeStringArrays(sb,tInfo, ChromaseqUtil.primerForEachReadNamesRef);
-				writeStringArrays(sb,tInfo, ChromaseqUtil.sampleCodeNamesRef);
-				writeStringArrays(sb,tInfo, ChromaseqUtil.sampleCodeRef);
+				here = writeLongs(sb, tInfo, ChromaseqUtil.trimmableNameRef);
+				some  |= here;
+				here = writeLongs(sb, tInfo, ChromaseqUtil.chromatogramsExistRef);
+				some  |= here;
+				here = writeLongs(sb, tInfo, ChromaseqUtil.whichContigRef);
+				some  |= here;
+				here = writeLongs(sb, tInfo, ChromaseqUtil.startTrimRef);
+				some  |= here;
+				here = writeDoubles(sb, tInfo, ChromaseqUtil.qualityNameRef);
+				some  |= here;
+				here = writeStrings(sb,tInfo, ChromaseqUtil.aceRef);
+				some  |= here;
+				here = writeStrings(sb,tInfo, ChromaseqUtil.chromatogramReadsRef);
+				some  |= here;
+				here = writeStringArrays(sb,tInfo, ChromaseqUtil.origReadFileNamesRef);
+				some  |= here;
+				here = writeStringArrays(sb,tInfo, ChromaseqUtil.primerForEachReadNamesRef);
+				some  |= here;
+				here = writeStringArrays(sb,tInfo, ChromaseqUtil.sampleCodeNamesRef);
+				some  |= here;
+				here = writeStringArrays(sb,tInfo, ChromaseqUtil.sampleCodeRef);
+				some  |= here;
 			}
 			//reportCellObjects(data,ChromaseqUtil.paddingRef);
 			//reportCellObjects(data,ChromaseqUtil.trimmableNameRef);
 		}
+		if (!some)
+			return null;
 		return sb.toString();
 	}
 	/*.................................................................................................................*/
@@ -319,9 +359,12 @@ class ChromaseqBlock extends NexusBlock {
 		return "CHROMASEQ";
 	}
 	public String getNEXUSBlock(){
+		String contents = ownerModule.getBlockContents();
+		if (contents == null)
+			return null;
 		String blocks="BEGIN CHROMASEQ;" + StringUtil.lineEnding();
 		blocks += "\tVERSION " + version+ ";" + StringUtil.lineEnding();
-		blocks += ownerModule.getBlockContents();
+		blocks += contents;
 		blocks += "END;" + StringUtil.lineEnding();
 		return blocks;
 	}
