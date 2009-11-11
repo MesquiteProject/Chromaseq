@@ -98,6 +98,9 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		
 		// =========== Calculate total number of universal bases ===========
 		
+	//	totalNumAddedBases=ChromaseqUtil.getTotalNumBasesAddedBeyondPhPhBases(editedData, it);
+	//	totalNumDeletedBases=ChromaseqUtil.getTotalNumOriginalBasesTurnedToGaps(editedData, it);
+	
 		totalNumAddedBases=0;
 		totalNumDeletedBases=0;
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
@@ -106,11 +109,22 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				if (registryData.isUnassigned(ic, it)) {  //this must be an added base
 					totalNumAddedBases++;
 				} else if (positionInOriginal>=0 && reverseRegistryData.isUnassigned(positionInOriginal,it)) {  // this must be a deleted base
-					totalNumAddedBases++;
+					totalNumDeletedBases++;
 				}
 			}
 		}
-		totalUniversalBases = contigDisplay.getTotalNumOverallBases()+totalNumAddedBases-totalNumDeletedBases;
+		
+		
+		/* contigDisplay.getTotalNumOverallBases() is the number of bases according to the contig 
+		 * - it's the number of bases in the contig plus the extra bases in front and at the end (as found in individual reads
+		 * that extend beyond the contig.  So, it's the length of overall bases according to the PhredPhrap cloud.
+		 */
+		totalUniversalBases = contigDisplay.getTotalNumOverallBases();
+
+		/* Now let's add to this the bases that 
+		 */
+		Debugg.println("   in ChromaseqUniversalMapper.reset, totalNumAddedBases: " +totalNumAddedBases + ", totalNumDeletedBases: " + totalNumDeletedBases);
+		totalUniversalBases += totalNumAddedBases-totalNumDeletedBases;
 
 		if (otherBaseFromUniversalBase==null || otherBaseFromUniversalBase[ACECONTIG].length!=totalUniversalBases)
 			createOtherBaseFromUniversalBase();

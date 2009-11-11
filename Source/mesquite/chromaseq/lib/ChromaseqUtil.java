@@ -42,6 +42,10 @@ public class ChromaseqUtil{
 	public static final String GENENAMEREF ="geneName";//MesquiteString: data
 	public static final String PHPHMQVERSIONREF ="phphmqVersion";//MesquiteString: data
 	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
+	
+	public static final int UNCHANGEDBASE = 0;
+	public static final int ADDEDBASE = 1;
+	public static final int DELETEDBASE = 2;
 
 	public static void attachStringToMatrix(Attachable a, MesquiteString s){
 		a.attachIfUniqueName(s);
@@ -272,13 +276,49 @@ public class ChromaseqUtil{
 				if (!MesquiteInteger.isCombinable(registryData.getState(ic, it))) { // we still haven't found one that is in the original
 					long addedBaseState = addedBaseData.getState(ic, it);
 					int addedBaseValue = CategoricalState.getOnlyElement(addedBaseState);
-					if (addedBaseValue==1)
+					if (addedBaseValue==ADDEDBASE)
 						count++;
 				} else
 					return count;
 			}
 		}
 		return 0;
+	}
+	/*.................................................................................................................*/
+	public static int getTotalNumBasesAddedBeyondPhPhBases(CharacterData data, int it) {
+		int count=0;
+		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		if (addedBaseData!=null && registryData!=null && editedData!=null) {
+			for (int ic=0;ic<addedBaseData.getNumChars() && ic<registryData.getNumChars(); ic++) {
+
+				if (!MesquiteInteger.isCombinable(registryData.getState(ic, it))) { // we still haven't found one that is in the original
+					long addedBaseState = addedBaseData.getState(ic, it);
+					int addedBaseValue = CategoricalState.getOnlyElement(addedBaseState);
+					if (addedBaseValue==ADDEDBASE)
+						count++;
+				} 			}
+		}
+		return count;
+	}
+	/*.................................................................................................................*/
+	public static int getTotalNumOriginalBasesTurnedToGaps(CharacterData data, int it) {
+		int count=0;
+		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		if (addedBaseData!=null && registryData!=null && editedData!=null) {
+			for (int ic=0;ic<addedBaseData.getNumChars() && ic<registryData.getNumChars(); ic++) {
+
+				if (!MesquiteInteger.isCombinable(registryData.getState(ic, it))) { // we still haven't found one that is in the original
+					long addedBaseState = addedBaseData.getState(ic, it);
+					int addedBaseValue = CategoricalState.getOnlyElement(addedBaseState);
+					if (addedBaseValue==DELETEDBASE)
+						count++;
+				} 			}
+		}
+		return count;
 	}
 
 	/*.................................................................................................................*/
@@ -288,15 +328,15 @@ public class ChromaseqUtil{
 			long editedState = editedData.getState(ic, it);
 			if (!MesquiteInteger.isCombinable(registryState)) { // then the original data doesn't have a state here
 				if (!CategoricalState.isInapplicable(editedState))  // the edited data has something in it
-					addedBaseData.setState(ic, it, CategoricalState.makeSet(1));  // mark it as having an added base
+					addedBaseData.setState(ic, it, CategoricalState.makeSet(ADDEDBASE));  // mark it as having an added base
 				else
 					addedBaseData.setToUnassigned(ic, it);
 				registryData.setToUnassigned(ic, it);  //set it to unassigned as a mark that it is extra
 
 			}
-			else if (false) {  // the original data DOES have a state here
+			else {  // the original data DOES have a state here
 				if (CategoricalState.isInapplicable(editedState))  // the edited data DOESN'T have something in it
-					addedBaseData.setState(ic, it, CategoricalState.makeSet(2));  // mark it as having a base removed
+					addedBaseData.setState(ic, it, CategoricalState.makeSet(DELETEDBASE));  // mark it as having a base removed
 			}
 
 		}
@@ -336,29 +376,6 @@ public class ChromaseqUtil{
 			fillAddedBaseData(data,it);
 	}
 
-
-	/*.................................................................................................................*/
-
-	public static void fillReverseRegistryData(MeristicData reverseRegistryData) {
-		MeristicData registryData = getRegistryData(reverseRegistryData);
-		DNAData editedData = getEditedData(reverseRegistryData);
-		if (registryData==null)
-			return;
-		for (int it=0; it<reverseRegistryData.getNumTaxa(); it++) 
-			for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
-				reverseRegistryData.setToInapplicable(ic, it);
-			}
-		for (int it=0; it<registryData.getNumTaxa() && it<reverseRegistryData.getNumTaxa(); it++) 
-			for (int ic=0; ic<registryData.getNumChars(); ic++){
-				int mapping = registryData.getState(ic, it);
-				if (mapping>=0 && mapping<=reverseRegistryData.getNumChars()) {
-					if (editedData.isInapplicable(ic, it)) // then even though the registry points into the original data, there is no data in the edited matrix
-						reverseRegistryData.setToUnassigned(ic, it);
-					else
-						reverseRegistryData.setState(mapping, it, 0, ic);
-				}
-			}
-	}
 
 	/*.................................................................................................................*/
 	public static void setAddedBaseDataValues(CategoricalData addedBaseData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
@@ -405,10 +422,34 @@ public class ChromaseqUtil{
 
 		return addedBaseData;
 	}
+	/*.................................................................................................................*/
+	// reverseRegistryData is same size as originalData and contains the positions in the editedData of that original data cell
+		public static void fillReverseRegistryData(MeristicData reverseRegistryData) {
+			MeristicData registryData = getRegistryData(reverseRegistryData);
+			DNAData editedData = getEditedData(reverseRegistryData);
+			if (registryData==null)
+				return;
+			for (int it=0; it<reverseRegistryData.getNumTaxa(); it++) 
+				for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
+					reverseRegistryData.setToInapplicable(ic, it);
+				}
+			for (int it=0; it<registryData.getNumTaxa() && it<reverseRegistryData.getNumTaxa(); it++) 
+				for (int ic=0; ic<registryData.getNumChars(); ic++){
+					int mapping = registryData.getState(ic, it);
+					if (MesquiteInteger.isCombinable(mapping) && mapping>=0 && mapping<=reverseRegistryData.getNumChars()) {
+						if (editedData.isInapplicable(ic, it)) // then even though the registry points into the original data, there is no data in the edited matrix
+							reverseRegistryData.setToUnassigned(ic, it);
+						else
+							reverseRegistryData.setState(mapping, it, 0, ic);
+					}
+				}
+		}
+
 
 	/*.................................................................................................................*/
 
 	public synchronized static void fillRegistryData(MeristicData registryData) {
+		Debugg.printStackTrace("========== in fillRegistryData ============");
 		if (registryData==null)
 			return;
 		for (int it=0; it<registryData.getNumTaxa(); it++) 
@@ -604,7 +645,7 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
-
+/* called if no registry data are available */
 	public static MeristicData createRegistryData(CharacterData data) {
 		MesquiteString uid = null;
 		Object obj = getStringAttached(data,PHPHIMPORTIDREF);
