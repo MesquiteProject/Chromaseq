@@ -423,6 +423,7 @@ public class ChromaseqUtil{
 		addedBaseData =  (CategoricalData)manageCharacters.newCharacterData(data.getTaxa(), data.getNumChars(), CategoricalData.DATATYPENAME);  //
 		//registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.lastApplicable()+1, MeristicData.DATATYPENAME);  //
 		addedBaseData.addToFile(file, data.getProject(), manageCharacters);  
+		addedBaseData.setUserVisible(false);
 
 		setAddedBaseDataValues(addedBaseData, data, dataGeneName, uid, gN);
 
@@ -621,6 +622,7 @@ public class ChromaseqUtil{
 
 		fillReverseRegistryData(reverseRegistryData);
 		reverseRegistryData.setEditorInhibition(true);
+		reverseRegistryData.setUserVisible(false);
 
 		return reverseRegistryData;
 	}
@@ -675,6 +677,7 @@ public class ChromaseqUtil{
 		registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.getNumChars(), MeristicData.DATATYPENAME);  //
 		//registryData =  (MeristicData)manageCharacters.newCharacterData(data.getTaxa(), data.lastApplicable()+1, MeristicData.DATATYPENAME);  //
 		registryData.addToFile(file, data.getProject(), manageCharacters);  
+		registryData.setUserVisible(false);
 
 		setRegistryDataValues(registryData,  data, dataGeneName,  uid,  gN);
 
