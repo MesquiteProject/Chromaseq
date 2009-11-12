@@ -383,11 +383,11 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 	/*--------------------------------------*/
 	/*This returns for overall position i, what is the position in the read. */
-	public int getReadBaseFromOverallBase(int whichRead,int i){
-		int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(i);
+	public int getReadBaseFromUniversalBase(int whichRead,int i){
+		int contigBase = contigDisplay.getContigBaseFromUniversalBase(i);
 		Read read = chromatograms[whichRead].getRead();
 		if (read!=null)
-			return read.getReadBaseFromContigBase(consensusBase);  
+			return read.getReadBaseFromContigBase(contigBase);  
 		else
 			return i;
 	}
@@ -411,7 +411,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/*--------------------------------------*/
 	/** Given the overall base numbering, as given in overallBase, this method selects that base within this contig*/
 	public void selectOverallBase(int overallBase){
-		int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(overallBase);
+		int consensusBase = contigDisplay.getContigBaseFromUniversalBase(overallBase);
 //		int readBase = getReadBaseFromConsensusBase(consensusBase);
 //		if (j <0 || j>= chromatogram.getTraceLength())
 //		return;
@@ -424,7 +424,7 @@ public class ChromatogramCanvas extends MousePanel {
 
 	//this is consensus position
 	public void deselectOverallBase(int whichRead, int overallBase){
-		int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(overallBase);
+		int consensusBase = contigDisplay.getContigBaseFromUniversalBase(overallBase);
 		int readBase = getReadBaseFromConsensusBase(whichRead, consensusBase);
 		selected[overallBase] = false;
 		chromatogramPanel.exportDeselectUniversalBase(overallBase);
@@ -586,9 +586,9 @@ public class ChromatogramCanvas extends MousePanel {
 		}
 		if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())){
 			if (!MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()))
-				contigDisplay.focusMatrixOn(contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getFirstTouchedOverall()), MesquiteInteger.unassigned);
+				contigDisplay.focusMatrixOn(contigDisplay.getContigBaseFromUniversalBase(contigDisplay.getFirstTouchedOverall()), MesquiteInteger.unassigned);
 			else
-				contigDisplay.focusMatrixOn(contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getFirstTouchedOverall()), contigDisplay.getConsensusBaseFromOverallBase(contigDisplay.getSecondTouchedOverall()));
+				contigDisplay.focusMatrixOn(contigDisplay.getContigBaseFromUniversalBase(contigDisplay.getFirstTouchedOverall()), contigDisplay.getContigBaseFromUniversalBase(contigDisplay.getSecondTouchedOverall()));
 		}
 		if (chromatogramPanel.getScrollToTouched()) {
 			int ic = findConsensusBaseNumber(SETREAD,x);

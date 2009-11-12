@@ -289,6 +289,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		
 		Read read = chromatograms[whichRead].getRead();
 		int numBases = contigDisplay.getTotalNumOverallBases();
+		ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 
 		if (blackBackground)
 			setBackground(Color.black);
@@ -302,19 +303,14 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 //		=====================  COLOR THE BASES OF THE READ ==============================
 		int firstLocation = -1;
 		int lastLocation = -1;
-		for (int i=firstBase;i < numBases;i++) {   //as it now stands, this is the overallBase
-			int readBase = getReadBaseFromOverallBase(whichRead, i);
-			int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(i);
+		for (int universalBase=firstBase;universalBase < numBases;universalBase++) {   //as it now stands, this is the overallBase
+			int readBase = getReadBaseFromUniversalBase(whichRead, universalBase);
+		//	int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(universalBase);
 			if (readBase>=0 && readBase<read.getBasesLength()) {
 
 				char c = read.getPhdBaseChar(readBase);
-				char matrixC= contigDisplay.getMatrixStateAtConsensusBase(consensusBase);
+				char matrixC= contigDisplay.getMatrixStateAtUniversalBase(universalBase);
 				int qual = read.getPhdBaseQuality(readBase);
-		
-if (i>450 && i<475 && false) {
-		int consensus = read.getContigBaseFromReadBase(readBase);
-			Debugg.println("" + i + "    readC: " + c +  "     matrixC: " + matrixC);// + ", panel.getNumBasesAddedToStart(): "+panel.getNumBasesAddedToStart());
-}
 
 				if (qual>=0 && contigDisplay.getColorOverviewByQuality()) {
 					if (qual==0)
@@ -330,9 +326,9 @@ if (i>450 && i<475 && false) {
 					g.setColor(baseColor);
 				}
 				if (firstLocation<0)
-					firstLocation = left+(i)*singleBaseWidth;
-				fillRect(g, cwidth, left+(i)*singleBaseWidth, topOfRead, singleBaseWidth, readBaseHeight);
-				lastLocation = left+(i)*singleBaseWidth+singleBaseWidth;
+					firstLocation = left+(universalBase)*singleBaseWidth;
+				fillRect(g, cwidth, left+(universalBase)*singleBaseWidth, topOfRead, singleBaseWidth, readBaseHeight);
+				lastLocation = left+(universalBase)*singleBaseWidth+singleBaseWidth;
 			} 
 		}
 
@@ -395,7 +391,7 @@ if (i>450 && i<475 && false) {
 
 		} else {
 			int ic = getOverallBaseFromLocation(x-offsetInBox,getGraphics()); 
-			 ic = contigDisplay.getConsensusBaseFromOverallBase(ic)+firstBase;
+			 ic = contigDisplay.getContigBaseFromUniversalBase(ic)+firstBase;
 			if (MesquiteInteger.isCombinable(ic)){
 				contigDisplay.scrollToConsensusBase(ic);
 				contigDisplay.repaintPanels();
@@ -409,7 +405,7 @@ if (i>450 && i<475 && false) {
 			int numBases = contigDisplay.getTotalNumOverallBases();
 			int ic = getOverallBaseFromLocation(x-offsetInBox,getGraphics()); 
 			int overallBase = ic+firstBase;
-			int consensus = contigDisplay.getConsensusBaseFromOverallBase(ic)+firstBase;
+			int consensus = contigDisplay.getContigBaseFromUniversalBase(ic)+firstBase;
 			if (MesquiteInteger.isCombinable(consensus) && overallBase>=0 && overallBase<numBases){
 				contigDisplay.scrollToConsensusBase(consensus);
 				contigDisplay.repaintPanels();
