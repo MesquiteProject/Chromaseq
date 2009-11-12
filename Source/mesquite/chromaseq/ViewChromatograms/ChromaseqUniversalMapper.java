@@ -187,21 +187,23 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
 			int positionInOriginal = registryData.getState(ic, it);
+			boolean addedBase = false;
 			if (registryData!=null){
-				if (registryData.isUnassigned(ic, it)) {  //this must be an added base
+				if (registryData.getState(ic, it)==ChromaseqUtil.ADDEDBASEREGISTRY) {  //this must be an added base
 					positionInOriginal=-1;
 					numAddedBases++;
+					addedBase = true;
 				} else if (positionInOriginal>=0 && reverseRegistryData.getState(positionInOriginal,it)==ChromaseqUtil.DELETEDBASEREGISTRY) {  // this must be a deleted base
 					numDeletedBases++;
 				}
 			}
-			if (!editedData.isInapplicable(ic, it)|| originalData.isValidAssignedState(positionInOriginal,it)){   // there is a state in the edited matrix or there was one in the original matrix
+			if (!editedData.isInapplicable(ic, it)|| originalData.isValidAssignedState(positionInOriginal,it) || addedBase){   // there is a state in the edited matrix or there was one in the original matrix
 				if (editedData.isInapplicable(ic, it))
 					count++;
 				
 				numBasesFound++;
-				if (positionInOriginal<0) {  // but it wasn't in the original
-				} else {
+				//if (positionInOriginal<0) {  // but it wasn't in the original
+				//} else {
 					numOriginalBasesFound++;
 					if (ic < firstBase)
 						firstBase = ic;
@@ -226,7 +228,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 					if (ic>lastIC)
 						lastIC = ic;
 
-				}
+				//}
 			} 
 
 		}

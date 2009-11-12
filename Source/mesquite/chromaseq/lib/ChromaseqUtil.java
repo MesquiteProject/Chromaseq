@@ -45,6 +45,7 @@ public class ChromaseqUtil{
 	public static final int ADDEDBASE = 1;
 	public static final int DELETEDBASE = 2;
 	public static final int DELETEDBASEREGISTRY = -2;
+	public static final int ADDEDBASEREGISTRY = -3;
 
 	public static void attachStringToMatrix(Attachable a, MesquiteString s){
 		a.attachIfUniqueName(s);
@@ -351,6 +352,18 @@ public class ChromaseqUtil{
 		reverseRegistryData.setState(icOriginal, it, DELETEDBASEREGISTRY);  // registry now says that there is nothing in original data here
 	}
 	
+	/*.................................................................................................................*/
+	public static void insertGapIntoEditedMatrix(CharacterData data, int ic, int it) {
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		int icOriginal = registryData.getState(ic, it);
+		registryData.setState(ic, it, ChromaseqUtil.ADDEDBASEREGISTRY);
+		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
+		for (int originalBase=icOriginal; originalBase<reverseRegistryData.getNumChars(); originalBase++) {
+			int posInEdited = reverseRegistryData.getState(ic, it)+1;
+			reverseRegistryData.setState(ic, it, posInEdited);
+		}
+			
+	}
 	/*.................................................................................................................*/
 	public static void fillAddedBaseData(CharacterData data, int ic, int it) {
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
