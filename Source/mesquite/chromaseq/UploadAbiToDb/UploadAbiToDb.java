@@ -1,7 +1,6 @@
 package mesquite.chromaseq.UploadAbiToDb;
 
 import mesquite.chromaseq.lib.AbiUploader;
-import mesquite.chromaseq.lib.PhPhRunner;
 import mesquite.lib.*;
 import mesquite.lib.duties.UtilitiesAssistant;
 import mesquite.molec.lib.DNADatabaseURLSource;

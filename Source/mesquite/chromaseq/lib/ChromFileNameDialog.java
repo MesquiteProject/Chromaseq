@@ -2,7 +2,6 @@ package mesquite.chromaseq.lib;
 
 import java.awt.Button;
 import java.awt.Choice;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;

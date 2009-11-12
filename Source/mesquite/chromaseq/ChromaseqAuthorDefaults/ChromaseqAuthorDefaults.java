@@ -2,13 +2,10 @@ package mesquite.chromaseq.ChromaseqAuthorDefaults;
 
 import mesquite.basic.AuthorDefaults.AuthorDefaults;
 import mesquite.chromaseq.lib.ProjectAuthorDefaultsDialog;
-import mesquite.lib.Author;
 import mesquite.lib.CommandChecker;
-import mesquite.lib.CommandRecord;
 import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
-import mesquite.lib.MesquiteString;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.MesquiteWindow;
 import mesquite.lib.MesquiteXMLPreferencesModule;

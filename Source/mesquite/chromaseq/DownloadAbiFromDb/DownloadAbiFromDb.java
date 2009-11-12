@@ -1,9 +1,7 @@
 package mesquite.chromaseq.DownloadAbiFromDb;
 
 import mesquite.chromaseq.lib.AbiDownloader;
-import mesquite.chromaseq.lib.AbiUploader;
 import mesquite.lib.CommandChecker;
-import mesquite.lib.CommandRecord;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.duties.UtilitiesAssistant;
 

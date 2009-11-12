@@ -1,10 +1,8 @@
 package mesquite.chromaseq.ChromFileNameParsManager;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-import mesquite.batchArch.lib.TemplateRecord;
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
 

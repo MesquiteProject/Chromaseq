@@ -1,6 +1,5 @@
 package mesquite.chromaseq.lib;
 
-import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteXMLPreferencesModule;
 import mesquite.molec.lib.DNADatabaseURLSource;
 

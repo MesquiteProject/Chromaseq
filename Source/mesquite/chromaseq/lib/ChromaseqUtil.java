@@ -11,8 +11,6 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 package mesquite.chromaseq.lib;
 
-import java.util.Vector;
-
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
 import mesquite.lib.characters.CharacterData;

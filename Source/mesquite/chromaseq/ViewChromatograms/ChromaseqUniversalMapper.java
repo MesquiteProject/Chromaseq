@@ -3,7 +3,6 @@ package mesquite.chromaseq.ViewChromatograms;
 import mesquite.categ.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.*;
-import mesquite.molec.*;
 import mesquite.chromaseq.lib.*;
 import mesquite.meristic.lib.*;
 

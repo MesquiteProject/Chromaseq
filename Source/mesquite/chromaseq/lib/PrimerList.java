@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.dom4j.*;
 
-import mesquite.tol.lib.*;
-
 import mesquite.lib.*;
 import mesquite.molec.lib.*;
 import mesquite.tol.lib.XMLConstants;

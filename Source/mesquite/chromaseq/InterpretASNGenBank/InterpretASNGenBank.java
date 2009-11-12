@@ -10,7 +10,6 @@ import mesquite.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.duties.*;
 import mesquite.categ.lib.*;
-import mesquite.chromaseq.ViewChromatograms.VChromWindow;
 import mesquite.chromaseq.lib.*;
 
 //IUPACna " "

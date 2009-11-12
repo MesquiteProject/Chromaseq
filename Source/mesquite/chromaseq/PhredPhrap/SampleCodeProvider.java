@@ -2,7 +2,6 @@ package mesquite.chromaseq.PhredPhrap;
 
 import java.util.*;
 
-import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
 
 import org.dom4j.*;

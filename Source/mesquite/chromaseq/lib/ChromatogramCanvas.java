@@ -1,20 +1,12 @@
 package mesquite.chromaseq.lib;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
-import mesquite.categ.lib.DNAData;
-import mesquite.categ.lib.DNAState;
-import mesquite.chromaseq.lib.*;
-import mesquite.chromaseq.ViewChromatograms.VChromWindow;
 import mesquite.lib.ColorDistribution;
-import mesquite.lib.Debugg;
-import mesquite.lib.GraphicsUtil;
 import mesquite.lib.IntegerArray;
-import mesquite.lib.MesquiteDouble;
 import mesquite.lib.MesquiteEvent;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteTool;

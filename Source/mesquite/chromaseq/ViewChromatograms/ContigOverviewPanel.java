@@ -1,6 +1,5 @@
 package mesquite.chromaseq.ViewChromatograms;
 
-import mesquite.categ.lib.*;
 import mesquite.chromaseq.lib.*;
 import mesquite.chromaseq.lib.ChromatogramPanel;
 import mesquite.chromaseq.lib.ChromatogramCanvas;

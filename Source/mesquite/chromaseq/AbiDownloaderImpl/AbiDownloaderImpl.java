@@ -1,7 +1,6 @@
 package mesquite.chromaseq.AbiDownloaderImpl;
 
 import java.awt.Label;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

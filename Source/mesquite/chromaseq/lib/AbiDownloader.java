@@ -1,7 +1,5 @@
 package mesquite.chromaseq.lib;
 
-import mesquite.lib.CommandRecord;
-import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteProject;
 import mesquite.lib.MesquiteXMLPreferencesModule;
 

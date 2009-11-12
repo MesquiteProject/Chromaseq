@@ -2,9 +2,6 @@ package mesquite.chromaseq.lib;
 
 import java.io.File;
 import java.util.Hashtable;
-import java.util.Iterator;
-
-import mesquite.lib.CommandRecord;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.StringUtil;

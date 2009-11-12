@@ -1,7 +1,5 @@
 package mesquite.chromaseq.lib;
 
-import mesquite.lib.*;
-
 public class PhredPhrapAgent {
 	
 	ChromFileNameParsing nameParsingRule;
