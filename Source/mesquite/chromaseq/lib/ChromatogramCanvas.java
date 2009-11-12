@@ -419,7 +419,7 @@ public class ChromatogramCanvas extends MousePanel {
 		if (overallBase <0 || overallBase> selected.length)
 			return;
 		selected[overallBase] = true;
-		chromatogramPanel.exportSelectConsensusPosition(consensusBase);
+		chromatogramPanel.exportSelectUniversalBase(overallBase);
 	}
 
 	//this is consensus position
@@ -427,7 +427,7 @@ public class ChromatogramCanvas extends MousePanel {
 		int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(overallBase);
 		int readBase = getReadBaseFromConsensusBase(whichRead, consensusBase);
 		selected[overallBase] = false;
-		chromatogramPanel.exportDeselectConsensusPosition(consensusBase);
+		chromatogramPanel.exportDeselectUniversalBase(overallBase);
 	}
 	/*.................................................................................................................*/
 	public String getPeakHeightsOfBase(int whichRead, int readBaseNumber) {   // i is the position, zero-based, in the padded consensus sequence; returns location

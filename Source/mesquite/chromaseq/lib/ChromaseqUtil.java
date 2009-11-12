@@ -46,6 +46,7 @@ public class ChromaseqUtil{
 	public static final int UNCHANGEDBASE = 0;
 	public static final int ADDEDBASE = 1;
 	public static final int DELETEDBASE = 2;
+	public static final int DELETEDBASEREGISTRY = -2;
 
 	public static void attachStringToMatrix(Attachable a, MesquiteString s){
 		a.attachIfUniqueName(s);
@@ -343,6 +344,15 @@ public class ChromaseqUtil{
 
 	}
 
+	/*.................................................................................................................*/
+	public static void setNewGap(CharacterData data, int ic, int it) {
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
+		int icOriginal = registryData.getState(ic, it);
+		registryData.setState(ic, it, DELETEDBASEREGISTRY);  // registry now says that there is nothing in original data here
+		reverseRegistryData.setState(icOriginal, it, DELETEDBASEREGISTRY);  // registry now says that there is nothing in original data here
+	}
+	
 	/*.................................................................................................................*/
 	public static void fillAddedBaseData(CharacterData data, int ic, int it) {
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
