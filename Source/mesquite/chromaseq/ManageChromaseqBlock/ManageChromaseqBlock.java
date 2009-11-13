@@ -213,6 +213,7 @@ public class ManageChromaseqBlock extends FileInit {
 		int numM = proj.getNumberCharMatrices();
 		for (int i = 0; i<numM; i++){
 			mesquite.lib.characters.CharacterData data = proj.getCharacterMatrix(i);
+			if (data.getWritable()){
 			sb.append("\n\tCHARACTERS = " + ParseUtil.tokenize(data.getName()) + " ;" + StringUtil.lineEnding());
 			boolean here = writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTIDREF);
 			some  |= here;
@@ -252,6 +253,7 @@ public class ManageChromaseqBlock extends FileInit {
 			}
 			//reportCellObjects(data,ChromaseqUtil.paddingRef);
 			//reportCellObjects(data,ChromaseqUtil.trimmableNameRef);
+		}
 		}
 		if (!some)
 			return null;
