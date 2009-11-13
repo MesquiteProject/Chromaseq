@@ -129,11 +129,11 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 			int positionInOriginal = registryData.getState(ic, it);
 			if (registryData!=null){
-				if (registryData.isUnassigned(ic, it)) {  //this must be an added base
+				if (registryData.getState(ic, it)==ChromaseqUtil.ADDEDBASEREGISTRY) {  //this must be an added base
 					totalNumAddedBases++;
-				} //else if (positionInOriginal>=0 && reverseRegistryData.getState(positionInOriginal,it)==ChromaseqUtil.DELETEDBASEREGISTRY) {  // this must be a deleted base
-				//	totalNumDeletedBases++;
-				//}
+				} else if (positionInOriginal>=0 && reverseRegistryData.getState(positionInOriginal,it)==ChromaseqUtil.DELETEDBASEREGISTRY) {  // this must be a deleted base
+					totalNumDeletedBases++;
+				}
 			}
 		}
 

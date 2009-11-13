@@ -367,18 +367,20 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 	/*--------------------------------------*/
 	public void setSelected(int overallBase, boolean sel){
-		if (overallBase>=0||overallBase<selected.length)
+		if (overallBase>=0|| overallBase<selected.length)
 			selected[overallBase]= sel;
 	}
 	/*--------------------------------------*/
 	public boolean getSelected(int overallBase){
-		if (overallBase<0||overallBase>=selected.length)
+		if (overallBase<0|| overallBase>=selected.length)
 			return false;
 		return selected[overallBase];
 	}
 	/*--------------------------------------*/
 	/*This returns for consensus position i, what is the position in the read. */
 	public int getReadBaseFromConsensusBase(int whichRead,int i){
+		if (!contigDisplay.contigExists())
+			return i;
 		Read read = chromatograms[whichRead].getRead();
 		if (read!=null)
 			return read.getReadBaseFromContigBase(i);  
@@ -388,6 +390,8 @@ public class ChromatogramCanvas extends MousePanel {
 	/*--------------------------------------*/
 	/*This returns for overall position i, what is the position in the read. */
 	public int getReadBaseFromUniversalBase(int whichRead,int i){
+		if (!contigDisplay.contigExists())
+			return i;
 		int contigBase = contigDisplay.getContigBaseFromUniversalBase(i);
 		Read read = chromatograms[whichRead].getRead();
 		if (read!=null)
