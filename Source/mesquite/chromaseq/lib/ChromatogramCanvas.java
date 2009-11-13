@@ -607,7 +607,12 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 	/*_________________________________________________*/
 	public void mouseMoved(int modifiers, int x, int y, MesquiteTool tool) {
-		int ic = findConsensusBaseNumber(SETREAD,x);
+		int ic;
+		if (contigDisplay.contigExists()) 
+			ic= findConsensusBaseNumber(SETREAD,x);
+		else
+			ic = findUniversalBaseNumber(SETREAD, x); 
+
 		int readBaseNumber = reads[SETREAD].getReadBaseFromContigBase(ic);
 		int quality = reads[SETREAD].getPhdBaseQuality(readBaseNumber);
 		double averageQuality = reads[SETREAD].getAverageQuality();
