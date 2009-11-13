@@ -58,9 +58,9 @@ public class ChromatogramCanvas extends MousePanel {
 		maxValue = 0;
 		if (canShowTraces())
 			initTraces(0);
-		selected = new boolean[contigDisplay.getTotalNumOverallBases()];   // uses local read as index
+		selected = new boolean[contigDisplay.getTotalNumUniversalBases()];   // uses local read as index
 
-		for (i=0;i<contigDisplay.getTotalNumOverallBases();i++) {
+		for (i=0;i<contigDisplay.getTotalNumUniversalBases();i++) {
 			selected[i] = false;
 		}
 
@@ -529,7 +529,7 @@ public class ChromatogramCanvas extends MousePanel {
 				chromatogramPanel.exportDeselectAll();
 				selectOverallBase(ic);
 				if (clickCount>1)
-					contigDisplay.scrollToOverallBase(ic);
+					contigDisplay.scrollToUniversalBase(ic);
 				contigDisplay.repaintPanels();
 			}
 		}

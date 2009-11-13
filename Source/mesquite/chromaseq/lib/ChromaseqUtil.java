@@ -195,6 +195,8 @@ public class ChromaseqUtil{
 	public static CharacterData getAssociatedData(CharacterData data, String dataType) {
 		if (data==null)
 			return null;
+		if (data.getProject()==null)
+			return null;
 		String uid = getUID(data);
 		//	String gn = getGeneName(data);
 		Object obj;
@@ -286,7 +288,7 @@ public class ChromaseqUtil{
 		}
 		return 0;
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static int getTotalNumBasesAddedBeyondPhPhBases(CharacterData data, int it) {
 		int count=0;
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
@@ -304,7 +306,7 @@ public class ChromaseqUtil{
 		}
 		return count;
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static int getTotalNumOriginalBasesTurnedToGaps(CharacterData data, int it) {
 		int count=0;
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
@@ -669,6 +671,8 @@ public class ChromaseqUtil{
 	public static double getQualityScoreForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
 		ContinuousData qualityData = getQualityData(data);
 		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return 0.0;
 		int mapping = registryData.getState(ic, it);
 		return qualityData.getState(mapping, it, 0);
 	}
@@ -676,6 +680,8 @@ public class ChromaseqUtil{
 	public static long getOriginalStateForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
 		DNAData originalData = getOriginalData(data);
 		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return 0;
 		int mapping = registryData.getState(ic, it);
 		return originalData.getState(mapping, it);
 	}
@@ -683,6 +689,8 @@ public class ChromaseqUtil{
 	public static boolean originalIsInapplicableForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
 		DNAData originalData = getOriginalData(data);
 		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return false;
 		int mapping = registryData.getState(ic, it);
 		return originalData.isInapplicable(mapping, it);
 	}

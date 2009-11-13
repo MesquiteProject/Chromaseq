@@ -394,7 +394,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 				chromatogramPanel.exportDeselectAll();
 				selectOverallBase(ic);
 				if (clickCount>1)
-					contigDisplay.scrollToOverallBase(ic);
+					contigDisplay.scrollToUniversalBase(ic);
 				contigDisplay.repaintPanels();
 			}
 		}

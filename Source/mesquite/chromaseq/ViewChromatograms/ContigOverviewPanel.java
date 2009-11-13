@@ -35,7 +35,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 		scrollPanel.setBackground(Color.blue);
 		scrollBar = new Scrollbar(Scrollbar.HORIZONTAL);
 		scrollBar.addAdjustmentListener(this);
-		numBases = panel.getTotalNumOverallBases();
+		numBases = panel.getTotalNumUniversalBases();
 		numBasesVisible = panel.getApproximateNumberOfPeaksVisible();
 
 		scrollBar.setUnitIncrement(10);
@@ -64,7 +64,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 		//chromArea.repaint();
 	}
 	public  void setScrollPosition( ){
-		numBases = contigDisplay.getTotalNumOverallBases();
+		numBases = contigDisplay.getTotalNumUniversalBases();
 		int left = contigOverviewCanvas.getLeftBoundaryOfOverview(contigOverviewCanvas.getGraphics());
 		numBasesVisible = getBounds().width-left;
 
@@ -234,8 +234,8 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int top = getTopOfRead(0)-5;
 		int bottom = getTopOfRead(numChromatograms-1)+readBaseHeight + 5;
 		int width = contigDisplay.getApproximateNumberOfPeaksVisible();
-		if (firstConsensusBase+contigDisplay.getApproximateNumberOfPeaksVisible()> contigDisplay.getTotalNumOverallBases()){
-			width =  contigDisplay.getTotalNumOverallBases()-firstConsensusBase;
+		if (firstConsensusBase+contigDisplay.getApproximateNumberOfPeaksVisible()> contigDisplay.getTotalNumUniversalBases()){
+			width =  contigDisplay.getTotalNumUniversalBases()-firstConsensusBase;
 			if (width<0) width=0;
 		}
 		return new Rectangle(left+firstConsensusBase*singleBaseWidth, top, width*singleBaseWidth,bottom-top);
@@ -250,9 +250,9 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		return (location-left)/singleBaseWidth;
 	}
 	/*...........................................................................*/
-	public int getOverallBaseFromLocation(int location, Graphics g) {
+	public int getUniversalBaseFromLocation(int location, Graphics g) {
 		int left = getLeftBoundaryOfOverview(g);
-		return (location-left)/singleBaseWidth;
+		return (location-left)/singleBaseWidth+firstBase;
 	}
 	/*...........................................................................*/
 	public void paint(Graphics g) {	
@@ -287,7 +287,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int cwidth = getBounds().width-left;
 		
 		Read read = chromatograms[whichRead].getRead();
-		int numBases = contigDisplay.getTotalNumOverallBases();
+		int numBases = contigDisplay.getTotalNumUniversalBases();
 		ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 
 		if (blackBackground)
@@ -389,10 +389,10 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 			offsetInBox = x-centerOfBox;
 
 		} else {
-			int ic = getOverallBaseFromLocation(x-offsetInBox,getGraphics()); 
-			 ic = contigDisplay.getContigBaseFromUniversalBase(ic)+firstBase;
-			if (MesquiteInteger.isCombinable(ic)){
-				contigDisplay.scrollToConsensusBase(ic);
+			int numBases = contigDisplay.getUniversalMapper().getNumUniversalBases();
+			int universalBase = getUniversalBaseFromLocation(x-offsetInBox,getGraphics()); 
+			if (MesquiteInteger.isCombinable(universalBase) && universalBase>=0 && universalBase<numBases){
+				contigDisplay.scrollToUniversalBase(universalBase);
 				contigDisplay.repaintPanels();
 			}
 		}
@@ -401,12 +401,10 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		//ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (mouseDownInBox) {
 			setCursor(window.getHandCursor());
-			int numBases = contigDisplay.getTotalNumOverallBases();
-			int ic = getOverallBaseFromLocation(x-offsetInBox,getGraphics()); 
-			int overallBase = ic+firstBase;
-			int consensus = contigDisplay.getContigBaseFromUniversalBase(ic)+firstBase;
-			if (MesquiteInteger.isCombinable(consensus) && overallBase>=0 && overallBase<numBases){
-				contigDisplay.scrollToConsensusBase(consensus);
+			int numBases = contigDisplay.getUniversalMapper().getNumUniversalBases();
+			int universalBase = getUniversalBaseFromLocation(x-offsetInBox,getGraphics()); 
+			if (MesquiteInteger.isCombinable(universalBase) && universalBase>=0 && universalBase<numBases){
+				contigDisplay.scrollToUniversalBase(universalBase);
 				contigDisplay.repaintPanels();
 			}
 		}
