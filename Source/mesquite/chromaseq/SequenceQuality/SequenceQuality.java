@@ -1,8 +1,7 @@
 package mesquite.chromaseq.SequenceQuality;
 
 import mesquite.categ.lib.MolecularState;
-import mesquite.chromaseq.lib.ChromaseqBaseMapper;
-import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.chromaseq.lib.*;
 import mesquite.cont.lib.ContinuousData;
 import mesquite.lib.EmployeeNeed;
 import mesquite.lib.MesquiteModule;
@@ -24,7 +23,6 @@ import mesquite.lib.duties.NumberForTaxon;
 		MatrixSourceCoord matrixSourceTask;
 		Taxa currentTaxa = null;
 		MCharactersDistribution observedStates =null;
-		ChromaseqBaseMapper chromMapper;
 		ContinuousData linkedData;
 		CharacterData data;
 
@@ -63,7 +61,6 @@ import mesquite.lib.duties.NumberForTaxon;
 			data = observedStates.getParentData();
 			
 			linkedData = ChromaseqUtil.getQualityData(data);
-			chromMapper = new ChromaseqBaseMapper(data);
 
 		}
 		
@@ -77,7 +74,7 @@ import mesquite.lib.duties.NumberForTaxon;
 	    		double sum = 0;
 	   		for (int ic = 0; ic<linkedData.getNumChars(false); ic++){
 	   			if (!data.isUnassigned(ic, it) && !linkedData.isUnassigned(ic, it)) {
-	   				double d = chromMapper.getQualityScore(ic, it);
+	   				double d = ChromaseqUtil.getQualityScoreForEditedMatrixBase(data,ic, it);
 	   				if (d>101)
 	   					;
 	   				else if (d>=90.0)
@@ -123,7 +120,6 @@ import mesquite.lib.duties.NumberForTaxon;
 				return;
 			data = observedStates.getParentData();
 			linkedData = ChromaseqUtil.getQualityData(data);
-			chromMapper = new ChromaseqBaseMapper(data);
 
 			double qualityScore = getQualityTaxon(it);
 

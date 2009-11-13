@@ -665,6 +665,29 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
+	public static double getQualityScoreForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
+		ContinuousData qualityData = getQualityData(data);
+		MeristicData registryData = getRegistryData(data);
+		int mapping = registryData.getState(ic, it);
+		return qualityData.getState(mapping, it, 0);
+	}
+	/*.................................................................................................................*/
+	public static long getOriginalStateForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
+		DNAData originalData = getOriginalData(data);
+		MeristicData registryData = getRegistryData(data);
+		int mapping = registryData.getState(ic, it);
+		return originalData.getState(mapping, it);
+	}
+	/*.................................................................................................................*/
+	public static boolean originalIsInapplicableForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
+		DNAData originalData = getOriginalData(data);
+		MeristicData registryData = getRegistryData(data);
+		int mapping = registryData.getState(ic, it);
+		return originalData.isInapplicable(mapping, it);
+	}
+
+
+	/*.................................................................................................................*/
 
 	public static void setRegistryDataValues(MeristicData registryData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
 		registryData.saveChangeHistory = false;
