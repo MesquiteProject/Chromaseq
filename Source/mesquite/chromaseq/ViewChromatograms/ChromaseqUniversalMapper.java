@@ -7,10 +7,10 @@ import mesquite.chromaseq.lib.*;
 import mesquite.meristic.lib.*;
 
 public class ChromaseqUniversalMapper implements MesquiteListener {
-	public static final int PHREDPHRAPMESQUITESEQUENCE = 0;   // this is the "Phred.Phrap.Mesquite" sequence line in the chromatogram viewer
+	public static final int PHREDPHRAPMESQUITESEQUENCE = 0;   // this is the "Original Untrimmed" sequence line in the chromatogram viewer
 	public static final int EDITEDMATRIXSEQUENCE = 1;   // this is the edited in matrix sequence line in the chromatogram viewer
 	public static final int EDITEDMATRIX = 2;    // this is the row in the editedMatrix in the actually editedData object, including gaps etc.
-	public static final int ORIGINALIMPORTSEQUENCE = 3;    // this is the "OriginalImport" sequence line in the chromatogram viewer.
+	public static final int ORIGINALIMPORTSEQUENCE = 3;    // this is the "Original Trimmed" sequence line in the chromatogram viewer.
 	public static final int ACEFILECONTIG = 4;    // this is the "Phred.Phrap.Mesquite" sequence line in the chromatogram viewer.
 	static final int numMappings = 5;
 
@@ -141,8 +141,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		 */
 		totalUniversalBases += totalNumAddedBases-totalNumDeletedBases;
 
-		Debugg.println("  totalUniversalBases: " +totalUniversalBases);
-		Debugg.println("  totalNumAddedBases: " +totalNumAddedBases + ", totalNumDeletedBases: " + totalNumDeletedBases);
+//		Debugg.println("  totalUniversalBases: " +totalUniversalBases);
+//		Debugg.println("  totalNumAddedBases: " +totalNumAddedBases + ", totalNumDeletedBases: " + totalNumDeletedBases);
 
 		if (otherBaseFromUniversalBase==null || otherBaseFromUniversalBase[PHREDPHRAPMESQUITESEQUENCE].length!=totalUniversalBases)
 			createOtherBaseFromUniversalBase();
@@ -289,6 +289,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			negativeBase--;
 		}
 
+		// =========== Now fill in the edges of each mapping ===========
 		for(int mapping=0; mapping<numMappings; mapping++) {
 			for (int i=0; i<otherBaseFromUniversalBase[mapping].length; i++) {
 				if (otherBaseFromUniversalBase[mapping][i]>=0) {
@@ -313,36 +314,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 		}
 
-		/*
-	if (numBasesFound<0) { //all gaps in original
-			for (int i=0; i<universalBaseFromOtherBase[MATRIXSEQUENCE].length; i++) {
-				universalBaseFromOtherBase[MATRIXSEQUENCE][i] = i;
-				otherBaseFromUniversalBase[MATRIXSEQUENCE][i] = i;
-			}
-		}
-		else { //trailing bit go above numbers present
-			for (int ic = 0; ic< firstBase; ic++){ //going from first original base to the right
-				otherBaseFromUniversalBase[MATRIXSEQUENCE][ic] = ic-firstBase;
-
-			}
-			for (int i=numBasesFound+1; i<universalBaseFromOtherBase[MATRIXSEQUENCE].length; i++)
-				universalBaseFromOtherBase[MATRIXSEQUENCE][i] = ++lastIC;
-		}
-
-		//filling in trailing bit in case matrix was added to
-		int highestDefined = otherBaseFromUniversalBase[MATRIXSEQUENCE].length-1;
-		for (highestDefined = otherBaseFromUniversalBase[MATRIXSEQUENCE].length-1; highestDefined>=0; highestDefined--){
-			if (otherBaseFromUniversalBase[MATRIXSEQUENCE][highestDefined]>=0)
-				break;
-		}
-		int max = -1;
-		for (int ic = 0; ic<otherBaseFromUniversalBase[MATRIXSEQUENCE].length; ic++)
-			if (MesquiteInteger.isCombinable(otherBaseFromUniversalBase[MATRIXSEQUENCE][ic]) && max < otherBaseFromUniversalBase[MATRIXSEQUENCE][ic])
-				max = otherBaseFromUniversalBase[MATRIXSEQUENCE][ic];
-		for (int ic = highestDefined+1; ic<otherBaseFromUniversalBase[MATRIXSEQUENCE].length; ic++)
-			otherBaseFromUniversalBase[MATRIXSEQUENCE][ic] = ++max;
-		 */
-
+	
 		hasBeenSet = true;
 	}
 	/*.................................................................................................................*/
