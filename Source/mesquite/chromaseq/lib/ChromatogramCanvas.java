@@ -214,17 +214,17 @@ public class ChromatogramCanvas extends MousePanel {
 		if (f != null)
 			fm = getFontMetrics(f);
 
-		int offsetForInserted = 0;
+//		int offsetForInserted = 0;
 		int cwidth = getBounds().width;
 		if (isShownReversed()) {
 			xPixel = cwidth - xPixel;
 			for (int i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
-					int consensusBase = getContigBaseFromReadBase(whichRead,i);
-					int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
-					offsetForInserted += space;
+//					int consensusBase = getContigBaseFromReadBase(whichRead,i);
+//					int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
+//					offsetForInserted += space;
 
-					int overallBase = contigDisplay.getUniversalBaseFromContigBase(consensusBase);
+//					int overallBase = contigDisplay.getUniversalBaseFromContigBase(consensusBase);
 
 					int cmid = 10;
 					if (fm != null)
@@ -235,7 +235,7 @@ public class ChromatogramCanvas extends MousePanel {
 						w = getPhdLocation(reads[whichRead], cwidth, i+1, contigDisplay,true) - getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true) + 1;
 					else
 						w =  (int)contigDisplay.getAveragePeakDistance();
-					int h = getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2 + offsetForInserted;
+					int h = getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2;
 					/*if (reversed){
 						w = cwidth-w;
 						h = cwidth-h;
@@ -257,11 +257,11 @@ public class ChromatogramCanvas extends MousePanel {
 		else
 			for (int i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
-					int consensusBase = getContigBaseFromReadBase(whichRead,i);
-					int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
-					offsetForInserted += space;
+//					int consensusBase = getContigBaseFromReadBase(whichRead,i);
+//					int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
+//					offsetForInserted += space;
 
-					int overallBase = contigDisplay.getUniversalBaseFromContigBase(consensusBase);
+//					int overallBase = contigDisplay.getUniversalBaseFromContigBase(consensusBase);
 
 					int cmid = 10;
 					if (fm != null)
@@ -272,7 +272,7 @@ public class ChromatogramCanvas extends MousePanel {
 						w = getPhdLocation(reads[whichRead], cwidth, i+1, contigDisplay,true) - getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true) + 1;
 					else
 						w =  (int)contigDisplay.getAveragePeakDistance();
-					int h = getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2 + offsetForInserted;
+					int h = getPhdLocation(reads[whichRead], cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2;
 					/*if (reversed){
 					w = cwidth-w;
 					h = cwidth-h;
