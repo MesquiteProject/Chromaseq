@@ -62,8 +62,8 @@ public class SampleCodeProvider {
 				if (seq.equals(";") || StringUtil.blank(seq))
 					seq="";
 				String fullseq = subParser.getNextToken();
-				if (fullseq.equals(";") || StringUtil.blank(fullseq))
-					fullseq="";
+				if (StringUtil.blank(fullseq) || fullseq.equals(";"))
+					fullseq=seq;
 				return new String[]{seq, fullseq};
 			}
 			line = sampleCodeListParser.getRawNextDarkLine();
