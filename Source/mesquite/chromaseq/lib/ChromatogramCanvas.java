@@ -345,12 +345,14 @@ public class ChromatogramCanvas extends MousePanel {
 	/*--------------------------------------*/
 	/*This returns for read position i, what is the position in the consensus. */
 	public int getContigBaseFromReadBase(int whichRead, int i){
-		Read read = chromatograms[whichRead].getRead();
-		if (read!=null)
-			return read.getContigBaseFromReadBase(i);
-		else 
-			return i;
-
+		if (contigDisplay.contigExists()) {
+			Read read = chromatograms[whichRead].getRead();
+			if (read!=null)
+				return read.getContigBaseFromReadBase(i);
+			else 
+				return i;
+		}
+		return i;
 	}
 	public void deselectAll(){
 		for (int i = 0; i<selected.length; i++)
