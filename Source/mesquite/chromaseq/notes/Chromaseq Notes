@@ -1,5 +1,12 @@
 Necessary pre-beta
 
+- move from sequence panel to matrix not functioning
+
+
+
+=========
+
+
 registration: use bop down tool to pull from read at front end.  If there is padding in read and/or phredphrap contig, then registration off
 registration: add bases to start using insert tool; registration off
 registration: select base  that had been added to start using insert tool; hit -; immediately registration goes back to correct, and continued hitting - makes sense!

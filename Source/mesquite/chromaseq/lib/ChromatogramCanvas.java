@@ -5,7 +5,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
+import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.lib.ColorDistribution;
+import mesquite.lib.Debugg;
 import mesquite.lib.IntegerArray;
 import mesquite.lib.MesquiteEvent;
 import mesquite.lib.MesquiteInteger;
@@ -171,9 +173,10 @@ public class ChromatogramCanvas extends MousePanel {
 	 * but instead the position from the start of the main contig. Thus,  positions to the left of the main contig are -ve */
 	public int findConsensusBaseNumber(int whichRead, int xPixel){ //this needs to return consensus position!
 		reCalcCenterBase();
+		ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 		int cwidth = getBounds().width;
 		int halfPeaks = contigDisplay.getApproximateNumberOfPeaksVisible()/2;
-		int centerConsensusBase = centerBase-contigDisplay.getContig().getReadExcessAtStart();
+		int centerConsensusBase = universalMapper.getOtherBaseFromUniversalBase(ChromaseqUniversalMapper.ACEFILECONTIG, centerBase); //centerBase-contigDisplay.getContig().getReadExcessAtStart();
 		int centerReadBase = getReadBaseFromConsensusBase(whichRead, centerConsensusBase);
 
 		int firstReadBase = centerReadBase - halfPeaks;
@@ -407,7 +410,7 @@ public class ChromatogramCanvas extends MousePanel {
 //		int readBase = getReadBaseFromConsensusBase(consensusBase);
 //		if (j <0 || j>= chromatogram.getTraceLength())
 //		return;
-//		Debugg.println("|||||||||||| selectOverallBase " + overallBase + " consensusBase " + consensusBase);
+//		Debugg.println("|||||||||||| selectOverallBase,  overallBase: " + overallBase + " consensusBase " + consensusBase);
 		if (overallBase <0 || overallBase> selected.length)
 			return;
 		selected[overallBase] = true;
@@ -477,7 +480,7 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 
 	public static int SETREAD = 0;
-	/*--------------------------------------*/
+	/*...............................................................................................................*/
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
@@ -531,6 +534,7 @@ public class ChromatogramCanvas extends MousePanel {
 			}
 		}
 	}
+	/*...............................................................................................................*/
 	public void mouseDrag (int modifiers, int x, int y, MesquiteTool tool) {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		int ic = findOverallBaseNumber(SETREAD,x); 
@@ -568,7 +572,7 @@ public class ChromatogramCanvas extends MousePanel {
 			contigDisplay.setSecondTouchedOverall(ic);
 		}
 	}
-	/* to be used by subclasses to tell that panel touched */
+	/*...............................................................................................................*/
 	public void mouseUp(int modifiers, int x, int y, MesquiteTool tool) {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels()){

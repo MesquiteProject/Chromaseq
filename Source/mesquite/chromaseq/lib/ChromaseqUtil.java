@@ -365,6 +365,16 @@ public class ChromaseqUtil{
 			
 	}
 	/*.................................................................................................................*/
+	public static boolean isUniversalBase(CharacterData data, int icEdited, int it) {
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		if (registryData==null) return false;
+		int icOriginal = registryData.getState(icEdited, it);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		DNAData originalData = ChromaseqUtil.getOriginalData(data);
+		return (!editedData.isInapplicable(icEdited, it) || icOriginal==ChromaseqUtil.ADDEDBASEREGISTRY || originalData.isValidAssignedState(icOriginal,it));
+	}
+
+	/*.................................................................................................................*/
 	public static void fillAddedBaseData(CharacterData data, int ic, int it) {
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
