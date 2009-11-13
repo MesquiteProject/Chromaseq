@@ -483,7 +483,6 @@ public class ChromaseqUtil{
 	/*.................................................................................................................*/
 
 	public synchronized static void fillRegistryData(MeristicData registryData) {
-		Debugg.printStackTrace("========== in fillRegistryData ============");
 		if (registryData==null)
 			return;
 		for (int it=0; it<registryData.getNumTaxa(); it++) 

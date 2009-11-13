@@ -195,12 +195,12 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 //		=====================  COLOR THE BASES UNDER THE READ ==============================
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
-				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
+				int consensusBase = getContigBaseFromReadBase(whichRead,i);
 				int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
 
 				offsetForInserted += space;
 
-				int overallBase = contigDisplay.getOverallBaseFromConsensusBase(consensusBase);
+				int overallBase = contigDisplay.getUniversalBaseFromContigBase(consensusBase);
 				char c = read.getPhdBaseChar(i);
 				int qual = read.getPhdBaseQuality(i);
 
@@ -281,9 +281,9 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
-				int consensusBase = getConsensusBaseFromReadBase(whichRead,i);
+				int consensusBase = getContigBaseFromReadBase(whichRead,i);
 				offsetForInserted += contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
-				int overallBase = contigDisplay.getOverallBaseFromConsensusBase(consensusBase);
+				int overallBase = contigDisplay.getUniversalBaseFromContigBase(consensusBase);
 				char c = read.getPhdBaseChar(i);
 				int qual = read.getPhdBaseQuality(i);
 

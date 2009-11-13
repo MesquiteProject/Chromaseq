@@ -158,7 +158,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				universalBaseFromOtherBase[mapping][i]=-1;
 
 
-		// =========== Calculate mappings for the ace contig panel (i.e., the "Phred.Phrap.Mesquite" one) ===========
+		// =========== Calculate mappings for the ace contig panel (i.e., the "Original Untrimmed" one) ===========
 
 		SequenceCanvas sequenceCanvas = aceContigPanel.getCanvas();
 		MesquiteSequence sequence = aceContigPanel.getSequence();
@@ -188,7 +188,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 		}
 
-		// =========== Calculate mappings for the original import panel (i.e., the "Original.Import" one - just like Phred.Phrap.Mesquite but trimmed) ===========
+		// =========== Calculate mappings for the original import panel (i.e., the "Original.Trimmed" one - just like Original.Untrimmed but trimmed) ===========
 		sequenceCanvas = originalImportSequencePanel.getCanvas();
 		sequence = originalImportSequencePanel.getSequence();
 		if (sequenceCanvas!=null && sequence!=null){
@@ -222,7 +222,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int numAddedBases = 0;
 		int numDeletedBases = 0;
 		int count = 0;
-		int startingUniversalBase = contigDisplay.getOverallBaseFromConsensusBase(numBasesOriginallyTrimmedFromStartOfPhPhContig-contigDisplay.getNumBasesAddedToStart());
+		int startingUniversalBase = contigDisplay.getUniversalBaseFromContigBase(numBasesOriginallyTrimmedFromStartOfPhPhContig-contigDisplay.getNumBasesAddedToStart());
 		Debugg.println("++++startingUniversalBase: " + startingUniversalBase);
 		Debugg.println("contigDisplay.getNumBasesOriginallyTrimmedFromStartOfPhPhContig()   " + contigDisplay.getNumBasesOriginallyTrimmedFromStartOfPhPhContig() + ", contigDisplay.getNumBasesAddedToStart(): " + contigDisplay.getNumBasesAddedToStart());
 
