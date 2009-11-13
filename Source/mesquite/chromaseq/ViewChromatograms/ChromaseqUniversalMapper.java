@@ -289,21 +289,28 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			negativeBase--;
 		}
 
-		Debugg.println("******** inapplicable *******  "   + count);
-
-		int startToShow = 760;
-		int numToShow = 3;
-		Debugg.println("   otherBaseFromUniversalBase[PHREDPHRAPMESQUITESEQUENCE] ");
-		for (int universalBase = startToShow; universalBase<startToShow+numToShow; universalBase++) {
-			Debugg.println("   " + universalBase + ": " + otherBaseFromUniversalBase[PHREDPHRAPMESQUITESEQUENCE][universalBase]);
-		}
-		Debugg.println("   otherBaseFromUniversalBase[EDITEDMATRIXSEQUENCE] ");
-		for (int universalBase = startToShow; universalBase<startToShow+numToShow; universalBase++) {
-			Debugg.println("   " + universalBase + ": " + otherBaseFromUniversalBase[EDITEDMATRIXSEQUENCE][universalBase]);
-		}
-		Debugg.println("   otherBaseFromUniversalBase[EDITEDMATRIX] ");
-		for (int universalBase = startToShow; universalBase<startToShow+numToShow; universalBase++) {
-			Debugg.println("   " + universalBase + ": " + otherBaseFromUniversalBase[EDITEDMATRIX][universalBase]);
+		for(int mapping=0; mapping<numMappings; mapping++) {
+			for (int i=0; i<otherBaseFromUniversalBase[mapping].length; i++) {
+				if (otherBaseFromUniversalBase[mapping][i]>=0) {
+					int countDown = -1;
+					for (int k=i-1; k>=0; k--) {
+						otherBaseFromUniversalBase[mapping][k]=countDown;
+						countDown--;
+					}
+					break;
+				}
+			}
+			for (int i=otherBaseFromUniversalBase[mapping].length-1; i>=0; i--) {
+				if (otherBaseFromUniversalBase[mapping][i]>=0) {
+					int lastValue = otherBaseFromUniversalBase[mapping][i];
+					int countUp = 1;
+					for (int k=i; k<otherBaseFromUniversalBase[mapping].length; k++) {
+						otherBaseFromUniversalBase[mapping][k]=lastValue+countUp;
+						countUp++;
+					}
+					break;
+				}
+			}
 		}
 
 		/*
