@@ -128,7 +128,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/*...........................................................................*/
 	/** Given a pixel offset from left, returns the consensus position at that point. This is not the overall consensus position, zero-based,
 	 * but instead the position from the start of the main contig. Thus,  positions to the left of the main contig are -ve */
-	public int findOverallBaseNumber(int whichRead, int xPixel){ //this needs to return consensus position!
+	public int findUniversalBaseNumber(int whichRead, int xPixel){ //this needs to return consensus position!
 		int cons = findConsensusBaseNumber(whichRead, xPixel);
 		int overall = contigDisplay.getUniversalBaseFromContigBase(cons);
 
@@ -176,8 +176,15 @@ public class ChromatogramCanvas extends MousePanel {
 		ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 		int cwidth = getBounds().width;
 		int halfPeaks = contigDisplay.getApproximateNumberOfPeaksVisible()/2;
-		int centerConsensusBase = universalMapper.getOtherBaseFromUniversalBase(ChromaseqUniversalMapper.ACEFILECONTIG, centerBase); //centerBase-contigDisplay.getContig().getReadExcessAtStart();
-		int centerReadBase = getReadBaseFromConsensusBase(whichRead, centerConsensusBase);
+		int centerConsensusBase;
+		int centerReadBase;
+		if (contigDisplay.contigExists()) {
+			centerConsensusBase = universalMapper.getOtherBaseFromUniversalBase(ChromaseqUniversalMapper.ACEFILECONTIG, centerBase); //centerBase-contigDisplay.getContig().getReadExcessAtStart();
+			 centerReadBase = getReadBaseFromConsensusBase(whichRead, centerConsensusBase);
+		} else {
+			centerConsensusBase = centerBase;
+			centerReadBase = centerBase;
+		}
 
 		int firstReadBase = centerReadBase - halfPeaks;
 		int lastReadBase = centerReadBase+halfPeaks;
@@ -486,7 +493,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
-		int ic = findOverallBaseNumber(SETREAD, x); 
+		int ic = findUniversalBaseNumber(SETREAD, x); 
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels() &&!onRequiredSelection){
 			int cons = findConsensusBaseNumber(SETREAD,x);
@@ -539,7 +546,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/*...............................................................................................................*/
 	public void mouseDrag (int modifiers, int x, int y, MesquiteTool tool) {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
-		int ic = findOverallBaseNumber(SETREAD,x); 
+		int ic = findUniversalBaseNumber(SETREAD,x); 
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels() && !onRequiredSelection){
 			int cons = findConsensusBaseNumber(SETREAD,x);
@@ -614,7 +621,7 @@ public class ChromatogramCanvas extends MousePanel {
 			return;
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (chromTool.getWorksOnlyOnSelection())
-			if (!getSelected(findOverallBaseNumber(SETREAD,x)))
+			if (!getSelected(findUniversalBaseNumber(SETREAD,x)))
 				setCursor(Cursor.getDefaultCursor());
 			else
 				setCurrentCursor(modifiers, x, y, chromTool);

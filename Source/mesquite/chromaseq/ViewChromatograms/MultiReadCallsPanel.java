@@ -348,7 +348,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		int whichRead = findRead(y);
 		if (whichRead<0) return;
-		int ic = findOverallBaseNumber(whichRead, x); 
+		int ic = findUniversalBaseNumber(whichRead, x); 
 		localFirstTouched = findConsensusBaseNumber(whichRead,x);
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels() &&!onRequiredSelection){
@@ -403,7 +403,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		int whichRead = findRead(y);
 		if (whichRead<0) return;
-		int ic = findOverallBaseNumber(whichRead,x); 
+		int ic = findUniversalBaseNumber(whichRead,x); 
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);
 		if (!tool.isArrowTool() && chromTool.getWorksOnChromatogramPanels() && !onRequiredSelection){
 			int cons = findConsensusBaseNumber(whichRead,x);
@@ -482,7 +482,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 			return;
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (chromTool.getWorksOnlyOnSelection())
-			if (!getSelected(findOverallBaseNumber(whichRead,x)))
+			if (!getSelected(findUniversalBaseNumber(whichRead,x)))
 				setCursor(Cursor.getDefaultCursor());
 			else
 				setCurrentCursor(modifiers, x, y, chromTool);
