@@ -150,5 +150,27 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	/*.................................................................................................................*/
 	public void fileReadIn(MesquiteFile f) {
 		createRegistryDataIfNeeded(f);
+		if (!ChromaseqUtil.isChromaseqDevelopment())
+			return;
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				CharacterData registryData = ChromaseqUtil.getRegistryData(data);
+				if (registryData != null) registryData.setUserVisible(true);
+				CharacterData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
+				if (reverseRegistryData != null) reverseRegistryData.setUserVisible(true);
+				CharacterData originalData = ChromaseqUtil.getOriginalData(data);
+				if (originalData != null) originalData.setUserVisible(true);
+				CharacterData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+				if (addedBaseData != null) addedBaseData.setUserVisible(true);
+				
+			}
+		}
+		
 	}
 }
