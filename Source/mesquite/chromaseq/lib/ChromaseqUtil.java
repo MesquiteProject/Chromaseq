@@ -193,6 +193,8 @@ public class ChromaseqUtil{
 
 
 	public static CharacterData getAssociatedData(CharacterData data, String dataType) {
+		if (data==null)
+			return null;
 		String uid = getUID(data);
 		//	String gn = getGeneName(data);
 		Object obj;
