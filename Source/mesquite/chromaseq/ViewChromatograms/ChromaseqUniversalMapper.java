@@ -180,14 +180,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				}
 			}
 			for (int sequenceBase=0; sequenceBase<sequence.getLength(); sequenceBase++){
-				//	int consensus = sequenceCanvas.getConsensusFromLocalIndex(i);
-				/*		int start = 450;
-				if (sequenceBase>start && sequenceBase<start+70) {
-					Debugg.println(" " + sequenceBase + "   " + addedBases[sequenceBase]);
-				}
-				 */		int universalBase = sequenceBase + contig.getReadExcessAtStart()+ addedBases[sequenceBase];
-				 //		if (sequenceBase-contig.getReadExcessAtStart()>=0)
-				 //			universalBase += addedBases[sequenceBase];//-contig.getReadExcessAtStart()];
+				int universalBase = sequenceBase + contig.getReadExcessAtStart()+ addedBases[sequenceBase];
 				 otherBaseFromUniversalBase[PHREDPHRAPMESQUITESEQUENCE][universalBase] = sequenceBase;
 				 universalBaseFromOtherBase[PHREDPHRAPMESQUITESEQUENCE][sequenceBase] = universalBase;
 				 otherBaseFromUniversalBase[ACEFILECONTIG][universalBase] = sequenceBase;
@@ -195,6 +188,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 		}
 
+		// =========== Calculate mappings for the original import panel (i.e., the "Original.Import" one - just like Phred.Phrap.Mesquite but trimmed) ===========
 		sequenceCanvas = originalImportSequencePanel.getCanvas();
 		sequence = originalImportSequencePanel.getSequence();
 		if (sequenceCanvas!=null && sequence!=null){
@@ -212,14 +206,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				}
 			}
 			for (int sequenceBase=0; sequenceBase<sequence.getLength(); sequenceBase++){
-				//	int consensus = sequenceCanvas.getConsensusFromLocalIndex(i);
-				/*		int start = 450;
-				if (sequenceBase>start && sequenceBase<start+70) {
-					Debugg.println(" " + sequenceBase + "   " + addedBases[sequenceBase]);
-				}
-				 */		int universalBase = sequenceBase + contig.getReadExcessAtStart()+ numBasesOriginallyTrimmedFromStartOfPhPhContig+addedBases[sequenceBase];
-				 //		if (sequenceBase-contig.getReadExcessAtStart()>=0)
-				 //			universalBase += addedBases[sequenceBase];//-contig.getReadExcessAtStart()];
+				int universalBase = sequenceBase + contig.getReadExcessAtStart()+ numBasesOriginallyTrimmedFromStartOfPhPhContig+addedBases[sequenceBase];
+				universalBase+=contig.getNumPaddedBefore(otherBaseFromUniversalBase[ACEFILECONTIG][universalBase]);  // account for padding
 				 otherBaseFromUniversalBase[ORIGINALIMPORTSEQUENCE][universalBase] = sequenceBase;
 				 universalBaseFromOtherBase[ORIGINALIMPORTSEQUENCE][sequenceBase] = universalBase;
 			}
