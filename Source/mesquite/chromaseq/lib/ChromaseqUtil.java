@@ -26,7 +26,7 @@ public class ChromaseqUtil{
 	public static final int BASECALLED=2;
 	public static final String PHPHMQVERSION ="2";
 
-	
+
 	//===========================MATRIX TYPES==============================
 	public static final String QUALITYREF ="quality";
 	public static final String ORIGINALREF ="original";
@@ -40,7 +40,7 @@ public class ChromaseqUtil{
 	public static final String GENENAMEREF ="geneName";//MesquiteString: data
 	public static final String PHPHMQVERSIONREF ="phphmqVersion";//MesquiteString: data
 	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
-	
+
 	public static final int UNCHANGEDBASE = 0;
 	public static final int ADDEDBASE = 1;
 	public static final int DELETEDBASE = 2;
@@ -64,15 +64,15 @@ public class ChromaseqUtil{
 	public static final NameReference voucherCodeRef = NameReference.getNameReference("VoucherCode"); //String: taxa
 	public static final NameReference voucherDBRef = NameReference.getNameReference("VoucherDB");//String: taxa
 	public static final NameReference origTaxonNameRef= NameReference.getNameReference("origName");//String: taxa
-	
+
 	public static final NameReference aceRef = NameReference.getNameReference("aceFile"); //String: tInfo
 	public static final NameReference chromatogramReadsRef = NameReference.getNameReference("chromatogramReads");//String: tInfo
-	
+
 	public static final NameReference origReadFileNamesRef= NameReference.getNameReference("readFileNames");//Strings: tInfo
 	public static final NameReference primerForEachReadNamesRef= NameReference.getNameReference("primerForEachRead");//Strings: tInfo
 	public static final NameReference sampleCodeNamesRef= NameReference.getNameReference("sampleCodeForEachRead");//Strings: tInfo
 	public static final NameReference sampleCodeRef= NameReference.getNameReference("sampleCodeForTaxon");//Strings: tInfo
-	
+
 	public static final NameReference chromatogramsExistRef = NameReference.getNameReference("chromatogramsExist");//long: tinfo
 	public static final NameReference startTrimRef = NameReference.getNameReference("startTrim");//long: tInfo
 	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
@@ -84,8 +84,8 @@ public class ChromaseqUtil{
 
 	public static final NameReference paddingRef = NameReference.getNameReference("paddingBefore"); //MesquiteInteger: data(cells)
 	//public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //MesquiteInteger: data(cells)
-	
-	
+
+
 	public static String getStringAssociated(Associable a, NameReference nr, int index){
 		return (String)a.getAssociatedObject(nr, index);
 	}
@@ -355,7 +355,7 @@ public class ChromaseqUtil{
 		registryData.setState(ic, it, DELETEDBASEREGISTRY);  // registry now says that there is nothing in original data here
 		reverseRegistryData.setState(icOriginal, it, DELETEDBASEREGISTRY);  // registry now says that there is nothing in original data here
 	}
-	
+
 	/*.................................................................................................................*/
 	public static void insertGapIntoEditedMatrix(CharacterData data, int ic, int it) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
@@ -366,7 +366,7 @@ public class ChromaseqUtil{
 			int posInEdited = reverseRegistryData.getState(ic, it)+1;
 			reverseRegistryData.setState(ic, it, posInEdited);
 		}
-			
+
 	}
 	/*.................................................................................................................*/
 	public static boolean isUniversalBase(CharacterData data, int icEdited, int it) {
@@ -460,28 +460,143 @@ public class ChromaseqUtil{
 	}
 	/*.................................................................................................................*/
 	// reverseRegistryData is same size as originalData and contains the positions in the editedData of that original data cell
-		public static void fillReverseRegistryData(MeristicData reverseRegistryData) {
-			MeristicData registryData = getRegistryData(reverseRegistryData);
-			DNAData editedData = getEditedData(reverseRegistryData);
-			if (registryData==null)
-				return;
-			for (int it=0; it<reverseRegistryData.getNumTaxa(); it++) 
-				for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
-					reverseRegistryData.setToInapplicable(ic, it);
+	public static void fillReverseRegistryData(MeristicData reverseRegistryData) {
+		MeristicData registryData = getRegistryData(reverseRegistryData);
+		DNAData editedData = getEditedData(reverseRegistryData);
+		if (registryData==null)
+			return;
+		for (int it=0; it<reverseRegistryData.getNumTaxa(); it++) 
+			for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
+				reverseRegistryData.setToInapplicable(ic, it);
+			}
+		for (int it=0; it<registryData.getNumTaxa() && it<reverseRegistryData.getNumTaxa(); it++) 
+			for (int ic=0; ic<registryData.getNumChars(); ic++){
+				int mapping = registryData.getState(ic, it);
+				if (MesquiteInteger.isCombinable(mapping) && mapping>=0 && mapping<=reverseRegistryData.getNumChars()) {
+					if (editedData.isInapplicable(ic, it)) // then even though the registry points into the original data, there is no data in the edited matrix
+						reverseRegistryData.setToUnassigned(ic, it);
+					else
+						reverseRegistryData.setState(mapping, it, 0, ic);
 				}
-			for (int it=0; it<registryData.getNumTaxa() && it<reverseRegistryData.getNumTaxa(); it++) 
-				for (int ic=0; ic<registryData.getNumChars(); ic++){
-					int mapping = registryData.getState(ic, it);
-					if (MesquiteInteger.isCombinable(mapping) && mapping>=0 && mapping<=reverseRegistryData.getNumChars()) {
-						if (editedData.isInapplicable(ic, it)) // then even though the registry points into the original data, there is no data in the edited matrix
-							reverseRegistryData.setToUnassigned(ic, it);
-						else
-							reverseRegistryData.setState(mapping, it, 0, ic);
+			}
+	}
+
+
+	/*.................................................................................................................*/
+
+	public synchronized static void fillRegistryData(PairwiseAligner aligner, MeristicData registryData, int it) {
+		DNAData originalData = getOriginalData(registryData);
+		DNAData editedData = getEditedData(registryData);
+		if(originalData==null || editedData==null)
+			return;
+
+		int lengthDifference = originalData.numApplicable(it)-editedData.numApplicable(it);
+		if (lengthDifference==0) {  // they both have the same number of applicable; probably ok
+			int count=0;
+			int icOriginal = 0;
+			for (int icEdited=0; icEdited<editedData.getNumChars(); icEdited++){
+				if (!editedData.isInapplicable(icEdited,it)) {
+					icOriginal = originalData.nextApplicable(it, icOriginal, true);
+					if (icOriginal>=0) {
+						registryData.setState(icEdited, it, 0, icOriginal);
+						icOriginal++;
+						count++;
 					}
+					else break;
 				}
+			}
+		} else {
+			if (aligner!=null) {
+				MesquiteNumber alignScore = new MesquiteNumber();
+				long[][] alignment = aligner.getAlignment(originalData,  it, editedData, it, alignScore);
+				if (alignment!=null) {
+					int originalCount = 0;
+					int editedCount = 0;
+
+					/* now flag all unmatched bases
+						for (int ic=0; ic<alignment.length; ic++) {
+							boolean originalIsApplicable = alignment[ic][0]!=CategoricalState.inapplicable;
+							boolean editedIsApplicable = alignment[ic][1]!=CategoricalState.inapplicable;
+
+							if (editedIsApplicable &&!originalIsApplicable) 
+								alignment[ic][1]=CategoricalState.impossible;   //flag it
+							if (!editedIsApplicable &&originalIsApplicable) 
+								alignment[ic][0]=CategoricalState.impossible;
+						}
+
+
+						for (int ic=0; ic<alignment.length; ic++) {
+								if (it==1&& ic<100) Debugg.println(""+ ic + "   " + alignment[ic][0] + "  " + alignment[ic][1]);
+						}
+					 */
+					//		int icEdited = editedData.firstApplicable(it, 0); 
+					//		int icOriginal = originalData.firstApplicable(it, 0); 
+					int icEdited = 0;
+					int icOriginal = 0;
+
+					int diffEdited=0;
+					int diffOriginal=0;
+
+					if (it==0) 
+						Debugg.println("startloop");
+					for (int ic=0; ic<alignment.length && icEdited>=0 && icOriginal>=0; ic++) {
+						boolean originalIsApplicable = alignment[ic][0]!=CategoricalState.inapplicable;
+						boolean editedIsApplicable = alignment[ic][1]!=CategoricalState.inapplicable;
+						if (editedIsApplicable){
+							editedCount++;
+							diffOriginal++;
+						}
+						if (originalIsApplicable) {
+							originalCount++;
+							diffEdited++;
+						}
+
+						/*	if (it==0 && icEdited<60) {
+								if (editedIsApplicable)
+									Debugg.print("editedIsApplicable (editedCount: " + editedCount + ", diffEdited: " + diffEdited + ") ||" );
+								if (originalIsApplicable)
+									Debugg.print("|| originalIsApplicable (originalCount: " + originalCount + ", diffOriginal: " + diffOriginal + ") ||" );
+								Debugg.println("|| icEdited: " + icEdited + ", icOriginal: " + icOriginal + ") " );
+							}
+
+						 */
+						if (editedIsApplicable && originalIsApplicable) {
+							for (int i = 0;i<diffEdited && icEdited>=0; i++) {
+								icEdited = editedData.nextApplicable(it, icEdited, false); 
+								if (icEdited>=0)
+									icEdited++;
+							}
+							for (int i = 0;i<diffOriginal && icOriginal>=0; i++) {
+								icOriginal = originalData.nextApplicable(it, icOriginal, false);
+								if (icOriginal>=0)
+									icOriginal++;
+							}
+							icEdited--;
+							icOriginal--;
+							if (icEdited>=0 && icEdited<registryData.getNumChars() && icOriginal>=0 && icOriginal<originalData.getNumChars()) {
+								registryData.setState(icEdited, it, 0, icOriginal);
+							}
+							icEdited++;
+							icOriginal++;
+
+							diffOriginal=0;
+							diffEdited=0;
+						}
+					}
+
+				}
+
+
+			} else {
+
+				//Debugg.println("sequence " + it + " (" + originalData.getTaxa().getTaxonName(it) + ") with length difference " + lengthDifference);
+				for (int ic=0; ic<registryData.getNumChars(); ic++){
+					registryData.setState(ic, it, 0, ic);
+				}
+			}
 		}
 
-
+	}
 	/*.................................................................................................................*/
 
 	public synchronized static void fillRegistryData(MeristicData registryData) {
@@ -497,113 +612,35 @@ public class ChromaseqUtil{
 			return;
 		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
 		for (int it=0; it<registryData.getNumTaxa(); it++)  {
-			int lengthDifference = originalData.numApplicable(it)-editedData.numApplicable(it);
-			if (lengthDifference==0) {  // they both have the same number of applicable; probably ok
-				int count=0;
-				int icOriginal = 0;
-				for (int icEdited=0; icEdited<editedData.getNumChars(); icEdited++){
-					if (!editedData.isInapplicable(icEdited,it)) {
-						icOriginal = originalData.nextApplicable(it, icOriginal, true);
-						if (icOriginal>=0) {
-							registryData.setState(icEdited, it, 0, icOriginal);
-							icOriginal++;
-							count++;
-						}
-						else break;
-					}
-				}
-			} else {
-				if (aligner!=null) {
-					MesquiteNumber alignScore = new MesquiteNumber();
-					long[][] alignment = aligner.getAlignment(originalData,  it, editedData, it, alignScore);
-					if (alignment!=null) {
-						int originalCount = 0;
-						int editedCount = 0;
-
-						/* now flag all unmatched bases
-						for (int ic=0; ic<alignment.length; ic++) {
-							boolean originalIsApplicable = alignment[ic][0]!=CategoricalState.inapplicable;
-							boolean editedIsApplicable = alignment[ic][1]!=CategoricalState.inapplicable;
-
-							if (editedIsApplicable &&!originalIsApplicable) 
-								alignment[ic][1]=CategoricalState.impossible;   //flag it
-							if (!editedIsApplicable &&originalIsApplicable) 
-								alignment[ic][0]=CategoricalState.impossible;
-						}
-
-
-						for (int ic=0; ic<alignment.length; ic++) {
-								if (it==1&& ic<100) Debugg.println(""+ ic + "   " + alignment[ic][0] + "  " + alignment[ic][1]);
-						}
-						 */
-						//		int icEdited = editedData.firstApplicable(it, 0); 
-						//		int icOriginal = originalData.firstApplicable(it, 0); 
-						int icEdited = 0;
-						int icOriginal = 0;
-
-						int diffEdited=0;
-						int diffOriginal=0;
-
-						if (it==0) 
-							Debugg.println("startloop");
-						for (int ic=0; ic<alignment.length && icEdited>=0 && icOriginal>=0; ic++) {
-							boolean originalIsApplicable = alignment[ic][0]!=CategoricalState.inapplicable;
-							boolean editedIsApplicable = alignment[ic][1]!=CategoricalState.inapplicable;
-							if (editedIsApplicable){
-								editedCount++;
-								diffOriginal++;
-							}
-							if (originalIsApplicable) {
-								originalCount++;
-								diffEdited++;
-							}
-
-							/*	if (it==0 && icEdited<60) {
-								if (editedIsApplicable)
-									Debugg.print("editedIsApplicable (editedCount: " + editedCount + ", diffEdited: " + diffEdited + ") ||" );
-								if (originalIsApplicable)
-									Debugg.print("|| originalIsApplicable (originalCount: " + originalCount + ", diffOriginal: " + diffOriginal + ") ||" );
-								Debugg.println("|| icEdited: " + icEdited + ", icOriginal: " + icOriginal + ") " );
-							}
-
-							 */
-							if (editedIsApplicable && originalIsApplicable) {
-								for (int i = 0;i<diffEdited && icEdited>=0; i++) {
-									icEdited = editedData.nextApplicable(it, icEdited, false); 
-									if (icEdited>=0)
-										icEdited++;
-								}
-								for (int i = 0;i<diffOriginal && icOriginal>=0; i++) {
-									icOriginal = originalData.nextApplicable(it, icOriginal, false);
-									if (icOriginal>=0)
-										icOriginal++;
-								}
-								icEdited--;
-								icOriginal--;
-								if (icEdited>=0 && icEdited<registryData.getNumChars() && icOriginal>=0 && icOriginal<originalData.getNumChars()) {
-									registryData.setState(icEdited, it, 0, icOriginal);
-								}
-								icEdited++;
-								icOriginal++;
-
-								diffOriginal=0;
-								diffEdited=0;
-							}
-						}
-
-					}
-
-
-				} else {
-
-					//Debugg.println("sequence " + it + " (" + originalData.getTaxa().getTaxonName(it) + ") with length difference " + lengthDifference);
-					for (int ic=0; ic<registryData.getNumChars(); ic++){
-						registryData.setState(ic, it, 0, ic);
-					}
-				}
-			}
+			fillRegistryData(aligner,registryData,it);
 		}
 		fillAddedBaseData(editedData);
+	}
+	/*.................................................................................................................*/
+
+	public synchronized static void reFillRegistries(CharacterData data, int it) {
+		DNAData editedData = getEditedData(data);
+		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return;
+		for (int ic=0; ic<registryData.getNumChars(); ic++){
+			registryData.setToInapplicable(ic, it);
+		}
+		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
+		fillRegistryData(aligner,registryData,it);
+		MeristicData reverseRegistryData = getReverseRegistryData(data);
+		for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
+			reverseRegistryData.setToInapplicable(ic, it);
+		}
+		for (int ic=0; ic<registryData.getNumChars(); ic++){
+			int mapping = registryData.getState(ic, it);
+			if (MesquiteInteger.isCombinable(mapping) && mapping>=0 && mapping<=reverseRegistryData.getNumChars()) {
+				if (editedData.isInapplicable(ic, it)) // then even though the registry points into the original data, there is no data in the edited matrix
+					reverseRegistryData.setToUnassigned(ic, it);
+				else
+					reverseRegistryData.setState(mapping, it, 0, ic);
+			}
+		}
 	}
 
 	/*.................................................................................................................*/
@@ -710,7 +747,7 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
-/* called if no registry data are available */
+	/* called if no registry data are available */
 	public static MeristicData createRegistryData(CharacterData data) {
 		MesquiteString uid = null;
 		Object obj = getStringAttached(data,PHPHIMPORTIDREF);

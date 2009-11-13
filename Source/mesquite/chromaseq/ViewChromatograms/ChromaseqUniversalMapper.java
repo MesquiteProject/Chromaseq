@@ -99,6 +99,16 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			universalBaseFromOtherBase[ACEFILECONTIG] = new int[contig.getNumBases()];
 	}
 	/*.................................................................................................................*/
+	/* this method recalculates all mappings */
+	public synchronized void serialFill() {
+		for(int mapping=0; mapping<numMappings; mapping++) 
+			for (int i=0; i<otherBaseFromUniversalBase[mapping].length; i++) 
+				otherBaseFromUniversalBase[mapping][i]=i;
+		for(int mapping=0; mapping<numMappings; mapping++) 
+			for (int i=0; i<universalBaseFromOtherBase[mapping].length; i++) 
+				universalBaseFromOtherBase[mapping][i]=i;
+	}
+		/*.................................................................................................................*/
 
 
 	int resetCount = 0;
