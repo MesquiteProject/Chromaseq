@@ -327,8 +327,15 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 
 	public int getOtherBaseFromUniversalBase(int otherBaseSystem, int universalBase) {
-		if (universalBase<0 || universalBase>=otherBaseFromUniversalBase[otherBaseSystem].length)
+		if (universalBase<0)
 			return -1;
+		if (universalBase>=otherBaseFromUniversalBase[otherBaseSystem].length) {
+			int endOtherBase = 0;
+			if (otherBaseFromUniversalBase[otherBaseSystem].length-1 <0)
+				return -1;
+			endOtherBase = otherBaseFromUniversalBase[otherBaseSystem][otherBaseFromUniversalBase[otherBaseSystem].length-1]+ (universalBase-otherBaseFromUniversalBase[otherBaseSystem].length+1);
+			return endOtherBase;
+		}
 		return otherBaseFromUniversalBase[otherBaseSystem][universalBase];
 	}
 	/*.................................................................................................................*/
