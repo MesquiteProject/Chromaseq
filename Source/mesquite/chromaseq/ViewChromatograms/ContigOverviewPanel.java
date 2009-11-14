@@ -305,9 +305,6 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		int lastLocation = -1;
 		for (int universalBase=firstBase;universalBase < numBases;universalBase++) {   //as it now stands, this is the overallBase
 			int readBase = getReadBaseFromUniversalBase(whichRead, universalBase);
-	//		if (universalBase>numBases-20)
-	//			Debugg.println(" numBases: " + numBases+ ", universalBase: " + universalBase + ", readBase: " + readBase);
-		//	int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(universalBase);
 			if (readBase>=0 && readBase<read.getBasesLength()) {
 
 				char c = read.getPhdBaseChar(readBase);
