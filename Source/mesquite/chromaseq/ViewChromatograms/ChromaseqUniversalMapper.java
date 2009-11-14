@@ -115,7 +115,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset() {
-//		Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+		Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -193,6 +193,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		}
 
 		// =========== Calculate mappings for the original import panel (i.e., the "Original.Trimmed" one - just like Original.Untrimmed but trimmed) ===========
+		int prevNumPads = 0;
 		sequenceCanvas = originalTrimmedSequencePanel.getCanvas();
 		sequence = originalTrimmedSequencePanel.getSequence();
 		if (sequenceCanvas!=null && sequence!=null){
@@ -211,7 +212,11 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 			for (int sequenceBase=0; sequenceBase<sequence.getLength(); sequenceBase++){
 				int universalBase = sequenceBase + contig.getReadExcessAtStart()+ numBasesOriginallyTrimmedFromStartOfPhPhContig+addedBases[sequenceBase];
-				universalBase+=contig.getNumPaddedBefore(otherBaseFromUniversalBase[ACEFILECONTIG][universalBase]);  // account for padding
+				int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);  // account for padding
+				if (numPads<prevNumPads)
+					numPads=prevNumPads;
+				universalBase+=numPads;
+				prevNumPads = numPads;
 				 otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE][universalBase] = sequenceBase;
 				 universalBaseFromOtherBase[ORIGINALTRIMMEDSEQUENCE][sequenceBase] = universalBase;
 			}
@@ -226,6 +231,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int startingUniversalBase = contigDisplay.getUniversalBaseFromContigBase(numBasesOriginallyTrimmedFromStartOfPhPhContig-contigDisplay.getNumBasesAddedToStart());
 
 		boolean firstTimeThrough = true;
+		prevNumPads = 0;
 
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
@@ -245,8 +251,12 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				int sequenceBase = numBasesFound;
 				int matrixBase = ic;
 				int universalBase = startingUniversalBase+numBasesFound;
-				universalBase+=contig.getNumPaddedBefore(otherBaseFromUniversalBase[ACEFILECONTIG][universalBase]);  // account for padding
-
+				int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
+				if (numPads<prevNumPads)
+					numPads=prevNumPads;
+				universalBase+=numPads;  // account for padding
+				prevNumPads = numPads;
+				
 				if (firstTimeThrough)  {
 					firstTimeThrough=false;
 				}

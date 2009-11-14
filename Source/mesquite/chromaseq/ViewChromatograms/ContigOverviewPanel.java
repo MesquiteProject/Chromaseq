@@ -298,12 +298,15 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		Color baseColor;
 		
 //		int trim= panel.getDisplayPositionOfConsensusBase(0);
+//		Debugg.println(" |||||||||||||||||| " + read.getName());
 
 //		=====================  COLOR THE BASES OF THE READ ==============================
 		int firstLocation = -1;
 		int lastLocation = -1;
 		for (int universalBase=firstBase;universalBase < numBases;universalBase++) {   //as it now stands, this is the overallBase
 			int readBase = getReadBaseFromUniversalBase(whichRead, universalBase);
+	//		if (universalBase>numBases-20)
+	//			Debugg.println(" numBases: " + numBases+ ", universalBase: " + universalBase + ", readBase: " + readBase);
 		//	int consensusBase = contigDisplay.getConsensusBaseFromOverallBase(universalBase);
 			if (readBase>=0 && readBase<read.getBasesLength()) {
 
