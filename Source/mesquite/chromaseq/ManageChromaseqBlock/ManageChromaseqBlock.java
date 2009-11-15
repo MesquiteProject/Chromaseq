@@ -41,7 +41,7 @@ public class ManageChromaseqBlock extends FileInit {
   	 	temp.addLine("addAuthorNameToMatrices");
  	 	return temp;
   	 }
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	void reportAttached(Associable a, String nr){
 		if (a.getAttachment(nr) != null)
 			Debugg.println("YES attached [" + nr + " = " + a.getAttachment(nr) + "] " +   a.getName());

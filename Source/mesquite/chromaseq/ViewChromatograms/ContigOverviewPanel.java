@@ -306,10 +306,11 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		for (int universalBase=firstBase;universalBase < numBases;universalBase++) {   //as it now stands, this is the overallBase
 			int readBase = getReadBaseFromUniversalBase(whichRead, universalBase);
 			if (readBase>=0 && readBase<read.getBasesLength()) {
-
-				char c = read.getPhdBaseChar(readBase);
-				char matrixC= contigDisplay.getMatrixStateAtUniversalBase(universalBase);
+			//	if (contigDisplay.isReversedInEditedData())
+			//		readBase =read.getBasesLength()-readBase-1; 
 				int qual = read.getPhdBaseQuality(readBase);
+				char c = read.getPhdBaseChar(readBase);
+				char matrixC= contigDisplay.getMatrixStateAtUniversalBase(universalBase); //
 
 				if (qual>=0 && contigDisplay.getColorOverviewByQuality()) {
 					if (qual==0)
