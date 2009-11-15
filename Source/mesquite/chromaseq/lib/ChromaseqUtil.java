@@ -104,6 +104,12 @@ public class ChromaseqUtil{
 	public static void setLongAssociated(Associable a, NameReference nr, int index, long c){
 		a.setAssociatedLong(nr, index, c);
 	}
+	public static boolean getBooleanAssociated(Associable a, NameReference nr, int index){
+		return a.getAssociatedBit(nr, index);
+	}
+	public static void setBooleanAssociated(Associable a, NameReference nr, int index, boolean b){
+		a.setAssociatedBit(nr, index, b);
+	}
 	public static double getDoubleAssociated(Associable a, NameReference nr, int index){
 		return a.getAssociatedDouble(nr, index);
 	}
@@ -119,8 +125,8 @@ public class ChromaseqUtil{
 	public static void setIntegerCellObject(CharacterData data, NameReference nr, int ic, int it, MesquiteInteger c){
 		data.setCellObject(nr, ic, it, c);
 	}
-	//===============================================================================
-	/*--------------*/
+
+	
 	public static boolean isTrimmable(int ic, int it, CharacterData data){
 		if (data == null)
 			return false;

@@ -115,7 +115,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset() {
-		Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+		//Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -210,7 +210,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 						addedBases[sequenceBases] = totalAddedBases;
 				}
 			}
-			Debugg.println(" totalAddedBases: " + totalAddedBases);
+
 			int sequenceLength = sequence.getLength();
 			for (int sequenceBase=0; sequenceBase<sequenceLength; sequenceBase++){
 				int universalBase = sequenceBase + contig.getReadExcessAtStart()+ numBasesOriginallyTrimmedFromStartOfPhPhContig+addedBases[sequenceBase];

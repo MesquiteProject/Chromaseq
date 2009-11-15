@@ -99,6 +99,8 @@ public class ManageChromaseqBlock extends FileInit {
 				reportLong(tInfo, ChromaseqUtil.chromatogramsExistRef);
 				reportLong(tInfo, ChromaseqUtil.whichContigRef);
 				reportLong(tInfo, ChromaseqUtil.startTrimRef);
+	//			reportBoolean(tInfo, ChromaseqUtil.reversedRef);
+	//			reportBoolean(tInfo, ChromaseqUtil.complementedRef);
 				reportDouble(tInfo, ChromaseqUtil.qualityNameRef);
 				reportObject(tInfo, ChromaseqUtil.aceRef);
 				reportObject(tInfo, ChromaseqUtil.chromatogramReadsRef);
