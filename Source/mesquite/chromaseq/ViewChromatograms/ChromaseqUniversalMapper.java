@@ -210,7 +210,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			int sequenceBases = -1;
 			for (int ic=0; ic<registryData.getNumChars(); ic++){
 				int icOriginal = registryData.getState(ic, it);
-				if (icOriginal==ChromaseqUtil.ADDEDBASEREGISTRY){// || registryData.isInapplicable(ic, it)) { //
+				if (icOriginal==ChromaseqUtil.ADDEDBASEREGISTRY){ // || registryData.isInapplicable(ic, it)) { //
 					totalAddedBases++;
 				} else if (originalData.isValidAssignedState(icOriginal,it)) {
 					sequenceBases++;
@@ -220,6 +220,15 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 
 			int sequenceLength = sequence.getLength();
+
+			/*
+			Debugg.println("   totalUniversalBases: " + totalUniversalBases + "   sequenceLength: " + sequenceLength);
+			Debugg.println("   contig.getReadExcessAtStart(): " + contig.getReadExcessAtStart() + "   numBasesOriginallyTrimmedFromStartOfPhPhContig: " + numBasesOriginallyTrimmedFromStartOfPhPhContig);
+			Debugg.println("   totalAddedBases: " + totalAddedBases);
+			Debugg.println(sequence.getSequence());
+			Debugg.println("   ------------------\n");
+*/
+			
 			for (int sequenceBase=0; sequenceBase<sequenceLength; sequenceBase++){
 				int universalBase = sequenceBase + contig.getReadExcessAtStart()+ numBasesOriginallyTrimmedFromStartOfPhPhContig+addedBases[sequenceBase];
 				int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);  // account for padding
@@ -387,6 +396,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				}
 		}
 
+		//Debugg.println("======= End Resetting Universal Base Registry ======= \n");
 
 		hasBeenSet = true;
 	}

@@ -726,7 +726,7 @@ public class ChromaseqUtil{
 		if (registryData==null)
 			return 0;
 		int mapping = registryData.getState(ic, it);
-		return originalData.getState(mapping, it);
+		return originalData.getStateRaw(mapping, it);
 	}
 	/*.................................................................................................................*/
 	public static boolean originalIsInapplicableForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
