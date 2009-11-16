@@ -19,6 +19,7 @@ import mesquite.chromaseq.lib.*;
 public class ManageChromaseqBlock extends FileInit {
 	
 	public static final int CHROMASEQBLOCKVERSION = 2;
+	public static final int ChromaseqBuild = 20;
 
 	int numBlocks =0;
 	public Class getDutyClass(){
@@ -271,6 +272,7 @@ public class ManageChromaseqBlock extends FileInit {
 		if ((bs == null || bs.length ==0)){
 			ChromaseqBlock ab = new ChromaseqBlock(f, this);
 			ab.setVersion(CHROMASEQBLOCKVERSION);
+			ab.setBuild(ChromaseqBuild);
 			numBlocks++;
 			addNEXUSBlock(ab);
 		}
@@ -334,12 +336,14 @@ class ChromaseqBlockTest extends NexusBlockTest  {
 /* ======================================================================== */
 class ChromaseqBlock extends NexusBlock {
 	int version = 1;
+	int build = 1;
 	ManageChromaseqBlock ownerModule;
 
 	public ChromaseqBlock(MesquiteFile f, ManageChromaseqBlock mb){
 		super(f, mb);
 		ownerModule = mb;
 		version = mb.CHROMASEQBLOCKVERSION;
+		build = mb.ChromaseqBuild;
 	}
 	public int getVersion() {
 		return version;
@@ -363,13 +367,21 @@ class ChromaseqBlock extends NexusBlock {
 		return "CHROMASEQ";
 	}
 	public String getNEXUSBlock(){
-		String contents = ownerModule.getBlockContents();
+		//String contents = ownerModule.getBlockContents();
+		String contents ="";
 		if (contents == null)
 			return null;
 		String blocks="BEGIN CHROMASEQ;" + StringUtil.lineEnding();
 		blocks += "\tVERSION " + version+ ";" + StringUtil.lineEnding();
+		blocks += "\tBuild " + build+ ";" + StringUtil.lineEnding();
 		blocks += contents;
 		blocks += "END;" + StringUtil.lineEnding();
 		return blocks;
+	}
+	public int getBuild() {
+		return build;
+	}
+	public void setBuild(int build) {
+		this.build = build;
 	}
 }

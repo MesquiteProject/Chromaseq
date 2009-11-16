@@ -120,7 +120,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset() {
-		//Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+//	Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -221,12 +221,12 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 			int sequenceLength = sequence.getLength();
 
-			/*
-			Debugg.println("   totalUniversalBases: " + totalUniversalBases + "   sequenceLength: " + sequenceLength);
+
+/*			Debugg.println("   totalUniversalBases: " + totalUniversalBases + "   sequenceLength: " + sequenceLength);
 			Debugg.println("   contig.getReadExcessAtStart(): " + contig.getReadExcessAtStart() + "   numBasesOriginallyTrimmedFromStartOfPhPhContig: " + numBasesOriginallyTrimmedFromStartOfPhPhContig);
 			Debugg.println("   totalAddedBases: " + totalAddedBases);
-			Debugg.println(sequence.getSequence());
-			Debugg.println("   ------------------\n");
+			Debugg.println("   contigDisplay.getNumBasesAddedToStart(): " + contigDisplay.getNumBasesAddedToStart());
+			Debugg.println("   contigDisplay.getNumBasesAddedToEnd(): " + contigDisplay.getNumBasesAddedToEnd());
 */
 			
 			for (int sequenceBase=0; sequenceBase<sequenceLength; sequenceBase++){
@@ -247,13 +247,16 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int numOriginalBasesFound=-1;
 		int numAddedBases = 0;
 		int numDeletedBases = 0;
-		int startingUniversalBase = contigDisplay.getUniversalBaseFromContigBase(numBasesOriginallyTrimmedFromStartOfPhPhContig-contigDisplay.getNumBasesAddedToStart());
 		int numChars = editedData.getNumChars();
+
+	//	Debugg.println("   numChars: " + numChars);
 
 		boolean firstTimeThrough = true;
 		prevNumPads = 0;
 
 		if (!reversedInEditData) { 
+			int startingUniversalBase = contigDisplay.getUniversalBaseFromContigBase(numBasesOriginallyTrimmedFromStartOfPhPhContig-contigDisplay.getNumBasesAddedToStart());
+//			Debugg.println("   startingUniversalBase: " + startingUniversalBase);
 			for (int matrixBase = 0; matrixBase< numChars; matrixBase++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 				int positionInOriginal = registryData.getState(matrixBase, it);
 				if (registryData!=null){
@@ -294,7 +297,9 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 		}
 		else {
-			for (int matrixBase = numChars; matrixBase>=0 ; matrixBase--){  // going through the sourceData object.  This is either the edited matrix or the original matrix
+			int startingUniversalBase = contigDisplay.getUniversalBaseFromContigBase(numBasesOriginallyTrimmedFromStartOfPhPhContig-contigDisplay.getNumBasesAddedToEnd());
+//			Debugg.println("   startingUniversalBase: " + startingUniversalBase);
+			for (int matrixBase = numChars-1; matrixBase>=0 ; matrixBase--){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
 				int positionInOriginal = registryData.getState(matrixBase, it);
 				if (registryData!=null){
@@ -311,7 +316,9 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 					int sequenceBase = numBasesFound;
 					int universalBase = startingUniversalBase+numBasesFound;
-					int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
+					int numPads = 0;
+					if (universalBase>=0)
+						numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
 					if (numPads<prevNumPads)
 						numPads=prevNumPads;
 					universalBase+=numPads;  // account for padding
@@ -396,7 +403,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				}
 		}
 
-		//Debugg.println("======= End Resetting Universal Base Registry ======= \n");
+//		Debugg.println("======= End Resetting Universal Base Registry ======= \n");
 
 		hasBeenSet = true;
 	}

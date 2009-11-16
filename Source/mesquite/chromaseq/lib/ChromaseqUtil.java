@@ -46,6 +46,7 @@ public class ChromaseqUtil{
 	public static final int DELETEDBASE = 2;
 	public static final int DELETEDBASEREGISTRY = -2;
 	public static final int ADDEDBASEREGISTRY = -3;
+	public static final int MOVEDBASEREGISTRY = -4;
 
 	public static void attachStringToMatrix(Attachable a, MesquiteString s){
 		a.attachIfUniqueName(s);
@@ -270,12 +271,12 @@ public class ChromaseqUtil{
 
 	/*.................................................................................................................*/
 	public static void resetNumAddedToStart(ContigDisplay contigDisplay, CharacterData data, int it) {
-		int numAdded = getNumAddedToStart(data,it);
+		int numAdded = getNumAddedToStart(data,it,true);
 		contigDisplay.setNumBasesAddedToStart(numAdded);
 
 	}
 	/*.................................................................................................................*/
-	public static int getNumAddedToStart(CharacterData data, int it) {
+	public static int getNumAddedToStart(CharacterData data, int it, boolean includeMoved) {
 		int count=0;
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
@@ -283,7 +284,9 @@ public class ChromaseqUtil{
 		if (addedBaseData!=null && registryData!=null && editedData!=null) {
 			for (int ic=0;ic<addedBaseData.getNumChars() && ic<registryData.getNumChars(); ic++) {
 
-				if (!MesquiteInteger.isCombinable(registryData.getState(ic, it))) { // we still haven't found one that is in the original
+				if (registryData.getState(ic, it)==ADDEDBASEREGISTRY || (includeMoved && registryData.getState(ic, it)==MOVEDBASEREGISTRY))
+					count++;
+				else if (!MesquiteInteger.isCombinable(registryData.getState(ic, it))) { // we still haven't found one that is in the original
 					long addedBaseState = addedBaseData.getState(ic, it);
 					int addedBaseValue = CategoricalState.getOnlyElement(addedBaseState);
 					if (addedBaseValue==ADDEDBASE)
@@ -294,6 +297,34 @@ public class ChromaseqUtil{
 		}
 		return 0;
 	}
+	/*.................................................................................................................*/
+	public static void resetNumAddedToEnd(ContigDisplay contigDisplay, CharacterData data, int it) {
+		int numAdded = getNumAddedToEnd(data,it, true);
+		contigDisplay.setNumBasesAddedToEnd(numAdded);
+
+	}
+	/*.................................................................................................................*/
+	public static int getNumAddedToEnd(CharacterData data, int it, boolean includeMoved) {
+		int count=0;
+		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		if (addedBaseData!=null && registryData!=null && editedData!=null) {
+			for (int ic=addedBaseData.getNumChars()-1;ic>=0; ic--) {
+				if (registryData.getState(ic, it)==ADDEDBASEREGISTRY || (includeMoved && registryData.getState(ic, it)==MOVEDBASEREGISTRY))
+					count++;
+				else if (!MesquiteInteger.isCombinable(registryData.getState(ic, it))) { // we still haven't found one that is in the original
+					long addedBaseState = addedBaseData.getState(ic, it);
+					int addedBaseValue = CategoricalState.getOnlyElement(addedBaseState);
+					if (addedBaseValue==ADDEDBASE)
+						count++;
+				} else
+					return count;
+			}
+		}
+		return 0;
+	}
+
 	/*.................................................................................................................*
 	public static int getTotalNumBasesAddedBeyondPhPhBases(CharacterData data, int it) {
 		int count=0;
@@ -363,6 +394,18 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
+	public static void specifyAsAddedBase(CharacterData data, int ic, int it) {
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		registryData.setState(ic, it, ChromaseqUtil.ADDEDBASEREGISTRY);
+		fillAddedBaseData(data,ic,it);
+	}
+	/*.................................................................................................................*/
+	public static void specifyAsMovedBase(CharacterData data, int ic, int it) {
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		registryData.setState(ic, it, ChromaseqUtil.MOVEDBASEREGISTRY);
+		fillAddedBaseData(data,ic,it);
+	}
+	/*.................................................................................................................*/
 	public static void insertGapIntoEditedMatrix(CharacterData data, int ic, int it) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		int icOriginal = registryData.getState(ic, it);
@@ -372,6 +415,7 @@ public class ChromaseqUtil{
 			int posInEdited = reverseRegistryData.getState(ic, it)+1;
 			reverseRegistryData.setState(ic, it, posInEdited);
 		}
+		fillAddedBaseData(data,ic,it);
 
 	}
 	/*.................................................................................................................*/
@@ -381,7 +425,7 @@ public class ChromaseqUtil{
 		int icOriginal = registryData.getState(icEdited, it);
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
 		DNAData originalData = ChromaseqUtil.getOriginalData(data);
-		return (!editedData.isInapplicable(icEdited, it) || icOriginal==ChromaseqUtil.ADDEDBASEREGISTRY || originalData.isValidAssignedState(icOriginal,it));
+		return (!editedData.isInapplicable(icEdited, it) || icOriginal==ChromaseqUtil.ADDEDBASEREGISTRY || icOriginal==ChromaseqUtil.MOVEDBASEREGISTRY || originalData.isValidAssignedState(icOriginal,it));
 	}
 
 	/*.................................................................................................................*/
@@ -406,6 +450,7 @@ public class ChromaseqUtil{
 	public static void fillAddedBaseData(ContigDisplay contigDisplay, CharacterData data, int it) {
 		fillAddedBaseData(data, it);
 		resetNumAddedToStart(contigDisplay, data,it);
+		resetNumAddedToEnd(contigDisplay, data,it);
 	}
 
 
