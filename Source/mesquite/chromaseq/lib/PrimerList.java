@@ -19,7 +19,8 @@ public class PrimerList {
 	String [] fragmentNames;
 	String [] sequences;
 	boolean [] forward;
-	String fragName;
+	String primerName;
+	String fragmentName;
 	int numPrimers;
 	private boolean useDb;
 	private String databaseURL;
@@ -59,6 +60,7 @@ public class PrimerList {
 		}
 	}
 
+	
 	/*
 	public void readXMLPrimerFile(String primerList) {  // this does not work; just started to build this.
 		String oneFragment;
@@ -183,6 +185,15 @@ public class PrimerList {
 		}
 	}
 
+	public String[][] getPrimerArray () {
+		String [][] primers = new String[numPrimers][2];
+		for (int i=0; i<numPrimers; i++)
+			primers[i][0] = primerNames[i];
+		for (int i=0; i<numPrimers; i++)
+			primers[i][1] = sequences[i];
+		return primers;
+	}
+	
 	public void readTabbedPrimerFile(String primerList) {
 		Document doc = MesquiteXMLUtilities.getDocumentFromString(primerList);
 		if (doc != null) {
@@ -190,13 +201,13 @@ public class PrimerList {
 			parsePrimerXML(doc);
 			return;
 		}
-		String oneFragment;
-		int numPrimers = 0;
+		String onePrimer="";
+		numPrimers = 0;
 		String tempList = primerList;
 
 		while (!StringUtil.blank(tempList) && tempList.length() > 10 && tempList.indexOf(";")>=0) {
-			oneFragment = tempList.substring(0,tempList.indexOf(";"));
-			numPrimers += getNumPrimers(oneFragment);
+			onePrimer = tempList.substring(0,tempList.indexOf(";"));
+			numPrimers ++;
 			tempList = tempList.substring(tempList.indexOf(";")+1, tempList.length());
 			tempList.trim();
 		}
@@ -204,50 +215,33 @@ public class PrimerList {
 
 		int count = -1;
 		while (!StringUtil.blank(primerList) && primerList.length() > 10 && count < numPrimers) {
-			oneFragment = primerList.substring(0,primerList.indexOf(";"));
+			if (primerList.indexOf(";")>=0)
+				onePrimer = primerList.substring(0,primerList.indexOf(";"));
 
-			Parser parser = new Parser(oneFragment);
-			fragName = parser.getNextToken(); 
-			if (parser.getNextToken().equalsIgnoreCase("Forward")) {
-				token = parser.getNextToken();
-				while (!StringUtil.blank(token) && !token.equalsIgnoreCase("Reverse")) {
-					count ++;
-					primerNames[count] = token.trim();
-					fragmentNames[count] = fragName;
-					forward[count] = true;
-					token = parser.getNextToken();
-				}
-				if (token.equalsIgnoreCase("Reverse")) {
-					token = parser.getNextToken();
-					while (!StringUtil.blank(token)) {
-						count ++;
-						primerNames[count] = token.trim();
-						fragmentNames[count] = fragName;
-						forward[count] = false;
-						token = parser.getNextToken();
-					}
-				}
-			} else if (parser.getNextToken().equalsIgnoreCase("Reverse")) {
-				token = parser.getNextToken();
-				while (!StringUtil.blank(token) && !token.equalsIgnoreCase("Forward")) {
-					count ++;
-					primerNames[count] = token.trim();
-					fragmentNames[count] = fragName;
-					forward[count] = false;
-					token = parser.getNextToken();
-				}
-				if (token.equalsIgnoreCase("Forward")) {
-					//count --;
-					token = parser.getNextToken();
-					while (!StringUtil.blank(token)) {
-						count ++;
-						primerNames[count] = token.trim();
-						fragmentNames[count] = fragName;
-						forward[count] = true;
-						token = parser.getNextToken();
-					}
-				}
-			}
+			Parser parser = new Parser(onePrimer);
+			parser.setWhitespaceString("\t");
+			parser.setPunctuationString(";");
+			primerName = parser.getNextToken(); 
+			if (primerName!=null)
+				primerName=primerName.trim();
+			fragmentName = parser.getNextToken(); 
+			if (fragmentName!=null)
+				fragmentName=fragmentName.trim();
+			boolean isForward = true;
+			token = parser.getNextToken();
+			if (token !=null)
+					isForward = token.equalsIgnoreCase("F") || token.equalsIgnoreCase("Forward");
+			String sequence =  parser.getNextToken(); 
+			count ++;
+			primerNames[count] = primerName;
+			fragmentNames[count] = fragmentName;
+			forward[count] = isForward;
+			if (StringUtil.notEmpty(sequence))
+				sequences[count] = sequence;
+			else
+				sequences[count] = "";
+
+			
 			primerList = primerList.substring(primerList.indexOf(";")+1, primerList.length());
 			primerList.trim();
 			//count ++;
@@ -354,7 +348,7 @@ public class PrimerList {
 	int getNumPrimers(String oneFragment) {
 		int count = 0;
 		Parser parser = new Parser(oneFragment);
-		fragName = parser.getNextToken(); 
+		primerName = parser.getNextToken(); 
 		String token;
 		if (parser.getNextToken().equalsIgnoreCase("Forward")) {
 			token = parser.getNextToken();
