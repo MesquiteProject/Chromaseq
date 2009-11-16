@@ -400,10 +400,12 @@ public class ChromaseqUtil{
 		fillAddedBaseData(data,ic,it);
 	}
 	/*.................................................................................................................*/
-	public static void specifyAsMovedBase(CharacterData data, int ic, int it) {
+	public static void specifyAsMovedBase(ContigDisplay contigDisplay, CharacterData data, int ic, int it) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		registryData.setState(ic, it, ChromaseqUtil.MOVEDBASEREGISTRY);
 		fillAddedBaseData(data,ic,it);
+		resetNumAddedToStart(contigDisplay, data,it);
+		resetNumAddedToEnd(contigDisplay, data,it);
 	}
 	/*.................................................................................................................*/
 	public static void insertGapIntoEditedMatrix(CharacterData data, int ic, int it) {
