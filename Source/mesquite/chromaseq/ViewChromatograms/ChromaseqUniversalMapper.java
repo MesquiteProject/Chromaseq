@@ -366,7 +366,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				for (int i=otherBaseFromUniversalBase[mapping].length-1; i>=0; i--) {  // above specified section
 					if (otherBaseFromUniversalBase[mapping][i]>=0) {
 						int countUp = otherBaseFromUniversalBase[mapping][i]+1;
-						for (int k=i; k<otherBaseFromUniversalBase[mapping].length; k++) {
+						for (int k=i+1; k<otherBaseFromUniversalBase[mapping].length; k++) {
 							otherBaseFromUniversalBase[mapping][k]=countUp;
 							countUp++;
 						}
@@ -391,7 +391,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 					for (int i=otherBaseFromUniversalBase[mapping].length-1; i>=0; i--) {  // above specified section
 						if (otherBaseFromUniversalBase[mapping][i]>=0) {  // we've found the last specified
 							int countDown = otherBaseFromUniversalBase[mapping][i]-1;
-							for (int k=i; k<otherBaseFromUniversalBase[mapping].length; k++) {
+							for (int k=i+1; k<otherBaseFromUniversalBase[mapping].length; k++) {
 								otherBaseFromUniversalBase[mapping][k]=countDown;
 								countDown--;
 							}
