@@ -19,7 +19,7 @@ import mesquite.chromaseq.lib.*;
 public class ManageChromaseqBlock extends FileInit {
 	
 	public static final int CHROMASEQBLOCKVERSION = 2;
-	public static final int ChromaseqBuild = 20;
+	public static final int ChromaseqBuild = 21;
 
 	int numBlocks =0;
 	public Class getDutyClass(){

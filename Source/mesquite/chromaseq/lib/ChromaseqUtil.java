@@ -11,6 +11,8 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 package mesquite.chromaseq.lib;
 
+import java.awt.*;
+
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
 import mesquite.lib.characters.CharacterData;
@@ -86,6 +88,14 @@ public class ChromaseqUtil{
 	public static final NameReference paddingRef = NameReference.getNameReference("paddingBefore"); //MesquiteInteger: data(cells)
 	//public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //MesquiteInteger: data(cells)
 
+
+	public static void setBackground(ContigDisplay contigDisplay, Component component){
+		if (contigDisplay!=null && contigDisplay.isReversedInEditedData())
+			component.setBackground(ColorDistribution.lightMesquiteBrown);
+		else
+			component.setBackground(Color.white);
+
+	}
 
 	public static String getStringAssociated(Associable a, NameReference nr, int index){
 		return (String)a.getAssociatedObject(nr, index);
