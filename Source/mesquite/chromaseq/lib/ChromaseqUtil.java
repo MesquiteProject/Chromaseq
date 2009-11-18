@@ -550,7 +550,6 @@ public class ChromaseqUtil{
 	public synchronized static void inferRegistryDataUsingAlignment(PairwiseAligner aligner, MeristicData registryData, int it) {
 		DNAData originalData = getOriginalData(registryData);
 		DNAData editedData = getEditedData(registryData);
-		MeristicData reverseRegistryData = getReverseRegistryData(registryData);
 		if(originalData==null || editedData==null)
 			return;
 		if (it==0) 
@@ -565,147 +564,143 @@ public class ChromaseqUtil{
 		}
 
 
-			if (aligner!=null) {
-				MesquiteNumber alignScore = new MesquiteNumber();
-				int original = 0;
-				int edited = 1;
-				long[][] alignment = aligner.getAlignment(originalData,  it, editedData, it, alignScore, true);
-				if (alignment!=null) {
-					
-					//======  make mapping from the alignment sequences into the originalData and editData matrices ========
-					int[] locationInOriginal = new int[alignment.length];
-					int icOriginal = 0;
-					for (int ic=0; ic<alignment.length; ic++) 
-						locationInOriginal[ic] = -1;
-					for (int ic=0; ic<alignment.length; ic++) 
-						if (alignment[ic][original]!=CategoricalState.inapplicable){ // we've found one in the alignment, now we need to find the same one in the original
-							icOriginal = originalData.nextApplicable(it, icOriginal, true);
-							if (icOriginal>=0){  // we've found it
-								locationInOriginal[ic] = icOriginal;
-								icOriginal++;
-								if (icOriginal>=originalData.getNumChars())
-									break;
-							} else
+		if (aligner!=null) {
+			MesquiteNumber alignScore = new MesquiteNumber();
+			int original = 0;
+			int edited = 1;
+			long[][] alignment = aligner.getAlignment(originalData,  it, editedData, it, alignScore, true);
+			if (alignment!=null) {
+
+				//======  make mapping from the alignment sequences into the originalData and editData matrices ========
+				int[] locationInOriginal = new int[alignment.length];
+				int icOriginal = 0;
+				for (int ic=0; ic<alignment.length; ic++) 
+					locationInOriginal[ic] = -1;
+				for (int ic=0; ic<alignment.length; ic++) 
+					if (alignment[ic][original]!=CategoricalState.inapplicable){ // we've found one in the alignment, now we need to find the same one in the original
+						icOriginal = originalData.nextApplicable(it, icOriginal, true);
+						if (icOriginal>=0){  // we've found it
+							locationInOriginal[ic] = icOriginal;
+							icOriginal++;
+							if (icOriginal>=originalData.getNumChars())
 								break;
-						}
+						} else
+							break;
+					}
 
-					int[] locationInEdited = new int[alignment.length];
-					for (int ic=0; ic<alignment.length; ic++) 
-						locationInEdited[ic] = -1;
-					int icEdited = 0;
-					for (int ic=0; ic<alignment.length; ic++) 
-						if (alignment[ic][edited]!=CategoricalState.inapplicable){ // we've found one in the alignment, now we need to find the same one in the original
-							icEdited = editedData.nextApplicable(it, icEdited, true);
-							if (icEdited>=0){  // we've found it
-								locationInEdited[ic] = icEdited;
-								icEdited++;
-								if (icEdited>=editedData.getNumChars())
-									break;
-							} else
+				int[] locationInEdited = new int[alignment.length];
+				for (int ic=0; ic<alignment.length; ic++) 
+					locationInEdited[ic] = -1;
+				int icEdited = 0;
+				for (int ic=0; ic<alignment.length; ic++) 
+					if (alignment[ic][edited]!=CategoricalState.inapplicable){ // we've found one in the alignment, now we need to find the same one in the original
+						icEdited = editedData.nextApplicable(it, icEdited, true);
+						if (icEdited>=0){  // we've found it
+							locationInEdited[ic] = icEdited;
+							icEdited++;
+							if (icEdited>=editedData.getNumChars())
 								break;
-						}
-
-					//======  now deterimine the boundaries of the sequence in the original sequence in the alignment
-					
-					int firstApplicableInOriginal = -1;
-					int lastApplicableInOriginal = alignment.length;
-					for (int ic=0; ic<alignment.length; ic++) {
-						if (alignment[ic][original]!=CategoricalState.inapplicable){
-							firstApplicableInOriginal= ic;
+						} else
 							break;
-						}
-					}
-					for (int ic=alignment.length-1; ic>=0; ic--) {
-						if (alignment[ic][original]!=CategoricalState.inapplicable) {
-							lastApplicableInOriginal= ic;
-							break;
-						}
 					}
 
-					//======  now go through and determine what should be in main part of registry
-					for (int ic=0; ic<alignment.length; ic++) {
-						boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
-						boolean editedIsApplicable = alignment[ic][edited]!=CategoricalState.inapplicable;
-						if (locationInEdited[ic]<0 && (editedIsApplicable || originalIsApplicable)) {
-							if (editedIsApplicable)
-								Debugg.println("******** problem! matrix: " + editedData.getName() + ", taxon: " + editedData.getTaxa().getName(it) + ", ic: " + ic);
-						}
-						
-						if (locationInEdited[ic]>=0)
-							if (editedIsApplicable && originalIsApplicable){
-								registryData.setState(locationInEdited[ic], it, 0, locationInOriginal[ic]);
-							} else if (editedIsApplicable) {  // but original has nothing, must be a new base in the sequence
-								if (ic<firstApplicableInOriginal || ic> lastApplicableInOriginal) //then these must be end bases, that were moved there
-									registryData.setState(locationInEdited[ic], it, 0, MOVEDBASEREGISTRY);
-								else 
-									registryData.setState(locationInEdited[ic], it, 0, ADDEDBASEREGISTRY);
-							} else if (originalIsApplicable) {  // but there is nothing in the editedData!
-								registryData.setState(locationInEdited[ic], it, 0, DELETEDBASEREGISTRY);
-								//if (locationInOriginal[ic]>=0 && reverseRegistryData !=null)
-									//reverseRegistryData.setState(locationInOriginal[ic], it,0, DELETEDBASEREGISTRY);
-							}
-					}
+				//======  now deterimine the boundaries of the sequence in the original sequence in the alignment
 
-					//======  find out how many were deleted from start
-					int numDeleted = 0;	
-					int firstEditedBase = -1;
-					for (int ic=0; ic<alignment.length; ic++) {
-						boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
-						if (locationInEdited[ic]>=0){
-							firstEditedBase=ic;
-							break;
-						}
-						if (originalIsApplicable) {
-							numDeleted++;
-						}
+				int firstApplicableInOriginal = -1;
+				int lastApplicableInOriginal = alignment.length;
+				for (int ic=0; ic<alignment.length; ic++) {
+					if (alignment[ic][original]!=CategoricalState.inapplicable){
+						firstApplicableInOriginal= ic;
+						break;
 					}
-					if (numDeleted>0 && firstEditedBase>=0){
-						int start = locationInEdited[firstEditedBase]-1;
-						int ic2 = locationInOriginal[firstEditedBase]-1;
-						for (int ic=0; ic<numDeleted; ic++){
-							ic2 = originalData.prevApplicable(it, ic2, true);
-							if (ic2>=0)
-								registryData.setState(start-ic, it, 0, ic2);
-							ic2--;
-							
-						}
+				}
+				for (int ic=alignment.length-1; ic>=0; ic--) {
+					if (alignment[ic][original]!=CategoricalState.inapplicable) {
+						lastApplicableInOriginal= ic;
+						break;
+					}
+				}
 
+				//======  now go through and determine what should be in main part of registry
+				for (int ic=0; ic<alignment.length; ic++) {
+					boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
+					boolean editedIsApplicable = alignment[ic][edited]!=CategoricalState.inapplicable;
+
+					if (locationInEdited[ic]>=0)
+						if (editedIsApplicable && originalIsApplicable){
+							registryData.setState(locationInEdited[ic], it, 0, locationInOriginal[ic]);
+						} else if (editedIsApplicable) {  // but original has nothing, must be a new base in the sequence
+							if (ic<firstApplicableInOriginal || ic> lastApplicableInOriginal) //then these must be end bases, that were moved there
+								registryData.setState(locationInEdited[ic], it, 0, MOVEDBASEREGISTRY);
+							else 
+								registryData.setState(locationInEdited[ic], it, 0, ADDEDBASEREGISTRY);
+						} else if (originalIsApplicable) {  // but there is nothing in the editedData!
+							registryData.setState(locationInEdited[ic], it, 0, DELETEDBASEREGISTRY);
+							//if (locationInOriginal[ic]>=0 && reverseRegistryData !=null)
+							//reverseRegistryData.setState(locationInOriginal[ic], it,0, DELETEDBASEREGISTRY);
+						}
+				}
+
+				//======  find out how many were deleted from start
+				int numDeleted = 0;	
+				int firstEditedBase = -1;
+				for (int ic=0; ic<alignment.length; ic++) {
+					boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
+					if (locationInEdited[ic]>=0){
+						firstEditedBase=ic;
+						break;
 					}
-					//======  now take care of deleted from end
-					numDeleted = 0;	
-					int lastEditedBase = -1;
-					for (int ic=alignment.length-1; ic>=0; ic--) {
-						boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
-						if (locationInEdited[ic]>=0){
-							lastEditedBase=ic;
-							break;
-						}
-						if (originalIsApplicable) {
-							numDeleted++;
-						}
+					if (originalIsApplicable) {
+						numDeleted++;
 					}
-					if (numDeleted>0 && lastEditedBase>=0){
-						int start = locationInEdited[lastEditedBase]+1;
-						int ic2 = locationInOriginal[firstEditedBase]+1;
-						for (int ic=0; ic<numDeleted; ic++) {
-							ic2 = originalData.prevApplicable(it, ic2, false);
-							if (ic2>=0)
-								registryData.setState(start+ic, it, 0, ic2);
-							ic2--;
-						}
+				}
+				if (numDeleted>0 && firstEditedBase>=0){
+					int start = locationInEdited[firstEditedBase]-1;
+					int ic2 = locationInOriginal[firstEditedBase]-1;
+					for (int ic=0; ic<numDeleted; ic++){
+						ic2 = originalData.prevApplicable(it, ic2, true);
+						if (ic2>=0)
+							registryData.setState(start-ic, it, 0, ic2);
+						ic2--;
 
 					}
 
 				}
-
-			} else {
-
-				//Debugg.println("sequence " + it + " (" + originalData.getTaxa().getTaxonName(it) + ") with length difference " + lengthDifference);
-				for (int ic=0; ic<registryData.getNumChars(); ic++){
-					registryData.setState(ic, it, 0, ic);
+				//======  now take care of deleted from end
+				numDeleted = 0;	
+				int lastEditedBase = -1;
+				for (int ic=alignment.length-1; ic>=0; ic--) {
+					boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
+					if (locationInEdited[ic]>=0){
+						lastEditedBase=ic;
+						break;
+					}
+					if (originalIsApplicable) {
+						numDeleted++;
+					}
 				}
+				if (numDeleted>0 && lastEditedBase>=0){
+					int start = locationInEdited[lastEditedBase]+1;
+					int ic2 = locationInOriginal[firstEditedBase]+1;
+					for (int ic=0; ic<numDeleted; ic++) {
+						ic2 = originalData.prevApplicable(it, ic2, false);
+						if (ic2>=0)
+							registryData.setState(start+ic, it, 0, ic2);
+						ic2--;
+					}
+
+				}
+
 			}
-			/*int startChar = -1;
+
+		} else {
+
+			//Debugg.println("sequence " + it + " (" + originalData.getTaxa().getTaxonName(it) + ") with length difference " + lengthDifference);
+			for (int ic=0; ic<registryData.getNumChars(); ic++){
+				registryData.setState(ic, it, 0, ic);
+			}
+		}
+		/*int startChar = -1;
 			int endChar=-1;
 			for (int ic = 0; ic<editedData.getNumChars(); ic++) {
 				if (registryData.isInapplicable(ic, it)||registryData.isUnassigned(ic, it)) {
@@ -731,8 +726,8 @@ public class ChromaseqUtil{
 						registryData.setState(ic, it, 0, ADDEDBASEREGISTRY);
 				} 
 			}
-			*/
-		
+		 */
+
 	}
 	/*.................................................................................................................*/
 
