@@ -137,7 +137,7 @@ public class ChromaseqUtil{
 		data.setCellObject(nr, ic, it, c);
 	}
 
-	
+
 	public static boolean isTrimmable(int ic, int it, CharacterData data){
 		if (data == null)
 			return false;
@@ -547,108 +547,156 @@ public class ChromaseqUtil{
 
 	/*.................................................................................................................*/
 
-	public synchronized static void fillRegistryData(PairwiseAligner aligner, MeristicData registryData, int it) {
+	public synchronized static void inferRegistryDataUsingAlignment(PairwiseAligner aligner, MeristicData registryData, int it) {
 		DNAData originalData = getOriginalData(registryData);
 		DNAData editedData = getEditedData(registryData);
+		MeristicData reverseRegistryData = getReverseRegistryData(registryData);
 		if(originalData==null || editedData==null)
 			return;
+		if (it==0) 
+			MesquiteTrunk.mesquiteTrunk.logln("Creating Registry Data [" + editedData.getName() + "]");
+		else if (it==editedData.getNumTaxa()-1)
+			MesquiteTrunk.mesquiteTrunk.logln(".");
+		else
+			MesquiteTrunk.mesquiteTrunk.log(".");
 
-		int lengthDifference = originalData.numApplicable(it)-editedData.numApplicable(it);
-		if (lengthDifference==0) {  // they both have the same number of applicable; probably ok
-			int count=0;
-			int icOriginal = 0;
-			for (int icEdited=0; icEdited<editedData.getNumChars(); icEdited++){
-				if (!editedData.isInapplicable(icEdited,it)) {
-					icOriginal = originalData.nextApplicable(it, icOriginal, true);
-					if (icOriginal>=0) {
-						registryData.setState(icEdited, it, 0, icOriginal);
-						icOriginal++;
-						count++;
-					}
-					else break;
-				}
-			}
-		} else {
+		for (int ic=0; ic<editedData.getNumChars(); ic++){
+			registryData.setToInapplicable(ic, it);
+		}
+
+
 			if (aligner!=null) {
 				MesquiteNumber alignScore = new MesquiteNumber();
-				long[][] alignment = aligner.getAlignment(originalData,  it, editedData, it, alignScore);
+				int original = 0;
+				int edited = 1;
+				long[][] alignment = aligner.getAlignment(originalData,  it, editedData, it, alignScore, true);
 				if (alignment!=null) {
-					int originalCount = 0;
-					int editedCount = 0;
-
-					/* now flag all unmatched bases
-						for (int ic=0; ic<alignment.length; ic++) {
-							boolean originalIsApplicable = alignment[ic][0]!=CategoricalState.inapplicable;
-							boolean editedIsApplicable = alignment[ic][1]!=CategoricalState.inapplicable;
-
-							if (editedIsApplicable &&!originalIsApplicable) 
-								alignment[ic][1]=CategoricalState.impossible;   //flag it
-							if (!editedIsApplicable &&originalIsApplicable) 
-								alignment[ic][0]=CategoricalState.impossible;
-						}
-
-
-						for (int ic=0; ic<alignment.length; ic++) {
-								if (it==1&& ic<100) Debugg.println(""+ ic + "   " + alignment[ic][0] + "  " + alignment[ic][1]);
-						}
-					 */
-					//		int icEdited = editedData.firstApplicable(it, 0); 
-					//		int icOriginal = originalData.firstApplicable(it, 0); 
-					int icEdited = 0;
+					
+					//======  make mapping from the alignment sequences into the originalData and editData matrices ========
+					int[] locationInOriginal = new int[alignment.length];
 					int icOriginal = 0;
-
-					int diffEdited=0;
-					int diffOriginal=0;
-
-					if (it==0) 
-						Debugg.println("startloop");
-					for (int ic=0; ic<alignment.length && icEdited>=0 && icOriginal>=0; ic++) {
-						boolean originalIsApplicable = alignment[ic][0]!=CategoricalState.inapplicable;
-						boolean editedIsApplicable = alignment[ic][1]!=CategoricalState.inapplicable;
-						if (editedIsApplicable){
-							editedCount++;
-							diffOriginal++;
-						}
-						if (originalIsApplicable) {
-							originalCount++;
-							diffEdited++;
+					for (int ic=0; ic<alignment.length; ic++) 
+						locationInOriginal[ic] = -1;
+					for (int ic=0; ic<alignment.length; ic++) 
+						if (alignment[ic][original]!=CategoricalState.inapplicable){ // we've found one in the alignment, now we need to find the same one in the original
+							icOriginal = originalData.nextApplicable(it, icOriginal, true);
+							if (icOriginal>=0){  // we've found it
+								locationInOriginal[ic] = icOriginal;
+								icOriginal++;
+								if (icOriginal>=originalData.getNumChars())
+									break;
+							} else
+								break;
 						}
 
-						/*	if (it==0 && icEdited<60) {
-								if (editedIsApplicable)
-									Debugg.print("editedIsApplicable (editedCount: " + editedCount + ", diffEdited: " + diffEdited + ") ||" );
-								if (originalIsApplicable)
-									Debugg.print("|| originalIsApplicable (originalCount: " + originalCount + ", diffOriginal: " + diffOriginal + ") ||" );
-								Debugg.println("|| icEdited: " + icEdited + ", icOriginal: " + icOriginal + ") " );
-							}
+					int[] locationInEdited = new int[alignment.length];
+					for (int ic=0; ic<alignment.length; ic++) 
+						locationInEdited[ic] = -1;
+					int icEdited = 0;
+					for (int ic=0; ic<alignment.length; ic++) 
+						if (alignment[ic][edited]!=CategoricalState.inapplicable){ // we've found one in the alignment, now we need to find the same one in the original
+							icEdited = editedData.nextApplicable(it, icEdited, true);
+							if (icEdited>=0){  // we've found it
+								locationInEdited[ic] = icEdited;
+								icEdited++;
+								if (icEdited>=editedData.getNumChars())
+									break;
+							} else
+								break;
+						}
 
-						 */
-						if (editedIsApplicable && originalIsApplicable) {
-							for (int i = 0;i<diffEdited && icEdited>=0; i++) {
-								icEdited = editedData.nextApplicable(it, icEdited, false); 
-								if (icEdited>=0)
-									icEdited++;
-							}
-							for (int i = 0;i<diffOriginal && icOriginal>=0; i++) {
-								icOriginal = originalData.nextApplicable(it, icOriginal, false);
-								if (icOriginal>=0)
-									icOriginal++;
-							}
-							icEdited--;
-							icOriginal--;
-							if (icEdited>=0 && icEdited<registryData.getNumChars() && icOriginal>=0 && icOriginal<originalData.getNumChars()) {
-								registryData.setState(icEdited, it, 0, icOriginal);
-							}
-							icEdited++;
-							icOriginal++;
-
-							diffOriginal=0;
-							diffEdited=0;
+					//======  now deterimine the boundaries of the sequence in the original sequence in the alignment
+					
+					int firstApplicableInOriginal = -1;
+					int lastApplicableInOriginal = alignment.length;
+					for (int ic=0; ic<alignment.length; ic++) {
+						if (alignment[ic][original]!=CategoricalState.inapplicable){
+							firstApplicableInOriginal= ic;
+							break;
+						}
+					}
+					for (int ic=alignment.length-1; ic>=0; ic--) {
+						if (alignment[ic][original]!=CategoricalState.inapplicable) {
+							lastApplicableInOriginal= ic;
+							break;
 						}
 					}
 
-				}
+					//======  now go through and determine what should be in main part of registry
+					for (int ic=0; ic<alignment.length; ic++) {
+						boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
+						boolean editedIsApplicable = alignment[ic][edited]!=CategoricalState.inapplicable;
+						if (locationInEdited[ic]<0 && (editedIsApplicable || originalIsApplicable)) {
+							if (editedIsApplicable)
+								Debugg.println("******** problem! matrix: " + editedData.getName() + ", taxon: " + editedData.getTaxa().getName(it) + ", ic: " + ic);
+						}
+						
+						if (locationInEdited[ic]>=0)
+							if (editedIsApplicable && originalIsApplicable){
+								registryData.setState(locationInEdited[ic], it, 0, locationInOriginal[ic]);
+							} else if (editedIsApplicable) {  // but original has nothing, must be a new base in the sequence
+								if (ic<firstApplicableInOriginal || ic> lastApplicableInOriginal) //then these must be end bases, that were moved there
+									registryData.setState(locationInEdited[ic], it, 0, MOVEDBASEREGISTRY);
+								else 
+									registryData.setState(locationInEdited[ic], it, 0, ADDEDBASEREGISTRY);
+							} else if (originalIsApplicable) {  // but there is nothing in the editedData!
+								registryData.setState(locationInEdited[ic], it, 0, DELETEDBASEREGISTRY);
+								//if (locationInOriginal[ic]>=0 && reverseRegistryData !=null)
+									//reverseRegistryData.setState(locationInOriginal[ic], it,0, DELETEDBASEREGISTRY);
+							}
+					}
 
+					//======  find out how many were deleted from start
+					int numDeleted = 0;	
+					int firstEditedBase = -1;
+					for (int ic=0; ic<alignment.length; ic++) {
+						boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
+						if (locationInEdited[ic]>=0){
+							firstEditedBase=ic;
+							break;
+						}
+						if (originalIsApplicable) {
+							numDeleted++;
+						}
+					}
+					if (numDeleted>0 && firstEditedBase>=0){
+						int start = locationInEdited[firstEditedBase]-1;
+						int ic2 = locationInOriginal[firstEditedBase]-1;
+						for (int ic=0; ic<numDeleted; ic++){
+							ic2 = originalData.prevApplicable(it, ic2, true);
+							if (ic2>=0)
+								registryData.setState(start-ic, it, 0, ic2);
+							ic2--;
+							
+						}
+
+					}
+					//======  now take care of deleted from end
+					numDeleted = 0;	
+					int lastEditedBase = -1;
+					for (int ic=alignment.length-1; ic>=0; ic--) {
+						boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
+						if (locationInEdited[ic]>=0){
+							lastEditedBase=ic;
+							break;
+						}
+						if (originalIsApplicable) {
+							numDeleted++;
+						}
+					}
+					if (numDeleted>0 && lastEditedBase>=0){
+						int start = locationInEdited[lastEditedBase]+1;
+						int ic2 = locationInOriginal[firstEditedBase]+1;
+						for (int ic=0; ic<numDeleted; ic++) {
+							ic2 = originalData.prevApplicable(it, ic2, false);
+							if (ic2>=0)
+								registryData.setState(start+ic, it, 0, ic2);
+							ic2--;
+						}
+
+					}
+
+				}
 
 			} else {
 
@@ -657,8 +705,34 @@ public class ChromaseqUtil{
 					registryData.setState(ic, it, 0, ic);
 				}
 			}
-		}
-
+			/*int startChar = -1;
+			int endChar=-1;
+			for (int ic = 0; ic<editedData.getNumChars(); ic++) {
+				if (registryData.isInapplicable(ic, it)||registryData.isUnassigned(ic, it)) {
+					if (editedData.isValidAssignedState(ic, it))
+						registryData.setState(ic, it, 0, MOVEDBASEREGISTRY);
+				} else { // we've found a non-applicable, time to exit loop
+					startChar=ic;
+					break;
+				}
+			}
+			for (int ic = editedData.getNumChars()-1; ic>=0; ic--) {
+				if (registryData.isInapplicable(ic, it)||registryData.isUnassigned(ic, it)) {
+					if (editedData.isValidAssignedState(ic, it))
+						registryData.setState(ic, it, 0, MOVEDBASEREGISTRY);
+				} else { // we've found a non-applicable, time to exit loop
+					endChar=ic;
+					break;
+				}
+			}
+			for (int ic = startChar; ic<=endChar; ic++) {
+				if ((registryData.isInapplicable(ic, it)||registryData.isUnassigned(ic, it))) {
+					if (editedData.isValidAssignedState(ic, it))
+						registryData.setState(ic, it, 0, ADDEDBASEREGISTRY);
+				} 
+			}
+			*/
+		
 	}
 	/*.................................................................................................................*/
 
@@ -675,7 +749,7 @@ public class ChromaseqUtil{
 			return;
 		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
 		for (int it=0; it<registryData.getNumTaxa(); it++)  {
-			fillRegistryData(aligner,registryData,it);
+			inferRegistryDataUsingAlignment(aligner,registryData,it);
 		}
 		fillAddedBaseData(editedData);
 	}
@@ -690,7 +764,7 @@ public class ChromaseqUtil{
 			registryData.setToInapplicable(ic, it);
 		}
 		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
-		fillRegistryData(aligner,registryData,it);
+		inferRegistryDataUsingAlignment(aligner,registryData,it);
 		MeristicData reverseRegistryData = getReverseRegistryData(data);
 		for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
 			reverseRegistryData.setToInapplicable(ic, it);
@@ -720,7 +794,7 @@ public class ChromaseqUtil{
 	}
 	/*.................................................................................................................*/
 
-	public static MeristicData createReverseRegistryData(MeristicData registryData, DNAData originalData) {
+	public static MeristicData createReverseRegistryData(DNAData originalData) {
 		MeristicData rr = getReverseRegistryData(originalData);
 		if (rr!=null)
 			return rr;

@@ -106,7 +106,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 					DNAData originalData = ChromaseqUtil.getOriginalData(data);
 					registryData = ChromaseqUtil.getRegistryData(data);
 					if (originalData!=null && registryData!=null) {
-						reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);		
+						reverseRegistryData = ChromaseqUtil.createReverseRegistryData(originalData);		
 						storeReverseRegistry(reverseRegistryData);
 					}
 
@@ -134,7 +134,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
 				if (registryData!=null && reverseRegistryData==null) {
 					DNAData originalData = ChromaseqUtil.getOriginalData(data);
-					reverseRegistryData = ChromaseqUtil.createReverseRegistryData(registryData,originalData);		
+					reverseRegistryData = ChromaseqUtil.createReverseRegistryData(originalData);		
 					ChromaseqUtil.prepareOriginalAndQualityData(data);
 					storeReverseRegistry(reverseRegistryData);
 
