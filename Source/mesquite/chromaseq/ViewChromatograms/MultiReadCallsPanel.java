@@ -174,7 +174,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 
 		int i;
 
-		int offsetForInserted = 0;
+		//int offsetForInserted = 0;
 		int firstSel = MesquiteInteger.unassigned;
 		int cmid = 0;
 
@@ -189,16 +189,16 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		//	if (isShownComplemented())
 		//v-spacer		g.drawString("COMPLEMENTED", 10,v+64);
 
-		offsetForInserted = 0;
+		//offsetForInserted = 0;
 
 
 //		=====================  COLOR THE BASES UNDER THE READ ==============================
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
 				int consensusBase = getContigBaseFromReadBase(whichRead,i);
-				int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
+				//int space = contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
 
-				offsetForInserted += space;
+				//offsetForInserted += space;
 
 				int overallBase = contigDisplay.getUniversalBaseFromContigBase(consensusBase);
 				char c = read.getPhdBaseChar(i);
@@ -220,7 +220,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 					/*	char cc= panel.getMatrixStateAtConsensusPosition(consensusBase);
 		Color tempC = panel.getBaseColor(cc);
 		g.setColor(tempC);*/
-					fillRect(g, cwidth, getPhdLocation(read, cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2 + offsetForInserted, topOfRead, w, readBaseHeight);
+					fillRect(g, cwidth, getPhdLocation(read, cwidth, i, contigDisplay,true)- firstReadLocation - cmid - 2, topOfRead, w, readBaseHeight);
 				}
 
 /*
@@ -240,7 +240,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 			}
 		}
 
-		offsetForInserted = 0;
+	//	offsetForInserted = 0;
 /*		=====================  SHOW THE SELECTION ==============================
 		firstSel = MesquiteInteger.unassigned;
 		ColorDistribution.setTransparentGraphics(g);		
@@ -282,7 +282,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		for (i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
 			if (i>=0 && i<read.getBasesLength()) {
 				int consensusBase = getContigBaseFromReadBase(whichRead,i);
-				offsetForInserted += contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
+		//		offsetForInserted += contigDisplay.getSpaceInsertedBeforeDisplayBase(consensusBase);
 				int overallBase = contigDisplay.getUniversalBaseFromContigBase(consensusBase);
 				char c = read.getPhdBaseChar(i);
 				int qual = read.getPhdBaseQuality(i);
@@ -292,7 +292,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 					c = DNAData.complementChar(c);
 				}
 				Color textC = contigDisplay.getBaseColor(c,contigDisplay.getBackgroundColor());
-				int pixels = contigDisplay.getHorizontalPixels(getPhdLocation(read, cwidth, i, contigDisplay,true) - firstReadLocation) + offsetForInserted;
+				int pixels = contigDisplay.getHorizontalPixels(getPhdLocation(read, cwidth, i, contigDisplay,true) - firstReadLocation);
 
 				//if (selected[overallBase]){
 				//	StringUtil.highlightString(g, String.valueOf(c), pixels - cmid, bottomOfRead, textC, Color.white);
