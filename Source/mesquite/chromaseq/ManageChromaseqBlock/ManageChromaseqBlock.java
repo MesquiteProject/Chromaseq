@@ -198,6 +198,71 @@ public class ManageChromaseqBlock extends FileInit {
 			Debugg.println("YES cell objects [" + nr.getValue() + "] " + data.getName());
 	}
 	/*----------------------------------------*/
+	String getBlockContentsOld(){
+		MesquiteProject proj = getProject();
+		StringBuffer sb = new StringBuffer();
+		int numT = proj.getNumberTaxas();
+		boolean some = false;
+		for (int i = 0; i<numT; i++){
+			Taxa taxa = proj.getTaxa(i);
+			sb.append("\n\tTAXA = " + ParseUtil.tokenize(taxa.getName()) + " ;" + StringUtil.lineEnding());
+			boolean here = writeStrings(sb, taxa, ChromaseqUtil.voucherCodeRef);
+			some  |= here;
+			here = writeStrings(sb,taxa, ChromaseqUtil.voucherDBRef);
+			some  |= here;
+			here = writeStrings(sb,taxa, ChromaseqUtil.origTaxonNameRef);
+			some  |= here;
+		}
+		int numM = proj.getNumberCharMatrices();
+		for (int i = 0; i<numM; i++){
+			mesquite.lib.characters.CharacterData data = proj.getCharacterMatrix(i);
+			if (data.getWritable()){
+			sb.append("\n\tCHARACTERS = " + ParseUtil.tokenize(data.getName()) + " ;" + StringUtil.lineEnding());
+			boolean here = writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTIDREF);
+			some  |= here;
+			here = writeAttached(sb,  data, ChromaseqUtil.GENENAMEREF);
+			some  |= here;
+			here = writeAttached(sb,  data, ChromaseqUtil.PHPHMQVERSIONREF);
+			some  |= here;
+			here = writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
+			some  |= here;
+			here = writeLongs(sb, data,ChromaseqUtil.trimmableNameRef);
+			some  |= here;
+			Associable tInfo = data.getTaxaInfo(false);
+			if (tInfo != null) {
+				sb.append("\n\tTAXAINFO" + " ;" + StringUtil.lineEnding());
+				here = writeLongs(sb, tInfo, ChromaseqUtil.trimmableNameRef);
+				some  |= here;
+				here = writeLongs(sb, tInfo, ChromaseqUtil.chromatogramsExistRef);
+				some  |= here;
+				here = writeLongs(sb, tInfo, ChromaseqUtil.whichContigRef);
+				some  |= here;
+				here = writeLongs(sb, tInfo, ChromaseqUtil.startTrimRef);
+				some  |= here;
+				here = writeDoubles(sb, tInfo, ChromaseqUtil.qualityNameRef);
+				some  |= here;
+				here = writeStrings(sb,tInfo, ChromaseqUtil.aceRef);
+				some  |= here;
+				here = writeStrings(sb,tInfo, ChromaseqUtil.chromatogramReadsRef);
+				some  |= here;
+				here = writeStringArrays(sb,tInfo, ChromaseqUtil.origReadFileNamesRef);
+				some  |= here;
+				here = writeStringArrays(sb,tInfo, ChromaseqUtil.primerForEachReadNamesRef);
+				some  |= here;
+				here = writeStringArrays(sb,tInfo, ChromaseqUtil.sampleCodeNamesRef);
+				some  |= here;
+				here = writeStringArrays(sb,tInfo, ChromaseqUtil.sampleCodeRef);
+				some  |= here;
+			}
+			//reportCellObjects(data,ChromaseqUtil.paddingRef);
+			//reportCellObjects(data,ChromaseqUtil.trimmableNameRef);
+		}
+		}
+		if (!some)
+			return null;
+		return sb.toString();
+	}
+	/*----------------------------------------*/
 	String getBlockContents(){
 		MesquiteProject proj = getProject();
 		StringBuffer sb = new StringBuffer();
@@ -287,17 +352,14 @@ public class ManageChromaseqBlock extends FileInit {
 		NexusBlock b=new ChromaseqBlock(file, this);
 		((ChromaseqBlock)b).setVersion(CHROMASEQBLOCKVERSION);
 		MesquiteString comment = new MesquiteString();
+		int version = 0;
 
 		while (!StringUtil.blank(commandString = block.getNextFileCommand(comment))) {
 			String commandName = parser.getFirstToken(commandString);
 
 			if (commandName.equalsIgnoreCase("VERSION")) {
 				String token  = parser.getNextToken();
-				int vers = MesquiteInteger.fromString(token);
-				if (MesquiteInteger.isCombinable(vers)){
-				}
-				
-
+				version = MesquiteInteger.fromString(token);				
 			}
 		}
 		return b;

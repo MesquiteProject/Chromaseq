@@ -18,6 +18,7 @@ import mesquite.lib.duties.*;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.CharactersManager;
 import mesquite.align.lib.PairwiseAligner;
+import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.cont.lib.*;
 import mesquite.categ.lib.*;
 import mesquite.meristic.lib.*;
@@ -36,6 +37,7 @@ public class ChromaseqUtil{
 	public static final String REGISTRYREF = "registration";
 	public static final String REVERSEREGISTRYREF = "reverse registration";
 	public static final String ADDEDBASEREF = "added base";
+	public static final String ADDEDDELETEDBASEREF = "added base";
 
 	//===========================ATTACHABLE handling==============================
 	public static final String PHPHIMPORTIDREF = "phphImportID"; //MesquiteString: data
@@ -80,6 +82,8 @@ public class ChromaseqUtil{
 	public static final NameReference startTrimRef = NameReference.getNameReference("startTrim");//long: tInfo
 	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
 	public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //long: tInfo, data(ch); MesquiteInteger: data(cells)
+
+	public static final NameReference contigMapperRef = NameReference.getNameReference("contigMapper");//long: tInfo
 
 	public static final NameReference qualityNameRef = NameReference.getNameReference("phredPhrapQuality"); //double: tinfo
 
@@ -137,6 +141,27 @@ public class ChromaseqUtil{
 		data.setCellObject(nr, ic, it, c);
 	}
 
+	/*.................................................................................................................*/
+	public static ContigMapper getContigMapperAssociated(MolecularData data, int it) {
+		if (data==null)
+			return null;
+		Taxon taxon = data.getTaxa().getTaxon(it);
+		Associable tInfo = data.getTaxaInfo(false);
+		if (tInfo != null && taxon != null) {
+			return (ContigMapper)tInfo.getAssociatedObject(ChromaseqUtil.contigMapperRef, it);
+		}
+		return null;
+	}
+	/*.................................................................................................................*/
+	public static void setContigMapperAssociated(MolecularData data, int it, ContigMapper contigMapper) {
+		if (data==null)
+			return;
+		Taxon taxon = data.getTaxa().getTaxon(it);
+		Associable tInfo = data.getTaxaInfo(false);
+		if (tInfo != null && taxon != null) {
+			tInfo.setAssociatedObject(ChromaseqUtil.contigMapperRef, it, contigMapper);
+		}
+	}
 
 	public static boolean isTrimmable(int ic, int it, CharacterData data){
 		if (data == null)
@@ -278,6 +303,13 @@ public class ChromaseqUtil{
 		return null;
 	}
 
+	public static MeristicData getAddedDeletedBaseData(CharacterData data) {
+		CharacterData d = getAssociatedData(data,ADDEDDELETEDBASEREF);
+		if (d instanceof MeristicData)
+			return (MeristicData)d;
+		return null;
+	}
+
 
 	/*.................................................................................................................*/
 	public static void resetNumAddedToStart(ContigDisplay contigDisplay, CharacterData data, int it) {
@@ -308,6 +340,23 @@ public class ChromaseqUtil{
 		return 0;
 	}
 	/*.................................................................................................................*/
+	public static int getNumAddedDeletedToStart(CharacterData data, int it, boolean includeMoved) {
+		int count=0;
+		MeristicData addedDeletedBaseData = ChromaseqUtil.getAddedDeletedBaseData(data);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		if (addedDeletedBaseData!=null && registryData!=null && editedData!=null) {
+			for (int ic=0;ic<addedDeletedBaseData.getNumChars() && ic<editedData.getNumChars(); ic++) {
+				if (!editedData.isInapplicable(ic, it)) {
+					if (addedDeletedBaseData.isCombinable(ic, it))
+						count += addedDeletedBaseData.getState(ic, it, 0);
+				}
+				else break;
+			}
+		}
+		return 0;
+	}
+	/*.................................................................................................................*/
 	public static void resetNumAddedToEnd(ContigDisplay contigDisplay, CharacterData data, int it) {
 		int numAdded = getNumAddedToEnd(data,it, true);
 		contigDisplay.setNumBasesAddedToEnd(numAdded);
@@ -330,6 +379,24 @@ public class ChromaseqUtil{
 						count++;
 				} else
 					return count;
+			}
+		}
+		return 0;
+	}
+
+	/*.................................................................................................................*/
+	public static int getNumAddedDeletedToEnd(CharacterData data, int it, boolean includeMoved) {
+		int count=0;
+		MeristicData addedDeletedBaseData = ChromaseqUtil.getAddedDeletedBaseData(data);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		if (addedDeletedBaseData!=null && registryData!=null && editedData!=null) {
+			for (int ic=addedDeletedBaseData.getNumChars()-1;ic>=0; ic--) {
+				if (!editedData.isInapplicable(ic, it)) {
+					if (addedDeletedBaseData.isCombinable(ic, it))
+						count += addedDeletedBaseData.getState(ic, it, 0);
+				}
+				else break;
 			}
 		}
 		return 0;
@@ -394,7 +461,7 @@ public class ChromaseqUtil{
 
 	}
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void setNewGap(CharacterData data, int ic, int it) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
@@ -413,6 +480,27 @@ public class ChromaseqUtil{
 	public static void specifyAsMovedBase(ContigDisplay contigDisplay, CharacterData data, int ic, int it) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		registryData.setState(ic, it, ChromaseqUtil.MOVEDBASEREGISTRY);
+		fillAddedBaseData(data,ic,it);
+		resetNumAddedToStart(contigDisplay, data,it);
+		resetNumAddedToEnd(contigDisplay, data,it);
+	}
+	/*.................................................................................................................*/
+	public static void setStateOfMatrixBase(ContigDisplay contigDisplay, CharacterData data, int ic, int it, long s) {
+		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		editedData.setState(ic, it, s);
+		ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
+		boolean baseInContig = contigDisplay.baseInContig(ic);
+		if (CategoricalState.isInapplicable(s)){
+			if (baseInContig)
+				contigDisplay.setBaseInContigDeleted(ic, true);
+			MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+			MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
+			int icOriginal = registryData.getState(ic, it);
+			registryData.setToInapplicable(ic, it);
+			if (MeristicState.isCombinable(icOriginal)) {
+				reverseRegistryData.setToInapplicable(ic, it);
+			}
+		}
 		fillAddedBaseData(data,ic,it);
 		resetNumAddedToStart(contigDisplay, data,it);
 		resetNumAddedToEnd(contigDisplay, data,it);
@@ -487,6 +575,19 @@ public class ChromaseqUtil{
 		addedBaseData.setLocked(true);
 		addedBaseData.setColorCellsByDefault(true);
 		addedBaseData.setUseDiagonalCharacterNames(false);
+	}
+	/*.................................................................................................................*/
+	public static void setAddedDeletedBaseDataValues(MeristicData addedDeletedBaseData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
+		addedDeletedBaseData.saveChangeHistory = false;
+		data.addToLinkageGroup(addedDeletedBaseData); //link matrices!
+		addedDeletedBaseData.setName("Number of bases added and deleted for " + name + " from Phred/Phrap");
+		addedDeletedBaseData.setResourcePanelIsOpen(false);
+		attachStringToMatrix(addedDeletedBaseData,uid);
+		attachStringToMatrix(addedDeletedBaseData,gN);
+		attachStringToMatrix(addedDeletedBaseData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.ADDEDDELETEDBASEREF));
+		addedDeletedBaseData.setLocked(true);
+		addedDeletedBaseData.setColorCellsByDefault(true);
+		addedDeletedBaseData.setUseDiagonalCharacterNames(false);
 	}
 	/*.................................................................................................................*/
 
