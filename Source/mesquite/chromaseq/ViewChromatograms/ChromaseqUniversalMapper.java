@@ -329,27 +329,22 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		prevNumPads = 0;
 
 		if (!reversedInEditData) { 
-			int startingContigBase = contigMapper.getNumAddedDeletedBefore(numBasesOriginallyTrimmedFromStartOfPhPhContig-1);
-			int startingUniversalBase = contigDisplay.getUniversalBaseFromContigBase(startingContigBase);
-			//			Debugg.println("   startingUniversalBase: " + startingUniversalBase);
+			int startingUniversalBase = contigDisplay.getUniversalBaseFromContigBase(numBasesOriginallyTrimmedFromStartOfPhPhContig-1);
+						Debugg.println("   startingUniversalBase: " + startingUniversalBase);
 			for (int matrixBase = 0; matrixBase< numChars; matrixBase++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
 				int positionInOriginal = registryData.getState(matrixBase, it);
-				if (registryData!=null){
-					if (registryData.getState(matrixBase, it)==ChromaseqUtil.ADDEDBASEREGISTRY || registryData.getState(matrixBase, it)==ChromaseqUtil.MOVEDBASEREGISTRY) {  //this must be an added base
-						positionInOriginal=-1;
-						numAddedBases++;
-					} else if (positionInOriginal>=0 && reverseRegistryData.getState(positionInOriginal,it)==ChromaseqUtil.DELETEDBASEREGISTRY) {  // this must be a deleted base
-						numDeletedBases++;
-					}
-				}
-
-				if (ChromaseqUtil.isUniversalBase(editedData,matrixBase,it)){
-					numBasesFound++;
+				if (positionInOriginal>=0){ 
 					numOriginalBasesFound++;
+				}
+				
 
-					int sequenceBase = numBasesFound-numDeletedBases;
-					int universalBase = startingUniversalBase+numBasesFound;
+				if (editedData.isValidAssignedState(matrixBase,it)){
+					numBasesFound++;
+					
+					int sequenceBase = numBasesFound;
+					contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig+sequenceBase;
+					int universalBase = startingUniversalBase+numOriginalBasesFound + contigMapper.getNumAddedDeletedAfter(contigBase)+numBasesOriginallyTrimmedFromStartOfPhPhContig;
 					int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
 					if (numPads<prevNumPads)
 						numPads=prevNumPads;
