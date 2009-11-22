@@ -145,16 +145,18 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			contigMapper = ContigMapper.getContigMapper(editedData,contig, it,numBasesOriginallyTrimmedFromStartOfPhPhContig);
 			contigMapper.zeroValues();
 		}
+		
+		contigMapper.setUpContigMapper(editedData,it, numBasesOriginallyTrimmedFromStartOfPhPhContig);
 
 		int contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig-1;
-		int lastContigBaseInOriginal = -1;
+/*		int lastContigBaseInOriginal = -1;
 		int lastEditedBaseInOriginal = -1;
 		int deletedAtEnd = 0;
 		for (int ic = 0; ic< numBasesOriginallyTrimmedFromStartOfPhPhContig; ic++){  
 			contigMapper.setDeletedBase(ic, true);
 		}
 		// =========== Do initial setup of contigMapper ===========
-		int added=0;
+//		int added=0;
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
 			int positionInEdited = reverseRegistryData.getState(ic, it,0);
 			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
@@ -198,26 +200,12 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 		contigMapper.setNumAddedToEnd(addedToEnd);
 		contigMapper.calcNumAddedDeleted();
+		
+		*/
 //		Debugg.println(contigMapper.toString());
 
 
 		int totalNumAddedDeletedBases=contigMapper.getTotalNumberAddedDeletedBases();
-		//totalNumDeletedBases=contigMapper.getTotalNumberDeletedBases();
-		int numDeletedFromStart = 0;
-		boolean foundFirstBase = false;
-
-		/*		int numDeletedFromEnd=0;
-		for (int ic = editedData.getNumChars()-1; ic>=0; ic--){  // going through the sourceData object.  This is either the edited matrix or the original matrix
-			if (registryData!=null){
-				int positionInOriginal = registryData.getState(ic, it);
-				if (registryData.getState(ic, it)==ChromaseqUtil.ADDEDBASEREGISTRY) {  //this must be an added base
-					totalNumAddedBases++;
-				} else if (positionInOriginal>=0 && reverseRegistryData.getState(positionInOriginal,it)==ChromaseqUtil.DELETEDBASEREGISTRY) {  // this must be a deleted base
-					totalNumDeletedBases++;
-				}
-			}
-		}
-		 */
 
 		/* contigDisplay.getTotalNumOverallBases() is the number of bases according to the contig 
 		 * - it's the number of bases in the contig plus the extra bases in front and at the end (as found in individual reads

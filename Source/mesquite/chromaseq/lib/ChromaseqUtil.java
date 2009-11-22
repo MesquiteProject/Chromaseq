@@ -311,13 +311,13 @@ public class ChromaseqUtil{
 	}
 
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void resetNumAddedToStart(ContigDisplay contigDisplay, CharacterData data, int it) {
 		int numAdded = getNumAddedToStart(data,it,true);
 		contigDisplay.setNumBasesAddedToStart(numAdded);
 
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static int getNumAddedToStart(CharacterData data, int it, boolean includeMoved) {
 		int count=0;
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
@@ -356,13 +356,13 @@ public class ChromaseqUtil{
 		}
 		return 0;
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void resetNumAddedToEnd(ContigDisplay contigDisplay, CharacterData data, int it) {
 		int numAdded = getNumAddedToEnd(data,it, true);
 		contigDisplay.setNumBasesAddedToEnd(numAdded);
 
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static int getNumAddedToEnd(CharacterData data, int it, boolean includeMoved) {
 		int count=0;
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
@@ -481,8 +481,8 @@ public class ChromaseqUtil{
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		registryData.setState(ic, it, ChromaseqUtil.MOVEDBASEREGISTRY);
 		fillAddedBaseData(data,ic,it);
-		resetNumAddedToStart(contigDisplay, data,it);
-		resetNumAddedToEnd(contigDisplay, data,it);
+		//resetNumAddedToStart(contigDisplay, data,it);
+		//resetNumAddedToEnd(contigDisplay, data,it);
 	}
 	/*.................................................................................................................*/
 	public static void setStateOfMatrixBase(ContigDisplay contigDisplay, CharacterData data, int ic, int it, long s) {
@@ -502,8 +502,8 @@ public class ChromaseqUtil{
 			}
 		}
 		fillAddedBaseData(data,ic,it);
-		resetNumAddedToStart(contigDisplay, data,it);
-		resetNumAddedToEnd(contigDisplay, data,it);
+	//	resetNumAddedToStart(contigDisplay, data,it);
+	//	resetNumAddedToEnd(contigDisplay, data,it);
 	}
 	/*.................................................................................................................*
 	public static void insertGapIntoEditedMatrix(CharacterData data, int ic, int it) {
@@ -572,8 +572,8 @@ public class ChromaseqUtil{
 	/*.................................................................................................................*/
 	public static void fillAddedBaseData(ContigDisplay contigDisplay, CharacterData data, int it) {
 		fillAddedBaseData(data, it);
-		resetNumAddedToStart(contigDisplay, data,it);
-		resetNumAddedToEnd(contigDisplay, data,it);
+//		resetNumAddedToStart(contigDisplay, data,it);
+//		resetNumAddedToEnd(contigDisplay, data,it);
 	}
 
 

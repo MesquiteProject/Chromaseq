@@ -4,6 +4,7 @@ import mesquite.categ.lib.MolecularData;
 import mesquite.lib.Associable;
 import mesquite.lib.MesquiteLong;
 import mesquite.lib.Taxon;
+import mesquite.meristic.lib.MeristicData;
 
 public class ContigMapper {
 	int numAddedToEnd;
@@ -43,6 +44,71 @@ public class ContigMapper {
 		if (numTrimmedFromStart>0)
 			contigMapper.setTrimmedFromStart(numTrimmedFromStart);
 		return contigMapper;
+	}
+	/*.................................................................................................................*/
+	public void setUpContigMapper(MolecularData editedData, int it, int numTrimmedFromStart) {
+		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
+		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(editedData);
+		int contigBase = numTrimmedFromStart-1;
+		int lastContigBaseInOriginal = -1;
+		int lastEditedBaseInOriginal = -1;
+		int deletedAtEnd = 0;
+		for (int ic = 0; ic< numTrimmedFromStart; ic++){  
+			setDeletedBase(ic, true);
+		}
+		
+		// =========== cleanup RegistryData from earlier versions ===========
+		for (int ic = 0; ic< registryData.getNumChars(); ic++){  
+			if (registryData.getState(ic, it,0)>=0 && editedData.isInapplicable(ic, it))
+				registryData.setToInapplicable(ic, it);
+		}
+
+		// =========== Do initial setup of contigMapper ===========
+//		int added=0;
+		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
+			int positionInEdited = reverseRegistryData.getState(ic, it,0);
+			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
+				contigBase++;
+				if (positionInEdited<0 || editedData.isInapplicable(positionInEdited, it)){  // not in edited, record as deleted
+					setDeletedBase(contigBase, true);
+					deletedAtEnd++;
+				}
+				else{  // is in edited, so reset deletedAtEnds
+					deletedAtEnd=0;
+					lastEditedBaseInOriginal = positionInEdited;  // record last base in edited which corresponds to one in original
+				}
+				lastContigBaseInOriginal=contigBase;
+			}
+		}
+		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contig.getNumBases()-lastContigBaseInOriginal-1;
+
+//		Debugg.println("   numBasesOriginallyTrimmedFromStartOfPhPhContig: " + numBasesOriginallyTrimmedFromStartOfPhPhContig);
+
+		for (int ic = 0; ic< numBasesOriginallyTrimmedFromEndOfPhPhContig; ic++){  
+			setDeletedBase(contig.getNumBases()-ic-1, true);
+		}
+		setNumDeletedFromEnd(deletedAtEnd);
+		setNumBasesOriginallyTrimmedFromEndOfPhPhContig(numBasesOriginallyTrimmedFromEndOfPhPhContig);
+		int addedBase=0;
+		int addedToEnd=0;
+		for (int ic = 0; ic< editedData.getNumChars(); ic++){  
+			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+				int positionInOriginal = registryData.getState(ic, it);
+				if (positionInOriginal<0 || !registryData.isCombinable(positionInOriginal, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+					addedBase++;
+					if (ic>=lastEditedBaseInOriginal)
+						addedToEnd++;
+				}
+				else { // it is in original; now record added bases
+					setAddedBases(contigBase, addedBase);
+					addedBase=0;
+				}
+			}
+		}
+
+		setNumAddedToEnd(addedToEnd);
+		calcNumAddedDeleted();
 	}
 	/*.................................................................................................................*/
 	public static boolean contigMapperExists (MolecularData data, int it) {
