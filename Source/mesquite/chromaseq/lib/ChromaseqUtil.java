@@ -505,15 +505,29 @@ public class ChromaseqUtil{
 		resetNumAddedToStart(contigDisplay, data,it);
 		resetNumAddedToEnd(contigDisplay, data,it);
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void insertGapIntoEditedMatrix(CharacterData data, int ic, int it) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		int icOriginal = registryData.getState(ic, it);
 		registryData.setState(ic, it, ChromaseqUtil.ADDEDBASEREGISTRY);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
-		for (int originalBase=icOriginal; originalBase<reverseRegistryData.getNumChars(); originalBase++) {
+		if ( icOriginal>=0)
+			for (int originalBase=icOriginal; originalBase<reverseRegistryData.getNumChars(); originalBase++) {
 			int posInEdited = reverseRegistryData.getState(ic, it)+1;
 			reverseRegistryData.setState(ic, it, posInEdited);
+		}
+		fillAddedBaseData(data,ic,it);
+
+	}
+	/*.................................................................................................................*/
+	public static void specifyBaseAsAdded(ContigDisplay contigDisplay, CharacterData data, int ic, int it) {
+		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		for (int icEdited = ic; icEdited<registryData.getNumChars(); icEdited++){
+			int  icOriginal = registryData.getState(icEdited, it);
+			if (icOriginal>=0){  // found one that is in contig.
+				contigDisplay.getContigMapper().addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);
+				break;
+			}
 		}
 		fillAddedBaseData(data,ic,it);
 

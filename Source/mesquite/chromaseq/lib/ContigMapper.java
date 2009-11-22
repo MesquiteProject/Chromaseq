@@ -152,7 +152,7 @@ public class ContigMapper {
 			return 0;
 		int count = 0;
 		for (int ic = 0; ic<addedBefore.length && ic<=consensusBase; ic++)
-			count += addedBefore[consensusBase] ;
+			count += addedBefore[ic] ;
 		return count;
 	}
 	/*.................................................................................................................*/
@@ -175,6 +175,11 @@ public class ContigMapper {
 	public  void setDeletedBase (int contigBase, boolean b){
 		if (contigBase>=0 && contigBase<deleted.length)
 			deleted[contigBase] = b;
+	}
+	/*.................................................................................................................*/
+	public  void addToAddedBases (int contigBase, int numAdded){
+		if (contigBase>=0 && contigBase<addedBefore.length)
+			addedBefore[contigBase] += numAdded;
 	}
 	/*.................................................................................................................*/
 	public  void setAddedBases (int contigBase, int numAdded){
@@ -217,6 +222,7 @@ public class ContigMapper {
 	/*.................................................................................................................*/
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
+		sb.append("---- ContigMapper details ---- \n");
 		sb.append("DELETED ");
 		for (int i=0; i<deleted.length; i++)
 			if (deleted[i])
@@ -225,9 +231,13 @@ public class ContigMapper {
 		sb.append("\nADDEDBEFORE ");
 		for (int i=0; i<addedBefore.length; i++)
 			sb.append(" "+addedBefore[i]) ;
+		sb.append("\nTOTALADDEDDELETEDBEFORE ");
+		for (int i=0; i<totalAddedBefore.length; i++)
+			sb.append(" "+totalAddedBefore[i]) ;
 		sb.append("\nnumAddedToEnd: " + numAddedToEnd); 
 		sb.append("\nnumDeletedFromEnd: " + numDeletedFromEnd); 
 		sb.append("\nnumBasesOriginallyTrimmedFromEndOfPhPhContig: " + numBasesOriginallyTrimmedFromEndOfPhPhContig); 
+		sb.append("\n-------------------------- \n");
 		return sb.toString();
 	}
 	public int getNumBasesOriginallyTrimmedFromEndOfPhPhContig() {
