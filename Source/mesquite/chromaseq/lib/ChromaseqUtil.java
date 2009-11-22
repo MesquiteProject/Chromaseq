@@ -522,7 +522,16 @@ public class ChromaseqUtil{
 	/*.................................................................................................................*/
 	public static void specifyBaseAsAdded(ContigDisplay contigDisplay, CharacterData data, int ic, int it) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
-		for (int icEdited = ic; icEdited<registryData.getNumChars(); icEdited++){
+		if (contigDisplay.isReversedInEditedData()) {
+			for (int icEdited = ic; icEdited>=0; icEdited--){
+				int  icOriginal = registryData.getState(icEdited, it);
+				if (icOriginal>=0){  // found one that is in contig.
+					contigDisplay.getContigMapper().addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);
+					break;
+				}
+			}
+		}
+		else for (int icEdited = ic; icEdited<registryData.getNumChars(); icEdited++){
 			int  icOriginal = registryData.getState(icEdited, it);
 			if (icOriginal>=0){  // found one that is in contig.
 				contigDisplay.getContigMapper().addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);

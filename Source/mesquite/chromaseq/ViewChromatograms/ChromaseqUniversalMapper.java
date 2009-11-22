@@ -127,7 +127,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset() {
-Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+//Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -171,6 +171,9 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 			}
 		}
 		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contig.getNumBases()-lastContigBaseInOriginal-1;
+
+//		Debugg.println("   numBasesOriginallyTrimmedFromStartOfPhPhContig: " + numBasesOriginallyTrimmedFromStartOfPhPhContig);
+
 		for (int ic = 0; ic< numBasesOriginallyTrimmedFromEndOfPhPhContig; ic++){  
 			contigMapper.setDeletedBase(contig.getNumBases()-ic-1, true);
 		}
@@ -195,7 +198,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 
 		contigMapper.setNumAddedToEnd(addedToEnd);
 		contigMapper.calcNumAddedDeleted();
-		Debugg.println(contigMapper.toString());
+//		Debugg.println(contigMapper.toString());
 
 
 		int totalNumAddedDeletedBases=contigMapper.getTotalNumberAddedDeletedBases();
@@ -271,7 +274,9 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 			}
 			*/
 			for (int sequenceBase=0; sequenceBase<sequence.getLength(); sequenceBase++){
-				int universalBase = sequenceBase + contig.getReadExcessAtStart()+ addedBases[sequenceBase];
+				int universalBase = sequenceBase + contig.getReadExcessAtStart();
+				if (sequenceBase<sequence.getLength()-1)
+					universalBase += addedBases[sequenceBase+1];
 				otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase] = sequenceBase;
 				universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][sequenceBase] = universalBase;
 				otherBaseFromUniversalBase[ACEFILECONTIG][universalBase] = sequenceBase;
@@ -297,7 +302,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 
 			for (int sequenceBase=0; sequenceBase<sequenceLength; sequenceBase++){
 				contigBase = sequenceBase+numBasesOriginallyTrimmedFromStartOfPhPhContig;
-				int universalBase = startingUniversalBase + sequenceBase + contigMapper.getNumAddedBefore(contigBase);
+				int universalBase = startingUniversalBase + sequenceBase + contigMapper.getNumAddedBefore(contigBase+1);
 				int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);  // account for padding
 				if (numPads<prevNumPads)
 					numPads=prevNumPads;
@@ -328,7 +333,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 					
 			for (int matrixBase = 0; matrixBase< numChars; matrixBase++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
-				if (editedData.isValidAssignedState(matrixBase,it)){
+				if (!editedData.isInapplicable(matrixBase,it)){
 					int positionInOriginal = registryData.getState(matrixBase, it);
 					if (positionInOriginal>=0){ 
 						numOriginalBasesFound++;
@@ -340,16 +345,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 					int sequenceBase = numBasesFound;
 					contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig+lastPositionInOriginal;
 					int universalBase = startingUniversalBase+numBasesFound + contigMapper.getNumDeletedBefore(contigBase)+startingNumAddedDeletedBefore;
-/*					if (numBasesFound==1) {
-						Debugg.println("   matrixBase: " + matrixBase);
-						Debugg.println("   contigBase: " + contigBase);
-						Debugg.println("   numOriginalBasesFound: " + numOriginalBasesFound);
-						Debugg.println("   lastPositionInOriginal: " + lastPositionInOriginal);
-						Debugg.println("   positionInOriginal: " + positionInOriginal);
-						Debugg.println("   contigMapper.getNumAddedDeletedBefore(contigBase): " + contigMapper.getNumAddedDeletedBefore(contigBase));
-						Debugg.println("   universalBase: " + universalBase);
-					}
-*/
+
 					int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
 					if (numPads<prevNumPads)
 						numPads=prevNumPads;
@@ -374,7 +370,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 			//			Debugg.println("   startingUniversalBase: " + startingUniversalBase);
 			for (int matrixBase = numChars-1; matrixBase>=0 ; matrixBase--){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
-				if (editedData.isValidAssignedState(matrixBase,it)){
+				if (!editedData.isInapplicable(matrixBase,it)){
 					int positionInOriginal = registryData.getState(matrixBase, it);
 					if (positionInOriginal>=0){ 
 						numOriginalBasesFound++;
@@ -386,15 +382,6 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 					int sequenceBase = numBasesFound;
 					contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig+lastPositionInOriginal;
 					int universalBase = startingUniversalBase+numBasesFound + contigMapper.getNumDeletedBefore(contigBase)+startingNumAddedDeletedBefore;
-					if (numBasesFound==1) {
-						Debugg.println("   matrixBase: " + matrixBase);
-						Debugg.println("   contigBase: " + contigBase);
-						Debugg.println("   numOriginalBasesFound: " + numOriginalBasesFound);
-						Debugg.println("   lastPositionInOriginal: " + lastPositionInOriginal);
-						Debugg.println("   positionInOriginal: " + positionInOriginal);
-						Debugg.println("   contigMapper.getNumAddedDeletedBefore(contigBase): " + contigMapper.getNumAddedDeletedBefore(contigBase));
-						Debugg.println("   universalBase: " + universalBase);
-					}
 
 					int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
 					if (numPads<prevNumPads)
@@ -501,7 +488,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 				}
 		}
 
-				Debugg.println("======= End Resetting Universal Base Registry ======= " + resetCount + "\n");
+//				Debugg.println("======= End Resetting Universal Base Registry ======= " + resetCount + "\n");
 
 		hasBeenSet = true;
 	}
