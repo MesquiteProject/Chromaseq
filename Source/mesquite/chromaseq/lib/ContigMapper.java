@@ -95,13 +95,13 @@ public class ContigMapper {
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  
 			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
 				int positionInOriginal = registryData.getState(ic, it);
-				if (positionInOriginal<0 || !registryData.isCombinable(positionInOriginal, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+				if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
 					addedBase++;
 					if (ic>=lastEditedBaseInOriginal)
 						addedToEnd++;
 				}
 				else { // it is in original; now record added bases
-					setAddedBases(contigBase, addedBase);
+					setAddedBases(positionInOriginal, addedBase);
 					addedBase=0;
 				}
 			}

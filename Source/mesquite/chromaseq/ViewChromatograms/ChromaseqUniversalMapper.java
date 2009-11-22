@@ -149,60 +149,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		contigMapper.setUpContigMapper(editedData,it, numBasesOriginallyTrimmedFromStartOfPhPhContig);
 
 		int contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig-1;
-/*		int lastContigBaseInOriginal = -1;
-		int lastEditedBaseInOriginal = -1;
-		int deletedAtEnd = 0;
-		for (int ic = 0; ic< numBasesOriginallyTrimmedFromStartOfPhPhContig; ic++){  
-			contigMapper.setDeletedBase(ic, true);
-		}
-		// =========== Do initial setup of contigMapper ===========
-//		int added=0;
-		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
-			int positionInEdited = reverseRegistryData.getState(ic, it,0);
-			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
-				contigBase++;
-				if (positionInEdited<0 || editedData.isInapplicable(positionInEdited, it)){  // not in edited, record as deleted
-					contigMapper.setDeletedBase(contigBase, true);
-					deletedAtEnd++;
-				}
-				else{  // is in edited, so reset deletedAtEnds
-					deletedAtEnd=0;
-					lastEditedBaseInOriginal = positionInEdited;  // record last base in edited which corresponds to one in original
-				}
-				lastContigBaseInOriginal=contigBase;
-			}
-		}
-		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contig.getNumBases()-lastContigBaseInOriginal-1;
 
-//		Debugg.println("   numBasesOriginallyTrimmedFromStartOfPhPhContig: " + numBasesOriginallyTrimmedFromStartOfPhPhContig);
-
-		for (int ic = 0; ic< numBasesOriginallyTrimmedFromEndOfPhPhContig; ic++){  
-			contigMapper.setDeletedBase(contig.getNumBases()-ic-1, true);
-		}
-		contigMapper.setNumDeletedFromEnd(deletedAtEnd);
-		contigMapper.setNumBasesOriginallyTrimmedFromEndOfPhPhContig(numBasesOriginallyTrimmedFromEndOfPhPhContig);
-		int addedBase=0;
-		int addedToEnd=0;
-		for (int ic = 0; ic< editedData.getNumChars(); ic++){  
-			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
-				int positionInOriginal = registryData.getState(ic, it);
-				if (positionInOriginal<0 || !registryData.isCombinable(positionInOriginal, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
-					addedBase++;
-					if (ic>=lastEditedBaseInOriginal)
-						addedToEnd++;
-				}
-				else { // it is in original; now record added bases
-					contigMapper.setAddedBases(contigBase, addedBase);
-					addedBase=0;
-				}
-			}
-		}
-
-		contigMapper.setNumAddedToEnd(addedToEnd);
-		contigMapper.calcNumAddedDeleted();
-		
-		*/
-//		Debugg.println(contigMapper.toString());
+		Debugg.println(contigMapper.toString());
 
 
 		int totalNumAddedDeletedBases=contigMapper.getTotalNumberAddedDeletedBases();
