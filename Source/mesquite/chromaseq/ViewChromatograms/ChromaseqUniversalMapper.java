@@ -145,15 +145,21 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			contigMapper = ContigMapper.getContigMapper(editedData,contig, it,numBasesOriginallyTrimmedFromStartOfPhPhContig);
 			contigMapper.zeroValues();
 		}
-
+		if (contigMapper.getContig()==null)
+			contigMapper.setContig(contigDisplay.getContig());
 		if (!contigMapper.hasBeenSetUp())
-			contigMapper.setUp(editedData,it, numBasesOriginallyTrimmedFromStartOfPhPhContig);
+			if (contigMapper.getStoredInFile()){
+				contigMapper.setNumTrimmedFromStart(numBasesOriginallyTrimmedFromStartOfPhPhContig);
+				contigMapper.recalc(editedData,it);
+			}
+			else
+				contigMapper.setUp(editedData,it, numBasesOriginallyTrimmedFromStartOfPhPhContig);
 		int numResurrectedAtStart = contigMapper.getNumResurrectedAtStart();
 //		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig();
 		int originalEndOfTrimmedContig = contig.getNumBases() - contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig();
 		int contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig-1;
 
-	//			Debugg.println(contigMapper.toString());
+				Debugg.println(contigMapper.toString());
 
 		int totalNumAddedDeletedBases=contigMapper.getTotalNumberAddedDeletedBases();
 

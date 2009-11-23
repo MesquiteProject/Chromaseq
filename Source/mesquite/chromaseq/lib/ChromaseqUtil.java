@@ -157,10 +157,12 @@ public class ChromaseqUtil{
 		if (data==null)
 			return;
 		Taxon taxon = data.getTaxa().getTaxon(it);
-		Associable tInfo = data.getTaxaInfo(false);
+		Associable tInfo = data.getTaxaInfo(true);
 		if (tInfo != null && taxon != null) {
 			tInfo.setAssociatedObject(ChromaseqUtil.contigMapperRef, it, contigMapper);
 		}
+		contigMapper.setTaxonNumber(it);
+		contigMapper.setData(data);
 	}
 
 	public static boolean isTrimmable(int ic, int it, CharacterData data){
