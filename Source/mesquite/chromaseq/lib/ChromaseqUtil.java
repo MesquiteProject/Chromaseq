@@ -36,8 +36,8 @@ public class ChromaseqUtil{
 	public static final String EDITEDREF ="edited";
 	public static final String REGISTRYREF = "registration";
 	public static final String REVERSEREGISTRYREF = "reverse registration";
-	public static final String ADDEDBASEREF = "added base";
-	public static final String ADDEDDELETEDBASEREF = "added base";
+//	public static final String ADDEDBASEREF = "added base";
+//	public static final String ADDEDDELETEDBASEREF = "added deleted base";
 
 	//===========================ATTACHABLE handling==============================
 	public static final String PHPHIMPORTIDREF = "phphImportID"; //MesquiteString: data
@@ -45,13 +45,13 @@ public class ChromaseqUtil{
 	public static final String PHPHMQVERSIONREF ="phphmqVersion";//MesquiteString: data
 	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
 
-	public static final int UNCHANGEDBASE = 0;
+/*	public static final int UNCHANGEDBASE = 0;
 	public static final int ADDEDBASE = 1;
 	public static final int DELETEDBASE = 2;
 	public static final int DELETEDBASEREGISTRY = -2;
 	public static final int ADDEDBASEREGISTRY = -3;
 	public static final int MOVEDBASEREGISTRY = -4;
-
+*/
 	public static void attachStringToMatrix(Attachable a, MesquiteString s){
 		a.attachIfUniqueName(s);
 	}
@@ -296,12 +296,15 @@ public class ChromaseqUtil{
 		return null;
 	}
 
+	/*.................................................................................................................*
 	public static CategoricalData getAddedBaseData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,ADDEDBASEREF);
 		if (d instanceof CategoricalData)
 			return (CategoricalData)d;
 		return null;
 	}
+
+	/*.................................................................................................................*
 
 	public static MeristicData getAddedDeletedBaseData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,ADDEDDELETEDBASEREF);
@@ -339,7 +342,7 @@ public class ChromaseqUtil{
 		}
 		return 0;
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static int getNumAddedDeletedToStart(CharacterData data, int it, boolean includeMoved) {
 		int count=0;
 		MeristicData addedDeletedBaseData = ChromaseqUtil.getAddedDeletedBaseData(data);
@@ -384,7 +387,7 @@ public class ChromaseqUtil{
 		return 0;
 	}
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static int getNumAddedDeletedToEnd(CharacterData data, int it, boolean includeMoved) {
 		int count=0;
 		MeristicData addedDeletedBaseData = ChromaseqUtil.getAddedDeletedBaseData(data);
@@ -439,7 +442,7 @@ public class ChromaseqUtil{
 		return count;
 	}
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void fillAddedBaseData(CategoricalData addedBaseData, MeristicData registryData, DNAData editedData, int ic, int it) {
 		if (addedBaseData!=null && registryData!=null && editedData!=null) {
 			int registryState = registryData.getState(ic, it);
@@ -470,7 +473,7 @@ public class ChromaseqUtil{
 		reverseRegistryData.setState(icOriginal, it, DELETEDBASEREGISTRY);  // registry now says that there is nothing in original data here
 	}
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void specifyAsAddedBase(CharacterData data, int ic, int it) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		registryData.setState(ic, it, ChromaseqUtil.ADDEDBASEREGISTRY);
@@ -478,30 +481,36 @@ public class ChromaseqUtil{
 	}
 	/*.................................................................................................................*/
 	public static void specifyAsMovedBase(ContigDisplay contigDisplay, CharacterData data, int ic, int it) {
-		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
-		registryData.setState(ic, it, ChromaseqUtil.MOVEDBASEREGISTRY);
-		fillAddedBaseData(data,ic,it);
+//		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+//		registryData.setState(ic, it, ChromaseqUtil.MOVEDBASEREGISTRY);
+//		fillAddedBaseData(data,ic,it);
 		//resetNumAddedToStart(contigDisplay, data,it);
 		//resetNumAddedToEnd(contigDisplay, data,it);
 	}
 	/*.................................................................................................................*/
-	public static void setStateOfMatrixBase(ContigDisplay contigDisplay, CharacterData data, int ic, int it, long s) {
+	public static void setStateOfMatrixBase(ContigDisplay contigDisplay, CharacterData data, int ic, int it, long s, boolean recalc) {
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
+		boolean wasInapplicable = editedData.isInapplicable(ic,it);
 		editedData.setState(ic, it, s);
 		ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 		boolean baseInContig = contigDisplay.baseInContig(ic);
-		if (CategoricalState.isInapplicable(s)){
-			if (baseInContig)
-				contigDisplay.setBaseInContigDeleted(ic, true);
+		if (CategoricalState.isInapplicable(s) && !wasInapplicable){
 			MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 			MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
 			int icOriginal = registryData.getState(ic, it);
 			registryData.setToInapplicable(ic, it);
-			if (MeristicState.isCombinable(icOriginal)) {
-				reverseRegistryData.setToInapplicable(ic, it);
+			if (icOriginal>=0 && MeristicState.isCombinable(icOriginal)) {
+				reverseRegistryData.setToInapplicable(icOriginal, it);
 			}
 		}
-		fillAddedBaseData(data,ic,it);
+		if (CategoricalState.isInapplicable(s)!=wasInapplicable) {
+			if (baseInContig)
+				contigDisplay.setBaseInContigDeleted(ic, CategoricalState.isInapplicable(s));
+			if (recalc)
+				contigDisplay.getContigMapper().recalc();
+		}
+		
+	//	fillAddedBaseData(data,ic,it);
 	//	resetNumAddedToStart(contigDisplay, data,it);
 	//	resetNumAddedToEnd(contigDisplay, data,it);
 	}
@@ -520,26 +529,38 @@ public class ChromaseqUtil{
 
 	}
 	/*.................................................................................................................*/
-	public static void specifyBaseAsAdded(ContigDisplay contigDisplay, CharacterData data, int ic, int it) {
+	public static void specifyBaseAsAdded(ContigDisplay contigDisplay, CharacterData data, int ic, int it, int contigBase) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
-		if (contigDisplay.isReversedInEditedData()) {
+		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
+		ContigMapper contigMapper = contigDisplay.getContigMapper();
+		
+		if (contigBase>=0){  //it matches a contig base; let's resurrect it
+			contigMapper.setDeletedBase(contigBase, false);
+			//registryData.setState(ic,it,0,contigBase);
+			//reverseRegistryData.setState(contigBase,it,0,ic);
+			contigMapper.recalc();
+		}
+		else if (contigDisplay.isReversedInEditedData()) {
 			for (int icEdited = ic; icEdited>=0; icEdited--){
 				int  icOriginal = registryData.getState(icEdited, it);
 				if (icOriginal>=0){  // found one that is in contig.
-					contigDisplay.getContigMapper().addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);
+					contigMapper.addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);
 					break;
 				}
 			}
-		}
-		else for (int icEdited = ic; icEdited<registryData.getNumChars(); icEdited++){
-			int  icOriginal = registryData.getState(icEdited, it);
-			if (icOriginal>=0){  // found one that is in contig.
-				contigDisplay.getContigMapper().addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);
-				break;
-			}
-		}
-		fillAddedBaseData(data,ic,it);
+			contigMapper.recalc();
 
+		}
+		else {
+			for (int icEdited = ic; icEdited<registryData.getNumChars(); icEdited++){
+				int  icOriginal = registryData.getState(icEdited, it);
+				if (icOriginal>=0){  // found one that is in contig.
+					contigMapper.addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);
+					break;
+				}
+			}
+			contigMapper.recalc();
+		}
 	}
 	/*.................................................................................................................*/
 	public static boolean isUniversalBase(CharacterData data, int icEdited, int it) {
@@ -548,17 +569,17 @@ public class ChromaseqUtil{
 		int icOriginal = registryData.getState(icEdited, it);
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
 		DNAData originalData = ChromaseqUtil.getOriginalData(data);
-		return (!editedData.isInapplicable(icEdited, it) || icOriginal==ChromaseqUtil.ADDEDBASEREGISTRY || icOriginal==ChromaseqUtil.MOVEDBASEREGISTRY || originalData.isValidAssignedState(icOriginal,it));
+		return (!editedData.isInapplicable(icEdited, it));
 	}
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void fillAddedBaseData(CharacterData data, int ic, int it) {
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
 		fillAddedBaseData(addedBaseData,registryData, editedData, ic,it);
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void fillAddedBaseData(CharacterData data, int it) {
 		//Debugg.println("fillAddedBaseData it: " + it);
 		CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
@@ -569,7 +590,7 @@ public class ChromaseqUtil{
 				fillAddedBaseData(addedBaseData,registryData, editedData, ic,it);
 			}
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void fillAddedBaseData(ContigDisplay contigDisplay, CharacterData data, int it) {
 		fillAddedBaseData(data, it);
 //		resetNumAddedToStart(contigDisplay, data,it);
@@ -577,7 +598,7 @@ public class ChromaseqUtil{
 	}
 
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void fillAddedBaseData(CharacterData data) {
 		if (data==null)
 			return;
@@ -586,7 +607,7 @@ public class ChromaseqUtil{
 	}
 
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void setAddedBaseDataValues(CategoricalData addedBaseData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
 		addedBaseData.saveChangeHistory = false;
 		data.addToLinkageGroup(addedBaseData); //link matrices!
@@ -599,7 +620,7 @@ public class ChromaseqUtil{
 		addedBaseData.setColorCellsByDefault(true);
 		addedBaseData.setUseDiagonalCharacterNames(false);
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public static void setAddedDeletedBaseDataValues(MeristicData addedDeletedBaseData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
 		addedDeletedBaseData.saveChangeHistory = false;
 		data.addToLinkageGroup(addedDeletedBaseData); //link matrices!
@@ -612,7 +633,7 @@ public class ChromaseqUtil{
 		addedDeletedBaseData.setColorCellsByDefault(true);
 		addedDeletedBaseData.setUseDiagonalCharacterNames(false);
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 
 	public static CategoricalData createAddedBaseData(CharacterData data) {
 		CategoricalData addedBaseData = getAddedBaseData(data);
@@ -754,12 +775,14 @@ public class ChromaseqUtil{
 						if (editedIsApplicable && originalIsApplicable){
 							registryData.setState(locationInEdited[ic], it, 0, locationInOriginal[ic]);
 						} else if (editedIsApplicable) {  // but original has nothing, must be a new base in the sequence
-							if (ic<firstApplicableInOriginal || ic> lastApplicableInOriginal) //then these must be end bases, that were moved there
-								registryData.setState(locationInEdited[ic], it, 0, MOVEDBASEREGISTRY);
-							else 
-								registryData.setState(locationInEdited[ic], it, 0, ADDEDBASEREGISTRY);
+							if (ic<firstApplicableInOriginal || ic> lastApplicableInOriginal){ //then these must be end bases, that were moved there
+					//			registryData.setState(locationInEdited[ic], it, 0, MOVEDBASEREGISTRY);
+							}
+							else {
+					//			registryData.setState(locationInEdited[ic], it, 0, ADDEDBASEREGISTRY);
+							}
 						} else if (originalIsApplicable) {  // but there is nothing in the editedData!
-							registryData.setState(locationInEdited[ic], it, 0, DELETEDBASEREGISTRY);
+					//		registryData.setState(locationInEdited[ic], it, 0, DELETEDBASEREGISTRY);
 							//if (locationInOriginal[ic]>=0 && reverseRegistryData !=null)
 							//reverseRegistryData.setState(locationInOriginal[ic], it,0, DELETEDBASEREGISTRY);
 						}
@@ -870,7 +893,7 @@ public class ChromaseqUtil{
 		for (int it=0; it<registryData.getNumTaxa(); it++)  {
 			inferRegistryDataUsingAlignment(aligner,registryData,it);
 		}
-		fillAddedBaseData(editedData);
+	//	fillAddedBaseData(editedData);
 	}
 	/*.................................................................................................................*/
 

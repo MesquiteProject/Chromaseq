@@ -1,21 +1,21 @@
 package mesquite.chromaseq.lib;
 
 import mesquite.categ.lib.MolecularData;
-import mesquite.lib.Associable;
-import mesquite.lib.MesquiteLong;
-import mesquite.lib.Taxon;
 import mesquite.meristic.lib.MeristicData;
+import mesquite.lib.*;
 
 public class ContigMapper {
-	int numAddedToEnd;
+	int numAddedToEnd, numResurrectedAtStart;
 	int numDeletedFromStart, numDeletedFromEnd;
 	int numBasesOriginallyTrimmedFromEndOfPhPhContig=0;
+	int numTrimmedFromStart = 0;
 	int[] addedBefore;
 	int[] totalAddedBefore, totalAddedAfter;
 	boolean[] deleted;
 	int numBases=0;
 	Contig contig=null;
 	boolean storedInFile = false;
+	boolean 	hasBeenSetUp = false;
 
 	public ContigMapper (Contig contig) {
 		this.contig = contig;
@@ -41,15 +41,15 @@ public class ContigMapper {
 			contigMapper = new ContigMapper(contig);
 			ChromaseqUtil.setContigMapperAssociated(data, it, contigMapper);
 		}
-		if (numTrimmedFromStart>0)
-			contigMapper.setTrimmedFromStart(numTrimmedFromStart);
 		return contigMapper;
 	}
 	/*.................................................................................................................*/
-	public void setUpContigMapper(MolecularData editedData, int it, int numTrimmedFromStart) {
+	public void setUp(MolecularData editedData, int it, int numTrimmedFromStart) {
+		Debugg.println("SETUP CONTIGMAPPER");
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(editedData);
+		this.numTrimmedFromStart = numTrimmedFromStart;
 		int contigBase = numTrimmedFromStart-1;
 		int lastContigBaseInOriginal = -1;
 		int lastEditedBaseInOriginal = -1;
@@ -65,7 +65,6 @@ public class ContigMapper {
 		}
 
 		// =========== Do initial setup of contigMapper ===========
-//		int added=0;
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
 			int positionInEdited = reverseRegistryData.getState(ic, it,0);
 			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
@@ -76,6 +75,7 @@ public class ContigMapper {
 				}
 				else{  // is in edited, so reset deletedAtEnds
 					deletedAtEnd=0;
+					setDeletedBase(contigBase, false);
 					lastEditedBaseInOriginal = positionInEdited;  // record last base in edited which corresponds to one in original
 				}
 				lastContigBaseInOriginal=contigBase;
@@ -108,7 +108,8 @@ public class ContigMapper {
 		}
 
 		setNumAddedToEnd(addedToEnd);
-		calcNumAddedDeleted();
+		recalc();
+		hasBeenSetUp = true;
 	}
 	/*.................................................................................................................*/
 	public static boolean contigMapperExists (MolecularData data, int it) {
@@ -118,6 +119,7 @@ public class ContigMapper {
 
 	/*.................................................................................................................*/
 	public  void zeroValues (){
+		Debugg.println("ZERO CONTIGMAPPER");
 		if (deleted!=null)
 			for (int ic = 0; ic<deleted.length; ic++)
 				deleted[ic]=false;
@@ -131,6 +133,7 @@ public class ContigMapper {
 		numDeletedFromStart =0;
 		numDeletedFromEnd = 0;
 		numBasesOriginallyTrimmedFromEndOfPhPhContig = 0;
+		numTrimmedFromStart=0;
 	}
 	/*.................................................................................................................*/
 	public void init () {
@@ -187,7 +190,7 @@ public class ContigMapper {
 		return totalAddedBefore[contigBase];
 	}
 	/*.................................................................................................................*/
-	public void calcNumAddedDeleted (){
+	public void recalc (){
 		int count = 0;
 		for (int ic = 0; ic<addedBefore.length; ic++){
 			count += addedBefore[ic] ;
@@ -211,6 +214,13 @@ public class ContigMapper {
 				count++;
 		}
 		totalAddedAfter[deleted.length-1] -= numDeletedFromEnd;
+		count=0;
+		for (int ic = deleted.length-1; ic>=0; ic--){
+			if (!deleted[ic] && ic<numTrimmedFromStart)
+				count++;
+		}
+		setNumResurrectedAtStart(count);
+
 	}
 	/*.................................................................................................................*/
 	public  int getNumAddedBefore (int consensusBase){
@@ -278,12 +288,12 @@ public class ContigMapper {
 	/*.................................................................................................................*/
 	public void setTrimmedFromStart(int trimmed) {
 		for (int i = 0; i<deleted.length && i<trimmed; i++)
-			deleted[i] = true;
+			setDeletedBase(i,true);
 	}
 	/*.................................................................................................................*/
 	public void setTrimmedFromEnd(int trimmed) {
 		for (int i = 0; i<deleted.length && i<trimmed; i++)
-			deleted[deleted.length-i-1] = true;
+			setDeletedBase(deleted.length-i-1,true);
 	}
 	/*.................................................................................................................*/
 	public String toString() {
@@ -312,6 +322,18 @@ public class ContigMapper {
 	public void setNumBasesOriginallyTrimmedFromEndOfPhPhContig(
 			int numBasesOriginallyTrimmedFromEndOfPhPhContig) {
 		this.numBasesOriginallyTrimmedFromEndOfPhPhContig = numBasesOriginallyTrimmedFromEndOfPhPhContig;
+	}
+	public boolean hasBeenSetUp() {
+		return hasBeenSetUp;
+	}
+	public void setHasBeenSetUp(boolean hasBeenSetUp) {
+		this.hasBeenSetUp = hasBeenSetUp;
+	}
+	public int getNumResurrectedAtStart() {
+		return numResurrectedAtStart;
+	}
+	public void setNumResurrectedAtStart(int num) {
+		this.numResurrectedAtStart = num;
 	}
 
 
