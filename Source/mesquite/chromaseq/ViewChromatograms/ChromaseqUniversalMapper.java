@@ -127,7 +127,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset() {
-		Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+	//	Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -153,8 +153,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int originalEndOfTrimmedContig = contig.getNumBases() - contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig();
 		int contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig-1;
 
-//				Debugg.println(contigMapper.toString());
-
+	//			Debugg.println(contigMapper.toString());
 
 		int totalNumAddedDeletedBases=contigMapper.getTotalNumberAddedDeletedBases();
 
@@ -280,9 +279,9 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		prevNumPads = 0;
 
 
+		int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numBasesOriginallyTrimmedFromStartOfPhPhContig-numResurrectedAtStart]-startingAddedBeforeOriginalTrim;
 
 		if (!reversedInEditData) { 
-			int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numBasesOriginallyTrimmedFromStartOfPhPhContig-numResurrectedAtStart]-startingAddedBeforeOriginalTrim;
 
 			for (int matrixBase = 0; matrixBase< numChars; matrixBase++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
@@ -334,8 +333,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				} 
 			}
 		}
-		else {
-			int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numBasesOriginallyTrimmedFromStartOfPhPhContig];
+		else {  // data are reversed!
 			//			Debugg.println("   startingUniversalBase: " + startingUniversalBase);
 			for (int matrixBase = numChars-1; matrixBase>=0 ; matrixBase--){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
@@ -470,8 +468,14 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				}
 		}
 
-		//				Debugg.println("======= End Resetting Universal Base Registry ======= " + resetCount + "\n");
+	/*	int start = 570;
+		int end = 600;
+		for (int universalBase = start; universalBase<end;universalBase++) {
+			Debugg.println(" universalBase: " + universalBase + ", otherBaseFromUniversalBase[editedMatrixSequence]: " + otherBaseFromUniversalBase[EDITEDMATRIXSEQUENCE][universalBase]);
+		}
 
+		Debugg.println("======= End Resetting Universal Base Registry ======= " + resetCount + "\n");
+*/
 		hasBeenSet = true;
 	}
 	/*.................................................................................................................*/

@@ -526,7 +526,6 @@ public class ChromaseqUtil{
 			reverseRegistryData.setState(ic, it, posInEdited);
 		}
 		fillAddedBaseData(data,ic,it);
-
 	}
 	/*.................................................................................................................*/
 	public static void specifyBaseAsAdded(ContigDisplay contigDisplay, CharacterData data, int ic, int it, int contigBase) {
@@ -536,8 +535,10 @@ public class ChromaseqUtil{
 		
 		if (contigBase>=0){  //it matches a contig base; let's resurrect it
 			contigMapper.setDeletedBase(contigBase, false);
-			//registryData.setState(ic,it,0,contigBase);
-			//reverseRegistryData.setState(contigBase,it,0,ic);
+			if (contigBase>=contigDisplay.getNumBasesOriginallyTrimmedFromStartOfPhPhContig() && contigBase<= contigDisplay.getContig().getNumBases()-contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig()) {
+				registryData.setState(ic,it,0,contigBase);
+				reverseRegistryData.setState(contigBase,it,0,ic);
+			}
 			contigMapper.recalc();
 		}
 		else if (contigDisplay.isReversedInEditedData()) {
@@ -564,11 +565,11 @@ public class ChromaseqUtil{
 	}
 	/*.................................................................................................................*/
 	public static boolean isUniversalBase(CharacterData data, int icEdited, int it) {
-		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+		/*MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		if (registryData==null) return false;
 		int icOriginal = registryData.getState(icEdited, it);
+		DNAData originalData = ChromaseqUtil.getOriginalData(data);*/
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
-		DNAData originalData = ChromaseqUtil.getOriginalData(data);
 		return (!editedData.isInapplicable(icEdited, it));
 	}
 
