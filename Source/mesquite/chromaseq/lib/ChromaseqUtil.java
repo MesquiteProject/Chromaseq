@@ -530,7 +530,7 @@ public class ChromaseqUtil{
 		fillAddedBaseData(data,ic,it);
 	}
 	/*.................................................................................................................*/
-	public static void specifyBaseAsAdded(ContigDisplay contigDisplay, CharacterData data, int ic, int it, int contigBase) {
+	public static void specifyBaseAsAdded(ContigDisplay contigDisplay, CharacterData data, int ic, int it, int contigBase, int addToContigBase) {
 		MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
 		ContigMapper contigMapper = contigDisplay.getContigMapper();
@@ -543,7 +543,10 @@ public class ChromaseqUtil{
 			}
 			contigMapper.recalc();
 		}
-		else if (contigDisplay.isReversedInEditedData()) {
+		else if (addToContigBase>=0) {
+			contigMapper.addToAddedBases(addToContigBase, 1);
+
+		} else if (contigDisplay.isReversedInEditedData()) {
 			for (int icEdited = ic; icEdited>=0; icEdited--){
 				int  icOriginal = registryData.getState(icEdited, it);
 				if (icOriginal>=0){  // found one that is in contig.
@@ -554,7 +557,7 @@ public class ChromaseqUtil{
 			contigMapper.recalc();
 
 		}
-		else {
+		else {  // let's find the next one up that it can be
 			for (int icEdited = ic; icEdited<registryData.getNumChars(); icEdited++){
 				int  icOriginal = registryData.getState(icEdited, it);
 				if (icOriginal>=0){  // found one that is in contig.
