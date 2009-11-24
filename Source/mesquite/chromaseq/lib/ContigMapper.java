@@ -42,6 +42,7 @@ public class ContigMapper {
 		if (contigMapper==null) {
 			contigMapper = new ContigMapper(contig);
 			ChromaseqUtil.setContigMapperAssociated(data, it, contigMapper);
+			contigMapper.setNumTrimmedFromStart(numTrimmedFromStart);
 		}
 		return contigMapper;
 	}
@@ -93,6 +94,26 @@ public class ContigMapper {
 		setData(editedData);
 		setTaxonNumber(it);
 		recalc();
+	}
+	/*.................................................................................................................*/
+	public void calcEndTrim() {
+		if (editedData==null)
+			return;
+		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
+		int contigBase = numTrimmedFromStart-1;
+		int lastContigBaseInOriginal = -1;
+
+		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
+			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
+				contigBase++;
+				lastContigBaseInOriginal=contigBase;
+			}
+		}
+		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contig.getNumBases()-lastContigBaseInOriginal-1;
+		setNumBasesOriginallyTrimmedFromEndOfPhPhContig(numBasesOriginallyTrimmedFromEndOfPhPhContig);
+		for (int ic = 0; ic< numBasesOriginallyTrimmedFromEndOfPhPhContig; ic++){  
+			setDeletedBase(contig.getNumBases()-ic-1, true);
+		}
 	}
 	/*.................................................................................................................*/
 	/** This method does the basic calculations to summarize various aspects of the added and deleted bases; it does not alter the core storage about which bases are deleted and how many are added.*/
