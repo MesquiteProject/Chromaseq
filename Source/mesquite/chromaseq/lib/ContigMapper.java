@@ -217,10 +217,10 @@ public class ContigMapper {
 
 	/*.................................................................................................................*/
 	public  void zeroValues (){
-		Debugg.println("++++++++ zeroValues, it: " + it);
 		if (deleted!=null)
-			for (int ic = 0; ic<deleted.length; ic++)
+			for (int ic = 0; ic<deleted.length; ic++){
 				deleted[ic]=false;
+			}
 		if (addedBefore!=null)
 			for (int ic = 0; ic<addedBefore.length; ic++){
 				addedBefore[ic]=0;
@@ -241,7 +241,6 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	public void init (int numBases) {
-		Debugg.println("++++++++ init, it: " + it + ", numBases: " + numBases);
 		if (numBases>0) {
 			addedBefore = new int[numBases];
 			totalAddedBefore = new int[numBases];
@@ -319,8 +318,9 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	public  void setDeletedBase (int contigBase, boolean b){
-		if (contigBase>=0 && contigBase<deleted.length)
+		if (contigBase>=0 && contigBase<deleted.length) {
 			deleted[contigBase] = b;
+		}
 	}
 	/*.................................................................................................................*/
 	public  void addToAddedBases (int contigBase, int numAdded){

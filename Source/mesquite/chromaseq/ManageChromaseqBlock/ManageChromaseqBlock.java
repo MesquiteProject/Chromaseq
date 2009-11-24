@@ -23,7 +23,7 @@ import mesquite.chromaseq.lib.*;
 public class ManageChromaseqBlock extends FileInit {
 
 	public static final int CHROMASEQBLOCKVERSION = 2;
-	public static final int ChromaseqBuild = 21;
+	public static final int ChromaseqBuild = 22;
 
 	int numBlocks =0;
 	public Class getDutyClass(){
@@ -424,13 +424,13 @@ public class ManageChromaseqBlock extends FileInit {
 						if ("DELETED".equalsIgnoreCase(subC)) {
 							String token = subcommands[1][i];
 							Parser parser = new Parser(token);
-							if (numBases<=0){
+						/*	if (numBases<=0){
 								numBases = parser.getNumberOfDarkChars();
 								parser.setPosition(0);
 							}
 							if (contigMapper.getNumBases()< numBases)
-								contigMapper.setNumBases(numBases);
-							for (int base = 0; base<numBases; base++) {
+								contigMapper.setNumBases(numBases);  */
+							for (int base = 0; base<contigMapper.getNumBases(); base++) {
 								char c = parser.nextDarkChar();
 								if ("1".equalsIgnoreCase(""+ c))
 									contigMapper.setDeletedBase(base, true);
@@ -439,13 +439,7 @@ public class ManageChromaseqBlock extends FileInit {
 						} else if ("ADDEDBEFORE".equalsIgnoreCase(subC)) {
 							String token = subcommands[1][i];
 							Parser parser = new Parser(token);
-							if (numBases<=0){
-								numBases = parser.getNumberOfDarkChars();
-								parser.setPosition(0);
-							}
-							if (contigMapper.getNumBases()< numBases)
-								contigMapper.setNumBases(numBases);
-							for (int base = 0; base<numBases; base++) {
+							for (int base = 0; base<contigMapper.getNumBases(); base++) {
 								String s = parser.getNextToken();
 								int added = MesquiteInteger.fromString(s);
 								if (MesquiteInteger.isCombinable(added))

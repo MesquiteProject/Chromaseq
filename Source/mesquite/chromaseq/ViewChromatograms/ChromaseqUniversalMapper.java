@@ -127,7 +127,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset() {
-Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+//   Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -159,7 +159,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 		int originalEndOfTrimmedContig = contig.getNumBases() - contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig();
 		int contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig-1;
 
-				Debugg.println(contigMapper.toString());
+//				Debugg.println(contigMapper.toString());
 
 		int totalNumAddedDeletedBases=contigMapper.getTotalNumberAddedDeletedBases();
 
@@ -302,7 +302,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 
 					int sequenceBase = numBasesFound;
 					contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig+lastPositionInOriginal-1;  //-startingAddedBeforeOriginalTrim
-					if (numBasesFound==1){
+					if (numBasesFound==1 && false){
 						Debugg.println("   sequenceBase: " + sequenceBase);
 						Debugg.println("   contigBase: " + contigBase);
 						Debugg.println("   contigMapper.getNumDeletedBefore(contigBase): " + contigMapper.getNumDeletedBefore(contigBase));
@@ -353,7 +353,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 
 					int sequenceBase = numBasesFound;
 					contigBase = numBasesOriginallyTrimmedFromStartOfPhPhContig+lastPositionInOriginal-1;  //-startingAddedBeforeOriginalTrim
-					if (numBasesFound==1){
+					if (numBasesFound==1 && false){
 						Debugg.println("   sequenceBase: " + sequenceBase);
 						Debugg.println("   contigBase: " + contigBase);
 						Debugg.println("   contigMapper.getNumDeletedBefore(contigBase): " + contigMapper.getNumDeletedBefore(contigBase));
@@ -481,7 +481,7 @@ Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCoun
 			Debugg.println(" universalBase: " + universalBase + ", otherBaseFromUniversalBase[editedMatrixSequence]: " + otherBaseFromUniversalBase[EDITEDMATRIXSEQUENCE][universalBase]);
 		}
 */
-		Debugg.println("======= End Resetting Universal Base Registry ======= " + resetCount + "\n");
+//		Debugg.println("======= End Resetting Universal Base Registry ======= " + resetCount + "\n");
 
 		hasBeenSet = true;
 	}
