@@ -67,7 +67,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		reversedInEditData = contigDisplay.isReversedInEditedData();
 		complementedInEditData = contigDisplay.isComplementedInEditedData();
 
-	//	numBasesOriginallyTrimmedFromStartOfPhPhContig = contig.getNumBasesOriginallyTrimmedFromStartOfPhPhContig(editedData, it);
 		contigMapper = ContigMapper.getContigMapper(editedData,contig, it);
 
 		init();
@@ -80,6 +79,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int[] parameters = Notification.getParameters(notification);
 		if (obj instanceof CharacterData) {
 			reset();
+//			ContigMapper.checkTaxonNumbers(editedData);
 			contigDisplay.repaintPanels();
 		} 
 	}
@@ -145,6 +145,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 		//	totalNumAddedBases=ChromaseqUtil.getTotalNumBasesAddedBeyondPhPhBases(editedData, it);
 		//	totalNumDeletedBases=ChromaseqUtil.getTotalNumOriginalBasesTurnedToGaps(editedData, it);
+		it = contigDisplay.getTaxon().getNumber();
 
 
 //		ChromaseqUtil.fillAddedBaseData(contigDisplay,  editedData, it);

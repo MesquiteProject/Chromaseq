@@ -161,7 +161,7 @@ public class ChromaseqUtil{
 		if (tInfo != null && taxon != null) {
 			tInfo.setAssociatedObject(ChromaseqUtil.contigMapperRef, it, contigMapper);
 		}
-		contigMapper.setTaxonNumber(it);
+//		contigMapper.setTaxonNumber(it);
 		contigMapper.setData(data);
 	}
 
@@ -534,7 +534,7 @@ public class ChromaseqUtil{
 					contigMapper.addToAddedBases(contigBase, -1);				
 			}
 			if (recalc)
-				contigDisplay.getContigMapper().recalc();
+				contigDisplay.getContigMapper().recalc(it);
 		}
 		
 	//	fillAddedBaseData(data,ic,it);
@@ -566,7 +566,7 @@ public class ChromaseqUtil{
 				registryData.setState(ic,it,0,contigBase);
 				reverseRegistryData.setState(contigBase,it,0,ic);
 			}
-			contigMapper.recalc();
+			contigMapper.recalc(it);
 		}
 		else if (addToContigBase>=0) {
 			contigMapper.addToAddedBases(addToContigBase, 1);
@@ -579,7 +579,7 @@ public class ChromaseqUtil{
 					break;
 				}
 			}
-			contigMapper.recalc();
+			contigMapper.recalc(it);
 
 		}
 		else {  // let's find the next one up that it can be
@@ -590,7 +590,7 @@ public class ChromaseqUtil{
 					break;
 				}
 			}
-			contigMapper.recalc();
+			contigMapper.recalc(it);
 		}
 	}
 	/*.................................................................................................................*/

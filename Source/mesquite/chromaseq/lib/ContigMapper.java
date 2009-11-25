@@ -14,6 +14,7 @@ package mesquite.chromaseq.lib;
 import mesquite.categ.lib.MolecularData;
 import mesquite.meristic.lib.MeristicData;
 import mesquite.lib.*;
+import mesquite.lib.characters.CharacterData;
 
 public class ContigMapper {
 	int numAddedToEnd, numResurrectedAtStart;
@@ -28,7 +29,6 @@ public class ContigMapper {
 	boolean storedInFile = false;
 	boolean 	hasBeenSetUp = false;
 	MolecularData editedData = null;
-	int it = -1;
 
 	public ContigMapper (Contig contig) {
 		this.contig = contig;
@@ -58,9 +58,18 @@ public class ContigMapper {
 		}
 		return contigMapper;
 	}
-	/*.................................................................................................................*/
-	public void setTaxonNumber(int it) {
-		this.it = it;
+	/*.................................................................................................................*
+	public static void checkTaxonNumbers(MolecularData editedData) {
+		for (int it = 0; it<editedData.getNumTaxa(); it++){
+			Taxon taxon = editedData.getTaxa().getTaxon(it);
+			Associable tInfo = editedData.getTaxaInfo(false);
+			if (tInfo != null && taxon != null) {
+				ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
+				if (contigMapper!=null){
+					contigMapper.setTaxonNumber(it);
+				}
+			}
+		}
 	}
 	/*.................................................................................................................*/
 	public void setData(MolecularData data) {
@@ -104,11 +113,10 @@ public class ContigMapper {
 	/*.................................................................................................................*/
 	public void recalc(MolecularData editedData, int it) {
 		setData(editedData);
-		setTaxonNumber(it);
-		recalc();
+		recalc(it);
 	}
 	/*.................................................................................................................*/
-	public void calcEndTrim() {
+	public void calcEndTrim(int it) {
 		if (editedData==null)
 			return;
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
@@ -129,7 +137,7 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	/** This method does the basic calculations to summarize various aspects of the added and deleted bases; it does not alter the core storage about which bases are deleted and how many are added.*/
-	public void recalc() {
+	public void recalc(int it) {
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(editedData);
@@ -180,7 +188,6 @@ public class ContigMapper {
 	/*.................................................................................................................*/
 	public void setUp(MolecularData editedData, int it, int numTrimmedFromStart) {
 		this.editedData = editedData;
-		this.it = it;
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(editedData);
@@ -239,7 +246,7 @@ public class ContigMapper {
 			}
 		}
 
-		recalc();
+		recalc(it);
 		hasBeenSetUp = true;
 	}
 	/*.................................................................................................................*/
