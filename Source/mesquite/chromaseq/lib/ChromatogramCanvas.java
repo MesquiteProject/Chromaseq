@@ -406,11 +406,13 @@ public class ChromatogramCanvas extends MousePanel {
 		if (!contigDisplay.contigExists())
 			return i;
 		int contigBase = contigDisplay.getContigBaseFromUniversalBase(i);
-		if (contigBase<0) 
-			return contigBase;
+//		if (contigBase<0) 
+	//		return contigBase;
 		Read read = chromatograms[whichRead].getRead();
-		if (read!=null)
-			return read.getReadBaseFromContigBase(contigBase);  
+		if (read!=null) {
+			int readBase =  read.getReadBaseFromContigBase(contigBase);  
+			return readBase;
+		}
 		else
 			return i;
 	}
