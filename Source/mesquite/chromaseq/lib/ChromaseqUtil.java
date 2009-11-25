@@ -1134,6 +1134,22 @@ public class ChromaseqUtil{
 	}
 	/*.................................................................................................................*/
 
+	public synchronized static void inferRegistryData(CharacterData data, int it) {
+		DNAData originalData = getOriginalData(data);
+		DNAData editedData = getEditedData(data);
+		MeristicData registryData = getRegistryData(data);
+		if (registryData==null || originalData==null || editedData==null)
+			return;
+		for (int ic=0; ic<registryData.getNumChars(); ic++){
+			registryData.setToInapplicable(ic, it);
+		}
+		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
+		inferRegistryDataUsingAlignment(aligner,registryData,it);
+		MesquiteFile file = data.getProject().getHomeFile();
+		inferContigMapper(aligner, file, editedData, it);
+	}
+	/*.................................................................................................................*/
+
 	public synchronized static void inferRegistryData(MeristicData registryData, MesquiteFile file) {
 		if (registryData==null)
 			return;
