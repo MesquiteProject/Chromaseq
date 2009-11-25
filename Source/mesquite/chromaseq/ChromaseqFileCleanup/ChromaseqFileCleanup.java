@@ -2,6 +2,7 @@ package mesquite.chromaseq.ChromaseqFileCleanup;
 
 import mesquite.categ.lib.CategoricalData;
 import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.MolecularData;
 import mesquite.chromaseq.lib.ChromaseqUtil;
 import mesquite.lib.*;
 import mesquite.lib.duties.FileInit;
@@ -146,17 +147,31 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	public void aboutToReadMesquiteBlock(MesquiteFile f) {
 		createRegistryDataIfNeeded(f);
 	}
-
+	/*.................................................................................................................*/
+	public void removeOldNameReferences(MolecularData data) {
+		if (data==null)
+			return;
+		Associable tInfo = data.getTaxaInfo(false);
+		if (tInfo != null)
+			tInfo.removeAssociatedLongs(ChromaseqUtil.startTrimRef);
+	}
 	/*.................................................................................................................*/
 	public void fileReadIn(MesquiteFile f) {
 		createRegistryDataIfNeeded(f);
-		if (!ChromaseqUtil.isChromaseqDevelopment())
-			return;
 		if (f==null)
 			return;
 		if (f.getProject()==null)
 			return;
 		ListableVector matrices = f.getProject().getCharacterMatrices();
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				MolecularData editedData = ChromaseqUtil.getEditedData(data);
+				removeOldNameReferences(editedData);
+			}
+		}
+		if (!ChromaseqUtil.isChromaseqDevelopment())
+			return;
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {

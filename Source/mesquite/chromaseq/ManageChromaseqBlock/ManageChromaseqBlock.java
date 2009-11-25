@@ -23,7 +23,9 @@ import mesquite.chromaseq.lib.*;
 public class ManageChromaseqBlock extends FileInit {
 
 	public static final int CHROMASEQBLOCKVERSION = 2;
-	public static final int ChromaseqBuild = 22;
+	public static final int ChromaseqBuild = 23;
+	/*  first build of new (November 2009), apparently file-format-complete ChromaseqUniversalMapper and ContigMapper scheme: 23
+	 * */
 
 	int numBlocks =0;
 	public Class getDutyClass(){
@@ -454,6 +456,13 @@ public class ManageChromaseqBlock extends FileInit {
 								numBases=0;
 							if (contigMapper.getNumBases()< numBases)
 								contigMapper.setNumBases(numBases);
+						}				
+						else if ("TRIMSTART".equalsIgnoreCase(subC)) {
+							String token = subcommands[1][i];
+							int numTrimmedFromStart = MesquiteInteger.fromString(token);
+							if (!MesquiteInteger.isCombinable(numTrimmedFromStart))
+								numTrimmedFromStart=0;
+							contigMapper.setNumTrimmedFromStart(numTrimmedFromStart);
 						}				
 					}
 				}

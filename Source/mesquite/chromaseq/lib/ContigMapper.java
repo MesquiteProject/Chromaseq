@@ -1,3 +1,14 @@
+/* Mesquite chromaseq source code.  Copyright 2005-2009 D. Maddison and W. Maddison.
+Disclaimer:  The Mesquite source code is lengthy and we are few.  There are no doubt inefficiencies and goofs in this code. 
+The commenting leaves much to be desired. Please approach this source code with the spirit of helping out.
+Perhaps with your help we can be more than a few, and make Mesquite better.
+
+Mesquite is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.
+Mesquite's web site is http://mesquiteproject.org
+
+This source code and its compiled class files are free and modifiable under the terms of 
+GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
+ */
 package mesquite.chromaseq.lib;
 
 import mesquite.categ.lib.MolecularData;
@@ -7,7 +18,7 @@ import mesquite.lib.*;
 public class ContigMapper {
 	int numAddedToEnd, numResurrectedAtStart;
 	int numDeletedFromStart, numDeletedFromEnd;
-	int numBasesOriginallyTrimmedFromEndOfPhPhContig=0;
+	int numTrimmedFromEnd=0;
 	int numTrimmedFromStart = 0;
 	int[] addedBefore;
 	int[] totalAddedBefore, totalAddedAfter;
@@ -42,7 +53,8 @@ public class ContigMapper {
 		if (contigMapper==null) {
 			contigMapper = new ContigMapper(contig);
 			ChromaseqUtil.setContigMapperAssociated(data, it, contigMapper);
-			contigMapper.setNumTrimmedFromStart(numTrimmedFromStart);
+			if (MesquiteInteger.isCombinable(numTrimmedFromStart) && numTrimmedFromStart>=0)
+				contigMapper.setNumTrimmedFromStart(numTrimmedFromStart);
 		}
 		return contigMapper;
 	}
@@ -109,9 +121,9 @@ public class ContigMapper {
 				lastContigBaseInOriginal=contigBase;
 			}
 		}
-		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contig.getNumBases()-lastContigBaseInOriginal-1;
-		setNumBasesOriginallyTrimmedFromEndOfPhPhContig(numBasesOriginallyTrimmedFromEndOfPhPhContig);
-		for (int ic = 0; ic< numBasesOriginallyTrimmedFromEndOfPhPhContig; ic++){  
+		int num = contig.getNumBases()-lastContigBaseInOriginal-1;
+		setNumTrimmedFromEnd(num);
+		for (int ic = 0; ic< num; ic++){  
 			setDeletedBase(contig.getNumBases()-ic-1, true);
 		}
 	}
@@ -141,11 +153,11 @@ public class ContigMapper {
 				lastContigBaseInOriginal=contigBase;
 			}
 		}
-		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contig.getNumBases()-lastContigBaseInOriginal-1;
+		int numFromEnd = contig.getNumBases()-lastContigBaseInOriginal-1;
 
 
 		setNumDeletedFromEnd(deletedAtEnd);
-		setNumBasesOriginallyTrimmedFromEndOfPhPhContig(numBasesOriginallyTrimmedFromEndOfPhPhContig);
+		setNumTrimmedFromEnd(numFromEnd);
 		int addedBase=0;
 		int addedToEnd=0;
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  
@@ -204,10 +216,10 @@ public class ContigMapper {
 				lastContigBaseInOriginal=contigBase;
 			}
 		}
-		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contig.getNumBases()-lastContigBaseInOriginal-1;
+		int numFromEnd = contig.getNumBases()-lastContigBaseInOriginal-1;
 
 
-		for (int ic = 0; ic< numBasesOriginallyTrimmedFromEndOfPhPhContig; ic++){  
+		for (int ic = 0; ic< numFromEnd; ic++){  
 			setDeletedBase(contig.getNumBases()-ic-1, true);
 		}
 		int addedBase=0;
@@ -251,7 +263,7 @@ public class ContigMapper {
 		numAddedToEnd = 0;
 		numDeletedFromStart =0;
 		numDeletedFromEnd = 0;
-		numBasesOriginallyTrimmedFromEndOfPhPhContig = 0;
+		numTrimmedFromEnd = 0;
 		numTrimmedFromStart=0;
 	}
 	/*.................................................................................................................*/
@@ -344,6 +356,13 @@ public class ContigMapper {
 		}
 	}
 	/*.................................................................................................................*/
+	public  void setDeletedBases (int contigStart, int contigEnd, boolean b){
+		for (int contigBase=contigStart; contigBase<=contigEnd; contigBase++)
+			if (contigBase>=0 && contigBase<deleted.length) {
+				deleted[contigBase] = b;
+		}
+	}
+	/*.................................................................................................................*/
 	public  void addToAddedBases (int contigBase, int numAdded){
 		if (contigBase>=0 && contigBase<addedBefore.length)
 			addedBefore[contigBase] += numAdded;
@@ -378,12 +397,12 @@ public class ContigMapper {
 		return storedInFile;
 	}
 	/*.................................................................................................................*/
-	public void setTrimmedFromStart(int trimmed) {
+	public void markAsDeletedBasesTrimmedAtStart(int trimmed) {
 		for (int i = 0; i<deleted.length && i<trimmed; i++)
 			setDeletedBase(i,true);
 	}
 	/*.................................................................................................................*/
-	public void setTrimmedFromEnd(int trimmed) {
+	public void markAsDeletedBasesTrimmedAtEnd(int trimmed) {
 		for (int i = 0; i<deleted.length && i<trimmed; i++)
 			setDeletedBase(deleted.length-i-1,true);
 	}
@@ -391,6 +410,7 @@ public class ContigMapper {
 	public String getNEXUSCommand() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(" NUMBASES = " + deleted.length);
+		sb.append(" TRIMSTART = " + numTrimmedFromStart);
 		sb.append(" DELETED = ");
 		for (int i=0; i<deleted.length; i++)
 			if (deleted[i])
@@ -419,16 +439,15 @@ public class ContigMapper {
 			sb.append(" "+totalAddedBefore[i]) ;
 		sb.append("\nnumAddedToEnd: " + numAddedToEnd); 
 		sb.append("\nnumDeletedFromEnd: " + numDeletedFromEnd); 
-		sb.append("\nnumBasesOriginallyTrimmedFromEndOfPhPhContig: " + numBasesOriginallyTrimmedFromEndOfPhPhContig); 
+		sb.append("\nnumTrimmedFromEnd: " + numTrimmedFromEnd); 
 		sb.append("\n-------------------------- \n");
 		return sb.toString();
 	}
-	public int getNumBasesOriginallyTrimmedFromEndOfPhPhContig() {
-		return numBasesOriginallyTrimmedFromEndOfPhPhContig;
+	public int getNumTrimmedFromEnd() {
+		return numTrimmedFromEnd;
 	}
-	public void setNumBasesOriginallyTrimmedFromEndOfPhPhContig(
-			int numBasesOriginallyTrimmedFromEndOfPhPhContig) {
-		this.numBasesOriginallyTrimmedFromEndOfPhPhContig = numBasesOriginallyTrimmedFromEndOfPhPhContig;
+	public void setNumTrimmedFromEnd(int num) {
+		this.numTrimmedFromEnd = num;
 	}
 	public boolean hasBeenSetUp() {
 		return hasBeenSetUp;
@@ -456,6 +475,14 @@ public class ContigMapper {
 	}
 	public void setNumTrimmedFromStart(int numTrimmedFromStart) {
 		this.numTrimmedFromStart = numTrimmedFromStart;
+	/*	if (editedData==null)
+			return;
+		Associable tInfo = editedData.getTaxaInfo(true);
+		if (tInfo != null) {
+		//	tInfo.removeAssociatedLongs(ChromaseqUtil.startTrimRef);
+			ChromaseqUtil.setLongAssociated(tInfo,ChromaseqUtil.startTrimRef, it, numTrimmedFromStart);
+		}
+*/
 	}
 
 

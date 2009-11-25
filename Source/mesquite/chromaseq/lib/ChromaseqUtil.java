@@ -494,7 +494,6 @@ public class ChromaseqUtil{
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
 		boolean wasInapplicable = editedData.isInapplicable(ic,it);
 		editedData.setState(ic, it, s);
-		ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 		boolean baseInContig = contigDisplay.baseInContig(ic);
 		if (CategoricalState.isInapplicable(s) && !wasInapplicable){
 			MeristicData registryData = ChromaseqUtil.getRegistryData(data);
@@ -508,6 +507,32 @@ public class ChromaseqUtil{
 		if (CategoricalState.isInapplicable(s)!=wasInapplicable) {
 			if (baseInContig)
 				contigDisplay.setBaseInContigDeleted(ic, CategoricalState.isInapplicable(s));
+			else { // wasn't in contig, so need to decrease the next bases added
+				ContigMapper contigMapper = contigDisplay.getContigMapper();
+				ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
+				int contigBase = -1;
+				for (int i=ic+1; i < editedData.getNumChars(); i++)
+					if (contigDisplay.baseInContig(i)){
+						contigBase = universalMapper.getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ACEFILECONTIG, i);
+						break;
+					}
+				if (contigBase<0) { // didn't find it going up, let's look down
+					for (int i=ic-1; i >=0; i--)
+						if (contigDisplay.baseInContig(i)){
+							contigBase = universalMapper.getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ACEFILECONTIG, i);
+							if (contigBase<contigDisplay.getContig().getNumBases()-1) // it's not the end base
+								contigBase++;
+							else {  // never found it; must be just bases added to the end, so decrease that by one
+								contigBase = -1;
+								contigMapper.setNumAddedToEnd(contigMapper.getNumAddedToEnd()-1);
+							}
+								
+							break;
+						}
+				}
+				if (contigBase>=0)
+					contigMapper.addToAddedBases(contigBase, -1);				
+			}
 			if (recalc)
 				contigDisplay.getContigMapper().recalc();
 		}
@@ -537,7 +562,7 @@ public class ChromaseqUtil{
 		
 		if (contigBase>=0){  //it matches a contig base; let's resurrect it
 			contigMapper.setDeletedBase(contigBase, false);
-			if (contigBase>=contigDisplay.getNumBasesOriginallyTrimmedFromStartOfPhPhContig() && contigBase<= contigDisplay.getContig().getNumBases()-contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig()) {
+			if (contigBase>=contigDisplay.getNumTrimmedFromStart() && contigBase<= contigDisplay.getContig().getNumBases()-contigMapper.getNumTrimmedFromEnd()) {
 				registryData.setState(ic,it,0,contigBase);
 				reverseRegistryData.setState(contigBase,it,0,ic);
 			}
@@ -694,7 +719,237 @@ public class ChromaseqUtil{
 				}
 			}
 	}
+	
+	/*.................................................................................................................*/
 
+	public synchronized static void reFillRegistries(CharacterData data, int it) {
+		DNAData editedData = getEditedData(data);
+		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return;
+		for (int ic=0; ic<registryData.getNumChars(); ic++){
+			registryData.setToInapplicable(ic, it);
+		}
+		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
+		inferRegistryDataUsingAlignment(aligner,registryData,it);
+		MeristicData reverseRegistryData = getReverseRegistryData(data);
+		for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
+			reverseRegistryData.setToInapplicable(ic, it);
+		}
+		for (int ic=0; ic<registryData.getNumChars(); ic++){
+			int mapping = registryData.getState(ic, it);
+			if (MesquiteInteger.isCombinable(mapping) && mapping>=0 && mapping<=reverseRegistryData.getNumChars()) {
+				if (editedData.isInapplicable(ic, it)) // then even though the registry points into the original data, there is no data in the edited matrix
+					reverseRegistryData.setToUnassigned(ic, it);
+				else
+					reverseRegistryData.setState(mapping, it, 0, ic);
+			}
+		}
+	}
+
+	/*.................................................................................................................*/
+
+	public static void setReverseRegistryDataValues(MeristicData reverseRegistryData, DNAData originalData, String name, MesquiteString uid, MesquiteString gN) {
+		originalData.addToLinkageGroup(reverseRegistryData); //link matrices!
+		reverseRegistryData.setName("Reverse Registration Data of " + name + " (for internal bookkeeping)");  //DAVID: if change name here have to change elsewhere
+		attachStringToMatrix(reverseRegistryData,uid);
+		attachStringToMatrix(reverseRegistryData,gN);
+		attachStringToMatrix(reverseRegistryData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REVERSEREGISTRYREF));
+		reverseRegistryData.setWritable(false);
+		reverseRegistryData.setResourcePanelIsOpen(false);
+
+	}
+	/*.................................................................................................................*/
+
+	public static MeristicData createReverseRegistryData(DNAData originalData) {
+		MeristicData rr = getReverseRegistryData(originalData);
+		if (rr!=null)
+			return rr;
+		MesquiteString uid = null;
+		int originalNumChars = originalData.getNumChars();
+		Object obj = getStringAttached(originalData,PHPHIMPORTIDREF);
+		if (obj!=null && obj instanceof MesquiteString) {
+			String dataUID= ((MesquiteString)obj).getValue();
+			uid = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataUID);
+		}
+		MesquiteString gN = null;
+		String dataGeneName = "";
+		obj = getStringAttached(originalData,GENENAMEREF);
+		if (obj!=null && obj instanceof MesquiteString) {
+			dataGeneName= ((MesquiteString)obj).getValue();
+			gN = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataGeneName);
+		}
+		FileCoordinator coord = originalData.getProject().getCoordinatorModule();
+		MesquiteFile file = originalData.getProject().getHomeFile();
+		CharactersManager manageCharacters = (CharactersManager)coord.findElementManager(mesquite.lib.characters.CharacterData.class);
+		MeristicData reverseRegistryData =  (MeristicData)manageCharacters.newCharacterData(originalData.getTaxa(), originalData.getNumChars(), MeristicData.DATATYPENAME);  //
+		reverseRegistryData.addToFile(file, originalData.getProject(), manageCharacters);  
+
+		setReverseRegistryDataValues(reverseRegistryData, originalData, dataGeneName, uid, gN);
+
+		fillReverseRegistryData(reverseRegistryData);
+		reverseRegistryData.setEditorInhibition(true);
+		reverseRegistryData.setUserVisible(isChromaseqDevelopment());
+
+		return reverseRegistryData;
+	}
+	/*.................................................................................................................*/
+
+	public static void prepareOriginalAndQualityData (CharacterData data) {
+		ContinuousData qualityData = getQualityData(data);
+		if (qualityData!=null) {
+			qualityData.resignFromLinkageGroup();
+			qualityData.setLocked(true);
+		}
+		DNAData originalData = getOriginalData(data);
+		if (originalData!=null) {
+			originalData.resignFromLinkageGroup();
+			originalData.setLocked(true);
+		}
+	}
+
+	/*.................................................................................................................*/
+	public static double getQualityScoreForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
+		ContinuousData qualityData = getQualityData(data);
+		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return 0.0;
+		int mapping = registryData.getState(ic, it);
+		return qualityData.getState(mapping, it, 0);
+	}
+	/*.................................................................................................................*/
+	public static long getOriginalStateForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
+		DNAData originalData = getOriginalData(data);
+		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return 0;
+		int mapping = registryData.getState(ic, it);
+		return originalData.getStateRaw(mapping, it);
+	}
+	/*.................................................................................................................*/
+	public static boolean originalIsInapplicableForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
+		DNAData originalData = getOriginalData(data);
+		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return false;
+		int mapping = registryData.getState(ic, it);
+		return originalData.isInapplicable(mapping, it);
+	}
+
+
+	/*.................................................................................................................*/
+
+	public static void setRegistryDataValues(MeristicData registryData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
+		registryData.saveChangeHistory = false;
+		data.addToLinkageGroup(registryData); //link matrices!
+		registryData.setName("Registration of " + name + " from Phred/Phrap");  //DAVID: if change name here have to change elsewhere
+		attachStringToMatrix(registryData,uid);
+		attachStringToMatrix(registryData,gN);
+		attachStringToMatrix(registryData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REGISTRYREF));
+		registryData.setResourcePanelIsOpen(false);
+		registryData.setEditorInhibition(true);
+	}
+	/*.................................................................................................................*/
+	 public synchronized static void inferContigMapper(PairwiseAligner aligner, MesquiteFile file, DNAData editedData, int it) {
+		 if (aligner==null || editedData==null) 
+			 return;
+		 DNAData originalData = getOriginalData(editedData);
+		 AceFile ace = AceFile.getAceFile(file, null, editedData,  it);
+		 Associable tInfo = editedData.getTaxaInfo(false);
+		 long whichContig = 0;
+		 if (tInfo != null)
+			 whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);
+		 Contig contig = ace.getContig((int)whichContig); 
+
+
+		 //====== first calculate, record, and specify trimmed region from start and end of contigs.  Use alignment to do this  ======= 
+		 int numTrimmedFromStart = 0;//contig.getNumBasesOriginallyTrimmedFromStartOfPhPhContig(editedData, it);
+		 int numTrimmedFromEnd = 0;
+		 long[] contigBases = contig.getSequenceAsLongArray();
+		 long[] originalTrimmed = new long[originalData.getNumChars()];
+		 for (int ic = 0; ic<originalData.getNumChars(); ic++){
+			 originalTrimmed[ic] = originalData.getState(ic, it);
+		 }
+		 MesquiteNumber alignScore = new MesquiteNumber();
+		 aligner.setMaintainOrder(true);
+		 long[][] contigOriginalAlignment = aligner.alignSequences(contigBases, originalTrimmed, true, alignScore);
+		 int contigSeq = 0;
+		 int originalSeq = 1;
+		 
+	//	 if (!MesquiteInteger.isCombinable(numTrimmedFromStart)){
+			 numTrimmedFromStart=0;
+			 for (int ic=0; ic<contigOriginalAlignment.length; ic++){
+				 if (contigOriginalAlignment[ic][originalSeq]!=CategoricalState.inapplicable) // we've found the first imported, trimmed base, so leave here
+					 break;
+				 if (contigOriginalAlignment[ic][contigSeq]!=CategoricalState.inapplicable) // we've found the first imported, trimmed base, so leave here
+					 numTrimmedFromStart++;
+			 }
+	//	 }
+			 
+		 numTrimmedFromEnd=0;
+		 for (int ic=contigOriginalAlignment.length-1; ic>=0; ic--){
+			 if (contigOriginalAlignment[ic][originalSeq]!=CategoricalState.inapplicable) // we've found the first imported, trimmed base, so leave here
+				 break;
+			 if (contigOriginalAlignment[ic][contigSeq]!=CategoricalState.inapplicable) // we've found the first imported, trimmed base, so leave here
+				 numTrimmedFromEnd++;
+		 }
+
+		 int padBeforeTrim = contig.resetPadding(numTrimmedFromStart, false);
+		 numTrimmedFromStart -= padBeforeTrim;
+
+
+		 ContigMapper contigMapper = ContigMapper.getContigMapper(editedData, null, it);  // this will also attach it!
+		 contigMapper.setNumBases(contig.getNumBases());
+		 contigMapper.zeroValues();
+		 contigMapper.setNumTrimmedFromStart(numTrimmedFromStart);
+		 contigMapper.markAsDeletedBasesTrimmedAtStart(numTrimmedFromStart);
+		 contigMapper.setNumTrimmedFromEnd(numTrimmedFromEnd);
+		 contigMapper.markAsDeletedBasesTrimmedAtEnd(numTrimmedFromEnd);
+		 contigMapper.setStoredInFile(true);
+		 
+//		 Debugg.println("contigMapper inference, it: " + it + ", numTrimmedFromStart: " + numTrimmedFromStart);
+		 //======= now figure out bases internally added or deleted using alignment between originalTrimmed and editedData
+
+		 long[] editedBases = new long[editedData.getNumChars()];
+		 for (int ic = 0; ic<editedData.getNumChars(); ic++){
+			 editedBases[ic] = editedData.getState(ic, it);
+		 }
+		 int editedSeq = 0;
+		 long[][] editedOriginalAlignment = aligner.alignSequences(editedBases, originalTrimmed, true, alignScore);
+
+		 int added = 0;
+		 int contigBase = numTrimmedFromStart-1;
+		 int addedToStart = 0;
+//		 for (int ic=editedOriginalAlignment.length-1; ic>=0; ic--){
+			 for (int ic=0; ic<editedOriginalAlignment.length; ic++){
+			 if (editedOriginalAlignment[ic][originalSeq]!=CategoricalState.inapplicable){   // we've found an original base, i.e., one in contig
+				 contigBase++;
+				 if (editedOriginalAlignment[ic][editedSeq]==CategoricalState.inapplicable) // there's nothing in the edited - must be deleated
+					 contigMapper.setDeletedBase(contigBase, true);
+				 else {
+					 if (contigBase==numTrimmedFromStart && addedToStart>0 && numTrimmedFromStart>0) {  // special case; need to shift and mark previous ones as not deleted
+						 int newStart = contigBase-addedToStart;
+						 int numAdded = addedToStart-numTrimmedFromStart;
+						 if (numAdded>0 && newStart<=0){
+							 contigMapper.setAddedBases(0, numAdded);
+						 }
+						contigMapper.setDeletedBases(numTrimmedFromStart-addedToStart, numTrimmedFromStart-1, false);
+					 }
+					 else 
+						 contigMapper.setAddedBases(contigBase, added);
+				 }
+				 added=0;
+			 } else if  (editedOriginalAlignment[ic][editedSeq]!=CategoricalState.inapplicable){ // here's one not in contig, but in edited - must be added
+				 added++;
+				 if (contigBase<numTrimmedFromStart)
+					 addedToStart++;
+			 }
+		 }
+		 contigMapper.setNumAddedToEnd(added);
+		 
+
+		 //contig.getPolyBaseString(i)
+	 }
 
 	/*.................................................................................................................*/
 
@@ -703,12 +958,6 @@ public class ChromaseqUtil{
 		DNAData editedData = getEditedData(registryData);
 		if(originalData==null || editedData==null)
 			return;
-		if (it==0) 
-			MesquiteTrunk.mesquiteTrunk.logln("Creating Registry Data [" + editedData.getName() + "]");
-		else if (it==editedData.getNumTaxa()-1)
-			MesquiteTrunk.mesquiteTrunk.logln(".");
-		else
-			MesquiteTrunk.mesquiteTrunk.log(".");
 
 		for (int ic=0; ic<editedData.getNumChars(); ic++){
 			registryData.setToInapplicable(ic, it);
@@ -845,6 +1094,7 @@ public class ChromaseqUtil{
 				}
 
 			}
+			
 
 		} else {
 
@@ -884,7 +1134,7 @@ public class ChromaseqUtil{
 	}
 	/*.................................................................................................................*/
 
-	public synchronized static void fillRegistryData(MeristicData registryData) {
+	public synchronized static void inferRegistryData(MeristicData registryData, MesquiteFile file) {
 		if (registryData==null)
 			return;
 		for (int it=0; it<registryData.getNumTaxa(); it++) 
@@ -897,138 +1147,20 @@ public class ChromaseqUtil{
 			return;
 		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
 		for (int it=0; it<registryData.getNumTaxa(); it++)  {
+			if (it==0) 
+				MesquiteTrunk.mesquiteTrunk.logln("Creating Registry Data [" + editedData.getName() + "]");
+			else
+				MesquiteTrunk.mesquiteTrunk.log(".");
+			CommandRecord.tick("Registering sequences for taxon " + (it+1));
 			inferRegistryDataUsingAlignment(aligner,registryData,it);
+			if (it==editedData.getNumTaxa()-1)
+				MesquiteTrunk.mesquiteTrunk.logln(".");
+			else
+				MesquiteTrunk.mesquiteTrunk.log(".");
+			//CommandRecord.tick("Registering contig from ACE file for taxon " + (it+1));
+			inferContigMapper(aligner, file, editedData, it);
 		}
 	//	fillAddedBaseData(editedData);
-	}
-	/*.................................................................................................................*/
-
-	public synchronized static void reFillRegistries(CharacterData data, int it) {
-		DNAData editedData = getEditedData(data);
-		MeristicData registryData = getRegistryData(data);
-		if (registryData==null)
-			return;
-		for (int ic=0; ic<registryData.getNumChars(); ic++){
-			registryData.setToInapplicable(ic, it);
-		}
-		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
-		inferRegistryDataUsingAlignment(aligner,registryData,it);
-		MeristicData reverseRegistryData = getReverseRegistryData(data);
-		for (int ic=0; ic<reverseRegistryData.getNumChars(); ic++){
-			reverseRegistryData.setToInapplicable(ic, it);
-		}
-		for (int ic=0; ic<registryData.getNumChars(); ic++){
-			int mapping = registryData.getState(ic, it);
-			if (MesquiteInteger.isCombinable(mapping) && mapping>=0 && mapping<=reverseRegistryData.getNumChars()) {
-				if (editedData.isInapplicable(ic, it)) // then even though the registry points into the original data, there is no data in the edited matrix
-					reverseRegistryData.setToUnassigned(ic, it);
-				else
-					reverseRegistryData.setState(mapping, it, 0, ic);
-			}
-		}
-	}
-
-	/*.................................................................................................................*/
-
-	public static void setReverseRegistryDataValues(MeristicData reverseRegistryData, DNAData originalData, String name, MesquiteString uid, MesquiteString gN) {
-		originalData.addToLinkageGroup(reverseRegistryData); //link matrices!
-		reverseRegistryData.setName("Reverse Registration Data of " + name + " (for internal bookkeeping)");  //DAVID: if change name here have to change elsewhere
-		attachStringToMatrix(reverseRegistryData,uid);
-		attachStringToMatrix(reverseRegistryData,gN);
-		attachStringToMatrix(reverseRegistryData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REVERSEREGISTRYREF));
-		reverseRegistryData.setWritable(false);
-		reverseRegistryData.setResourcePanelIsOpen(false);
-
-	}
-	/*.................................................................................................................*/
-
-	public static MeristicData createReverseRegistryData(DNAData originalData) {
-		MeristicData rr = getReverseRegistryData(originalData);
-		if (rr!=null)
-			return rr;
-		MesquiteString uid = null;
-		int originalNumChars = originalData.getNumChars();
-		Object obj = getStringAttached(originalData,PHPHIMPORTIDREF);
-		if (obj!=null && obj instanceof MesquiteString) {
-			String dataUID= ((MesquiteString)obj).getValue();
-			uid = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataUID);
-		}
-		MesquiteString gN = null;
-		String dataGeneName = "";
-		obj = getStringAttached(originalData,GENENAMEREF);
-		if (obj!=null && obj instanceof MesquiteString) {
-			dataGeneName= ((MesquiteString)obj).getValue();
-			gN = new MesquiteString(ChromaseqUtil.PHPHIMPORTIDREF, dataGeneName);
-		}
-		FileCoordinator coord = originalData.getProject().getCoordinatorModule();
-		MesquiteFile file = originalData.getProject().getHomeFile();
-		CharactersManager manageCharacters = (CharactersManager)coord.findElementManager(mesquite.lib.characters.CharacterData.class);
-		MeristicData reverseRegistryData =  (MeristicData)manageCharacters.newCharacterData(originalData.getTaxa(), originalData.getNumChars(), MeristicData.DATATYPENAME);  //
-		reverseRegistryData.addToFile(file, originalData.getProject(), manageCharacters);  
-
-		setReverseRegistryDataValues(reverseRegistryData, originalData, dataGeneName, uid, gN);
-
-		fillReverseRegistryData(reverseRegistryData);
-		reverseRegistryData.setEditorInhibition(true);
-		reverseRegistryData.setUserVisible(isChromaseqDevelopment());
-
-		return reverseRegistryData;
-	}
-	/*.................................................................................................................*/
-
-	public static void prepareOriginalAndQualityData (CharacterData data) {
-		ContinuousData qualityData = getQualityData(data);
-		if (qualityData!=null) {
-			qualityData.resignFromLinkageGroup();
-			qualityData.setLocked(true);
-		}
-		DNAData originalData = getOriginalData(data);
-		if (originalData!=null) {
-			originalData.resignFromLinkageGroup();
-			originalData.setLocked(true);
-		}
-	}
-
-	/*.................................................................................................................*/
-	public static double getQualityScoreForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
-		ContinuousData qualityData = getQualityData(data);
-		MeristicData registryData = getRegistryData(data);
-		if (registryData==null)
-			return 0.0;
-		int mapping = registryData.getState(ic, it);
-		return qualityData.getState(mapping, it, 0);
-	}
-	/*.................................................................................................................*/
-	public static long getOriginalStateForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
-		DNAData originalData = getOriginalData(data);
-		MeristicData registryData = getRegistryData(data);
-		if (registryData==null)
-			return 0;
-		int mapping = registryData.getState(ic, it);
-		return originalData.getStateRaw(mapping, it);
-	}
-	/*.................................................................................................................*/
-	public static boolean originalIsInapplicableForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
-		DNAData originalData = getOriginalData(data);
-		MeristicData registryData = getRegistryData(data);
-		if (registryData==null)
-			return false;
-		int mapping = registryData.getState(ic, it);
-		return originalData.isInapplicable(mapping, it);
-	}
-
-
-	/*.................................................................................................................*/
-
-	public static void setRegistryDataValues(MeristicData registryData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
-		registryData.saveChangeHistory = false;
-		data.addToLinkageGroup(registryData); //link matrices!
-		registryData.setName("Registration of " + name + " from Phred/Phrap");  //DAVID: if change name here have to change elsewhere
-		attachStringToMatrix(registryData,uid);
-		attachStringToMatrix(registryData,gN);
-		attachStringToMatrix(registryData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REGISTRYREF));
-		registryData.setResourcePanelIsOpen(false);
-		registryData.setEditorInhibition(true);
 	}
 
 	/*.................................................................................................................*/
@@ -1058,7 +1190,7 @@ public class ChromaseqUtil{
 
 		setRegistryDataValues(registryData,  data, dataGeneName,  uid,  gN);
 
-		fillRegistryData(registryData);
+		inferRegistryData(registryData, file);
 
 		prepareOriginalAndQualityData(data);
 
