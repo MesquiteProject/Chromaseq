@@ -308,7 +308,6 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 
 		Color baseColor;
 		
-//		int trim= panel.getDisplayPositionOfConsensusBase(0);
 //		Debugg.println(" |||||||||||||||||| " + read.getName());
 
 //		=====================  COLOR THE BASES OF THE READ ==============================

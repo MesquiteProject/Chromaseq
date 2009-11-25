@@ -40,7 +40,7 @@ public  class ChromatogramPanel extends MesquitePanel{
 	//this is consensus position
 	public void exportSelectUniversalBase(int i){
 		listen = false;
-		contigDisplay.selectDisplayPositionInTable(i);
+		contigDisplay.selectUniversalBaseInTable(i);
 
 		contigDisplay.setSelectedUniversalBaseInChrom(i, true, true);
 		listen = true;
@@ -48,7 +48,7 @@ public  class ChromatogramPanel extends MesquitePanel{
 	//this is consensus position
 	public void exportDeselectUniversalBase(int i){
 		listen = false;
-		contigDisplay.deselectDisplayPositionInTable(i);
+		contigDisplay.deselectUniversalBaseInTable(i);
 		contigDisplay.setSelectedUniversalBaseInChrom(i, false, true);
 		listen = true;
 	}
