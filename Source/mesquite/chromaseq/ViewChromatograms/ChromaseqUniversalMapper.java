@@ -191,13 +191,14 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			createOtherBaseFromUniversalBase();
 		for(int mapping=0; mapping<numMappings; mapping++) 
 			for (int i=0; i<otherBaseFromUniversalBase[mapping].length; i++) 
-				otherBaseFromUniversalBase[mapping][i]=-1;
+				otherBaseFromUniversalBase[mapping][i]= MesquiteInteger.unassigned;
 
 
 		createUniversalBaseFromOtherBase();
 		for(int mapping=0; mapping<numMappings; mapping++) 
 			for (int i=0; i<universalBaseFromOtherBase[mapping].length; i++) 
-				universalBaseFromOtherBase[mapping][i]=-1;
+				universalBaseFromOtherBase[mapping][i]= MesquiteInteger.unassigned;
+;
 
 
 		// =========== Calculate mappings for the original untrimmed panel (i.e., the "Original Untrimmed" one) ===========
@@ -502,6 +503,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 
 	public int getUniversalBaseFromOtherBase(int otherBaseSystem, int otherBase) {
+		if (!MesquiteInteger.isCombinable(otherBase))
+			return MesquiteInteger.unassigned;
 		if (otherBase<0) {
 			int firstUniversalBase = 0;
 			firstUniversalBase = universalBaseFromOtherBase[otherBaseSystem][0]+otherBase;
@@ -512,7 +515,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		if (otherBase>=universalBaseFromOtherBase[otherBaseSystem].length) {
 			int endUniversalBase = 0;
 			if (universalBaseFromOtherBase[otherBaseSystem].length-1 <0)
-				return -1;
+				return MesquiteInteger.unassigned;
 			endUniversalBase = universalBaseFromOtherBase[otherBaseSystem][universalBaseFromOtherBase[otherBaseSystem].length-1]+ (otherBase-universalBaseFromOtherBase[otherBaseSystem].length+1);
 			return endUniversalBase;
 		}
@@ -521,12 +524,12 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 
 	public int getOtherBaseFromUniversalBase(int otherBaseSystem, int universalBase) {
-		if (universalBase<0)
-			return -1;
+		if (!MesquiteInteger.isCombinable(universalBase) || universalBase<0)
+			return MesquiteInteger.unassigned;
 		if (universalBase>=otherBaseFromUniversalBase[otherBaseSystem].length) {
 			int endOtherBase = 0;
 			if (otherBaseFromUniversalBase[otherBaseSystem].length-1 <0)
-				return -1;
+				return MesquiteInteger.unassigned;
 			endOtherBase = otherBaseFromUniversalBase[otherBaseSystem][otherBaseFromUniversalBase[otherBaseSystem].length-1]+ (universalBase-otherBaseFromUniversalBase[otherBaseSystem].length+1);
 			return endOtherBase;
 		}
@@ -535,8 +538,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 
 	public int getEditedMatrixBaseFromUniversalBase(int universalBase) {
-		if (universalBase<0 || universalBase>=otherBaseFromUniversalBase[EDITEDMATRIX].length)
-			return -1;
+		if (!MesquiteInteger.isCombinable(universalBase) || universalBase<0 || universalBase>=otherBaseFromUniversalBase[EDITEDMATRIX].length)
+			return MesquiteInteger.unassigned;
 		int editedBase = otherBaseFromUniversalBase[EDITEDMATRIX][universalBase];
 		if (reversedInEditData) {
 			//editedBase = editedData.getNumChars()-editedBase-1;
@@ -546,11 +549,11 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 
 	public int getEditedMatrixBaseFromOtherBase(int otherBaseSystem, int otherBase) {
-		if (otherBase<0 || otherBase>=universalBaseFromOtherBase[otherBaseSystem].length)
-			return -1;
+		if (!MesquiteInteger.isCombinable(otherBase) || otherBase<0 || otherBase>=universalBaseFromOtherBase[otherBaseSystem].length)
+			return MesquiteInteger.unassigned;
 		int universalBase = universalBaseFromOtherBase[otherBaseSystem][otherBase];
-		if (universalBase<0 || universalBase>=otherBaseFromUniversalBase[EDITEDMATRIX].length)
-			return -1;
+		if (!MesquiteInteger.isCombinable(universalBase) || universalBase<0 || universalBase>=otherBaseFromUniversalBase[EDITEDMATRIX].length)
+			return MesquiteInteger.unassigned;
 		int editedBase = otherBaseFromUniversalBase[EDITEDMATRIX][universalBase];
 		if (reversedInEditData) {
 			//	editedBase = editedData.getNumChars()-editedBase-1;
@@ -560,11 +563,11 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 
 	public int getOtherBaseFromEditedMatrixBase(int otherBaseSystem, int matrixBase) {
-		if (matrixBase<0 || matrixBase>=universalBaseFromOtherBase[EDITEDMATRIX].length)
-			return -1;
+		if (!MesquiteInteger.isCombinable(matrixBase) || matrixBase<0 || matrixBase>=universalBaseFromOtherBase[EDITEDMATRIX].length)
+			return MesquiteInteger.unassigned;
 		int universalBase = universalBaseFromOtherBase[EDITEDMATRIX][matrixBase];
-		if (universalBase<0 || universalBase>=otherBaseFromUniversalBase[otherBaseSystem].length)
-			return -1;
+		if (!MesquiteInteger.isCombinable(universalBase) || universalBase<0 || universalBase>=otherBaseFromUniversalBase[otherBaseSystem].length)
+			return MesquiteInteger.unassigned;
 		return otherBaseFromUniversalBase[otherBaseSystem][universalBase];
 	}
 	/*.................................................................................................................*/
