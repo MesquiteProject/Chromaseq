@@ -22,7 +22,8 @@ public class ContigMapper {
 	int numTrimmedFromEnd=0;
 	int numTrimmedFromStart = 0;
 	int[] addedBefore;
-	int[] totalAddedBefore, totalAddedAfter;
+	int[] totalAddedDeletedBefore, totalAddedDeletedAfter;
+	int[] totalAddedBefore;
 	boolean[] deleted;
 	int numBases=0;
 	Contig contig=null;
@@ -81,26 +82,27 @@ public class ContigMapper {
 		int count = 0;
 		for (int ic = 0; ic<addedBefore.length; ic++){
 			count += addedBefore[ic] ;
+			totalAddedDeletedBefore[ic] = count;
 			totalAddedBefore[ic] = count;
 		}
 		count=0;
 		for (int ic = 0; ic<deleted.length; ic++){
-			totalAddedBefore[ic] -= count;
+			totalAddedDeletedBefore[ic] -= count;
 			if (deleted[ic])
 				count++;
 		}
 		count = 0;
 		for (int ic = addedBefore.length-1; ic>=0; ic--){
 			count += addedBefore[ic] ;
-			totalAddedAfter[ic] = count;
+			totalAddedDeletedAfter[ic] = count;
 		}
 		count=0;
 		for (int ic = deleted.length-1; ic>=0; ic--){
-			totalAddedAfter[ic] -= count;
+			totalAddedDeletedAfter[ic] -= count;
 			if (deleted[ic])
 				count++;
 		}
-		totalAddedAfter[deleted.length-1] -= numDeletedFromEnd;
+		totalAddedDeletedAfter[deleted.length-1] -= numDeletedFromEnd;
 
 		count=0;
 		for (int ic = deleted.length-1; ic>=0; ic--){
@@ -264,8 +266,9 @@ public class ContigMapper {
 		if (addedBefore!=null)
 			for (int ic = 0; ic<addedBefore.length; ic++){
 				addedBefore[ic]=0;
+				totalAddedDeletedBefore[ic]=0;
+				totalAddedDeletedAfter[ic]=0;
 				totalAddedBefore[ic]=0;
-				totalAddedAfter[ic]=0;
 			}
 		numAddedToEnd = 0;
 		numDeletedFromStart =0;
@@ -284,7 +287,8 @@ public class ContigMapper {
 		if (numBases>0) {
 			addedBefore = new int[numBases];
 			totalAddedBefore = new int[numBases];
-			totalAddedAfter = new int[numBases];
+			totalAddedDeletedBefore = new int[numBases];
+			totalAddedDeletedAfter = new int[numBases];
 			deleted = new boolean[numBases];
 		}
 		zeroValues();
@@ -294,6 +298,10 @@ public class ContigMapper {
 		this.contig=contig;
 	}
 	/*.................................................................................................................*/
+	public  int getTotalNumberAddedBases (){
+		return totalAddedBefore[totalAddedBefore.length-1]+getNumAddedToEnd();
+	}
+	/*.................................................................................................................*
 	public  int getTotalNumberAddedDeletedBases (){
 		return totalAddedBefore[totalAddedBefore.length-1]+getNumAddedDeletedFromEnd();
 	}
@@ -327,9 +335,9 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	public  int getNumAddedDeletedBefore (int contigBase){
-		if (contigBase<0 || totalAddedBefore == null || contigBase>=totalAddedBefore.length)
+		if (contigBase<0 || totalAddedDeletedBefore == null || contigBase>=totalAddedDeletedBefore.length)
 			return 0;
-		return totalAddedBefore[contigBase];
+		return totalAddedDeletedBefore[contigBase];
 	}
 	/*.................................................................................................................*/
 	public  int getNumAddedBefore (int consensusBase){
@@ -442,8 +450,8 @@ public class ContigMapper {
 		for (int i=0; i<addedBefore.length; i++)
 			sb.append(" "+addedBefore[i]) ;
 		sb.append("\nTOTALADDEDDELETEDBEFORE ");
-		for (int i=0; i<totalAddedBefore.length; i++)
-			sb.append(" "+totalAddedBefore[i]) ;
+		for (int i=0; i<totalAddedDeletedBefore.length; i++)
+			sb.append(" "+totalAddedDeletedBefore[i]) ;
 		sb.append("\nnumAddedToEnd: " + numAddedToEnd); 
 		sb.append("\nnumDeletedFromEnd: " + numDeletedFromEnd); 
 		sb.append("\nnumTrimmedFromEnd: " + numTrimmedFromEnd); 

@@ -78,7 +78,9 @@ public class ChromaseqUtil{
 	public static final NameReference sampleCodeNamesRef= NameReference.getNameReference("sampleCodeForEachRead");//Strings: tInfo
 	public static final NameReference sampleCodeRef= NameReference.getNameReference("sampleCodeForTaxon");//Strings: tInfo
 
-	public static final NameReference chromatogramsExistRef = NameReference.getNameReference("chromatogramsExist");//long: tinfo
+//	public static final NameReference chromatogramsExistRef = NameReference.getNameReference("chromatogramsExist");//long: tinfo
+	public static final NameReference numChromatogramsRef = NameReference.getNameReference("numberOfChromatograms");//long: tinfo
+//	public static final NameReference singleReadRef = NameReference.getNameReference("singleRead");//long: tinfo
 	public static final NameReference startTrimRef = NameReference.getNameReference("startTrim");//long: tInfo
 	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
 	public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //long: tInfo, data(ch); MesquiteInteger: data(cells)

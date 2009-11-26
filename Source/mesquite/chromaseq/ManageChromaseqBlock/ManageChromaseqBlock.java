@@ -23,8 +23,11 @@ import mesquite.chromaseq.lib.*;
 public class ManageChromaseqBlock extends FileInit {
 
 	public static final int CHROMASEQBLOCKVERSION = 2;
-	public static final int ChromaseqBuild = 23;
-	/*  first build of new (November 2009), apparently file-format-complete ChromaseqUniversalMapper and ContigMapper scheme: 23
+	public static final int ChromaseqBuild = 24;
+	/*  
+	builds:
+	23: first build of new (November 2009), apparently file-format-complete ChromaseqUniversalMapper and ContigMapper scheme
+	24: first build with single-read code in, 25 November 2009
 	 * */
 
 	int numBlocks =0;
@@ -239,7 +242,7 @@ public class ManageChromaseqBlock extends FileInit {
 					sb.append("\n\tTAXAINFO" + " ;" + StringUtil.lineEnding());
 					here = writeLongs(sb, tInfo, ChromaseqUtil.trimmableNameRef);
 					some  |= here;
-					here = writeLongs(sb, tInfo, ChromaseqUtil.chromatogramsExistRef);
+					here = writeLongs(sb, tInfo, ChromaseqUtil.numChromatogramsRef);
 					some  |= here;
 					here = writeLongs(sb, tInfo, ChromaseqUtil.whichContigRef);
 					some  |= here;
@@ -304,7 +307,7 @@ public class ManageChromaseqBlock extends FileInit {
 					sb.append("\n\tTAXAINFO" + " ;" + StringUtil.lineEnding());
 					here = writeLongs(sb, tInfo, ChromaseqUtil.trimmableNameRef);
 					some  |= here;
-					here = writeLongs(sb, tInfo, ChromaseqUtil.chromatogramsExistRef);
+					here = writeLongs(sb, tInfo, ChromaseqUtil.numChromatogramsRef);
 					some  |= here;
 					here = writeLongs(sb, tInfo, ChromaseqUtil.whichContigRef);
 					some  |= here;

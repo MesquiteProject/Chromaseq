@@ -138,7 +138,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset(boolean forceFullContigMapSetup) {
- // Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+ //Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -176,7 +176,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 //			Debugg.println(contigMapper.toString());
 
-		int totalNumAddedDeletedBases=contigMapper.getTotalNumberAddedDeletedBases();
+		int totalNumAddedBases=contigMapper.getTotalNumberAddedBases();
 
 		/* contigDisplay.getTotalNumOverallBases() is the number of bases according to the contig 
 		 * - it's the number of bases in the contig plus the extra bases in front and at the end (as found in individual reads
@@ -186,7 +186,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 		/* Now let's add to this the bases that 
 		 */
-		totalUniversalBases += totalNumAddedDeletedBases;
+		totalUniversalBases += totalNumAddedBases;
 
 		if (otherBaseFromUniversalBase==null || otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE].length!=totalUniversalBases)
 			createOtherBaseFromUniversalBase();
@@ -243,13 +243,13 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 //			Debugg.println("   contig.getReadExcessAtStart(): " + contig.getReadExcessAtStart());
 			for (int sequenceBase=0; sequenceBase<sequence.getLength(); sequenceBase++){
 				int universalBase = sequenceBase + contig.getReadExcessAtStart();
-				if (sequenceBase<0 && false){
+				if (sequenceBase<5 && false){
 					Debugg.println("   sequenceBase: " + sequenceBase);
 					Debugg.println("     universalBase: " + universalBase);
-					Debugg.println("     addedBases[sequenceBase+1]: " + addedBases[sequenceBase+1]);
+					Debugg.println("     addedBases[sequenceBase]: " + addedBases[sequenceBase]);
 				}
 				if (sequenceBase<addedBases.length-1)
-					universalBase += addedBases[sequenceBase];
+					universalBase += addedBases[sequenceBase+1];
 				otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase] = sequenceBase;
 				universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][sequenceBase] = universalBase;
 				otherBaseFromUniversalBase[ACEFILECONTIG][universalBase] = sequenceBase;
@@ -263,15 +263,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		sequence = originalTrimmedSequencePanel.getSequence();
 		if (sequenceCanvas!=null && sequence!=null){
 			int sequenceLength = sequence.getLength();
-
-			/*
-		Debugg.println("   totalUniversalBases: " + totalUniversalBases + "   sequenceLength: " + sequenceLength);
-			Debugg.println("   contig.getReadExcessAtStart(): " + contig.getReadExcessAtStart() + "   numBasesOriginallyTrimmedFromStartOfPhPhContig: " + numBasesOriginallyTrimmedFromStartOfPhPhContig);
-			Debugg.println("   totalAddedBases: " + totalAddedBases);
-			Debugg.println("   contigDisplay.getNumBasesAddedToStart(): " + contigDisplay.getNumBasesAddedToStart());
-			Debugg.println("   contigDisplay.getNumBasesAddedToEnd(): " + contigDisplay.getNumBasesAddedToEnd());
-			 */
 			int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart];
+			
 
 			for (int sequenceBase=0; sequenceBase<sequenceLength; sequenceBase++){
 				contigBase = sequenceBase+numTrimmedFromStart;
