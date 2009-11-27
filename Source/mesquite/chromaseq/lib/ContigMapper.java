@@ -455,6 +455,14 @@ public class ContigMapper {
 		sb.append("\nnumAddedToEnd: " + numAddedToEnd); 
 		sb.append("\nnumDeletedFromEnd: " + numDeletedFromEnd); 
 		sb.append("\nnumTrimmedFromEnd: " + numTrimmedFromEnd); 
+		sb.append("\nnumTrimmedFromStart: " + numTrimmedFromStart); 
+		sb.append("\nnumBases: " + numBases); 
+		int numDeletedAtStart=0;
+		for (int i=0; i<deleted.length; i++)
+			if (deleted[i])
+				numDeletedAtStart++ ;
+			else break;
+		sb.append("\nnumDeletedAtStart: " + numDeletedAtStart); 
 		sb.append("\n-------------------------- \n");
 		return sb.toString();
 	}

@@ -563,6 +563,8 @@ public class ChromaseqUtil{
 		ContigMapper contigMapper = contigDisplay.getContigMapper();
 		
 		if (contigBase>=0){  //it matches a contig base; let's resurrect it
+			if (!contigMapper.getDeletedBase(contigBase))
+				Debugg.println("base not deleted! " + contigBase);
 			contigMapper.setDeletedBase(contigBase, false);
 			if (contigBase>=contigDisplay.getNumTrimmedFromStart() && contigBase<= contigDisplay.getContig().getNumBases()-contigMapper.getNumTrimmedFromEnd()) {
 				registryData.setState(ic,it,0,contigBase);

@@ -249,7 +249,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		if (remainder!=null)
 			remainder.setValue(s);
 		
-		if (!StringUtil.blank(startToken) || " ".equals(startToken)) {
+		if (!StringUtil.blank(startToken)  || " ".equals(startToken)) {  
 			if (s.indexOf(startToken)>-1) {
 				piece = s.substring(s.indexOf(startToken)+startToken.length(), s.length());  // getting substring that starts with DNA number
 				if (startTokenResult != null) {
