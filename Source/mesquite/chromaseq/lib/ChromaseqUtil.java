@@ -947,6 +947,10 @@ public class ChromaseqUtil{
 			 return;
 		 DNAData originalData = getOriginalData(editedData);
 		 AceFile ace = AceFile.getAceFile(file, null, editedData,  it);
+		 if (ace ==null){
+			 // give warning!!!!!
+			 return;
+		 }
 		 Associable tInfo = editedData.getTaxaInfo(false);
 		 long whichContig = 0;
 		 if (tInfo != null)
@@ -1292,21 +1296,21 @@ public class ChromaseqUtil{
 		if(originalData==null || editedData==null)
 			return;
 		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
-		for (int it=0; it<registryData.getNumTaxa(); it++)  {
-			if (it==0) 
-				MesquiteTrunk.mesquiteTrunk.logln("Creating Registry Data [" + editedData.getName() + "]");
-			else
+		int count=0;
+		for (int it=0; it<registryData.getNumTaxa(); it++)  
+			if (AceFile.hasAceFile(editedData, it)){
+				if (count==0) 
+					MesquiteTrunk.mesquiteTrunk.logln("Creating Registry Data [" + editedData.getName() + "]");
+				else
+					MesquiteTrunk.mesquiteTrunk.log(".");
+				CommandRecord.tick("Registering sequences for taxon " + editedData.getTaxa().getName(it));
+				inferRegistryDataUsingAlignment(aligner,registryData,it);
 				MesquiteTrunk.mesquiteTrunk.log(".");
-			CommandRecord.tick("Registering sequences for taxon " + (it+1));
-			inferRegistryDataUsingAlignment(aligner,registryData,it);
-			if (it==editedData.getNumTaxa()-1)
-				MesquiteTrunk.mesquiteTrunk.logln(".");
-			else
-				MesquiteTrunk.mesquiteTrunk.log(".");
-			//CommandRecord.tick("Registering contig from ACE file for taxon " + (it+1));
-			inferContigMapper(aligner, file, editedData, it);
-		}
-	//	fillAddedBaseData(editedData);
+				inferContigMapper(aligner, file, editedData, it);
+				count++;
+			}
+		MesquiteTrunk.mesquiteTrunk.logln("");
+		//	fillAddedBaseData(editedData);
 	}
 
 	/*.................................................................................................................*/
@@ -1371,6 +1375,7 @@ public class ChromaseqUtil{
 
 		return registryData;
 	}
+	
 	public static boolean isChromaseqDevelopment(){
 		return StringArray.indexOf(MesquiteTrunk.startupArguments, "-chromaseqDev")>=0;
 	}
