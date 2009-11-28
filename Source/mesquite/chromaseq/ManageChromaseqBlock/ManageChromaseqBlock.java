@@ -18,11 +18,13 @@ import mesquite.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.categ.lib.*;
 import mesquite.lib.duties.*;
+import mesquite.meristic.lib.MeristicData;
 import mesquite.chromaseq.lib.*;
 
 public class ManageChromaseqBlock extends FileInit {
 
-	
+	int chromaseqVersionOfFile = 0;
+	int chromaseqBuildOfFile =0;
 
 	int numBlocks =0;
 	public Class getDutyClass(){
@@ -39,6 +41,20 @@ public class ManageChromaseqBlock extends FileInit {
 	public boolean isPrerelease(){
 		return true;
 	}
+	/*.................................................................................................................*/
+	public int getChromaseqVersionOfFile() {
+		return chromaseqVersionOfFile;
+	}
+	public void setChromaseqVersionOfFile(int chromaseqVersionOfFile) {
+		this.chromaseqVersionOfFile = chromaseqVersionOfFile;
+	}
+	public int getChromaseqBuildOfFile() {
+		return chromaseqBuildOfFile;
+	}
+	public void setChromaseqBuildOfFile(int chromaseqBuildOfFile) {
+		this.chromaseqBuildOfFile = chromaseqBuildOfFile;
+	}
+
 	/*.................................................................................................................*
   	 public Snapshot getSnapshot(MesquiteFile file) { 
    	 	Snapshot temp = new Snapshot(); 
@@ -386,6 +402,18 @@ public class ManageChromaseqBlock extends FileInit {
 
 		return s.toString();
 	}
+	/*.................................................................................................................*/
+	public void attachChromaseqBuild(MesquiteFile f, int build) {
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (data instanceof DNAData) data.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, build));
+		}
+	}
 	/*...................................................................................................................*/
 	public boolean readNexusCommand(MesquiteFile file, NexusBlock nBlock, String command, MesquiteString comment){ 
 		MesquiteProject project = file.getProject();
@@ -394,14 +422,14 @@ public class ManageChromaseqBlock extends FileInit {
 			String token  = parser.getNextToken();
 			int version = MesquiteInteger.fromString(token);				
 			if (MesquiteInteger.isCombinable(version)){
+				chromaseqVersionOfFile = version;
 			}
 		}
 		else	if (commandName.equalsIgnoreCase("BUILD")) {
 			String token  = parser.getNextToken();
 			int build = MesquiteInteger.fromString(token);		
 			if (MesquiteInteger.isCombinable(build)){
-				CharacterData data = nBlock.getDefaultCharacters();
-				data.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, build));
+				chromaseqBuildOfFile = build;
 			}
 		}
 		else if  (commandName.equalsIgnoreCase("CONTIGMAPPER")) {

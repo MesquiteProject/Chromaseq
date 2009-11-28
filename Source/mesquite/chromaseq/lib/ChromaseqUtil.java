@@ -75,8 +75,8 @@ public class ChromaseqUtil{
 		return null;
 	}
 	public static long getLongAttached(Attachable a, String s){
-		Object obj = a.getAttachment(s);
-		if (obj instanceof MesquiteLong)
+		Object obj = a.getAttachment(s, MesquiteLong.class);
+		if (obj!=null && obj instanceof MesquiteLong)
 			return ((MesquiteLong)obj).getValue();
 		return MesquiteLong.unassigned;
 	}
@@ -216,17 +216,24 @@ public class ChromaseqUtil{
 		return uid;
 	}
 
-	public static int getChromaseqBuildOfFile(CharacterData data) {
-		String uid = "";
-		long value = ChromaseqUtil.getLongAttached(data, READBUILDREF);
-		if (!MesquiteLong.isCombinable(value)) {
-			return (int)value;
+	public static int getChromaseqBuildOfFile(MesquiteModule ownerModule) {
+		mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock init = (mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock)ownerModule.findNearestColleagueWithDuty(mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock.class);
+		if (init !=null) {
+			int build =  init.getChromaseqBuildOfFile();
+//			Debugg.println("build: " + build);
+			return build;
 		}
 		return 0;
 	}
+	public static void setChromaseqBuildOfFile(MesquiteModule ownerModule, int build) {
+		mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock init = (mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock)ownerModule.findNearestColleagueWithDuty(mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock.class);
+		if (init !=null) {
+			 init.setChromaseqBuildOfFile(build);
+		}
+	}
 
-	public static boolean buildRequiresForcedRegistration(CharacterData data) {
-		int build = getChromaseqBuildOfFile(data);
+	public static boolean buildRequiresForcedRegistration(MesquiteModule ownerModule) {
+		int build = getChromaseqBuildOfFile(ownerModule);
 		return build < LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION;
 	}
 
@@ -1224,13 +1231,17 @@ public class ChromaseqUtil{
 
 	/*.................................................................................................................*/
 	/* called if no registry data are available */
-	public static MeristicData createRegistryData(CharacterData data) {
+	public static MeristicData createRegistryData(CharacterData data, MesquiteModule ownerModule) {
 //		if (rD!=null)
 //			rD.deleteMe(false);
 		DNAData editedData = getEditedData(data);
+/*		Debugg.println("\n\n|||||||||||||||||\nbefore detach\n" + editedData.listAttachments());
 		editedData.detach(ChromaseqUtil.READBUILDREF);
-		editedData.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, ChromaseqBuild));
-
+		Debugg.println("\nafter detach\n" + editedData.listAttachments());
+		editedData.attachIfUniqueName(new MesquiteLong(ChromaseqUtil.READBUILDREF, ChromaseqBuild));
+		Debugg.println("\nafter attach\n" + editedData.listAttachments()+"\n|||||||||||||||||\n");
+*/
+		
 		MesquiteString uid = null;
 		Object obj = getStringAttached(data,PHPHIMPORTIDREF);
 		if (obj!=null && obj instanceof MesquiteString) {

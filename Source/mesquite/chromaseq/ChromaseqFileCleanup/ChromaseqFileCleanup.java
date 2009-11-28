@@ -101,11 +101,13 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				 */				
 				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 				 if (registryData==null) {
-					 ChromaseqUtil.createRegistryData(data);		
+					logln("No chromaseq registration data is stored in file; it will now be inferred.");
+					ChromaseqUtil.createRegistryData(data, this);		
 				 }
-				 else if (ChromaseqUtil.buildRequiresForcedRegistration(data)) {
-					// registryData.deleteMe(false);
-					// ChromaseqUtil.createRegistryData(data);		
+				 else if (ChromaseqUtil.buildRequiresForcedRegistration(this)) {
+					logln("Chromaseq registration data stored in file is of a defunct version and needs to be rebuilt.");
+					//registryData.deleteMe(false);
+					ChromaseqUtil.createRegistryData(data, this);		
 				 }
 				 MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);		
 				 if (reverseRegistryData==null) {
@@ -125,6 +127,9 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 
 			}
 		}
+		ChromaseqUtil.setChromaseqBuildOfFile(this,  ChromaseqUtil.ChromaseqBuild);
+
+
 	}
 	/*.................................................................................................................*/
 	public void createReverseRegistryDataIfNeeded(MesquiteFile f) {
