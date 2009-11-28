@@ -49,12 +49,13 @@ public class ChromaseqUtil{
 	public static final String REGISTRYREF = "registration";
 	public static final String REVERSEREGISTRYREF = "reverse registration";
 	public static final String ADDEDBASEREF = "added base";
+	public static final String MATRIXTODELETE = "matrix to delete";
 //	public static final String ADDEDDELETEDBASEREF = "added deleted base";
 
 	//===========================ATTACHABLE handling==============================
 	public static final String PHPHIMPORTIDREF = "phphImportID"; //MesquiteString: data
 	public static final String GENENAMEREF ="geneName";//MesquiteString: data
-	public static final String READBUILDREF ="chromaseqBuild";//MesquiteString: data
+//	public static final String READBUILDREF ="chromaseqBuild";//MesquiteString: data
 	public static final String PHPHMQVERSIONREF ="phphmqVersion";//MesquiteString: data
 	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
 
@@ -292,7 +293,8 @@ public class ChromaseqUtil{
 		for (int i= 0; i< matrices.size(); i++){
 			CharacterData d = (CharacterData)matrices.elementAt(i);
 			obj = getStringAttached(d,PHPHIMPORTMATRIXTYPEREF);
-			if (obj instanceof MesquiteString)
+			MesquiteString aboutToDelete = ChromaseqUtil.getStringAttached(d, MATRIXTODELETE);  // if it is to be deleted it is not the one we want
+			if (aboutToDelete==null && obj instanceof MesquiteString)
 				if (((MesquiteString)obj).getValue().equalsIgnoreCase(dataType)) {
 					obj = getStringAttached(d,PHPHIMPORTIDREF);
 					String s = ((MesquiteString)obj).getValue();

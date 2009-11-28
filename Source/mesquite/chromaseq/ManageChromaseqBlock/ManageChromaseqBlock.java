@@ -402,7 +402,7 @@ public class ManageChromaseqBlock extends FileInit {
 
 		return s.toString();
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public void attachChromaseqBuild(MesquiteFile f, int build) {
 		if (f==null)
 			return;

@@ -81,14 +81,17 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 			}
 		}
 	}
-
+	int count = 1;
 	/*.................................................................................................................*/
 	public void createRegistryDataIfNeeded(MesquiteFile f) {
 		if (f==null)
 			return;
 		if (f.getProject()==null)
 			return;
+		
 		ListableVector matrices = f.getProject().getCharacterMatrices();
+		boolean registryMessageGiven = false;
+		count++;
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
@@ -101,13 +104,17 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				 */				
 				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 				 if (registryData==null) {
-					logln("No chromaseq registration data is stored in file; it will now be inferred.");
+					if (!registryMessageGiven)
+						logln("No chromaseq registration data is stored in file; it will now be inferred.");
 					ChromaseqUtil.createRegistryData(data, this);		
+					registryMessageGiven = true;
 				 }
 				 else if (ChromaseqUtil.buildRequiresForcedRegistration(this)) {
-					logln("Chromaseq registration data stored in file is of a defunct version and needs to be rebuilt.");
-					//registryData.deleteMe(false);
+					if (!registryMessageGiven)
+						logln("Chromaseq registration data stored in file is of a defunct version and needs to be rebuilt.");
+					ChromaseqUtil.attachStringToMatrix(registryData, new MesquiteString(ChromaseqUtil.MATRIXTODELETE, "extra registration matrix"));
 					ChromaseqUtil.createRegistryData(data, this);		
+					registryMessageGiven = true;
 				 }
 				 MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);		
 				 if (reverseRegistryData==null) {
@@ -129,6 +136,21 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		}
 		ChromaseqUtil.setChromaseqBuildOfFile(this,  ChromaseqUtil.ChromaseqBuild);
 
+	}
+	/*.................................................................................................................*/
+	public void deleteExtraRegistryMatrices(MesquiteFile f) {
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		int numMatrices = matrices.size();
+		for (int i=numMatrices-1; i>=0; i--)  {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			MesquiteString ms = ChromaseqUtil.getStringAttached(data, ChromaseqUtil.MATRIXTODELETE);
+			if (ms!=null)
+				data.deleteMe(false);
+		}
 
 	}
 	/*.................................................................................................................*/
@@ -167,11 +189,12 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	}
 	/*.................................................................................................................*/
 	public void fileReadIn(MesquiteFile f) {
-		createRegistryDataIfNeeded(f);
 		if (f==null)
 			return;
 		if (f.getProject()==null)
 			return;
+		createRegistryDataIfNeeded(f);
+		deleteExtraRegistryMatrices(f);
 		ListableVector matrices = f.getProject().getCharacterMatrices();
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
