@@ -101,8 +101,13 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	}
 
 	/*.................................................................................................................*/
+	public void createOtherBaseFromUniversalBase(int totalUniversalBases) {
+		otherBaseFromUniversalBase = new int[numMappings][totalUniversalBases];
+//		contigDisplay.setTotalNumInitialOverallBases(totalUniversalBases);
+	}
+	/*.................................................................................................................*/
 	public void createOtherBaseFromUniversalBase() {
-		otherBaseFromUniversalBase = new int[numMappings][contigDisplay.getTotalNumInitialOverallBases()];
+		otherBaseFromUniversalBase = new int[numMappings][contigDisplay.getTotalNumUniversalBases()];
 	}
 	/*.................................................................................................................*/
 	public void createUniversalBaseFromOtherBase() {
@@ -146,9 +151,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		//	totalNumAddedBases=ChromaseqUtil.getTotalNumBasesAddedBeyondPhPhBases(editedData, it);
 		//	totalNumDeletedBases=ChromaseqUtil.getTotalNumOriginalBasesTurnedToGaps(editedData, it);
 		it = contigDisplay.getTaxon().getNumber();
-
-
-		//		ChromaseqUtil.fillAddedBaseData(contigDisplay,  editedData, it);
+		contigDisplay.setUniversalMapper(this);
 
 		//MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
 		reversedInEditData = contigDisplay.isReversedInEditedData();
@@ -204,7 +207,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		for(int mapping=0; mapping<numMappings; mapping++) 
 			for (int i=0; i<universalBaseFromOtherBase[mapping].length; i++) 
 				universalBaseFromOtherBase[mapping][i]= MesquiteInteger.unassigned;
-		;
+		
 
 
 		// =========== Calculate mappings for the original untrimmed panel (i.e., the "Original Untrimmed" one) ===========
@@ -216,13 +219,17 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int startingDeletedBeforeOriginalTrim = contigMapper.getNumDeletedBefore(numTrimmedFromStart) ;
 		int paddingBeforeOriginalTrim = contig.getNumPaddedBefore(numTrimmedFromStart) ;
 
-/*		Debugg.println("   numTrimmedFromStart: " + numTrimmedFromStart);
+		/*
+		Debugg.println("   totalUniversalBases: " + totalUniversalBases);
+		Debugg.println("   otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE].length: " + otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE].length);
+		Debugg.println("   totalNumAddedBases: " + totalNumAddedBases);
+		Debugg.println("   numTrimmedFromStart: " + numTrimmedFromStart);
 		Debugg.println("   startingNumAddedDeletedBefore: " + startingNumAddedDeletedBefore);
 		Debugg.println("   startingAddedBeforeOriginalTrim: " + startingAddedBeforeOriginalTrim);
 		Debugg.println("   startingDeletedBeforeOriginalTrim: " + startingDeletedBeforeOriginalTrim);
 		Debugg.println("   paddingBeforeOriginalTrim: " + paddingBeforeOriginalTrim);
 
-	*/	
+	*/
 		
 		SequenceCanvas sequenceCanvas = originalUntrimmedPanel.getCanvas();
 		MesquiteSequence sequence = originalUntrimmedPanel.getSequence();
@@ -273,9 +280,13 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				universalBase+=numPads;
 				prevNumPads = numPads;
 				 */
-				otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase] = sequenceBase;
+				if (universalBase>= totalUniversalBases)
+					continue;
+				if (universalBase<otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE].length)
+					otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase] = sequenceBase;
 				universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][sequenceBase] = universalBase;
-				otherBaseFromUniversalBase[ACEFILECONTIG][universalBase] = sequenceBase;
+				if (universalBase<otherBaseFromUniversalBase[ACEFILECONTIG].length)
+					otherBaseFromUniversalBase[ACEFILECONTIG][universalBase] = sequenceBase;
 				universalBaseFromOtherBase[ACEFILECONTIG][sequenceBase] = universalBase;
 			}
 		}
@@ -299,7 +310,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 					numPads=prevNumPads;
 				universalBase+=numPads-paddingBeforeOriginalTrim;  //don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
 				prevNumPads = numPads;
-				otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE][universalBase] = sequenceBase;
+				if (universalBase<otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE].length)
+					otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE][universalBase] = sequenceBase;
 				universalBaseFromOtherBase[ORIGINALTRIMMEDSEQUENCE][sequenceBase] = universalBase;
 			}
 		}

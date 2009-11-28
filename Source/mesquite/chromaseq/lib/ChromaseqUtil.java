@@ -55,7 +55,7 @@ public class ChromaseqUtil{
 	//===========================ATTACHABLE handling==============================
 	public static final String PHPHIMPORTIDREF = "phphImportID"; //MesquiteString: data
 	public static final String GENENAMEREF ="geneName";//MesquiteString: data
-//	public static final String READBUILDREF ="chromaseqBuild";//MesquiteString: data
+	public static final String READBUILDREF ="chromaseqBuild";//MesquiteString: data
 	public static final String PHPHMQVERSIONREF ="phphmqVersion";//MesquiteString: data
 	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
 
@@ -217,6 +217,23 @@ public class ChromaseqUtil{
 		return uid;
 	}
 
+	public static int getChromaseqBuildOfMatrix(DNAData data) {
+		if (data==null)
+			return 0;
+		Object obj = data.getAttachment(READBUILDREF);
+		if (obj!=null && obj instanceof MesquiteLong) {
+			return (int)((MesquiteLong)obj).getValue();
+		}
+		return 0;
+		
+	}
+	public static void setChromaseqBuildOfMatrix(DNAData data, int build) {
+		if (data==null)
+			return;
+		data.detach(READBUILDREF);
+		data.attach(new MesquiteLong(READBUILDREF,build));
+	}
+
 	public static int getChromaseqBuildOfFile(MesquiteModule ownerModule) {
 		mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock init = (mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock)ownerModule.findNearestColleagueWithDuty(mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock.class);
 		if (init !=null) {
@@ -232,6 +249,12 @@ public class ChromaseqUtil{
 			 init.setChromaseqBuildOfFile(build);
 		}
 	}
+	
+	public static boolean buildRequiresForcedRegistration(DNAData data) {
+		int build = getChromaseqBuildOfMatrix(data);
+		return build < LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION;
+	}
+
 
 	public static boolean buildRequiresForcedRegistration(MesquiteModule ownerModule) {
 		int build = getChromaseqBuildOfFile(ownerModule);
@@ -901,6 +924,23 @@ public class ChromaseqUtil{
 		registryData.setResourcePanelIsOpen(false);
 		registryData.setEditorInhibition(true);
 	}
+	
+	/*.................................................................................................................*/
+	public static long[] getEditedSequence(DNAData editedData, int it) {
+		int numChars = editedData.getNumChars();
+		long[] editedBases = new long[numChars];
+		for (int ic = 0; ic<numChars; ic++){
+			long s =  editedData.getState(ic, it);
+			if (editedData.isComplemented(it)) 
+				s = DNAData.complement(s);
+			int base = ic;
+			if (editedData.isReversed(it))
+				base = numChars-ic-1;
+			editedBases[base] = s;
+		}
+		return editedBases;
+	}
+
 	/*.................................................................................................................*/
 	 public synchronized static void inferContigMapper(PairwiseAligner aligner, MesquiteFile file, DNAData editedData, int it) {
 		 if (aligner==null || editedData==null) 
@@ -962,10 +1002,7 @@ public class ChromaseqUtil{
 //		 Debugg.println("contigMapper inference, it: " + it + ", numTrimmedFromStart: " + numTrimmedFromStart);
 		 //======= now figure out bases internally added or deleted using alignment between originalTrimmed and editedData
 
-		 long[] editedBases = new long[editedData.getNumChars()];
-		 for (int ic = 0; ic<editedData.getNumChars(); ic++){
-			 editedBases[ic] = editedData.getState(ic, it);
-		 }
+		 long[] editedBases = getEditedSequence(editedData,it);
 		 int editedSeq = 0;
 		 long[][] editedOriginalAlignment = aligner.alignSequences(editedBases, originalTrimmed, true, alignScore);
 
@@ -1017,10 +1054,16 @@ public class ChromaseqUtil{
 
 
 		if (aligner!=null) {
+			aligner.setMaintainOrder(true);
 			MesquiteNumber alignScore = new MesquiteNumber();
 			int original = 0;
 			int edited = 1;
-			long[][] alignment = aligner.getAlignment(originalData,  it, editedData, it, alignScore, true);
+			 long[] editedBases = getEditedSequence(editedData,it);
+			 long[] originalBases = new long[originalData.getNumChars()];
+			 for (int ic = 0; ic<originalData.getNumChars(); ic++){
+				 originalBases[ic] = originalData.getState(ic, it);
+			 }
+			long[][] alignment = aligner.alignSequences(originalBases, editedBases, true, alignScore);
 			if (alignment!=null) {
 
 				//======  make mapping from the alignment sequences into the originalData and editData matrices ========
@@ -1044,16 +1087,29 @@ public class ChromaseqUtil{
 				for (int ic=0; ic<alignment.length; ic++) 
 					locationInEdited[ic] = -1;
 				int icEdited = 0;
+				if (editedData.isReversed(it))
+					icEdited = editedData.getNumChars()-1;
 				for (int ic=0; ic<alignment.length; ic++) 
 					if (alignment[ic][edited]!=CategoricalState.inapplicable){ // we've found one in the alignment, now we need to find the same one in the original
-						icEdited = editedData.nextApplicable(it, icEdited, true);
-						if (icEdited>=0){  // we've found it
-							locationInEdited[ic] = icEdited;
-							icEdited++;
-							if (icEdited>=editedData.getNumChars())
+						if (editedData.isReversed(it)) {
+							icEdited = editedData.prevApplicable(it, icEdited, true);
+							if (icEdited>=0){  // we've found it
+								locationInEdited[ic] = icEdited;
+								icEdited--;
+								if (icEdited<0)
+									break;
+							} else
 								break;
-						} else
-							break;
+						} else {
+							icEdited = editedData.nextApplicable(it, icEdited, true);
+							if (icEdited>=0){  // we've found it
+								locationInEdited[ic] = icEdited;
+								icEdited++;
+								if (icEdited>=editedData.getNumChars())
+									break;
+							} else
+								break;
+						}
 					}
 
 				//======  now deterimine the boundaries of the sequence in the original sequence in the alignment
@@ -1095,51 +1151,73 @@ public class ChromaseqUtil{
 						}
 				}
 
-				//======  find out how many were deleted from start
+				//======  find out how many were deleted from one end
+				int numDeletedFromStartOfContig = 0;
+				int numDeletedFromEndOfContig = 0;
+				int firstEditedBase = 0;
+				int lastEditedBase = 0;
 				int numDeleted = 0;	
-				int firstEditedBase = -1;
+				int boundaryBase = -1;
 				for (int ic=0; ic<alignment.length; ic++) {
 					boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
 					if (locationInEdited[ic]>=0){
-						firstEditedBase=ic;
+						boundaryBase=ic;
 						break;
 					}
 					if (originalIsApplicable) {
 						numDeleted++;
 					}
 				}
-				if (numDeleted>0 && firstEditedBase>=0){
-					int start = locationInEdited[firstEditedBase]-1;
-					int ic2 = locationInOriginal[firstEditedBase]-1;
-					for (int ic=0; ic<numDeleted; ic++){
-						ic2 = originalData.prevApplicable(it, ic2, true);
-						if (ic2>=0)
-							registryData.setState(start-ic, it, 0, ic2);
-						ic2--;
-
-					}
-
+				if (editedData.isReversed(it)){
+					lastEditedBase=boundaryBase;
+					numDeletedFromEndOfContig = numDeleted;
+				} else {
+					firstEditedBase=boundaryBase;
+					numDeletedFromStartOfContig = numDeleted;
 				}
-				//======  now take care of deleted from end
+				//======  find out how many were deleted from the other end
 				numDeleted = 0;	
-				int lastEditedBase = -1;
+				boundaryBase = -1;
 				for (int ic=alignment.length-1; ic>=0; ic--) {
 					boolean originalIsApplicable = alignment[ic][original]!=CategoricalState.inapplicable;
 					if (locationInEdited[ic]>=0){
-						lastEditedBase=ic;
+						boundaryBase=ic;
 						break;
 					}
 					if (originalIsApplicable) {
 						numDeleted++;
 					}
 				}
-				if (numDeleted>0 && lastEditedBase>=0){
-					int start = locationInEdited[lastEditedBase]+1;
+				int reversalFactor = 1;
+				if (!editedData.isReversed(it)){
+					lastEditedBase=boundaryBase;
+					numDeletedFromEndOfContig = numDeleted;
+					
+				} else {
+					firstEditedBase=boundaryBase;
+					numDeletedFromStartOfContig = numDeleted;
+					reversalFactor=-1;
+				}
+				
+				//======  now process them
+				if (numDeletedFromStartOfContig>0 && firstEditedBase>=0){
+					int start = locationInEdited[firstEditedBase]-1*reversalFactor;
+					int ic2 = locationInOriginal[firstEditedBase]-1;
+					for (int ic=0; ic<numDeletedFromStartOfContig; ic++){
+						ic2 = originalData.prevApplicable(it, ic2, true);
+						if (ic2>=0)
+							registryData.setState(start-ic*reversalFactor, it, 0, ic2);
+						ic2--;
+
+					}
+				}
+				if (numDeletedFromEndOfContig>0 && lastEditedBase>=0){
+					int start = locationInEdited[lastEditedBase]+1*reversalFactor;
 					int ic2 = locationInOriginal[firstEditedBase]+1;
-					for (int ic=0; ic<numDeleted; ic++) {
+					for (int ic=0; ic<numDeletedFromEndOfContig; ic++) {
 						ic2 = originalData.prevApplicable(it, ic2, false);
 						if (ic2>=0)
-							registryData.setState(start+ic, it, 0, ic2);
+							registryData.setState(start+ic*reversalFactor, it, 0, ic2);
 						ic2--;
 					}
 
@@ -1232,17 +1310,33 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
+
+	public synchronized static void inferRegistryData(MeristicData registryData) {
+		if (registryData==null)
+			return;
+		MesquiteFile file = registryData.getProject().getHomeFile();
+		inferRegistryData(registryData,file);
+	}
+
+	
+	
+	
+	
+	
+	/*.................................................................................................................*/
 	/* called if no registry data are available */
 	public static MeristicData createRegistryData(CharacterData data, MesquiteModule ownerModule) {
 //		if (rD!=null)
 //			rD.deleteMe(false);
 		DNAData editedData = getEditedData(data);
-/*		Debugg.println("\n\n|||||||||||||||||\nbefore detach\n" + editedData.listAttachments());
+		if (editedData==null)
+			return null;
+		Debugg.println("\n\n|||||||||||||||||\nbefore detach\n" + editedData.listAttachments());
 		editedData.detach(ChromaseqUtil.READBUILDREF);
-		Debugg.println("\nafter detach\n" + editedData.listAttachments());
-		editedData.attachIfUniqueName(new MesquiteLong(ChromaseqUtil.READBUILDREF, ChromaseqBuild));
+		Debugg.println("\nafter detach of chromaseqBuild\n" + editedData.listAttachments());
+		editedData.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, ChromaseqBuild));
 		Debugg.println("\nafter attach\n" + editedData.listAttachments()+"\n|||||||||||||||||\n");
-*/
+
 		
 		MesquiteString uid = null;
 		Object obj = getStringAttached(data,PHPHIMPORTIDREF);
