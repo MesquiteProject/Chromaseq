@@ -366,14 +366,20 @@ public class ChromaseqUtil{
 			return (MeristicData)d;
 		return null;
 	}
-
+	
 	/*.................................................................................................................*/
+	public static boolean isChromaseqDevelopment(){
+		return StringArray.indexOf(MesquiteTrunk.startupArguments, "-chromaseqDev")>=0;
+	}
+
+	/*.................................................................................................................*
 	public static CategoricalData getAddedBaseData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,ADDEDBASEREF);
 		if (d instanceof CategoricalData)
 			return (CategoricalData)d;
 		return null;
 	}
+
 
 	/*.................................................................................................................*
 
@@ -1322,26 +1328,15 @@ public class ChromaseqUtil{
 		inferRegistryData(registryData,file);
 	}
 
-	
-	
-	
-	
-	
 	/*.................................................................................................................*/
 	/* called if no registry data are available */
 	public static MeristicData createRegistryData(CharacterData data, MesquiteModule ownerModule) {
-//		if (rD!=null)
-//			rD.deleteMe(false);
 		DNAData editedData = getEditedData(data);
 		if (editedData==null)
 			return null;
-		Debugg.println("\n\n|||||||||||||||||\nbefore detach\n" + editedData.listAttachments());
 		editedData.detachObjectOfName(ChromaseqUtil.READBUILDREF);
-		Debugg.println("\nafter detach of chromaseqBuild\n" + editedData.listAttachments());
 		editedData.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, ChromaseqBuild));
-		Debugg.println("\nafter attach\n" + editedData.listAttachments()+"\n|||||||||||||||||\n");
 
-		
 		MesquiteString uid = null;
 		Object obj = getStringAttached(data,PHPHIMPORTIDREF);
 		if (obj!=null && obj instanceof MesquiteString) {
@@ -1366,7 +1361,6 @@ public class ChromaseqUtil{
 
 		setRegistryDataValues(registryData,  data, dataGeneName,  uid,  gN);
 
-
 		inferRegistryData(registryData, file);
 
 		prepareOriginalAndQualityData(data);
@@ -1376,7 +1370,4 @@ public class ChromaseqUtil{
 		return registryData;
 	}
 	
-	public static boolean isChromaseqDevelopment(){
-		return StringArray.indexOf(MesquiteTrunk.startupArguments, "-chromaseqDev")>=0;
-	}
 }

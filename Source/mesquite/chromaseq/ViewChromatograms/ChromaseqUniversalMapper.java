@@ -78,7 +78,9 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int code = Notification.getCode(notification);
 		int[] parameters = Notification.getParameters(notification);
 		if (obj instanceof CharacterData) {
-			reset(false);
+			
+Debugg.println("ChromaseqUniversalMapper.changed()");
+			reset(true);
 			//			ContigMapper.checkTaxonNumbers(editedData);
 			contigDisplay.repaintPanels();
 		} 
@@ -143,7 +145,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset(boolean forceFullContigMapSetup) {
-//		Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+//	Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -166,13 +168,16 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		}
 		if (contigMapper.getContig()==null)
 			contigMapper.setContig(contigDisplay.getContig());
-		if (!contigMapper.hasBeenSetUp() || forceFullContigMapSetup) {
-			if (contigMapper.getStoredInFile() && !forceFullContigMapSetup){
+		if (!contigMapper.hasBeenSetUp()) {
+			if (contigMapper.getStoredInFile()){
 				contigMapper.setNumTrimmedFromStart(numTrimmedFromStart);
 				contigMapper.recalc(editedData,it);
 			}
 			else
 				contigMapper.setUp(editedData,it, numTrimmedFromStart);
+		} 
+		else if (forceFullContigMapSetup) {
+			contigMapper.inferFromExistingRegistry(editedData,it, numTrimmedFromStart);
 		}
 		else
 			contigMapper.recalc(editedData,it);

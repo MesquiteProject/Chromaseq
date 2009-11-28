@@ -186,6 +186,106 @@ public class ContigMapper {
 
 		setNumAddedToEnd(addedToEnd);
 		recalcPart();
+		
+		hasBeenSetUp = true;
+
+	}
+	/*.................................................................................................................*/
+	public void inferFromExistingRegistry(MolecularData editedData, int it, int numTrimmedFromStart) {
+		this.editedData = editedData;
+		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
+		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
+		MeristicData registryData = ChromaseqUtil.getRegistryData(editedData);
+		this.numTrimmedFromStart = numTrimmedFromStart;
+		int lastContigBaseInOriginal = -1;
+		int lastEditedBaseInOriginal = -1;
+		int deletedAtEnd = 0;
+		int contigBase = 0;
+
+		int firstOriginalInEditor = -1;
+		int numOriginalBeforeFirstOriginalInEditor = 0;
+		int firstTrimmedContigBaseInEditor = numTrimmedFromStart-1;
+		// =========== Find the first  ===========
+		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
+			if (originalData.isValidAssignedState(ic, it)){ 
+				firstTrimmedContigBaseInEditor++;
+				int positionInEdited = reverseRegistryData.getState(ic, it,0);
+				if (positionInEdited>=0 && reverseRegistryData.isCombinable(ic, it) && !editedData.isInapplicable(positionInEdited, it)){  // in original, marked as in editor, and there
+					firstOriginalInEditor = positionInEdited;
+					break;
+				} else
+					numOriginalBeforeFirstOriginalInEditor++;
+			}
+		}
+
+		int numResurrectedAtStart = 0;
+		for (int ic = 0; ic< firstOriginalInEditor; ic++){  
+			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+				numResurrectedAtStart++;
+			}
+		}
+		
+		for (int ic = 0; ic< numTrimmedFromStart-numResurrectedAtStart; ic++){  
+			setDeletedBase(ic, true);
+		}
+		
+		int numAddedBeforeFirstContigBase = numResurrectedAtStart-numTrimmedFromStart;
+		if (numAddedBeforeFirstContigBase>0)
+			setAddedBases(0, numAddedBeforeFirstContigBase);
+		else
+			setAddedBases(0, 0);
+		
+		contigBase = numTrimmedFromStart-1;
+		// =========== Now process the bases within the original trimmed region ===========
+		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
+			int positionInEdited = reverseRegistryData.getState(ic, it,0);
+			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
+				contigBase++;
+				if (positionInEdited<0 || editedData.isInapplicable(positionInEdited, it)){  // not in edited, record as deleted
+					setDeletedBase(contigBase, true);
+					deletedAtEnd++;
+				}
+				else{  // is in edited, so reset deletedAtEnds
+					deletedAtEnd=0;
+					setDeletedBase(contigBase, false);
+					lastEditedBaseInOriginal = positionInEdited;  // record last base in edited which corresponds to one in original
+				}
+				lastContigBaseInOriginal=contigBase;
+			}
+		}
+		int numFromEnd = contig.getNumBases()-lastContigBaseInOriginal-1;
+
+
+		for (int ic = 0; ic< numFromEnd; ic++){  
+			setDeletedBase(contig.getNumBases()-ic-1, true);
+		}
+		int addedBase=0;
+		int addedToEnd=0;
+		for (int ic = firstOriginalInEditor; ic< editedData.getNumChars(); ic++){  
+			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+				int positionInOriginal = registryData.getState(ic, it);
+				if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+					addedBase++;
+					if (ic>=lastEditedBaseInOriginal)
+						addedToEnd++;
+				}
+				else { // it is in original; now record added bases
+					setAddedBases(numTrimmedFromStart+originalData.numValidAssignedState(0,positionInOriginal, it), addedBase);
+					addedBase=0;
+				}
+			}
+		}
+
+		recalc(it);
+		
+		// =========== cleanup RegistryData from earlier versions ===========
+		for (int ic = 0; ic< registryData.getNumChars(); ic++){  
+			if (registryData.getState(ic, it,0)>=0 && editedData.isInapplicable(ic, it)){
+				registryData.setToInapplicable(ic, it);
+			}
+		}
+		
+		hasBeenSetUp = true;
 	}
 	/*.................................................................................................................*/
 	public void setUp(MolecularData editedData, int it, int numTrimmedFromStart) {
@@ -194,21 +294,33 @@ public class ContigMapper {
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(editedData);
 		this.numTrimmedFromStart = numTrimmedFromStart;
-		int contigBase = numTrimmedFromStart-1;
 		int lastContigBaseInOriginal = -1;
 		int lastEditedBaseInOriginal = -1;
 		int deletedAtEnd = 0;
 		for (int ic = 0; ic< numTrimmedFromStart; ic++){  
 			setDeletedBase(ic, true);
 		}
+		int contigBase = 0;
 
-		// =========== cleanup RegistryData from earlier versions ===========
-		for (int ic = 0; ic< registryData.getNumChars(); ic++){  
-			if (registryData.getState(ic, it,0)>=0 && editedData.isInapplicable(ic, it))
-				registryData.setToInapplicable(ic, it);
+		int firstOriginalInEditor = -1;
+		int numBeforeFirstOriginalInEditor = 0;
+		// =========== Find the first  ===========
+		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
+			if (originalData.isValidAssignedState(ic, it)){ 
+				int positionInEdited = reverseRegistryData.getState(ic, it,0);
+				if (reverseRegistryData.isCombinable(ic, it) && !editedData.isInapplicable(positionInEdited, it)){  // in original, marked as in editor, and there
+					firstOriginalInEditor = positionInEdited;
+				} else
+					numBeforeFirstOriginalInEditor++;
+			}
 		}
 
-		// =========== Do initial setup of contigMapper ===========
+
+		
+		
+		
+		contigBase = numTrimmedFromStart-1;
+		// =========== Now process the bases within the original trimmed region ===========
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
 			int positionInEdited = reverseRegistryData.getState(ic, it,0);
 			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
@@ -249,6 +361,16 @@ public class ContigMapper {
 		}
 
 		recalc(it);
+		
+		// =========== cleanup RegistryData from earlier versions ===========
+		for (int ic = 0; ic< registryData.getNumChars(); ic++){  
+			if (registryData.getState(ic, it,0)>=0 && editedData.isInapplicable(ic, it)){
+				registryData.setToInapplicable(ic, it);
+			}
+		}
+
+
+		
 		hasBeenSetUp = true;
 	}
 	/*.................................................................................................................*/

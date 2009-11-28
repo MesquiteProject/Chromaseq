@@ -105,13 +105,13 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 				 if (registryData==null) {
 					if (!registryMessageGiven)
-						logln("No chromaseq registration data is stored in file; it will now be inferred.");
+						logln("No chromaseq registry is stored in file; it will now be inferred.");
 					ChromaseqUtil.createRegistryData(data, this);		
 					registryMessageGiven = true;
 				 }
-				 else if (ChromaseqUtil.buildRequiresForcedRegistration(this)) {   //(DNAData)data
+				 else if (ChromaseqUtil.buildRequiresForcedRegistration((DNAData)data)) {   //(DNAData)data
 					if (!registryMessageGiven)
-						logln("Chromaseq registration data stored in file is of a defunct version and needs to be rebuilt.");
+						logln("Chromaseq registry stored in file is of a defunct version and needs to be rebuilt.");
 					ChromaseqUtil.attachStringToMatrix(registryData, new MesquiteString(ChromaseqUtil.MATRIXTODELETE, "extra registration matrix"));
 					ChromaseqUtil.createRegistryData(data, this);		
 					registryMessageGiven = true;
@@ -189,7 +189,6 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	}
 	/*.................................................................................................................*/
 	public void deattachChromaseqBuild(MesquiteFile f) {
-		Debugg.println("\n\n\n*********  detach!!!!!!!!!!!!\n\n\n");
 		if (f==null)
 			return;
 		if (f.getProject()==null)
