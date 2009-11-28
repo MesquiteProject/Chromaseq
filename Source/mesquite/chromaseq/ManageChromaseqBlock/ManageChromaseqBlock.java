@@ -411,20 +411,8 @@ public class ManageChromaseqBlock extends FileInit {
 		ListableVector matrices = f.getProject().getCharacterMatrices();
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
-			if (data instanceof DNAData) data.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, build));
-		}
-	}
-	/*.................................................................................................................*/
-	public void deattachChromaseqBuild(MesquiteFile f) {
-		if (f==null)
-			return;
-		if (f.getProject()==null)
-			return;
-		ListableVector matrices = f.getProject().getCharacterMatrices();
-		for (int i=0; i<matrices.size(); i++) {
-			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (data instanceof DNAData) 
-				data.detach(ChromaseqUtil.READBUILDREF);
+				data.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, build));
 		}
 	}
 	/*...................................................................................................................*/
@@ -565,7 +553,6 @@ public class ManageChromaseqBlock extends FileInit {
 		if (f== null || f.getProject() == null)
 			return;
 		//convertOldToNew();
-		deattachChromaseqBuild(f);
 		NexusBlock[] bs = getProject().getNexusBlocks(ChromaseqBlock.class, f); 
 		if ((bs == null || bs.length ==0)){
 			ChromaseqBlock ab = new ChromaseqBlock(f, this);

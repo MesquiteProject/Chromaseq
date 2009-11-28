@@ -1336,7 +1336,7 @@ public class ChromaseqUtil{
 		if (editedData==null)
 			return null;
 		Debugg.println("\n\n|||||||||||||||||\nbefore detach\n" + editedData.listAttachments());
-		editedData.detach(ChromaseqUtil.READBUILDREF);
+		editedData.detachObjectOfName(ChromaseqUtil.READBUILDREF);
 		Debugg.println("\nafter detach of chromaseqBuild\n" + editedData.listAttachments());
 		editedData.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, ChromaseqBuild));
 		Debugg.println("\nafter attach\n" + editedData.listAttachments()+"\n|||||||||||||||||\n");
