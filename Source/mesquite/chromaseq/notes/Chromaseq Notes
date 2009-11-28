@@ -1,5 +1,13 @@
 Necessary pre-beta
 
+1. trivial: when display is graphically reversed, the little birds eye box in upper overview loses its moorings
+
+2. align sequences so that there are gaps in front.  Go to matrix editor window and change a gap in front of the sequence to a base, or change the first base to a gap.  Chromatogram window's "Edit in Matrix" gets accordingly misaligned.
+
+3. align sequences so that there are gaps in front.  Go to chromatogram window and change first base to a gap.  Note that second base is then drawn to the left, leaving a space.  Now go to a read, and touch on the base that aligns with this ghost space.  Move to matrix.  Negative array exception.  I believe what hapens is that in MoveReadToMatrix, if minSelectedInMatrix and max are undefined, the system marches on.  (Search for David!)
+
+
+
 - move from sequence panel to matrix not functioning
 - remove startTrimRef
 

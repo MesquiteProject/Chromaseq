@@ -23,11 +23,13 @@ import mesquite.chromaseq.lib.*;
 public class ManageChromaseqBlock extends FileInit {
 
 	public static final int CHROMASEQBLOCKVERSION = 2;
-	public static final int ChromaseqBuild = 24;
+	public static final int ChromaseqBuild = 25;
 	/*  
 	builds:
 	23: first build of new (November 2009), apparently file-format-complete ChromaseqUniversalMapper and ContigMapper scheme
 	24: first build with single-read code in, 25 November 2009
+		[files written with 24 needs a full force reregistration]
+	25: build of 27 November 2009, after fixing padding issue
 	 * */
 
 	int numBlocks =0;

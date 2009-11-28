@@ -563,9 +563,13 @@ public class ChromaseqUtil{
 		ContigMapper contigMapper = contigDisplay.getContigMapper();
 		
 		if (contigBase>=0){  //it matches a contig base; let's resurrect it
-			if (!contigMapper.getDeletedBase(contigBase))
-				Debugg.println("base not deleted! " + contigBase);
+//			if (!contigMapper.getDeletedBase(contigBase))
+//				Debugg.println("base not deleted! " + contigBase);
 			contigMapper.setDeletedBase(contigBase, false);
+			if (contigMapper.getIsPadding(contigBase)) {
+				//contigMapper.setPadding(contigBase,false);
+				//contigMapper.getContig().resetPadding(MesquiteInteger.unassigned, false);
+			}
 			if (contigBase>=contigDisplay.getNumTrimmedFromStart() && contigBase<= contigDisplay.getContig().getNumBases()-contigMapper.getNumTrimmedFromEnd()) {
 				registryData.setState(ic,it,0,contigBase);
 				reverseRegistryData.setState(contigBase,it,0,ic);
@@ -899,7 +903,7 @@ public class ChromaseqUtil{
 		 }
 
 		 int padBeforeTrim = contig.resetPadding(numTrimmedFromStart, false);
-		 numTrimmedFromStart -= padBeforeTrim;
+//		 numTrimmedFromStart -= padBeforeTrim;
 
 
 		 ContigMapper contigMapper = ContigMapper.getContigMapper(editedData, null, it);  // this will also attach it!

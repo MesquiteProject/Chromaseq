@@ -371,6 +371,17 @@ public class ContigMapper {
 		}
 	}
 	/*.................................................................................................................*/
+	public  void setPadding (int contigBase, boolean b){
+		if (contig!=null) 
+			contig.setPadding(contigBase,b);		
+	}
+	/*.................................................................................................................*/
+	public  boolean getIsPadding (int contigBase){
+		if (contig!=null) 
+			return contig.getIsPadding(contigBase);	
+		return false;
+	}
+	/*.................................................................................................................*/
 	public  void setDeletedBases (int contigStart, int contigEnd, boolean b){
 		for (int contigBase=contigStart; contigBase<=contigEnd; contigBase++)
 			if (contigBase>=0 && contigBase<deleted.length) {
