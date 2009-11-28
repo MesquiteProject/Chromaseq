@@ -18,12 +18,24 @@ import mesquite.lib.duties.*;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.CharactersManager;
 import mesquite.align.lib.PairwiseAligner;
+import mesquite.charMatrices.ManageCharacters.ManageCharacters;
 import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.cont.lib.*;
 import mesquite.categ.lib.*;
 import mesquite.meristic.lib.*;
 
 public class ChromaseqUtil{
+	
+	public static final int CHROMASEQBLOCKVERSION = 2;
+	public static final int ChromaseqBuild = 25;
+	public static final int LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION = 25;
+
+	/*  
+	builds:
+	23: first build of new (November 2009), apparently file-format-complete ChromaseqUniversalMapper and ContigMapper scheme
+	24: first build with single-read code in, 25 November 2009
+	25: build of 27 November 2009, after fixing padding issue
+	 * */
 
 	public static final int TRIMMABLE=1;
 	public static final int BASECALLED=2;
@@ -36,12 +48,13 @@ public class ChromaseqUtil{
 	public static final String EDITEDREF ="edited";
 	public static final String REGISTRYREF = "registration";
 	public static final String REVERSEREGISTRYREF = "reverse registration";
-//	public static final String ADDEDBASEREF = "added base";
+	public static final String ADDEDBASEREF = "added base";
 //	public static final String ADDEDDELETEDBASEREF = "added deleted base";
 
 	//===========================ATTACHABLE handling==============================
 	public static final String PHPHIMPORTIDREF = "phphImportID"; //MesquiteString: data
 	public static final String GENENAMEREF ="geneName";//MesquiteString: data
+	public static final String READBUILDREF ="chromaseqBuild";//MesquiteString: data
 	public static final String PHPHMQVERSIONREF ="phphmqVersion";//MesquiteString: data
 	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
 
@@ -60,6 +73,12 @@ public class ChromaseqUtil{
 		if (obj instanceof MesquiteString)
 			return (MesquiteString)obj;
 		return null;
+	}
+	public static long getLongAttached(Attachable a, String s){
+		Object obj = a.getAttachment(s);
+		if (obj instanceof MesquiteLong)
+			return ((MesquiteLong)obj).getValue();
+		return MesquiteLong.unassigned;
 	}
 	//===============================================================================
 
@@ -142,6 +161,8 @@ public class ChromaseqUtil{
 	public static void setIntegerCellObject(CharacterData data, NameReference nr, int ic, int it, MesquiteInteger c){
 		data.setCellObject(nr, ic, it, c);
 	}
+	
+
 
 	/*.................................................................................................................*/
 	public static ContigMapper getContigMapperAssociated(MolecularData data, int it) {
@@ -193,6 +214,20 @@ public class ChromaseqUtil{
 			uid = ((MesquiteString)obj).getValue();
 		}
 		return uid;
+	}
+
+	public static int getChromaseqBuildOfFile(CharacterData data) {
+		String uid = "";
+		long value = ChromaseqUtil.getLongAttached(data, READBUILDREF);
+		if (!MesquiteLong.isCombinable(value)) {
+			return (int)value;
+		}
+		return 0;
+	}
+
+	public static boolean buildRequiresForcedRegistration(CharacterData data) {
+		int build = getChromaseqBuildOfFile(data);
+		return build < LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION;
 	}
 
 	public static String getGeneName(CharacterData data) {
@@ -300,7 +335,7 @@ public class ChromaseqUtil{
 		return null;
 	}
 
-	/*.................................................................................................................*
+	/*.................................................................................................................*/
 	public static CategoricalData getAddedBaseData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,ADDEDBASEREF);
 		if (d instanceof CategoricalData)
@@ -1190,6 +1225,12 @@ public class ChromaseqUtil{
 	/*.................................................................................................................*/
 	/* called if no registry data are available */
 	public static MeristicData createRegistryData(CharacterData data) {
+//		if (rD!=null)
+//			rD.deleteMe(false);
+		DNAData editedData = getEditedData(data);
+		editedData.detach(ChromaseqUtil.READBUILDREF);
+		editedData.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, ChromaseqBuild));
+
 		MesquiteString uid = null;
 		Object obj = getStringAttached(data,PHPHIMPORTIDREF);
 		if (obj!=null && obj instanceof MesquiteString) {
@@ -1213,6 +1254,7 @@ public class ChromaseqUtil{
 		registryData.setUserVisible(isChromaseqDevelopment());
 
 		setRegistryDataValues(registryData,  data, dataGeneName,  uid,  gN);
+
 
 		inferRegistryData(registryData, file);
 

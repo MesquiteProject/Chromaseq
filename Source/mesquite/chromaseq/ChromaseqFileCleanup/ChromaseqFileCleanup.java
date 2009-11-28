@@ -92,31 +92,36 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
-/*				CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+				/*				CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
 				boolean newAddedBase = false;
 				if (addedBaseData==null) {
 					ChromaseqUtil.createAddedBaseData(data);		
 					newAddedBase = true;
 				}
-*/				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
-				if (registryData==null) {
-					ChromaseqUtil.createRegistryData(data);		
-				}
-				MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);		
-				if (reverseRegistryData==null) {
-					DNAData originalData = ChromaseqUtil.getOriginalData(data);
-					registryData = ChromaseqUtil.getRegistryData(data);
-					if (originalData!=null && registryData!=null) {
-						reverseRegistryData = ChromaseqUtil.createReverseRegistryData(originalData);		
-						storeReverseRegistry(reverseRegistryData);
-					}
+				 */				
+				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
+				 if (registryData==null) {
+					 ChromaseqUtil.createRegistryData(data);		
+				 }
+				 else if (ChromaseqUtil.buildRequiresForcedRegistration(data)) {
+					// registryData.deleteMe(false);
+					// ChromaseqUtil.createRegistryData(data);		
+				 }
+				 MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);		
+				 if (reverseRegistryData==null) {
+					 DNAData originalData = ChromaseqUtil.getOriginalData(data);
+					 registryData = ChromaseqUtil.getRegistryData(data);
+					 if (originalData!=null && registryData!=null) {
+						 reverseRegistryData = ChromaseqUtil.createReverseRegistryData(originalData);		
+						 storeReverseRegistry(reverseRegistryData);
+					 }
 
-				} else if (reverseRegistryVector.indexOf(reverseRegistryData)<0)
-					storeReverseRegistry(reverseRegistryData);
+				 } else if (reverseRegistryVector.indexOf(reverseRegistryData)<0)
+					 storeReverseRegistry(reverseRegistryData);
 
-//				if (newAddedBase)
-//					ChromaseqUtil.fillAddedBaseData(data);
-				ChromaseqUtil.prepareOriginalAndQualityData(data);
+				 //				if (newAddedBase)
+				 //					ChromaseqUtil.fillAddedBaseData(data);
+				 ChromaseqUtil.prepareOriginalAndQualityData(data);
 
 			}
 		}
@@ -181,11 +186,11 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				if (reverseRegistryData != null) reverseRegistryData.setUserVisible(true);
 				CharacterData originalData = ChromaseqUtil.getOriginalData(data);
 				if (originalData != null) originalData.setUserVisible(true);
-//				CharacterData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
-//				if (addedBaseData != null) addedBaseData.setUserVisible(true);
-				
+				//				CharacterData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+				//				if (addedBaseData != null) addedBaseData.setUserVisible(true);
+
 			}
 		}
-		
+
 	}
 }

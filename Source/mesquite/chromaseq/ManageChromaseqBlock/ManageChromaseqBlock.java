@@ -22,15 +22,7 @@ import mesquite.chromaseq.lib.*;
 
 public class ManageChromaseqBlock extends FileInit {
 
-	public static final int CHROMASEQBLOCKVERSION = 2;
-	public static final int ChromaseqBuild = 25;
-	/*  
-	builds:
-	23: first build of new (November 2009), apparently file-format-complete ChromaseqUniversalMapper and ContigMapper scheme
-	24: first build with single-read code in, 25 November 2009
-		[files written with 24 needs a full force reregistration]
-	25: build of 27 November 2009, after fixing padding issue
-	 * */
+	
 
 	int numBlocks =0;
 	public Class getDutyClass(){
@@ -401,10 +393,16 @@ public class ManageChromaseqBlock extends FileInit {
 		if (commandName.equalsIgnoreCase("VERSION")) {
 			String token  = parser.getNextToken();
 			int version = MesquiteInteger.fromString(token);				
+			if (MesquiteInteger.isCombinable(version)){
+			}
 		}
 		else	if (commandName.equalsIgnoreCase("BUILD")) {
 			String token  = parser.getNextToken();
-			int build = MesquiteInteger.fromString(token);				
+			int build = MesquiteInteger.fromString(token);		
+			if (MesquiteInteger.isCombinable(build)){
+				CharacterData data = nBlock.getDefaultCharacters();
+				data.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, build));
+			}
 		}
 		else if  (commandName.equalsIgnoreCase("CONTIGMAPPER")) {
 			stringPos.setValue(parser.getPosition());
@@ -528,8 +526,8 @@ public class ManageChromaseqBlock extends FileInit {
 		NexusBlock[] bs = getProject().getNexusBlocks(ChromaseqBlock.class, f); 
 		if ((bs == null || bs.length ==0)){
 			ChromaseqBlock ab = new ChromaseqBlock(f, this);
-			ab.setVersion(CHROMASEQBLOCKVERSION);
-			ab.setBuild(ChromaseqBuild);
+			ab.setVersion(ChromaseqUtil.CHROMASEQBLOCKVERSION);
+			ab.setBuild(ChromaseqUtil.ChromaseqBuild);
 			numBlocks++;
 			addNEXUSBlock(ab);
 		}
@@ -542,7 +540,7 @@ public class ManageChromaseqBlock extends FileInit {
 
 		String commandString;
 		NexusBlock b=new ChromaseqBlock(file, this);
-		((ChromaseqBlock)b).setVersion(CHROMASEQBLOCKVERSION);
+		((ChromaseqBlock)b).setVersion(ChromaseqUtil.CHROMASEQBLOCKVERSION);
 		MesquiteString comment = new MesquiteString();
 		int version = 0;
 
@@ -592,8 +590,8 @@ class ChromaseqBlock extends NexusBlock {
 	public ChromaseqBlock(MesquiteFile f, ManageChromaseqBlock mb){
 		super(f, mb);
 		ownerModule = mb;
-		version = mb.CHROMASEQBLOCKVERSION;
-		build = mb.ChromaseqBuild;
+		version = ChromaseqUtil.CHROMASEQBLOCKVERSION;
+		build = ChromaseqUtil.ChromaseqBuild;
 		this.f = f;
 	}
 	public int getVersion() {
