@@ -648,7 +648,7 @@ class ChromaseqBlock extends NexusBlock {
 	public String getNEXUSBlock(){
 		String contents = ownerModule.writeNexusCommands(f);
 		//String contents = ownerModule.getBlockContents();
-		if (contents == null)
+		if (StringUtil.blank(contents))
 			return null;
 		String blocks="BEGIN CHROMASEQ;" + StringUtil.lineEnding();
 		blocks += "\tVERSION " + version+ ";" + StringUtil.lineEnding();
