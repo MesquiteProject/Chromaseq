@@ -219,11 +219,19 @@ public class ContigMapper {
 		}
 
 		int numResurrectedAtStart = 0;
-		for (int ic = 0; ic< firstOriginalInEditor; ic++){  
-			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
-				numResurrectedAtStart++;
+		if (editedData.isReversed(it)) {
+			for (int ic = editedData.getNumChars(); ic> firstOriginalInEditor; ic--){  
+				if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+					numResurrectedAtStart++;
+				}
 			}
 		}
+		else
+			for (int ic = 0; ic< firstOriginalInEditor; ic++){  
+				if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+					numResurrectedAtStart++;
+				}
+			}
 		
 		for (int ic = 0; ic< numTrimmedFromStart-numResurrectedAtStart; ic++){  
 			setDeletedBase(ic, true);
@@ -261,17 +269,34 @@ public class ContigMapper {
 		}
 		int addedBase=0;
 		int addedToEnd=0;
-		for (int ic = firstOriginalInEditor; ic< editedData.getNumChars(); ic++){  
-			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
-				int positionInOriginal = registryData.getState(ic, it);
-				if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
-					addedBase++;
-					if (ic>=lastEditedBaseInOriginal)
-						addedToEnd++;
+		if (editedData.isReversed(it)) {
+			for (int ic = firstOriginalInEditor; ic>=0; ic--){  
+				if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+					int positionInOriginal = registryData.getState(ic, it);
+					if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+						addedBase++;
+						if (ic>=lastEditedBaseInOriginal)
+							addedToEnd++;
+					}
+					else { // it is in original; now record added bases
+						setAddedBases(numTrimmedFromStart+originalData.numValidAssignedState(0,positionInOriginal, it), addedBase);
+						addedBase=0;
+					}
 				}
-				else { // it is in original; now record added bases
-					setAddedBases(numTrimmedFromStart+originalData.numValidAssignedState(0,positionInOriginal, it), addedBase);
-					addedBase=0;
+			}
+		} else {
+			for (int ic = firstOriginalInEditor; ic< editedData.getNumChars(); ic++){  
+				if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+					int positionInOriginal = registryData.getState(ic, it);
+					if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+						addedBase++;
+						if (ic>=lastEditedBaseInOriginal)
+							addedToEnd++;
+					}
+					else { // it is in original; now record added bases
+						setAddedBases(numTrimmedFromStart+originalData.numValidAssignedState(0,positionInOriginal, it), addedBase);
+						addedBase=0;
+					}
 				}
 			}
 		}

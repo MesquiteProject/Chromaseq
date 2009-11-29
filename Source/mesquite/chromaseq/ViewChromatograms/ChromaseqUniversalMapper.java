@@ -80,8 +80,11 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		if (obj instanceof CharacterData) {
 			
 Debugg.println("ChromaseqUniversalMapper.changed()");
+
 			reset(true);
-			//			ContigMapper.checkTaxonNumbers(editedData);
+
+			ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
+//			ContigMapper.checkTaxonNumbers(editedData);
 			contigDisplay.repaintPanels();
 		} 
 	}
@@ -145,7 +148,7 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset(boolean forceFullContigMapSetup) {
-//	Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+	Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -187,7 +190,7 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 		int originalEndOfTrimmedContig = contig.getNumBases() - contigMapper.getNumTrimmedFromEnd();
 		int contigBase = numTrimmedFromStart-1;
 
-//		Debugg.println(contigMapper.toString());
+		Debugg.println(contigMapper.toString());
 
 		int totalNumAddedBases=contigMapper.getTotalNumberAddedBases();
 
@@ -405,7 +408,7 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 
 					int sequenceBase = numBasesFound;
 					contigBase = numTrimmedFromStart+lastPositionInOriginal-1;  //-startingAddedBeforeOriginalTrim
-					if (numBasesFound==1 && false){
+					if (numBasesFound==0){
 						Debugg.println("   sequenceBase: " + sequenceBase);
 						Debugg.println("   contigBase: " + contigBase);
 						Debugg.println("   contigMapper.getNumDeletedBefore(contigBase): " + contigMapper.getNumDeletedBefore(contigBase));

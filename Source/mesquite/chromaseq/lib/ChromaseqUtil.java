@@ -234,6 +234,15 @@ public class ChromaseqUtil{
 		data.attach(new MesquiteLong(READBUILDREF,build));
 	}
 
+
+	public static boolean buildRequiresForcedRegistration(DNAData data) {
+		int build = getChromaseqBuildOfMatrix(data);
+		return build < LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION;
+	}
+
+
+	/*.................................................................................................................*
+
 	public static int getChromaseqBuildOfFile(MesquiteModule ownerModule) {
 		mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock init = (mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock)ownerModule.findNearestColleagueWithDuty(mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock.class);
 		if (init !=null) {
@@ -248,19 +257,15 @@ public class ChromaseqUtil{
 		if (init !=null) {
 			 init.setChromaseqBuildOfFile(build);
 		}
-	}
-	
-	public static boolean buildRequiresForcedRegistration(DNAData data) {
-		int build = getChromaseqBuildOfMatrix(data);
-		return build < LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION;
-	}
-
-
-	public static boolean buildRequiresForcedRegistration(MesquiteModule ownerModule) {
+	}	
+		public static boolean buildRequiresForcedRegistration(MesquiteModule ownerModule) {
 		int build = getChromaseqBuildOfFile(ownerModule);
 		return build < LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION;
 	}
 
+/*.................................................................................................................*/
+
+	
 	public static String getGeneName(CharacterData data) {
 		String gn = "";
 		Object obj = ChromaseqUtil.getStringAttached(data, GENENAMEREF);
@@ -1326,6 +1331,11 @@ public class ChromaseqUtil{
 			return;
 		MesquiteFile file = registryData.getProject().getHomeFile();
 		inferRegistryData(registryData,file);
+		MeristicData reverseRegistryData = getReverseRegistryData(registryData);	
+		if (reverseRegistryData!=null)
+			fillReverseRegistryData(reverseRegistryData);
+
+
 	}
 
 	/*.................................................................................................................*/
@@ -1364,7 +1374,7 @@ public class ChromaseqUtil{
 		inferRegistryData(registryData, file);
 
 		prepareOriginalAndQualityData(data);
-
+		
 		//	createReverseRegistryData(registryData, originalData);
 
 		return registryData;

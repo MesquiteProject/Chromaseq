@@ -134,7 +134,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 
 			}
 		}
-		ChromaseqUtil.setChromaseqBuildOfFile(this,  ChromaseqUtil.ChromaseqBuild);
+		//ChromaseqUtil.setChromaseqBuildOfFile(this,  ChromaseqUtil.ChromaseqBuild);
 
 	}
 	/*.................................................................................................................*/
