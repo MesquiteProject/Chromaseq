@@ -181,7 +181,7 @@ public class ContigMapper {
 				lastContigBaseInOriginal=contigBase;
 			}
 		}
-		int numFromEnd = contig.getNumBases()-lastContigBaseInOriginal-1;
+		int numFromEnd = numBases-lastContigBaseInOriginal-1;
 
 
 		setNumDeletedFromEnd(deletedAtEnd);
@@ -209,6 +209,10 @@ public class ContigMapper {
 
 	}
 	/*.................................................................................................................*/
+	public void inferFromExistingRegistry(MolecularData editedData, int it) {
+		inferFromExistingRegistry(editedData,it, numTrimmedFromStart);
+	}
+	/*.................................................................................................................*/
 	public void inferFromExistingRegistry(MolecularData editedData, int it, int numTrimmedFromStart) {
 //		Debugg.println("\n======================  START OF INFER CONTIG MAPPER =============");
 //		Debugg.println(toString());
@@ -225,7 +229,15 @@ public class ContigMapper {
 		int lastEditedBaseInOriginal = -1;
 		int deletedAtEnd = 0;
 		int contigBase = 0;
-		for (int ic = 0; ic< contig.getNumBases(); ic++){  
+		if (contig!=null) {
+			if (contig.getNumBases()>numBases)
+				setNumBases(contig.getNumBases());
+		}
+		int numContigBases = numBases;
+		if (deleted==null || deleted.length!=numBases)
+			init(numBases);
+		
+		for (int ic = 0; ic< numContigBases; ic++){  
 			setDeletedBase(ic, false);
 			setAddedBases(0, 0);
 		}
@@ -290,11 +302,11 @@ public class ContigMapper {
 				lastContigBaseInOriginal=contigBase;
 			}
 		}
-		int numFromEnd = contig.getNumBases()-lastContigBaseInOriginal-1;
+		int numFromEnd = numContigBases-lastContigBaseInOriginal-1;
 
 
 		for (int ic = 0; ic< numFromEnd; ic++){  
-			setDeletedBase(contig.getNumBases()-1-ic, true);
+			setDeletedBase(numContigBases-1-ic, true);
 		}
 		
 

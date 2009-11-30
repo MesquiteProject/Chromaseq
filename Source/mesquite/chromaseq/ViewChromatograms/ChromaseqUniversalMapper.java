@@ -83,7 +83,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int[] parameters = Notification.getParameters(notification);
 		if (obj instanceof CharacterData) {
 			
-Debugg.println("---- ChromaseqUniversalMapper.changed()");
+//Debugg.println("---- ChromaseqUniversalMapper.changed()");
 
 			reset(true);
 

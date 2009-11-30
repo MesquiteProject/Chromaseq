@@ -21,7 +21,7 @@ import mesquite.lib.duties.*;
 import mesquite.meristic.lib.MeristicData;
 import mesquite.chromaseq.lib.*;
 
-public class ManageChromaseqBlock extends FileInit {
+public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 
 	int chromaseqVersionOfFile = 0;
 	int chromaseqBuildOfFile =0;
@@ -60,7 +60,26 @@ public class ManageChromaseqBlock extends FileInit {
 		int code = Notification.getCode(notification);
 		int[] parameters = Notification.getParameters(notification);
 		if (obj instanceof CharacterData) {
-			//ChromaseqUtil.getContigMapperAssociated(obj, it);
+			 if (code==MesquiteListener.NAMES_CHANGED || code==MesquiteListener.SELECTION_CHANGED) {
+				//	contigDisplay.repaintPanels();
+			}
+			else {
+				DNAData editedData = ChromaseqUtil.getEditedData((CharacterData)obj);
+				if (editedData!=null) {
+//					Debugg.println("  ManageChromaseqBlock listened and heard data changing!");
+					for (int it=0; it<editedData.getNumTaxa(); it++) {
+						ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
+						if (contigMapper!=null) {
+							contigMapper.inferFromExistingRegistry(editedData, it);
+						}
+					}
+				}
+	/*			if (parameters!=null && parameters.length>1) {
+					int starting = parameters[0];
+					int it = parameters[1];
+				}
+				*/
+			}
 		} 
 	}
 
@@ -557,11 +576,27 @@ public class ManageChromaseqBlock extends FileInit {
 		return false;
 	}
 	/*.................................................................................................................*/
+	public void setUpListening(MesquiteFile f) {
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				data.addListener(this);
+			}
+		}
+	}
+
+	/*.................................................................................................................*/
 	/** A method called immediately after the file has been read in or completely set up (if a new file).*/
 	public void fileReadIn(MesquiteFile f) {
 		if (f== null || f.getProject() == null)
 			return;
 		//convertOldToNew();
+		setUpListening(f);
 		NexusBlock[] bs = getProject().getNexusBlocks(ChromaseqBlock.class, f); 
 		if ((bs == null || bs.length ==0)){
 			ChromaseqBlock ab = new ChromaseqBlock(f, this);
