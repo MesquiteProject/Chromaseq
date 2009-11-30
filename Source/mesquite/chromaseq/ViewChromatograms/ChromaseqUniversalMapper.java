@@ -18,6 +18,10 @@ import mesquite.chromaseq.lib.*;
 import mesquite.meristic.lib.*;
 
 public class ChromaseqUniversalMapper implements MesquiteListener {
+	public ContigMapper getContigMapper() {
+		return contigMapper;
+	}
+
 	public static final int ORIGINALUNTRIMMEDSEQUENCE = 0;   // this is the "Original Untrimmed" sequence line in the chromatogram viewer
 	public static final int ORIGINALTRIMMEDSEQUENCE = 3;    // this is the "Original Trimmed" sequence line in the chromatogram viewer.
 	public static final int EDITEDMATRIXSEQUENCE = 1;   // this is the edited in matrix sequence line in the chromatogram viewer
@@ -79,7 +83,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int[] parameters = Notification.getParameters(notification);
 		if (obj instanceof CharacterData) {
 			
-Debugg.println("ChromaseqUniversalMapper.changed()");
+Debugg.println("---- ChromaseqUniversalMapper.changed()");
 
 			reset(true);
 
@@ -141,14 +145,13 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 	}
 	/*.................................................................................................................*/
 
-
 	int resetCount = 0;
 
 
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset(boolean forceFullContigMapSetup) {
-//	Debugg.println("======= Resetting Universal Base Registry ======= " + (resetCount++));
+//	Debugg.println("\n======= Resetting Universal Base Registry ======= " + (resetCount++));
 		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
 		// =========== Calculate total number of universal bases ===========
@@ -180,6 +183,7 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 				contigMapper.setUp(editedData,it, numTrimmedFromStart);
 		} 
 		else if (forceFullContigMapSetup) {
+			ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
 			contigMapper.inferFromExistingRegistry(editedData,it, numTrimmedFromStart);
 		}
 		else
@@ -187,7 +191,7 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 
 		int numResurrectedAtStart = contigMapper.getNumResurrectedAtStart();
 		//		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig();
-		int originalEndOfTrimmedContig = contig.getNumBases() - contigMapper.getNumTrimmedFromEnd();
+		int lastContigBaseBeforeTrimmedEnd = contig.getNumBases() - contigMapper.getNumTrimmedFromEnd();
 		int contigBase = numTrimmedFromStart-1;
 
 //		Debugg.println(contigMapper.toString());
@@ -225,7 +229,10 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 		int startingNumAddedDeletedBefore = contigMapper.getNumAddedDeletedBefore(numTrimmedFromStart) ;
 		int startingAddedBeforeOriginalTrim = contigMapper.getNumAddedBefore(numTrimmedFromStart) ;
 		int startingDeletedBeforeOriginalTrim = contigMapper.getNumDeletedBefore(numTrimmedFromStart) ;
-		int paddingBeforeOriginalTrim = contig.getNumPaddedBefore(numTrimmedFromStart) ;
+		int paddingBeforeOriginalTrim = contig.getNumPaddedBeforeContigBase(numTrimmedFromStart) ;
+		SequenceCanvas sequenceCanvas = originalUntrimmedPanel.getCanvas();
+		MesquiteSequence sequence = originalUntrimmedPanel.getSequence();
+		int contigLength = sequence.getLength();
 
 		/*
 		Debugg.println("   totalUniversalBases: " + totalUniversalBases);
@@ -236,60 +243,47 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 		Debugg.println("   startingAddedBeforeOriginalTrim: " + startingAddedBeforeOriginalTrim);
 		Debugg.println("   startingDeletedBeforeOriginalTrim: " + startingDeletedBeforeOriginalTrim);
 		Debugg.println("   paddingBeforeOriginalTrim: " + paddingBeforeOriginalTrim);
+//	Debugg.println(sequence.getSequence());
+			//			Debugg.println("   contig.getReadExcessAtStart(): " + contig.getReadExcessAtStart());
 
 	*/
-		
-		SequenceCanvas sequenceCanvas = originalUntrimmedPanel.getCanvas();
-		MesquiteSequence sequence = originalUntrimmedPanel.getSequence();
+//		Debugg.println(" |||||||||||||||||||||||  ");
 
-//	Debugg.println(sequence.getSequence());
-	
-	
 		if (sequenceCanvas!=null && sequence!=null){
-			int[] addedBases = new int[sequence.getLength()];//+contig.getReadExcessAtStart()];
+			
+			// ............  first, tabulate how many bases are added BEFORE any base in the contig, not counting bases added in trimmed region
+			int[] addedBases = new int[sequence.getLength()];
 			for (int sequenceBase=0; sequenceBase<addedBases.length; sequenceBase++){
 				addedBases[sequenceBase] = 0;
 			}
 			int totalAdded =0;
 			for (int sequenceBase=0; sequenceBase<addedBases.length; sequenceBase++){
-				if (sequenceBase>=numTrimmedFromStart) {
+				if (sequenceBase>numTrimmedFromStart) {  // only count those right of the trimmed ones, as ones before the trimmed ones don't count toward the universal base
 					totalAdded+= contigMapper.getAddedBases(sequenceBase);
 					addedBases[sequenceBase] = totalAdded;
 				}
 				//	if (sequenceBase>numBasesOriginallyTrimmedFromStartOfPhPhContig && contigMapper.getDeletedBase(sequenceBase))
 				//		addedBases[sequenceBase]++;
 			}
-			/*	int totalAddedBases = 0;
-			int sequenceBases = numBasesOriginallyTrimmedFromStartOfPhPhContig-1;
-			for (int ic=0; ic<registryData.getNumChars(); ic++){
-				int icOriginal = registryData.getState(ic, it);
-				if (icOriginal==ChromaseqUtil.ADDEDBASEREGISTRY){// || registryData.isInapplicable(ic, it)) { //
-					totalAddedBases++;
-				} else if (originalData.isValidAssignedState(icOriginal,it)) {
-					sequenceBases++;
-					if (sequenceBases>=0 && sequenceBases<addedBases.length)
-						addedBases[sequenceBases] = totalAddedBases;
-				}
-			}
-			 */
-			//			Debugg.println("   contig.getReadExcessAtStart(): " + contig.getReadExcessAtStart());
-			for (int sequenceBase=0; sequenceBase<sequence.getLength(); sequenceBase++){
+			
+			
+
+			//............  now go through the contig.  note that for this, the sequenceBase IS the contigBase
+			for (int sequenceBase=0; sequenceBase<contigLength; sequenceBase++){
 				int universalBase = sequenceBase + contig.getReadExcessAtStart();
-				if (sequenceBase<5 && false){
-					Debugg.println("   sequenceBase: " + sequenceBase);
-					Debugg.println("     universalBase: " + universalBase);
-					Debugg.println("     addedBases[sequenceBase]: " + addedBases[sequenceBase]);
-				}
 				if (sequenceBase<addedBases.length)
-					universalBase += addedBases[sequenceBase];
-				/*	int numPads = contig.getNumPaddedBefore(sequenceBase);  // account for padding
-				if (numPads<prevNumPads)
-					numPads=prevNumPads;
-				universalBase+=numPads;
-				prevNumPads = numPads;
-				 */
+					universalBase += addedBases[sequenceBase];  // or should this be sequenceBase+1
+				//............  don't have to adjust for padding, as the pads are IN the original untrimmed/contig.  just have to adjust for added bases
 				if (universalBase>= totalUniversalBases)
 					continue;
+				
+				if (sequenceBase>=565 && sequenceBase<=580 && false){
+					Debugg.println("...........");
+					Debugg.println("   sequenceBase: " + sequenceBase);
+					Debugg.println("   universalBase: " + universalBase);
+					Debugg.println("   addedBases[sequenceBase]: " + addedBases[sequenceBase]);
+				}
+
 				if (universalBase<otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE].length)
 					otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase] = sequenceBase;
 				universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][sequenceBase] = universalBase;
@@ -299,6 +293,7 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 			}
 		}
 
+		
 		// =========== Calculate mappings for the original import panel (i.e., the "Original.Trimmed" one - just like Original.Untrimmed but trimmed) ===========
 		prevNumPads = 0;
 		sequenceCanvas = originalTrimmedSequencePanel.getCanvas();
@@ -307,37 +302,93 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 			int sequenceLength = sequence.getLength();
 			int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart];
 
+			 // as we know the trimmed bases are ONLY a subset of the contig, then we can go through the contig and find them all
+			for (contigBase=numTrimmedFromStart; contigBase<contigLength; contigBase++){  
+				if (!contig.getIsPadding(contigBase)) {
+					int sequenceBase = contigBase-numTrimmedFromStart;
+					int numPads = contig.getNumPaddedBeforeContigBase(contigBase)-paddingBeforeOriginalTrim;  // account for padding
+					if (numPads<prevNumPads)   // in case numPads is -ve
+						numPads=prevNumPads;
+					sequenceBase -= numPads;
+					if (sequenceBase>=sequenceLength) continue;
 
-			for (int sequenceBase=0; sequenceBase<sequenceLength; sequenceBase++){
-				contigBase = sequenceBase+numTrimmedFromStart;
-				
-				// should the next line be contigMapper.getNumAddedBefore(contigBase) or contigMapper.getNumAddedBefore(contigBase+1)
-				int universalBase = startingUniversalBase + sequenceBase + contigMapper.getNumAddedBefore(contigBase)-startingAddedBeforeOriginalTrim;   
-				int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);  // account for padding
-				if (numPads<prevNumPads)
-					numPads=prevNumPads;
-				universalBase+=numPads-paddingBeforeOriginalTrim;  //don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
-				prevNumPads = numPads;
-				if (universalBase<otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE].length)
-					otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE][universalBase] = sequenceBase;
-				universalBaseFromOtherBase[ORIGINALTRIMMEDSEQUENCE][sequenceBase] = universalBase;
+					int universalBase = startingUniversalBase + sequenceBase + contigMapper.getNumAddedBefore(contigBase)-startingAddedBeforeOriginalTrim;   
+					
+					
+//					int calculatedContigBase = otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase];
+/*					if (sequenceBase>=1003 && sequenceBase<=1008){
+						Debugg.println("----------------------------");
+						Debugg.println("   sequenceBase: " + sequenceBase);
+						Debugg.println("   universalBase: " + universalBase);
+						Debugg.println("   contigBase: " + contigBase);
+						Debugg.println("   calculatedContigBase: " + calculatedContigBase);
+						Debugg.println("   numPads: " + numPads);
+						Debugg.println("   prevNumPads: " + prevNumPads);
+						Debugg.println("   paddingBeforeOriginalTrim: " + paddingBeforeOriginalTrim);
+						Debugg.println("   otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]: " + otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
+					}
+*/
+					universalBase+=numPads;//-paddingBeforeOriginalTrim;  //don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
+					prevNumPads = numPads;
+					if (universalBase<otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE].length)
+						otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE][universalBase] = sequenceBase;
+					universalBaseFromOtherBase[ORIGINALTRIMMEDSEQUENCE][sequenceBase] = universalBase;
+				}
 			}
 		}
 
+		
+		/* =========== Calculate mappings for the original import panel (i.e., the "Original.Trimmed" one - just like Original.Untrimmed but trimmed) ===========
+				prevNumPads = 0;
+				sequenceCanvas = originalTrimmedSequencePanel.getCanvas();
+				sequence = originalTrimmedSequencePanel.getSequence();
+				if (sequenceCanvas!=null && sequence!=null){
+					int sequenceLength = sequence.getLength();
+					int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart];
+
+					for (int sequenceBase=0; sequenceBase<sequenceLength; sequenceBase++){
+						contigBase = sequenceBase+numTrimmedFromStart;  // but trimmed doesn't have pads.
+						
+						// should the next line be contigMapper.getNumAddedBefore(contigBase) or contigMapper.getNumAddedBefore(contigBase+1)
+						int universalBase = startingUniversalBase + sequenceBase + contigMapper.getNumAddedBefore(contigBase)-startingAddedBeforeOriginalTrim;   
+						int calculatedContigBase = otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase];
+						int numPads = 0;
+						if (MesquiteInteger.isCombinable(contigBase)) {
+							numPads = contig.getNumPaddedBefore(contigBase)-paddingBeforeOriginalTrim;  // account for padding
+						} 
+						if (sequenceBase>=1003 && sequenceBase<=1008){
+							Debugg.println("----------------------------");
+							Debugg.println("   sequenceBase: " + sequenceBase);
+							Debugg.println("   universalBase: " + universalBase);
+							Debugg.println("   contigBase: " + contigBase);
+							Debugg.println("   calculatedContigBase: " + calculatedContigBase);
+							Debugg.println("   numPads: " + numPads);
+							Debugg.println("   prevNumPads: " + prevNumPads);
+							Debugg.println("   paddingBeforeOriginalTrim: " + paddingBeforeOriginalTrim);
+							Debugg.println("   otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]: " + otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
+						}
+						if (numPads<prevNumPads)
+							numPads=prevNumPads;
+						universalBase+=numPads;//-paddingBeforeOriginalTrim;  //don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
+						prevNumPads = numPads;
+						if (universalBase<otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE].length)
+							otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE][universalBase] = sequenceBase;
+						universalBaseFromOtherBase[ORIGINALTRIMMEDSEQUENCE][sequenceBase] = universalBase;
+					}
+				}
+				
+				*/
+
 		// =========== Calculate mappings for EditedInMatrix sequence panel ===========
 
-		int numBasesFound = -1;
-		int numOriginalBasesFound=-1;
+		int sequenceBase = -1;
+//		int numOriginalBasesFound=-1;
 		int numAddedBases = 0;
 		int numDeletedBases = 0;
 		int numChars = editedData.getNumChars();
 		int lastPositionInOriginal = -1;
-
-		//	Debugg.println("   numChars: " + numChars);
-
-		//	boolean firstTimeThrough = true;
+		int matrixBasesSinceLastOriginal = 0;
 		prevNumPads = 0;
-
 
 		int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart-numResurrectedAtStart]-startingAddedBeforeOriginalTrim;
 
@@ -345,40 +396,81 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 
 			for (int matrixBase = 0; matrixBase< numChars; matrixBase++){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
-				if (!editedData.isInapplicable(matrixBase,it)){
+				if (!editedData.isInapplicable(matrixBase,it)){     // the only ones we record are the non-inapplicable ones
+					sequenceBase++;
 					int positionInOriginal = registryData.getState(matrixBase, it);
 					if (registryData.isCombinable(matrixBase, it) && positionInOriginal>=0){ 
-						numOriginalBasesFound++;
+//						numOriginalBasesFound++;
+						matrixBasesSinceLastOriginal = 0;
 						lastPositionInOriginal=positionInOriginal;
-					}
+					} else
+						matrixBasesSinceLastOriginal ++;
 
-					numBasesFound++;
-
-					int sequenceBase = numBasesFound;
-					contigBase = numTrimmedFromStart+lastPositionInOriginal-1;  //-startingAddedBeforeOriginalTrim
-					if (numBasesFound==1 && false){
-						Debugg.println("   sequenceBase: " + sequenceBase);
-						Debugg.println("   contigBase: " + contigBase);
-						Debugg.println("   contigMapper.getNumDeletedBefore(contigBase): " + contigMapper.getNumDeletedBefore(contigBase));
-						Debugg.println("   startingUniversalBase: " + startingUniversalBase);
-						Debugg.println("   universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numBasesOriginallyTrimmedFromStartOfPhPhContig]: " + universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart]);
-						Debugg.println("   startingNumAddedDeletedBefore: " + startingNumAddedDeletedBefore);
-						Debugg.println("   numResurrectedAtStart: " + numResurrectedAtStart);
-						Debugg.println("   startingAddedBeforeOriginalTrimm: " + startingAddedBeforeOriginalTrim);
-						Debugg.println("   startingDeletedBeforeOriginalTrimm: " + startingDeletedBeforeOriginalTrim);
-						Debugg.println("   originalEndOfTrimmedContig: " + originalEndOfTrimmedContig);
-					}
-					int universalBase = startingUniversalBase+numBasesFound;
-					if (contigBase>=numTrimmedFromStart && contigBase<originalEndOfTrimmedContig)
-						universalBase += (contigMapper.getNumDeletedBefore(contigBase+1)-startingDeletedBeforeOriginalTrim);
-					else if (contigBase>=originalEndOfTrimmedContig)
-						universalBase += (contigMapper.getNumDeletedBefore(originalEndOfTrimmedContig)-startingDeletedBeforeOriginalTrim);
-					int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase-paddingBeforeOriginalTrim]);
+					
+					int lastContigBaseWithOriginalMatch = contigMapper.getContigBaseFromOriginalMatrixBase(lastPositionInOriginal, it);   // last contig base encountered that has an original base; won't incude pads
+					int numPadsSinceLastOriginal=0;
+					int additionalContigBases = 0;
+					if (matrixBasesSinceLastOriginal>0)  // now let's find is this really corresponds to another contigBase
+						for (int i = lastContigBaseWithOriginalMatch+1; i<contig.getNumBases(); i++){
+							int count = 0;
+							if (contig.getIsPadding(i)){
+								count++;
+								numPadsSinceLastOriginal++;
+							}
+							count+= contigMapper.getAddedBases(i);
+							if (count+additionalContigBases > matrixBasesSinceLastOriginal){  // we've gone past were we are
+								break;
+							}
+							additionalContigBases += count;			
+						}
+					contigBase = lastContigBaseWithOriginalMatch + additionalContigBases;
+						
+					int universalBase = startingUniversalBase+sequenceBase;
+					if (contigBase>=numTrimmedFromStart && contigBase<lastContigBaseBeforeTrimmedEnd)
+						universalBase += (contigMapper.getNumDeletedBefore(contigBase)-startingDeletedBeforeOriginalTrim);
+					else if (contigBase>=lastContigBaseBeforeTrimmedEnd)
+						universalBase += (contigMapper.getNumDeletedBefore(lastContigBaseBeforeTrimmedEnd)-startingDeletedBeforeOriginalTrim);
+					int calculatedContigBase = otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase];
+					int numPads = contig.getNumPaddedBeforeContigBase(contigBase)-paddingBeforeOriginalTrim;
 					if (numPads<prevNumPads)
 						numPads=prevNumPads;
 				//	if (contigBase<numTrimmedFromStart)
-					universalBase+=numPads-paddingBeforeOriginalTrim;  // don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
+					universalBase+=numPads;//-paddingBeforeOriginalTrim;  // don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
 					prevNumPads = numPads;
+					
+					
+					if (contigBase>=1504 && false){
+						if (contigBase==1504) {
+							Debugg.println("   startingNumAddedDeletedBefore: " + startingNumAddedDeletedBefore);
+							Debugg.println("   startingAddedBeforeOriginalTrimm: " + startingAddedBeforeOriginalTrim);
+							Debugg.println("   startingDeletedBeforeOriginalTrimm: " + startingDeletedBeforeOriginalTrim);
+							Debugg.println("   numResurrectedAtStart: " + numResurrectedAtStart); 
+							Debugg.println("   lastContigBaseBeforeTrimmedEnd: " + lastContigBaseBeforeTrimmedEnd);
+						}
+						Debugg.println("----------------------------");
+						Debugg.println("   matrixBase: " + matrixBase);
+						Debugg.println("   universalBase: " + universalBase);
+						Debugg.println("   sequenceBase: " + sequenceBase);
+						Debugg.println("   contigBase: " + contigBase);
+						if (contig.getIsPadding(contigBase))
+							Debugg.println("!!!!!!!!!! is padding!!!!!!!!");
+						Debugg.println("   lastContigBase: " + lastContigBaseWithOriginalMatch);
+						Debugg.println("   calculatedContigBase: " + calculatedContigBase);
+						Debugg.println("   lastPositionInOriginal: " + lastPositionInOriginal);
+						Debugg.println("   numPads: " + numPads);
+						Debugg.println("   lastContigBaseWithOriginalMatch: " + lastContigBaseWithOriginalMatch);
+						Debugg.println("   additionalContigBases: " + additionalContigBases);
+						Debugg.println("   contigMapper.getNumDeletedBefore(contigBase): " + contigMapper.getNumDeletedBefore(contigBase));
+						if (contigBase>=lastContigBaseBeforeTrimmedEnd)
+							Debugg.println("   SWITCH  ");
+						Debugg.println("   contigMapper.getNumDeletedBefore(lastContigBaseBeforeTrimmedEnd): " + contigMapper.getNumDeletedBefore(lastContigBaseBeforeTrimmedEnd));
+						if (contigMapper.getDeletedBase(contigBase))
+							Debugg.println(" DELETED ");
+						else
+							Debugg.println(" NOT DELETED ");
+
+
+					}
 
 					if (sequenceBase>=0 && sequenceBase<universalBaseFromOtherBase[EDITEDMATRIXSEQUENCE].length)
 						universalBaseFromOtherBase[EDITEDMATRIXSEQUENCE][sequenceBase] = universalBase;
@@ -397,39 +489,81 @@ Debugg.println("ChromaseqUniversalMapper.changed()");
 			//			Debugg.println("   startingUniversalBase: " + startingUniversalBase);
 			for (int matrixBase = numChars-1; matrixBase>=0 ; matrixBase--){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
-				if (!editedData.isInapplicable(matrixBase,it)){
+				if (!editedData.isInapplicable(matrixBase,it)){     // the only ones we record are the non-inapplicable ones
+					sequenceBase++;
 					int positionInOriginal = registryData.getState(matrixBase, it);
 					if (registryData.isCombinable(matrixBase, it) && positionInOriginal>=0){ 
-						numOriginalBasesFound++;
+//						numOriginalBasesFound++;
+						matrixBasesSinceLastOriginal = 0;
 						lastPositionInOriginal=positionInOriginal;
-					}
+					} else
+						matrixBasesSinceLastOriginal ++;
 
-					numBasesFound++;
-
-					int sequenceBase = numBasesFound;
-					contigBase = numTrimmedFromStart+lastPositionInOriginal-1;  //-startingAddedBeforeOriginalTrim
-					if (numBasesFound==1 && false){
-						Debugg.println("   sequenceBase: " + sequenceBase);
-						Debugg.println("   contigBase: " + contigBase);
-						Debugg.println("   contigMapper.getNumDeletedBefore(contigBase): " + contigMapper.getNumDeletedBefore(contigBase));
-						Debugg.println("   startingUniversalBase: " + startingUniversalBase);
-						Debugg.println("   universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numBasesOriginallyTrimmedFromStartOfPhPhContig]: " + universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart]);
-						Debugg.println("   startingNumAddedDeletedBefore: " + startingNumAddedDeletedBefore);
-						Debugg.println("   numResurrectedAtStart: " + numResurrectedAtStart);
-						Debugg.println("   startingAddedBeforeOriginalTrimm: " + startingAddedBeforeOriginalTrim);
-						Debugg.println("   startingDeletedBeforeOriginalTrimm: " + startingDeletedBeforeOriginalTrim);
-						Debugg.println("   originalEndOfTrimmedContig: " + originalEndOfTrimmedContig);
-					}
-					int universalBase = startingUniversalBase+numBasesFound;
-					if (contigBase>numTrimmedFromStart && contigBase<originalEndOfTrimmedContig)
-						universalBase += (contigMapper.getNumDeletedBefore(contigBase+1)-startingDeletedBeforeOriginalTrim);
-					else if (contigBase>=originalEndOfTrimmedContig)
-						universalBase += (contigMapper.getNumDeletedBefore(originalEndOfTrimmedContig)-startingDeletedBeforeOriginalTrim);
-					int numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
+					
+					int lastContigBaseWithOriginalMatch = contigMapper.getContigBaseFromOriginalMatrixBase(lastPositionInOriginal, it);   // last contig base encountered that has an original base; won't incude pads
+					int numPadsSinceLastOriginal=0;
+					int additionalContigBases = 0;
+					if (matrixBasesSinceLastOriginal>0)  // now let's find is this really corresponds to another contigBase
+						for (int i = lastContigBaseWithOriginalMatch+1; i<contig.getNumBases(); i++){
+							int count = 0;
+							if (contig.getIsPadding(i)){
+								count++;
+								numPadsSinceLastOriginal++;
+							}
+							count+= contigMapper.getAddedBases(i);
+							if (count+additionalContigBases > matrixBasesSinceLastOriginal){  // we've gone past were we are
+								break;
+							}
+							additionalContigBases += count;			
+						}
+					contigBase = lastContigBaseWithOriginalMatch + additionalContigBases;
+						
+					int universalBase = startingUniversalBase+sequenceBase;
+					if (contigBase>=numTrimmedFromStart && contigBase<lastContigBaseBeforeTrimmedEnd)
+						universalBase += (contigMapper.getNumDeletedBefore(contigBase)-startingDeletedBeforeOriginalTrim);
+					else if (contigBase>=lastContigBaseBeforeTrimmedEnd)
+						universalBase += (contigMapper.getNumDeletedBefore(lastContigBaseBeforeTrimmedEnd)-startingDeletedBeforeOriginalTrim);
+					int calculatedContigBase = otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase];
+					int numPads = contig.getNumPaddedBeforeContigBase(contigBase)-paddingBeforeOriginalTrim;
 					if (numPads<prevNumPads)
 						numPads=prevNumPads;
-					universalBase+=numPads-paddingBeforeOriginalTrim;  // don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
+				//	if (contigBase<numTrimmedFromStart)
+					universalBase+=numPads;//-paddingBeforeOriginalTrim;  // don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
 					prevNumPads = numPads;
+					
+					
+					if (contigBase>=1504 && false){
+						if (contigBase==1504) {
+							Debugg.println("   startingNumAddedDeletedBefore: " + startingNumAddedDeletedBefore);
+							Debugg.println("   startingAddedBeforeOriginalTrimm: " + startingAddedBeforeOriginalTrim);
+							Debugg.println("   startingDeletedBeforeOriginalTrimm: " + startingDeletedBeforeOriginalTrim);
+							Debugg.println("   numResurrectedAtStart: " + numResurrectedAtStart); 
+							Debugg.println("   lastContigBaseBeforeTrimmedEnd: " + lastContigBaseBeforeTrimmedEnd);
+						}
+						Debugg.println("----------------------------");
+						Debugg.println("   matrixBase: " + matrixBase);
+						Debugg.println("   universalBase: " + universalBase);
+						Debugg.println("   sequenceBase: " + sequenceBase);
+						Debugg.println("   contigBase: " + contigBase);
+						if (contig.getIsPadding(contigBase))
+							Debugg.println("!!!!!!!!!! is padding!!!!!!!!");
+						Debugg.println("   lastContigBase: " + lastContigBaseWithOriginalMatch);
+						Debugg.println("   calculatedContigBase: " + calculatedContigBase);
+						Debugg.println("   lastPositionInOriginal: " + lastPositionInOriginal);
+						Debugg.println("   numPads: " + numPads);
+						Debugg.println("   lastContigBaseWithOriginalMatch: " + lastContigBaseWithOriginalMatch);
+						Debugg.println("   additionalContigBases: " + additionalContigBases);
+						Debugg.println("   contigMapper.getNumDeletedBefore(contigBase): " + contigMapper.getNumDeletedBefore(contigBase));
+						if (contigBase>=lastContigBaseBeforeTrimmedEnd)
+							Debugg.println("   SWITCH  ");
+						Debugg.println("   contigMapper.getNumDeletedBefore(lastContigBaseBeforeTrimmedEnd): " + contigMapper.getNumDeletedBefore(lastContigBaseBeforeTrimmedEnd));
+						if (contigMapper.getDeletedBase(contigBase))
+							Debugg.println(" DELETED ");
+						else
+							Debugg.println(" NOT DELETED ");
+
+
+					}
 
 					if (sequenceBase>=0 && sequenceBase<universalBaseFromOtherBase[EDITEDMATRIXSEQUENCE].length)
 						universalBaseFromOtherBase[EDITEDMATRIXSEQUENCE][sequenceBase] = universalBase;

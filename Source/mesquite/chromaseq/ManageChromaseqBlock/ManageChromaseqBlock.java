@@ -54,6 +54,15 @@ public class ManageChromaseqBlock extends FileInit {
 	public void setChromaseqBuildOfFile(int chromaseqBuildOfFile) {
 		this.chromaseqBuildOfFile = chromaseqBuildOfFile;
 	}
+	/*.................................................................................................................*/
+	/** passes which object changed, along with optional Notification object with details (e.g., code number (type of change) and integers (e.g. which character))*/
+	public void changed(Object caller, Object obj, Notification notification){
+		int code = Notification.getCode(notification);
+		int[] parameters = Notification.getParameters(notification);
+		if (obj instanceof CharacterData) {
+			//ChromaseqUtil.getContigMapperAssociated(obj, it);
+		} 
+	}
 
 	/*.................................................................................................................*
   	 public Snapshot getSnapshot(MesquiteFile file) { 

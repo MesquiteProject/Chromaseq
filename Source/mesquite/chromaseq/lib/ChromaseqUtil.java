@@ -660,7 +660,8 @@ public class ChromaseqUtil{
 		} else if (contigDisplay.isReversedInEditedData()) {
 			for (int icEdited = ic; icEdited>=0; icEdited--){
 				int  icOriginal = registryData.getState(icEdited, it);
-				if (icOriginal>=0){  // found one that is in contig.
+				if (registryData.isCombinable(icEdited, it) && icOriginal>=0){  // found one that is in contig.
+					registryData.setToInapplicable(ic,it);
 					contigMapper.addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);
 					break;
 				}
@@ -671,7 +672,8 @@ public class ChromaseqUtil{
 		else {  // let's find the next one up that it can be
 			for (int icEdited = ic; icEdited<registryData.getNumChars(); icEdited++){
 				int  icOriginal = registryData.getState(icEdited, it);
-				if (icOriginal>=0){  // found one that is in contig.
+				if (registryData.isCombinable(icEdited, it) && icOriginal>=0){  // found one that is in contig.
+					registryData.setToInapplicable(ic,it);
 					contigMapper.addToAddedBases(contigDisplay.getUniversalMapper().getOtherBaseFromEditedMatrixBase(ChromaseqUniversalMapper.ORIGINALUNTRIMMEDSEQUENCE, icEdited),1);
 					break;
 				}

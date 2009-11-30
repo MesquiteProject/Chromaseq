@@ -18,6 +18,7 @@ import mesquite.lib.characters.CharacterData;
 
 public class ContigMapper {
 	int numAddedToEnd, numResurrectedAtStart;
+	int numResurrectedAtEnd;
 	int numDeletedFromStart, numDeletedFromEnd;
 	int numTrimmedFromEnd=0;
 	int numTrimmedFromStart = 0;
@@ -37,6 +38,16 @@ public class ContigMapper {
 	}
 	public ContigMapper () {
 		init();
+	}
+
+	/*.................................................................................................................*/
+	public int getContigBaseFromOriginalMatrixBase(int originalMatrixBase, int it) {
+		if (editedData==null || contig==null)
+			return originalMatrixBase;
+		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
+		int trimmedBase = originalData.numValidStateOrUnassigned(0, originalMatrixBase, it)-1;  // how many trimmed bases are up to that point
+		int contigBase = contig.getContigBaseFromTrimmedBase(trimmedBase);
+		return contigBase;  //-startingAddedBeforeOriginalTrim
 	}
 
 	/*.................................................................................................................*/
@@ -105,11 +116,18 @@ public class ContigMapper {
 		totalAddedDeletedAfter[deleted.length-1] -= numDeletedFromEnd;
 
 		count=0;
-		for (int ic = deleted.length-1; ic>=0; ic--){
+		for (int ic = numTrimmedFromStart; ic>=0; ic--){
 			if (!deleted[ic] && ic<numTrimmedFromStart)
 				count++;
 		}
 		setNumResurrectedAtStart(count);
+
+		count=0;
+		for (int ic = numBases-numTrimmedFromEnd; ic<deleted.length; ic++){
+			if (!deleted[ic] && ic>numBases-numTrimmedFromEnd-1)
+				count++;
+		}
+		setNumResurrectedAtEnd(count);
 
 	}
 	/*.................................................................................................................*/
@@ -126,7 +144,7 @@ public class ContigMapper {
 		int lastContigBaseInOriginal = -1;
 
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
-			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
+			if (originalData.isValidStateOrUnassigned(ic, it)){ // an original state is here!
 				contigBase++;
 				lastContigBaseInOriginal=contigBase;
 			}
@@ -151,7 +169,7 @@ public class ContigMapper {
 
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
 			int positionInEdited = reverseRegistryData.getState(ic, it,0);
-			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
+			if (originalData.isValidStateOrUnassigned(ic, it)){ // an original state is here!
 				contigBase++;
 				if (getDeletedBase(contigBase)){  
 					deletedAtEnd++;
@@ -171,9 +189,9 @@ public class ContigMapper {
 		int addedBase=0;
 		int addedToEnd=0;
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  
-			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+			if (editedData.isValidStateOrUnassigned(ic, it)){ // a state is here in the edited data
 				int positionInOriginal = registryData.getState(ic, it);
-				if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+				if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidStateOrUnassigned(positionInOriginal, it)){  // not in original!
 					addedBase++;
 					if (ic>=lastEditedBaseInOriginal)
 						addedToEnd++;
@@ -192,22 +210,32 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	public void inferFromExistingRegistry(MolecularData editedData, int it, int numTrimmedFromStart) {
+//		Debugg.println("\n======================  START OF INFER CONTIG MAPPER =============");
+//		Debugg.println(toString());
+//		Debugg.println("\n======================  ABOUT TO BEGIN CONTIG MAPPER =============");
+
+		
 		this.editedData = editedData;
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(editedData);
 		this.numTrimmedFromStart = numTrimmedFromStart;
+		setNumTrimmedFromStart(numTrimmedFromStart);
 		int lastContigBaseInOriginal = -1;
 		int lastEditedBaseInOriginal = -1;
 		int deletedAtEnd = 0;
 		int contigBase = 0;
+		for (int ic = 0; ic< contig.getNumBases(); ic++){  
+			setDeletedBase(ic, false);
+			setAddedBases(0, 0);
+		}
 
 		int firstOriginalInEditor = -1;
 		int numOriginalBeforeFirstOriginalInEditor = 0;
 		int firstTrimmedContigBaseInEditor = numTrimmedFromStart-1;
 		// =========== Find the first  ===========
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
-			if (originalData.isValidAssignedState(ic, it)){ 
+			if (originalData.isValidStateOrUnassigned(ic, it)){ 
 				firstTrimmedContigBaseInEditor++;
 				int positionInEdited = reverseRegistryData.getState(ic, it,0);
 				if (positionInEdited>=0 && reverseRegistryData.isCombinable(ic, it) && !editedData.isInapplicable(positionInEdited, it)){  // in original, marked as in editor, and there
@@ -221,14 +249,14 @@ public class ContigMapper {
 		int numResurrectedAtStart = 0;
 		if (editedData.isReversed(it)) {
 			for (int ic = editedData.getNumChars(); ic> firstOriginalInEditor; ic--){  
-				if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+				if (editedData.isValidStateOrUnassigned(ic, it)){ // a state is here in the edited data
 					numResurrectedAtStart++;
 				}
 			}
 		}
 		else
 			for (int ic = 0; ic< firstOriginalInEditor; ic++){  
-				if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+				if (editedData.isValidStateOrUnassigned(ic, it)){ // a state is here in the edited data
 					numResurrectedAtStart++;
 				}
 			}
@@ -243,12 +271,13 @@ public class ContigMapper {
 		else
 			setAddedBases(0, 0);
 		
-		contigBase = numTrimmedFromStart-1;
+
 		// =========== Now process the bases within the original trimmed region ===========
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
 			int positionInEdited = reverseRegistryData.getState(ic, it,0);
-			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
-				contigBase++;
+			if (originalData.isValidStateOrUnassigned(ic, it)){ // an original state is here!
+				contigBase =getContigBaseFromOriginalMatrixBase(ic,it);
+
 				if (positionInEdited<0 || editedData.isInapplicable(positionInEdited, it)){  // not in edited, record as deleted
 					setDeletedBase(contigBase, true);
 					deletedAtEnd++;
@@ -265,36 +294,41 @@ public class ContigMapper {
 
 
 		for (int ic = 0; ic< numFromEnd; ic++){  
-			setDeletedBase(contig.getNumBases()-ic-1, true);
+			setDeletedBase(contig.getNumBases()-1-ic, true);
 		}
+		
+
 		int addedBase=0;
 		int addedToEnd=0;
 		if (editedData.isReversed(it)) {
 			for (int ic = firstOriginalInEditor; ic>=0; ic--){  
-				if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+				if (editedData.isValidStateOrUnassigned(ic, it)){ // a state is here in the edited data
 					int positionInOriginal = registryData.getState(ic, it);
-					if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+					if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidStateOrUnassigned(positionInOriginal, it)){  // not in original!
 						addedBase++;
 						if (ic>=lastEditedBaseInOriginal)
 							addedToEnd++;
 					}
 					else { // it is in original; now record added bases
-						setAddedBases(numTrimmedFromStart+originalData.numValidAssignedState(0,positionInOriginal, it), addedBase);
+						setAddedBases(getContigBaseFromOriginalMatrixBase(positionInOriginal, it), addedBase);
 						addedBase=0;
 					}
 				}
 			}
 		} else {
 			for (int ic = firstOriginalInEditor; ic< editedData.getNumChars(); ic++){  
-				if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+				if (editedData.isValidStateOrUnassigned(ic, it)){ // a state is here in the edited data
 					int positionInOriginal = registryData.getState(ic, it);
-					if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+					if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidStateOrUnassigned(positionInOriginal, it)){  // not in original!
 						addedBase++;
 						if (ic>=lastEditedBaseInOriginal)
 							addedToEnd++;
 					}
 					else { // it is in original; now record added bases
-						setAddedBases(numTrimmedFromStart+originalData.numValidAssignedState(0,positionInOriginal, it), addedBase);
+						if (addedBase>0) {
+							contigBase = getContigBaseFromOriginalMatrixBase(positionInOriginal, it);
+							setAddedBases(contigBase, addedBase);
+						}
 						addedBase=0;
 					}
 				}
@@ -311,6 +345,8 @@ public class ContigMapper {
 		}
 		
 		hasBeenSetUp = true;
+//		Debugg.println(toString());
+//		Debugg.println("\n======================  END OF INFER CONTIG MAPPER =============");
 	}
 	/*.................................................................................................................*/
 	public void setUp(MolecularData editedData, int it, int numTrimmedFromStart) {
@@ -318,7 +354,7 @@ public class ContigMapper {
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
 		MeristicData registryData = ChromaseqUtil.getRegistryData(editedData);
-		this.numTrimmedFromStart = numTrimmedFromStart;
+		setNumTrimmedFromStart(numTrimmedFromStart);
 		int lastContigBaseInOriginal = -1;
 		int lastEditedBaseInOriginal = -1;
 		int deletedAtEnd = 0;
@@ -331,7 +367,7 @@ public class ContigMapper {
 		int numBeforeFirstOriginalInEditor = 0;
 		// =========== Find the first  ===========
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
-			if (originalData.isValidAssignedState(ic, it)){ 
+			if (originalData.isValidStateOrUnassigned(ic, it)){ 
 				int positionInEdited = reverseRegistryData.getState(ic, it,0);
 				if (reverseRegistryData.isCombinable(ic, it) && !editedData.isInapplicable(positionInEdited, it)){  // in original, marked as in editor, and there
 					firstOriginalInEditor = positionInEdited;
@@ -348,7 +384,7 @@ public class ContigMapper {
 		// =========== Now process the bases within the original trimmed region ===========
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
 			int positionInEdited = reverseRegistryData.getState(ic, it,0);
-			if (originalData.isValidAssignedState(ic, it)){ // an original state is here!
+			if (originalData.isValidStateOrUnassigned(ic, it)){ // an original state is here!
 				contigBase++;
 				if (positionInEdited<0 || editedData.isInapplicable(positionInEdited, it)){  // not in edited, record as deleted
 					setDeletedBase(contigBase, true);
@@ -371,9 +407,9 @@ public class ContigMapper {
 		int addedBase=0;
 		int addedToEnd=0;
 		for (int ic = 0; ic< editedData.getNumChars(); ic++){  
-			if (editedData.isValidAssignedState(ic, it)){ // a state is here in the edited data
+			if (editedData.isValidStateOrUnassigned(ic, it)){ // a state is here in the edited data
 				int positionInOriginal = registryData.getState(ic, it);
-				if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidAssignedState(positionInOriginal, it)){  // not in original!
+				if (positionInOriginal<0 || !registryData.isCombinable(ic, it) || !originalData.isValidStateOrUnassigned(positionInOriginal, it)){  // not in original!
 					addedBase++;
 					if (ic>=lastEditedBaseInOriginal)
 						addedToEnd++;
@@ -437,12 +473,14 @@ public class ContigMapper {
 			totalAddedDeletedBefore = new int[numBases];
 			totalAddedDeletedAfter = new int[numBases];
 			deleted = new boolean[numBases];
+			this.numBases = numBases;
 		}
 		zeroValues();
 	}
 	/*.................................................................................................................*/
 	public void init (Contig contig) {
 		this.contig=contig;
+		numBases = contig.getNumBases();
 	}
 	/*.................................................................................................................*/
 	public  int getTotalNumberAddedBases (){
@@ -614,6 +652,7 @@ public class ContigMapper {
 		sb.append("\nnumDeletedFromEnd: " + numDeletedFromEnd); 
 		sb.append("\nnumTrimmedFromEnd: " + numTrimmedFromEnd); 
 		sb.append("\nnumTrimmedFromStart: " + numTrimmedFromStart); 
+		sb.append("\nnumResurrectedAtStart: " + numResurrectedAtStart); 
 		sb.append("\nnumBases: " + numBases); 
 		int numDeletedAtStart=0;
 		for (int i=0; i<deleted.length; i++)
@@ -642,6 +681,25 @@ public class ContigMapper {
 	public void setNumResurrectedAtStart(int num) {
 		this.numResurrectedAtStart = num;
 	}
+	public int getNumLeftToResurrectAtStart() {
+		int num = numTrimmedFromStart-numResurrectedAtStart;
+		if (num<0)
+			return 0;
+		return num;
+	}
+	public int getNumResurrectedAtEnd() {
+		return numResurrectedAtEnd;
+	}
+	public void setNumResurrectedAtEnd(int numResurrectedAtEnd) {
+		this.numResurrectedAtEnd = numResurrectedAtEnd;
+	}
+	public int getNumLeftToResurrectAtEnd() {
+		int num = numTrimmedFromEnd-numResurrectedAtEnd;
+		if (num<0)
+			return 0;
+		return num;
+	}
+
 	public int getNumBases() {
 		return numBases;
 	}
@@ -654,8 +712,13 @@ public class ContigMapper {
 	public int getNumTrimmedFromStart() {
 		return numTrimmedFromStart;
 	}
+	public int getLastTrimmedContigBase() {
+		return numBases - numTrimmedFromEnd-1;
+	}
 	public void setNumTrimmedFromStart(int numTrimmedFromStart) {
 		this.numTrimmedFromStart = numTrimmedFromStart;
+		if (contig!=null)
+			contig.setNumTrimmedFromStart(numTrimmedFromStart);
 	/*	if (editedData==null)
 			return;
 		Associable tInfo = editedData.getTaxaInfo(true);
