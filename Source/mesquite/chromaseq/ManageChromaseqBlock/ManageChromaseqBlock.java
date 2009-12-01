@@ -63,23 +63,17 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 			 if (code==MesquiteListener.NAMES_CHANGED || code==MesquiteListener.SELECTION_CHANGED) {
 				//	contigDisplay.repaintPanels();
 			}
-			else {
-				DNAData editedData = ChromaseqUtil.getEditedData((CharacterData)obj);
-				if (editedData!=null) {
-//					Debugg.println("  ManageChromaseqBlock listened and heard data changing!");
+			else if (ChromaseqUtil.isChromaseqRegistryMatrix((CharacterData)obj)){
+				MeristicData registryData = (MeristicData)((CharacterData)obj);
+				if (registryData!=null) {
+					DNAData editedData = ChromaseqUtil.getEditedData(registryData);
 					for (int it=0; it<editedData.getNumTaxa(); it++) {
 						ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
 						if (contigMapper!=null) {
-							//
 							contigMapper.inferFromExistingRegistry(editedData, it);
 						}
 					}
 				}
-	/*			if (parameters!=null && parameters.length>1) {
-					int starting = parameters[0];
-					int it = parameters[1];
-				}
-				*/
 			}
 		} 
 	}
@@ -585,7 +579,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		ListableVector matrices = f.getProject().getCharacterMatrices();
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
-			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+			if (ChromaseqUtil.isChromaseqRegistryMatrix(data)) {  // listen to registryData rather than editedData as the former needs to be changed first before the contigMapper can be updated
 				data.addListener(this);
 			}
 		}

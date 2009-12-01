@@ -290,6 +290,21 @@ public class ChromaseqUtil{
 			}
 		return false;
 	}
+	
+	public static boolean isChromaseqRegistryMatrix(CharacterData data) {
+		if (!(data instanceof DNAData))
+			return false;
+		Object obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTIDREF);
+		if (obj==null) {
+			return false;
+		}
+		obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTMATRIXTYPEREF);
+		if (obj instanceof MesquiteString)
+			if (((MesquiteString)obj).getValue().equalsIgnoreCase(REGISTRYREF)) {
+				return true;
+			}
+		return false;
+	}
 
 
 	public static String getPHPHDataType(CharacterData data) {
