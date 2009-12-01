@@ -220,7 +220,7 @@ public class ChromaseqUtil{
 	public static int getChromaseqBuildOfMatrix(DNAData data) {
 		if (data==null)
 			return 0;
-		Object obj = data.getAttachment(READBUILDREF);
+		Object obj = data.getAttachment(READBUILDREF, MesquiteLong.class);
 		if (obj!=null && obj instanceof MesquiteLong) {
 			return (int)((MesquiteLong)obj).getValue();
 		}
@@ -230,7 +230,7 @@ public class ChromaseqUtil{
 	public static void setChromaseqBuildOfMatrix(DNAData data, int build) {
 		if (data==null)
 			return;
-		data.detach(READBUILDREF);
+		data.detachAllObjectsOfName(READBUILDREF);
 		data.attach(new MesquiteLong(READBUILDREF,build));
 	}
 

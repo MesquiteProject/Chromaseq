@@ -440,7 +440,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (data instanceof DNAData) 
-				data.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, build));
+				ChromaseqUtil.setChromaseqBuildOfMatrix((DNAData)data, build);
 		}
 	}
 	/*...................................................................................................................*/

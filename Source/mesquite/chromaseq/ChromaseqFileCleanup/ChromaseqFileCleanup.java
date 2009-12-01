@@ -187,7 +187,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		if (tInfo != null)
 			tInfo.removeAssociatedLongs(ChromaseqUtil.startTrimRef);
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public void deattachChromaseqBuild(MesquiteFile f) {
 		if (f==null)
 			return;
@@ -208,7 +208,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 			return;
 		createRegistryDataIfNeeded(f);
 		deleteExtraRegistryMatrices(f);
-		deattachChromaseqBuild(f);
+		//deattachChromaseqBuild(f);
 		ListableVector matrices = f.getProject().getCharacterMatrices();
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
