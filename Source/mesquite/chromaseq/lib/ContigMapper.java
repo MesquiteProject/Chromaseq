@@ -580,6 +580,8 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	public  void setDeletedBases (int contigStart, int contigEnd, boolean b){
+		if (deleted==null)
+			return;
 		for (int contigBase=contigStart; contigBase<=contigEnd; contigBase++)
 			if (contigBase>=0 && contigBase<deleted.length) {
 				deleted[contigBase] = b;
@@ -587,16 +589,22 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	public  void addToAddedBases (int contigBase, int numAdded){
+		if (addedBefore==null)
+			return;
 		if (contigBase>=0 && contigBase<addedBefore.length)
 			addedBefore[contigBase] += numAdded;
 	}
 	/*.................................................................................................................*/
 	public  void setAddedBases (int contigBase, int numAdded){
+		if (addedBefore==null)
+			return;
 		if (contigBase>=0 && contigBase<addedBefore.length)
 			addedBefore[contigBase] = numAdded;
 	}
 	/*.................................................................................................................*/
 	public  int getAddedBases (int contigBase){
+		if (addedBefore==null)
+			return 0;
 		if (contigBase>=0 && contigBase<addedBefore.length)
 			return addedBefore[contigBase];
 		return 0;
@@ -622,12 +630,14 @@ public class ContigMapper {
 	/*.................................................................................................................*/
 	public void markAsDeletedBasesTrimmedAtStart(int trimmed) {
 		if (deleted==null)
-			Debugg.println("numBases: " + numBases);
+			return;
 		for (int i = 0; i<deleted.length && i<trimmed; i++)
 			setDeletedBase(i,true);
 	}
 	/*.................................................................................................................*/
 	public void markAsDeletedBasesTrimmedAtEnd(int trimmed) {
+		if (deleted==null)
+			return;
 		for (int i = 0; i<deleted.length && i<trimmed; i++)
 			setDeletedBase(deleted.length-i-1,true);
 	}

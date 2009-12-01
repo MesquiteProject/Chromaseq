@@ -969,8 +969,11 @@ public class ChromaseqUtil{
 		 if (tInfo != null)
 			 whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);
 		 Contig contig = ace.getContig((int)whichContig); 
+		 
+		 if (contig.getNumBases()==0)
+			 return;
 
-
+		 
 		 //====== first calculate, record, and specify trimmed region from start and end of contigs.  Use alignment to do this  ======= 
 		 int numTrimmedFromStart = 0;//contig.getNumBasesOriginallyTrimmedFromStartOfPhPhContig(editedData, it);
 		 int numTrimmedFromEnd = 0;
