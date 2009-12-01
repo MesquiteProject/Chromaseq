@@ -58,8 +58,6 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	/** passes which object changed, along with optional Notification object with details (e.g., code number (type of change) and integers (e.g. which character))*/
 	public void changed(Object caller, Object obj, Notification notification){
 		int code = Notification.getCode(notification);
-		notification = null;
-		int c = notification.getCode();
 		int[] parameters = Notification.getParameters(notification);
 		if (obj instanceof CharacterData) {
 			 if (code==MesquiteListener.NAMES_CHANGED || code==MesquiteListener.SELECTION_CHANGED) {
