@@ -1,1 +1,110 @@
- <h2>Chromaseq Source Code Notes</h2><p>The most complex part of Chromaseq is the bookkeeping involved in making sure  that all of the bases in the different components are registered properly.  For example, we need to know that this particular peak corresponds to this  particular base call in the Phred file which corresponds to this base in the  Phrap contig which corresponds to this particular base on screen in the trimmed  sequence which corresponds to this particular base in the quality score matrix  which corresponds to this particular base in the main editable matrix.</p><p>These components exist as two primary clouds: The Phred/PhrapCloud and the  MesquiteMatrix Cloud. The <strong>Phred/Phrap Cloud</strong> contains the AceFile,  contigs, reads, original chromatograms, etc.; basically, all of the output  from Phred  and Phrap, as contained in the files (.phd, .ace, etc.) in the directory that  Phred and Phrap processed. The <strong>Mesquite Matrix Cloud</strong> contains  the original matrix, the quality data matrix, and the edited matrix. And, of  course, there is a pipeline of code that provides the linkages between those  two clouds.</p><p>Theseare the systems that connect bases: </p><OL> <LI>Within the <strong>Phred/Phrap Cloud</strong>: 	the system of coordination established by Phrap, and that is stored in Contig	  and Read, that establishes links between the original Contig and the original	  Reads, with padding, etc. The Contig stores in its bases the original,	  UNTRIMMED sequences, corresponding to those in the m.ace file. This contig	  has already	  had all of the other 			alterations on it that Mesquite performs (e.g., convert to lower	  case, ambiguity codes). Contig also stores in trimmedBases the bases that	  remain after trimming. It also stores the padding information for the untrimmed	  sequences. </LI>	<LI>Within the <strong>Mesquite Matrix Cloud</strong>: the registration system, which connects  the various matrices within Mesquite (original matrix, quality data, edited  matrix) </LI>	<ul>  <li>The original matrix (originalData)            contains the exact matrix as originally imported. This is after Mesquite          trimming etc. (convert to lower case, ambiguity    codes). </li>  <li>The quality data contains the quality scores for the original            data, and there is a one-to-one mapping between cells in originalData      and cells    in qualityData</li>  <li>The edited matrix contains the current, actively edited    matrix.</li>  </ul><blockquote>  <p>The registration system that connects these cells in these        matrices one to another is managed in <strong>ChromaseqUtil</strong> as        well as <strong>ChromaseqBaseMapper</strong>.        </p>  <p>The registration system  relies on several helper matrices to store the    relevant information:</p></blockquote><ul>    <li><strong>Registration matrix (MeristicData registryData)</strong>, which      is a meristic matrix that should be the same dimensions as the edited matrix.      Cell i for a sequence      stores the number      of the cell in the originalMatrix that corresponds to that cell in the    edited matrix</li>    <li><strong>Reverse Registration matrix (MeristicData reverseRegistryData)</strong>.      This is a meristic matrix that should be the same dimensions as the originalMatrix.      Cell i for a      sequence stores      the number of the cell (character) in the editedMatrix that corresponds      to that cell in the original matrix</li>    <li><strong>Added Bases Matrix (CategoricalData        addedBaseData)</strong>: if any bases are added, presumably either in        the chromatogram viewer or in the character matrix editor itself. Should        be        the same size as the edited matrix. If a cell in the AddedBasesMatrix        is 0, then the corresponding base in the edited matrix is an original        base;        if it is 1, then the corresponding base is a new base, not part of the        original matrix. </li></ul><LI>And then there are the mappings between these different clouds as well as  the displayed sequences in the chromatogram viewer. These are shown here:</LI></OL><p>&nbsp;</p><p align="center"><img src="ChromaseqRegistration1.png" width="769" height="415"></p><p><br>  In particular, the mappings include:</p><OL>  <ul>    <li>the                            connection between the numbering in the original      padded, untrimmed PhredPhrap Contig, and that in the trimmed original matrix      as imported in Mesquite. The former uses what is called the Consensus                            base,                            which                            is the numbering                            in    the Contig	that is padded and untrimmed.<br>    <strong>originalSequenceBase</strong> = ConsensusBase - numBasesOriginallyTrimmedFromStartOfPhPhContig    + numBasesAddedToStart;<br>      <strong>ConsensusBase</strong>      = base in originalSequence (i.e., originalData)      + numBasesOriginallyTrimmedFromStartOfPhPhContig - numBasesAddedToStart<br>    These provide the connection between the PhredPhrap Cloud (as represented    here by the consensusBase) and the Mesquite Matrix Cloud (as represented    by the originalSequenceBase).</li>    <li>the connection between the original Consensus numbering and the number                          of the OverallBase, which is just like the Consensus      numbering but it is offset,                           as there are some Reads that extend before the start      of the original (untrimmed) Contig. The Read that extends furthest to the      left (furthest                      upstream)                          extends 		                    contig.getReadExcessAtStart() to the left, and thus,      in OverallBase numbering, the first base of the (untrimmed) Contig is numbered      getReadExcessAtStart().                          The OverallBase numbering  exactly matches the Contig/Consensus      numbering, except that it is offset. It is used mainly for display.</li>    <li>The DisplayBase is very similar to the OverallBase, but may have additional                          bases inserted into it, or removed. There thus needs      to be a mapping between the two. </li>    <li>The mapping between the pixel position in the Chromatogram Viewer window                    and the DisplayBase.</li>  </ul></OL><p>A lot of the code for managing this is contained in the following places:</p><ul>  <li><strong>VChromWindow.ContigPanel</strong>,      toward the end.</li>  <li>MatrixSequence</li>  <li>ChromaseqBaseMapper</li>  <li>ChromaseqUtil</li></ul>
+ <h2>Chromaseq Source Code Notes</h2>
+<p>The most complex part of Chromaseq is the bookkeeping involved in making sure
+  that all of the bases in the different components are registered properly.
+  For example, we need to know that this particular peak corresponds to this
+  particular base call in the Phred file which corresponds to this base in the
+  Phrap contig which corresponds to this particular base on screen in the trimmed
+  sequence which corresponds to this particular base in the quality score matrix
+  which corresponds to this particular base in the main editable matrix.</p>
+<p>These components exist as two linked clusters of sequences: the <strong>Phred/Phrap Cluster</strong> and the <strong>Mesquite Matrix Cluster</strong>. The <strong>Phred/Phrap Cluster</strong> contains the AceFile,
+  contigs, reads, original chromatograms, etc.; basically, all of the output
+  from Phred
+  and Phrap, as contained in the files (.phd, .ace, etc.) in the directory that
+  Phred and Phrap processed. The <strong>Mesquite Matrix Cluster</strong> contains
+the original matrix, the quality data matrix, and the edited matrix. </p>
+<p>There are four mapping systems that coordinate sequence registration within and between these clusters:</p>
+<ol>
+  <li>The mapping system contained within the Phred/Phrap Cluster, as stored on disk in the AceFile, and in Mesquite primarily within the Contig and Read classes, that specifies how bases within this cluster are linked to one another. This is basically just an imagine within Mesquite of the mappings as specified in the files written by Phred and Phrap.</li>
+  <li>The mapping system specifying how the cells of the Mesquite matrices are linked one to another; this system is embodied by the registration matrix and the reverse registration matrix. This mapping is stored in the Mesquite file. </li>
+  <li>The ContigMappers, which for each sequence stores information about which of the original Contig bases from the Phred Phrap cluster have been deleted in editedData, how many bases have been added within editedData before each of the Contig bases, etc. This is stored into the ChromaseqBlock of the Mesquite file, and its main point is to do basic bookkeeping of addition/deletion of bases relative to the Contig so that the UniversalMapper can be reconstructed properly.</li>
+  <li>The ChromaseqUniversalMapper, built as needed when chromatograms are being displayed, from the information stored in the registration matrices and the ContigMapper. This universalMapper provides the mappings between the sequences and the position of each base in the display window.</li>
+</ol>
+<h3>Background</h3>
+<p>Phred makes base calls, and stores these in the .phd and .poly files that it creates. Phrap then assembles these into contigs, and stores the information about the contigs, source bases, read bases, etc. in the .ace file. The contig in the Ace file is untrimmed, and contains only hard base calls. E.g., in one particular sequence (it happens to be 28S for Bembidion mexicanum DNA2192), the start of Phrap's contig is:</p>
+<pre>gggataacgggacgacaggaaagccc*gCaCTGAAGCCCGTGGTCGGAAAC</pre>
+<p>Mesquite reads all this in, and looks into various files to alter the base calls as need, converting some to lower case based on quality scores, and converting some to ambiguity codes if there are multiple peaks of the appropriate relative heights. In this example, the Chromaseq-modified contig starts as follows:</p>
+<pre>ggkatawygsgrcgacrggaaagccm*gcactgaagcccgtggtcgGAAAC</pre>
+<p>Note that both of these contigs have padding in them, as indicated by the *. Chromaseq saves a modified Ace file with this new contig in it, as well as various other modifications, in the m.ace file. This seuqence is displayed in the chromatogram viewer under the label &quot;Original Untrimmed&quot;.</p>
+<p>On importing into the matrix, Chromaseq trims the low quality ends of this sequence according to the rules the user specifies, yielding the &quot;Original Trimmed&quot; sequence. The amount trimmed from the is numTrimmedFromStart, and is stored in Contig and in ContigMapper. The amount trimmed from the end (which is less important for the bookkeeping) is numTrimmedFromEnd. These values include any pads that are trimmed. The start of the Bembidion mexicanum DNA2192 is shown there in the chromatogram viewer:</p>
+<p><img src="images/OriginalToTrimmedSequences.jpg" width="734" height="171" /></p>
+<p>In addition to trimming the ends, Chromaseq also strips out any pads, and so the Original Trimmed sequence differs from the Original Untrimmed both in having shorter ends (sometimes) and in being without pads.</p>
+<p>For example, here is a piece in the middle of that same sequence, showing the pad present in the Original Untrimmed contig and the Original Trimmed Sequence</p>
+<p><img src="images/screendumps/Screen shot 2009-12-01 at 11.50.09 AM copy.png" width="326" height="72" /></p>
+<p>This Original Trimmed sequence is imported into the originalData and editedData DNA matrices in Mesquite; on import they should be identical. But then the user can modify the edited sequence in many ways, and the originalData and editedData matrices can diverge, although they will be linked together by the registryData and reverseRegistryData matrices. The originalData matrix should never be modified. </p>
+<p>One change the user might make is to resurrect some bases from the start of the sequence:</p>
+<p><img src="images/OriginalToEditedSequences.jpg" width="734" height="226" /></p>
+<p>In all of this, perhaps the key numbering scheme that is vital for all the registration is the number of the Original Untrimmed sequence - that is, the original Contig from the Ace file, as represented within Chromaseq by the Contig object. This numbering scheme is shown at the top of the Original Untrimmed sequence in the chromatogram viewer: it starts at 0, and extends through the region that was trimmed in the later sequences, and through to the end of the contig. The last base in this contig is contig.getNumBases()-1. </p>
+<p>A base position value in this numbering scheme is called the contigBase. In some parts of the code this contigBase might still be called consensusBase.</p>
+<p>In contrast, the Original Trimmed sequence is shorter than this; it is shorter by numTrimmedAtStart+numTrimmedAtEnd+number.of.pads.between.trimmed.ends</p>
+<p>The Edited in Matrix sequence can have pieces removed from it, if you turn those base calls to gaps:</p>
+<p><img src="images/screendumps/Screen shot 2009-12-01 at 11.50.28 AM.png" width="420" height="104" /></p>
+<p>Or it can have added bases:</p>
+<p><img src="images/screendumps/Screen shot 2009-12-01 at 11.51.00 AM.png" width="331" height="103" /></p>
+<p>In the chromatogram viewer, there is another counter, which is which display base one is at. This is called the universalBase. The number of universalBases in the entire view is the sum of:</p>
+<ol>
+  <li>the number of bases in the original contig: contig.getNumBases()</li>
+  <li>the number of bases in the read extends beyond the original contig to the right the furthest; this value is contig.getReadExcessAtStart()</li>
+  <li>the number of bases in the read extends beyond the original contig to the left the furthest; this value is contig.getReadExcessAtEnd()</li>
+  <li>any bases inserted into the editedData sequence that are *within* the boundaries of the original trim</li>
+</ol>
+<p>In some parts of the code this universalBase might still called overallBase or, more rarely, displayBase.</p>
+<h3>More details</h3>
+<OL> 
+  <LI>Within the <strong>Phred/Phrap Cluster</strong>: 
+	the system of coordination established by Phrap, and that is stored in Contig
+	  and Read, that establishes links between the original Contig and the original
+	  Reads, with padding, etc. The Contig stores in its bases the original,
+	  UNTRIMMED sequences, corresponding to those in the m.ace file. This contig
+	  has already
+	  had all of the other
+ 			alterations on it that Mesquite performs (e.g., convert to lower
+	  case, ambiguity codes). Contig also stores in trimmedBases the bases that
+	  remain after trimming. It also stores the padding information for the untrimmed
+	  sequences. </LI>	
+<LI>Within the <strong>Mesquite Matrix Cluster</strong>: the registration system, which connects
+  the various matrices within Mesquite (original matrix, quality data, edited
+  matrix) </LI>	
+<ul>
+  <li>The original matrix (originalData)
+            contains the exact matrix as originally imported. This is after Mesquite
+          trimming etc. (convert to lower case, ambiguity
+    codes). </li>
+  <li>The quality data contains the quality scores for the original
+            data, and there is a one-to-one mapping between cells in originalData
+      and cells
+    in qualityData</li>
+  <li>The edited matrix (editedData) contains the current, actively edited
+    matrix.</li>
+  </ul>
+<blockquote>
+  <p>The registration information that connects these cells in these
+        matrices one to another is managed primarily in <strong>ChromaseqUtil</strong>, and is stored in the following matrices:</p>
+</blockquote>
+<ul>
+    <li><strong>Registration matrix (MeristicData registryData)</strong>, which
+      is a meristic matrix that should be the same dimensions as the edited matrix.
+      Cell i for a sequence
+      stores the number
+      of the cell in the originalData that corresponds to that cell in the
+    edited matrix. </li>
+    <li><strong>Reverse Registration matrix (MeristicData reverseRegistryData)</strong>.
+      This is a meristic matrix that should be the same dimensions as the originalData.
+      Cell i for a
+      sequence stores
+      the number of the cell (character) in the editedData that corresponds
+      to that cell in the original matrix.</li>
+  </ul>
+<p><img src="images/Registration.jpg" width="798" height="495" /></p>
+<p><strong>registryData</strong> is stored in the file, and must be maintained. It is linked to the editedData, and so as that changes with alignment, etc., the registryData also gets changed appropriately. </p>
+<p><strong>reverseRegistryData</strong> is not stored in the file; it is inferred on read-in/creation of registryData, and also needs to be updates on the fly. </p>
+</OL>
+<p><br>
+</p>
+<OL>
+</OL>
+<p>The bulk of the code for managing this is contained in the following places:</p>
+<ul>
+  <li>ChromaseqUtil</li>
+  <li>ChromaseqUniversalMapper</li>
+  <li>ContigMapper</li>
+</ul>

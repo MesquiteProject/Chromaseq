@@ -621,6 +621,8 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	public void markAsDeletedBasesTrimmedAtStart(int trimmed) {
+		if (deleted==null)
+			Debugg.println("numBases: " + numBases);
 		for (int i = 0; i<deleted.length && i<trimmed; i++)
 			setDeletedBase(i,true);
 	}
@@ -716,7 +718,7 @@ public class ContigMapper {
 		return numBases;
 	}
 	public void setNumBases(int numBases) {
-		if (numBases!=this.numBases) {
+		if (numBases!=this.numBases || deleted==null) {
 			this.numBases = numBases;
 			init(numBases);
 		}
