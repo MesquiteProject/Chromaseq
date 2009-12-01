@@ -70,6 +70,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 					for (int it=0; it<editedData.getNumTaxa(); it++) {
 						ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
 						if (contigMapper!=null) {
+							//
 							contigMapper.inferFromExistingRegistry(editedData, it);
 						}
 					}
