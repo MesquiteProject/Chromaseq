@@ -59,7 +59,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 
 	/*.................................................................................................................*/
 	public void changed(Object caller, Object obj, Notification notification){
-		if (obj instanceof DNAData) {
+		 if (obj instanceof DNAData) {
 			if (Notification.appearsCosmetic(notification))
 				return;
 			MeristicData reverseRegistryData = findReverseRegistry((DNAData)obj);

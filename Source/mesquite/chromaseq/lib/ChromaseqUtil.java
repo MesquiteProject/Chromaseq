@@ -1297,6 +1297,27 @@ public class ChromaseqUtil{
 		 */
 
 	}
+	
+	/*.................................................................................................................*/
+	public static Contig getContig(CharacterData data, int it, MesquiteModule ownerModule) {
+		DNAData editedData = getEditedData(data);
+		if (editedData==null)
+			return null;
+		Associable tInfo = data.getTaxaInfo(false);
+		if (tInfo == null)
+			return null;
+		AceFile ace = AceFile.getAceFile(ownerModule, editedData, it);
+		if (ace == null){
+			ownerModule.alert("Sorry, there seems to be no sequence for that taxon");
+			return null;
+		}
+		long whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);
+		if (whichContig < 0 || whichContig >= ace.getNumContigs())
+			return null;
+		return ace.getContig((int)whichContig);
+	}
+
+
 	/*.................................................................................................................*/
 
 	public synchronized static void inferRegistryData(CharacterData data, int it) {

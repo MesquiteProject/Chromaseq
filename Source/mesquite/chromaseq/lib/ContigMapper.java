@@ -209,15 +209,20 @@ public class ContigMapper {
 
 	}
 	/*.................................................................................................................*/
-	public void inferFromExistingRegistry(MolecularData editedData, int it) {
-		inferFromExistingRegistry(editedData,it, numTrimmedFromStart);
+	public void inferFromExistingRegistry(MolecularData editedData, int it, MesquiteModule ownerModule) {
+		inferFromExistingRegistry(editedData,it, numTrimmedFromStart,ownerModule);
 	}
 	/*.................................................................................................................*/
-	public void inferFromExistingRegistry(MolecularData editedData, int it, int numTrimmedFromStart) {
+	public void inferFromExistingRegistry(MolecularData editedData, int it, int numTrimmedFromStart, MesquiteModule ownerModule) {
 //		Debugg.println("\n======================  START OF INFER CONTIG MAPPER =============");
 //		Debugg.println(toString());
 //		Debugg.println("\n======================  ABOUT TO BEGIN CONTIG MAPPER =============");
 
+		if (getContig()==null && ownerModule!=null) {
+			Contig contig = 	ChromaseqUtil.getContig(editedData,it,ownerModule);
+			if (contig!=null)
+				setContig(contig);
+		}
 		
 		this.editedData = editedData;
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
@@ -237,6 +242,15 @@ public class ContigMapper {
 		if (deleted==null || deleted.length!=numBases)
 			init(numBases);
 		
+		// =========== cleanup RegistryData from earlier versions ===========
+		for (int ic = 0; ic< registryData.getNumChars(); ic++){  
+			int icOriginal = registryData.getState(ic, it,0);
+			if (registryData.isCombinable(ic, it) && icOriginal>=0 && editedData.isInapplicable(ic, it)){
+				registryData.setToInapplicable(ic, it);
+				reverseRegistryData.setToInapplicable(icOriginal, it);
+			}
+		}
+
 		for (int ic = 0; ic< numContigBases; ic++){  
 			setDeletedBase(ic, false);
 			setAddedBases(0, 0);
@@ -349,12 +363,6 @@ public class ContigMapper {
 
 		recalc(it);
 		
-		// =========== cleanup RegistryData from earlier versions ===========
-		for (int ic = 0; ic< registryData.getNumChars(); ic++){  
-			if (registryData.getState(ic, it,0)>=0 && editedData.isInapplicable(ic, it)){
-				registryData.setToInapplicable(ic, it);
-			}
-		}
 		
 		hasBeenSetUp = true;
 //		Debugg.println(toString());
@@ -435,12 +443,6 @@ public class ContigMapper {
 
 		recalc(it);
 		
-		// =========== cleanup RegistryData from earlier versions ===========
-		for (int ic = 0; ic< registryData.getNumChars(); ic++){  
-			if (registryData.getState(ic, it,0)>=0 && editedData.isInapplicable(ic, it)){
-				registryData.setToInapplicable(ic, it);
-			}
-		}
 
 
 		

@@ -184,7 +184,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		} 
 		else if (forceFullContigMapSetup) {
 			ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
-			contigMapper.inferFromExistingRegistry(editedData,it, numTrimmedFromStart);
+			contigMapper.inferFromExistingRegistry(editedData,it, numTrimmedFromStart, null);
 		}
 		else
 			contigMapper.recalc(editedData,it);
