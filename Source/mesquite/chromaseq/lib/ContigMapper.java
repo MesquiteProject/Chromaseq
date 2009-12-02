@@ -11,7 +11,13 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 package mesquite.chromaseq.lib;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.DNAState;
 import mesquite.categ.lib.MolecularData;
+import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.meristic.lib.MeristicData;
 import mesquite.lib.*;
 import mesquite.lib.characters.CharacterData;
@@ -31,6 +37,7 @@ public class ContigMapper {
 	boolean storedInFile = false;
 	boolean 	hasBeenSetUp = false;
 	MolecularData editedData = null;
+	double matchToEditedScore = MesquiteDouble.unassigned;
 
 	public ContigMapper (Contig contig) {
 		this.contig = contig;
@@ -49,6 +56,28 @@ public class ContigMapper {
 		int contigBase = contig.getContigBaseFromTrimmedBase(trimmedBase);
 		return contigBase;  //-startingAddedBeforeOriginalTrim
 	}
+	
+	/*.................................................................................................................*/
+	public int getMatrixBaseFromContigBase(int contigBase, int it) {
+		if (editedData==null || contig==null)
+			return contigBase;
+		int trimmedBase = contig.getTrimmedBaseFromContigBase(contigBase);
+		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
+		int count =-1;
+		for (int ic=0; ic<=originalData.getNumChars(); ic++)
+			if (originalData.isValidStateOrUnassigned(ic,it)){
+				count++;
+				if (count==trimmedBase) {  // we've found as many states as trimmedBases
+					break;
+				}
+			}
+		if (count>=0) {
+			MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
+			return reverseRegistryData.getState(count,it);
+		}
+		return contigBase;  
+	}
+
 
 	/*.................................................................................................................*/
 	public static ContigMapper getContigMapper (MolecularData data, Contig contig, int it) {
@@ -208,6 +237,16 @@ public class ContigMapper {
 		hasBeenSetUp = true;
 
 	}
+	
+	/*.................................................................................................................*/
+	public void checkContig(MolecularData editedData, int it, MesquiteModule ownerModule) {
+		if (getContig()==null && ownerModule!=null) {
+			Contig contig = 	ChromaseqUtil.getContig(editedData,it,ownerModule, false);
+			if (contig!=null)
+				setContig(contig);
+		}
+	}
+
 	/*.................................................................................................................*/
 	public void inferFromExistingRegistry(MolecularData editedData, int it, MesquiteModule ownerModule) {
 		inferFromExistingRegistry(editedData,it, numTrimmedFromStart,ownerModule);
@@ -218,11 +257,7 @@ public class ContigMapper {
 //		Debugg.println(toString());
 //		Debugg.println("\n======================  ABOUT TO BEGIN CONTIG MAPPER =============");
 
-		if (getContig()==null && ownerModule!=null) {
-			Contig contig = 	ChromaseqUtil.getContig(editedData,it,ownerModule);
-			if (contig!=null)
-				setContig(contig);
-		}
+		checkContig(editedData,it, ownerModule);
 		
 		this.editedData = editedData;
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
@@ -295,7 +330,7 @@ public class ContigMapper {
 		if (numAddedBeforeFirstContigBase>0)
 			setAddedBases(0, numAddedBeforeFirstContigBase);
 		else
-			setAddedBases(0, 0);
+			setAddedBases(0, 3);
 		
 
 		// =========== Now process the bases within the original trimmed region ===========
@@ -395,10 +430,6 @@ public class ContigMapper {
 					numBeforeFirstOriginalInEditor++;
 			}
 		}
-
-
-		
-		
 		
 		contigBase = numTrimmedFromStart-1;
 		// =========== Now process the bases within the original trimmed region ===========
@@ -753,6 +784,55 @@ public class ContigMapper {
 			ChromaseqUtil.setLongAssociated(tInfo,ChromaseqUtil.startTrimRef, it, numTrimmedFromStart);
 		}
 */
+	}
+	
+	/*...........................................................................*
+	public double calcMatchToEditedScoreOfRead(int whichRead, int it) {	
+		Read read = contig.getRead(whichRead);
+		double conflicts=0.0;
+		double bases=0.0;
+		for (int contigBase=0;contigBase < numBases;contigBase++) {
+			int readBase = read.getReadBaseFromContigBase(contigBase);
+			if (readBase>=0 && readBase<read.getBasesLength()) {
+				int qual = read.getPhdBaseQuality(readBase);
+				char c = read.getPhdBaseChar(readBase);
+				long readState = DNAState.fromCharStatic(c);
+
+				int matrixBase = getMatrixBaseFromContigBase(contigBase, it);
+				long editedState = editedData.getState(matrixBase,it);
+				if (qual>20) {
+					 if (!DNAState.equalsIgnoreCase(readState, editedState))
+						conflicts++;
+					 bases++;
+				}
+			} 
+		}
+		Debugg.println("      conflicts: " + conflicts + ", bases: " + bases);
+		if (bases==0)
+			return 0.0;
+		else
+			return conflicts/bases;
+	}
+	/*...........................................................................*
+	public double calcMatchToEditedScore(int it) {	
+		if (contig==null || contig.getNumReadsInContig()==0)
+			return 0.0;
+		double total = 0.0;
+		for (int whichRead = 0; whichRead<contig.getNumReadsInContig(); whichRead++) {
+			total += calcMatchToEditedScoreOfRead(whichRead,it);
+		}
+		double score = total/contig.getNumReadsInContig();
+		setMatchToEditedScore(score);
+		return score;
+	}
+	/*...........................................................................*/
+
+
+	public double getMatchToEditedScore() {
+		return matchToEditedScore;
+	}
+	public void setMatchToEditedScore(double matchToEditedScore) {
+		this.matchToEditedScore = matchToEditedScore;
 	}
 
 

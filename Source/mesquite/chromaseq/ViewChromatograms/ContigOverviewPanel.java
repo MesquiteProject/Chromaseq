@@ -26,7 +26,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 	int scrollDepth = 16;
 	Scrollbar scrollBar;
 	MesquitePanel scrollPanel;
-	int firstBase=0;
+	int firstBase=MesquiteInteger.unassigned;
 	int numBases ;
 	int numBasesVisible ;
 
@@ -48,6 +48,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 		scrollBar.addAdjustmentListener(this);
 		numBases = panel.getTotalNumUniversalBases();
 		numBasesVisible = panel.getApproximateNumberOfPeaksVisible();
+		firstBase=numBases/2 - numBasesVisible/2;
 
 		scrollBar.setUnitIncrement(10);
 		scrollPanel.add("South",scrollBar);
@@ -100,19 +101,56 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 	}
 	public void centerPanelAtOverallPosition(int i){
 		centerBase = i;
-		if (i<firstBase) {
-			if (i-2<0)
+		int boundary = contigDisplay.getApproximateNumberOfPeaksVisible()/2+10;
+		if (i-boundary<firstBase) {   //contigDisplay.getApproximateNumberOfPeaksVisible()
+			if (i-boundary<0)
 				positionOverview(i);
 			else
-				positionOverview(i-2);
+				positionOverview(i-boundary);
 		}
-		else if (i>firstBase+numBasesVisible) {
-			if (i+2>numBases)
+		else if (i+boundary>firstBase+numBasesVisible) {
+			if (i+boundary>numBases)
 				positionOverview(i-numBasesVisible);
 			else 
-				positionOverview(i-numBasesVisible+2);
+				positionOverview(i-numBasesVisible+boundary);
 		}
 		contigOverviewCanvas.repaint();
+		
+	}
+	public void centerPanelAtUniversalBase(int i, boolean trueCenter){
+		centerBase = i;
+		if (trueCenter) {
+			int newFirstBase = i=numBasesVisible/2;
+			int boundary = contigDisplay.getApproximateNumberOfPeaksVisible()/2+10;
+			if (newFirstBase-boundary<firstBase) {   //contigDisplay.getApproximateNumberOfPeaksVisible()
+				newFirstBase=newFirstBase-boundary;
+			}
+			else if (newFirstBase+boundary>firstBase+numBasesVisible) {
+				if (newFirstBase+boundary>numBases)
+					newFirstBase = newFirstBase-numBasesVisible;
+				else 
+					newFirstBase = newFirstBase-numBasesVisible+boundary;
+
+			}
+			positionOverview(newFirstBase);
+		} else {
+			int boundary = contigDisplay.getApproximateNumberOfPeaksVisible()/2+10;
+			if (i-boundary<firstBase) {   //contigDisplay.getApproximateNumberOfPeaksVisible()
+				if (i-boundary<0)
+					positionOverview(i);
+				else
+					positionOverview(i-boundary);
+			}
+			else if (i+boundary>firstBase+numBasesVisible) {
+				if (i+boundary>numBases)
+					positionOverview(i-numBasesVisible);
+				else 
+					positionOverview(i-numBasesVisible+boundary);
+
+			}
+		}
+		contigOverviewCanvas.repaint();
+
 	}
 
 	public boolean getColorByQuality() {

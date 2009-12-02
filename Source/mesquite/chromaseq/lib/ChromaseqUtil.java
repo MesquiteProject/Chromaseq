@@ -1299,7 +1299,7 @@ public class ChromaseqUtil{
 	}
 	
 	/*.................................................................................................................*/
-	public static Contig getContig(CharacterData data, int it, MesquiteModule ownerModule) {
+	public static Contig getContig(CharacterData data, int it, MesquiteModule ownerModule, boolean warnIfNoAce) {
 		DNAData editedData = getEditedData(data);
 		if (editedData==null)
 			return null;
@@ -1308,7 +1308,8 @@ public class ChromaseqUtil{
 			return null;
 		AceFile ace = AceFile.getAceFile(ownerModule, editedData, it);
 		if (ace == null){
-			ownerModule.alert("Sorry, there seems to be no sequence for that taxon");
+			if (warnIfNoAce)
+				ownerModule.alert("Sorry, there seems to be no sequence for that taxon");
 			return null;
 		}
 		long whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);

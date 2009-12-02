@@ -11,6 +11,9 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 package mesquite.chromaseq.ViewChromatograms;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import mesquite.categ.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.*;
@@ -86,9 +89,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 //Debugg.println("---- ChromaseqUniversalMapper.changed()");
 
 			reset(true);
-
 			ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
-//			ContigMapper.checkTaxonNumbers(editedData);
 			contigDisplay.repaintPanels();
 		} 
 	}
@@ -152,12 +153,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/* this method recalculates all mappings */
 	public synchronized void reset(boolean forceFullContigMapSetup) {
 //	Debugg.println("\n======= Resetting Universal Base Registry ======= " + (resetCount++));
-		//		Debugg.printStackTrace("\n\nuniversalMapper reset: " + Thread.currentThread()+"\n\n");
 
-		// =========== Calculate total number of universal bases ===========
-
-		//	totalNumAddedBases=ChromaseqUtil.getTotalNumBasesAddedBeyondPhPhBases(editedData, it);
-		//	totalNumDeletedBases=ChromaseqUtil.getTotalNumOriginalBasesTurnedToGaps(editedData, it);
 		it = contigDisplay.getTaxon().getNumber();
 		contigDisplay.setUniversalMapper(this);
 
@@ -166,7 +162,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		complementedInEditData = contigDisplay.isComplementedInEditedData();
 		numTrimmedFromStart = contigMapper.getNumTrimmedFromStart();
 		//		Debugg.println("   numBasesOriginallyTrimmedFromStartOfPhPhContig: " + numBasesOriginallyTrimmedFromStartOfPhPhContig);
-
 
 		if (contigMapper==null){
 			contigMapper = ContigMapper.getContigMapper(editedData,contig, it,numTrimmedFromStart);
@@ -189,6 +184,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		else
 			contigMapper.recalc(editedData,it);
 
+		
 		int numResurrectedAtStart = contigMapper.getNumResurrectedAtStart();
 		//		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig();
 		int lastContigBaseBeforeTrimmedEnd = contig.getNumBases() - contigMapper.getNumTrimmedFromEnd();
@@ -777,6 +773,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	public void setReverseComplement(boolean reverseComplement) {
 		this.reverseComplement = reverseComplement;
 	}
+
 
 
 }
