@@ -48,7 +48,7 @@ public class ChromaseqUtil{
 	public static final String EDITEDREF ="edited";
 	public static final String REGISTRYREF = "registration";
 	public static final String REVERSEREGISTRYREF = "reverse registration";
-	public static final String ADDEDBASEREF = "added base";
+//	public static final String ADDEDBASEREF = "added base";
 	public static final String MATRIXTODELETE = "matrix to delete";
 //	public static final String ADDEDDELETEDBASEREF = "added deleted base";
 
@@ -321,6 +321,52 @@ public class ChromaseqUtil{
 		return false;
 	}
 
+	/*.................................................................................................................*/
+	public static String getAceFileDirectory(String directoryName, MesquiteModule ownerModule, DNAData data, int it, boolean returnOriginalAceFile) {
+		if (data==null)
+			return null;
+		Associable tInfo = data.getTaxaInfo(false);
+		String path = null;
+		if (tInfo == null)
+			return null;
+		path = ChromaseqUtil.getStringAssociated(tInfo, ChromaseqUtil.aceRef, it);
+		if (StringUtil.blank(path))
+			return null;
+		path = StringUtil.getAllButLastItem(path,MesquiteFile.fileSeparator );
+		if (StringUtil.notEmpty(directoryName))
+			path = MesquiteFile.composePath(directoryName, path);
+		if (!MesquiteFile.fileExists(path))
+			return null;
+		return path;
+	}
+	/*.................................................................................................................*/
+	public static String getAceFileDirectory(MesquiteFile file, MesquiteModule ownerModule, DNAData data, int it,boolean returnOriginalAceFile) {
+		return getAceFileDirectory(file.getDirectoryName(),ownerModule,data,it,returnOriginalAceFile);
+	}
+	/*.................................................................................................................*/
+	public static String getAceFilePath(String directoryName, MesquiteModule ownerModule, DNAData data, int it, boolean returnOriginalAceFile) {
+		if (data==null)
+			return null;
+		Associable tInfo = data.getTaxaInfo(false);
+		String path = null;
+		if (tInfo == null)
+			return null;
+		path = ChromaseqUtil.getStringAssociated(tInfo, ChromaseqUtil.aceRef, it);	
+		if (StringUtil.blank(path))
+			return null;
+		if (path.endsWith("m.ace") && returnOriginalAceFile)
+			path = path.substring(0,path.length()-5)+".ace";
+		if (StringUtil.notEmpty(directoryName))
+			path = MesquiteFile.composePath(directoryName, path);
+		if (!MesquiteFile.fileExists(path))
+			return null;
+		return path;
+	}
+
+	/*.................................................................................................................*/
+	public static String getAceFilePath(MesquiteFile file, MesquiteModule ownerModule, DNAData data, int it,boolean returnOriginalAceFile) {
+		return getAceFilePath(file.getDirectoryName(),ownerModule,data,it,returnOriginalAceFile);
+	}
 	/*.................................................................................................................*/
 
 

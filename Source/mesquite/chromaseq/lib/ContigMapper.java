@@ -330,7 +330,7 @@ public class ContigMapper {
 		if (numAddedBeforeFirstContigBase>0)
 			setAddedBases(0, numAddedBeforeFirstContigBase);
 		else
-			setAddedBases(0, 3);
+			setAddedBases(0, 0);
 		
 
 		// =========== Now process the bases within the original trimmed region ===========
