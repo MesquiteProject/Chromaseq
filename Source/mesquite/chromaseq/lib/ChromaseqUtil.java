@@ -1031,6 +1031,9 @@ public class ChromaseqUtil{
 			 whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);
 		 Contig contig = ace.getContig((int)whichContig); 
 		 
+		 if (contig==null) {   // how can this happen???  it does, but how?
+			 return;
+		 }
 		 if (contig.getNumBases()==0)
 			 return;
 
