@@ -999,17 +999,6 @@ public class ChromaseqUtil{
 					if (locationInEdited[ic]>=0)
 						if (editedIsApplicable && originalIsApplicable){
 							registryData.setState(locationInEdited[ic], it, 0, locationInOriginal[ic]);
-						} else if (editedIsApplicable) {  // but original has nothing, must be a new base in the sequence
-							if (ic<firstApplicableInOriginal || ic> lastApplicableInOriginal){ //then these must be end bases, that were moved there
-					//			registryData.setState(locationInEdited[ic], it, 0, MOVEDBASEREGISTRY);
-							}
-							else {
-					//			registryData.setState(locationInEdited[ic], it, 0, ADDEDBASEREGISTRY);
-							}
-						} else if (originalIsApplicable) {  // but there is nothing in the editedData!
-					//		registryData.setState(locationInEdited[ic], it, 0, DELETEDBASEREGISTRY);
-							//if (locationInOriginal[ic]>=0 && reverseRegistryData !=null)
-							//reverseRegistryData.setState(locationInOriginal[ic], it,0, DELETEDBASEREGISTRY);
 						}
 				}
 
@@ -1089,39 +1078,10 @@ public class ChromaseqUtil{
 			
 
 		} else {
-
-			//Debugg.println("sequence " + it + " (" + originalData.getTaxa().getTaxonName(it) + ") with length difference " + lengthDifference);
 			for (int ic=0; ic<registryData.getNumChars(); ic++){
 				registryData.setState(ic, it, 0, ic);
 			}
 		}
-		/*int startChar = -1;
-			int endChar=-1;
-			for (int ic = 0; ic<editedData.getNumChars(); ic++) {
-				if (registryData.isInapplicable(ic, it)||registryData.isUnassigned(ic, it)) {
-					if (editedData.isValidAssignedState(ic, it))
-						registryData.setState(ic, it, 0, MOVEDBASEREGISTRY);
-				} else { // we've found a non-applicable, time to exit loop
-					startChar=ic;
-					break;
-				}
-			}
-			for (int ic = editedData.getNumChars()-1; ic>=0; ic--) {
-				if (registryData.isInapplicable(ic, it)||registryData.isUnassigned(ic, it)) {
-					if (editedData.isValidAssignedState(ic, it))
-						registryData.setState(ic, it, 0, MOVEDBASEREGISTRY);
-				} else { // we've found a non-applicable, time to exit loop
-					endChar=ic;
-					break;
-				}
-			}
-			for (int ic = startChar; ic<=endChar; ic++) {
-				if ((registryData.isInapplicable(ic, it)||registryData.isUnassigned(ic, it))) {
-					if (editedData.isValidAssignedState(ic, it))
-						registryData.setState(ic, it, 0, ADDEDBASEREGISTRY);
-				} 
-			}
-		 */
 
 	}
 	
