@@ -155,7 +155,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset(boolean forceFullContigMapSetup) {
-//		Debugg.println("\n======= Resetting Universal Base Registry ======= " + (resetCount++));
+//	Debugg.println("\n======= Resetting Universal Base Registry ======= " + (resetCount++));
 
 		it = contigDisplay.getTaxon().getNumber();
 		contigDisplay.setUniversalMapper(this);
@@ -166,6 +166,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			contigMapper = ContigMapper.getContigMapper(editedData,contig, it,numTrimmedFromStart);
 			contigMapper.zeroValues();
 		}
+		numTrimmedFromStart = contigMapper.getNumTrimmedFromStart();
+
 		if (contigMapper.getContig()==null)
 			contigMapper.setContig(contigDisplay.getContig());
 		if (!contigMapper.hasBeenSetUp()) {
@@ -184,7 +186,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			contigMapper.recalc(editedData,it);
 
 
-		numTrimmedFromStart = contigMapper.getNumTrimmedFromStart();
 		int numResurrectedAtStart = contigMapper.getNumResurrectedAtStart();
 		int lastContigBaseBeforeTrimmedEnd = contig.getNumBases() - contigMapper.getNumTrimmedFromEnd();
 		int contigBase = numTrimmedFromStart-1;
@@ -467,7 +468,10 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		registrationQuality = newRegistrationQuality;
 	
 		hasBeenSet = true;
-	}
+
+	
+//		Debugg.println("\n======= End Resetting Universal Base Registry ======= " + resetCount);
+}
 	
 	/*.................................................................................................................*/
 
