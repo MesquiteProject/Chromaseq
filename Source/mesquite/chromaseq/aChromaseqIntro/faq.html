@@ -25,15 +25,18 @@
 <!-- end masthead -->
 <div id="content"><!-- InstanceBeginEditable name="content" -->
   <p>&nbsp;</p>
-  <p>Q: I have used Chromaseq and Phred and Phrap to produce a consensus sequence. I've also made more base calls using Chromaseq's chromatogram viewer. However, one part of that sequence isn't the best, and I have resequenced part of the gene. Can I add these new chromatogram to the existing contig?</p>
-  <p>A: No. You will need to reprocess the original chromatograms again for that sequence, and remake any base calls. Sorry. If you want these sorts of tools, you will need to use dedicated chromatogram manipulation packages (see <a href="otherPrograms.html">Sequencher &amp; Others</a>). </p>
+  <p>Q: I have used Chromaseq and Phred and Phrap to produce a  sequence. I've also made more base calls using Chromaseq's chromatogram viewer. However, one part of that sequence isn't the best, and I have resequenced part of the gene. Can I add these new chromatogram to the existing contig?</p>
+  <p>A: Not yet. You will need to reprocess the original chromatograms again for that sequence, and remake any base calls. We will add the ability to add new reads in the future.</p>
   <p>&nbsp;</p>
   <p>Q: Can I insert bases into a sequence? </p>
-  <p>A: Not yet. We hope to add this soon.<br>
+  <p>A: Yes, using the Insert gaps tool. <br>
   </p>
   <p>&nbsp;</p>
-  <p>Q: I would like to use Chromaseq to make my base calls, then export the matrix as an NBRF file, read it into an alignment program, reimport the aligned matrix back into Mesquite, but still be able to look at the chromatograms for the sequences in this aligned matrix. Can I do this?</p>
-  <p>A: Not yet.  </p>
+  <p>Q: I would like to use Chromaseq to make my base calls for a matrix of sequences, then align the matrix. Can I do this?</p>
+  <p>A: Yes, but only if you do the alignment from within Mesquite so that it is fully aware of the re-alignment at it happens. For example, you can use the tools in the Matrix&gt;Align Multiple Sequences submenu.  </p>
+  <p>&nbsp;</p>
+  <p>Q: Can I reverse complement the sequences in the editor and still have Chromaseq function to let me look at the contigs and chromatograms?</p>
+  <p>A: Yes, if you use the Matrix&gt;Alter/Transform&gt;Reverse Complement to reverse and complement the entire sequence. If you reverse complement parts of the sequence, or use a tool outside of Mesquite, the connections between the bases in the editor and the bases in the chromatograms will be lost.</p>
 <!-- InstanceEndEditable --></div>
 <!--end content -->
 <div id="navBar">

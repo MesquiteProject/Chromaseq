@@ -40,9 +40,7 @@ public class AceDirectoryProcessor {
 	boolean addFragName = false;
 	boolean singleTaxaBlock = false;
 	
-	
 	MesquiteInteger maxChar = new MesquiteInteger(0);
-
 	
 	public AceDirectoryProcessor () {
 		
@@ -230,7 +228,9 @@ public class AceDirectoryProcessor {
 				AceFile ace = AceFile.getAceFile(ownerModule, editedData, it);
 				if (ace!=null) {
 					if (ace.getNumContigs()<=0 || ace.getContig(0).getNumBases()==0){
-						if (!warn && !AlertDialog.query(ownerModule.containerOfModule(), "Reprocess and save file?", "Some of the contigs need to be reprocessed, and the file re-saved. If you choose not to reprocess contigs, they will not be fully editable in Chromaseq.", "Reprocess and Save", "Do not reprocess", -1)) {
+						if (!warn && !AlertDialog.query(ownerModule.containerOfModule(), "Reprocess and save file?", "Some of the contigs need to be reprocessed, which will" +
+								" alter the modified .ace files produced by Phrap and Chromaseq.  To be compatible with these altered .ace files, the Mesquite file " +
+								"would then need to be re-saved. If instead you choose not to reprocess contigs, they will not be fully editable in Chromaseq.", "Reprocess and Save", "Do not reprocess", -1)) {
 							return false;
 						} else
 							resave = true;
