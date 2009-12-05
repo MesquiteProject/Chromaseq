@@ -13,33 +13,9 @@ Luxuries
 
 - pcrnumber/sample number system
 - revert
-- registration quality check system
 
 =========
 
-
-
-bugChrom001:  note how EditedInMatrix is offset by one, caused probably by padding ("*") in PhredPhrapMesquite
-
-end of first rothfelsi in enolaseDRM2
-
-regularly forgets primers, at least with topoisomeraseBP
-
-TopoisomeraseBP, arenobilis, position when move single read down
-
-bases disappear and shift over when converting to gaps
-
-OriginalTrimmed Sequence not shown properly
-
-test for chromaseqblock version number
-
-
-- move matrix uses polybases, which will require dealing with padding in that
-
-1. open file, open chromat, ask to show read matrix conflict, save file, close Mesquite, open Mesquite, open file.  
-Read matrix conflict not shown (i.e. neither by autopref nor by snapshot).
-
-Doesn't help to turn on Read Matrix Conflict then select Current Settings as Defaults.  Still fails to show by default on restart.
 
 2. Sometimes when editing sites in the chromatogram window, if you have a base highlighted that you just changed, 
 and then you click to another base to edit it, there is a very long delay (maybe up to 10 seconds) before that 
