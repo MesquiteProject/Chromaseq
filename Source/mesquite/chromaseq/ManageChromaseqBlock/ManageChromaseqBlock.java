@@ -25,6 +25,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 
 	int chromaseqVersionOfFile = 0;
 	int chromaseqBuildOfFile =0;
+	int chromaseqRegistrationBuildOfFile =0;
 
 	int numBlocks =0;
 	public Class getDutyClass(){
@@ -427,7 +428,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		return s.toString();
 	}
 	/*.................................................................................................................*/
-	public void attachChromaseqBuild(MesquiteFile f, int build) {
+	public void attachChromaseqRegistrationBuild(MesquiteFile f, int build) {
 		if (f==null)
 			return;
 		if (f.getProject()==null)
@@ -436,7 +437,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (data instanceof DNAData) 
-				ChromaseqUtil.setChromaseqBuildOfMatrix((DNAData)data, build);
+				ChromaseqUtil.setChromaseqRegistrationBuildOfMatrix((DNAData)data, build);
 		}
 	}
 	/*...................................................................................................................*/
@@ -455,7 +456,14 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 			int build = MesquiteInteger.fromString(token);		
 			if (MesquiteInteger.isCombinable(build)){
 				chromaseqBuildOfFile = build;
-				attachChromaseqBuild(file, build);
+			}
+		}
+		else	if (commandName.equalsIgnoreCase("REGISTRATIONBUILD")) {
+			String token  = parser.getNextToken();
+			int registrationBuild = MesquiteInteger.fromString(token);		
+			if (MesquiteInteger.isCombinable(registrationBuild)){
+				chromaseqRegistrationBuildOfFile = registrationBuild;
+				attachChromaseqRegistrationBuild(file, registrationBuild);
 			}
 		}
 		else if  (commandName.equalsIgnoreCase("CONTIGMAPPER")) {
@@ -601,6 +609,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 			ChromaseqBlock ab = new ChromaseqBlock(f, this);
 			ab.setVersion(ChromaseqUtil.CHROMASEQBLOCKVERSION);
 			ab.setBuild(ChromaseqUtil.ChromaseqBuild);
+			ab.setRegistrationBuild(ChromaseqUtil.ChromaseqRegistrationBuild);
 			numBlocks++;
 			addNEXUSBlock(ab);
 		}
@@ -657,6 +666,7 @@ class ChromaseqBlockTest extends NexusBlockTest  {
 class ChromaseqBlock extends NexusBlock {
 	int version = 1;
 	int build = 1;
+	int registrationBuild = 1;
 	ManageChromaseqBlock ownerModule;
 	MesquiteFile f;
 
@@ -665,6 +675,7 @@ class ChromaseqBlock extends NexusBlock {
 		ownerModule = mb;
 		version = ChromaseqUtil.CHROMASEQBLOCKVERSION;
 		build = ChromaseqUtil.ChromaseqBuild;
+		registrationBuild = ChromaseqUtil.ChromaseqRegistrationBuild;
 		this.f = f;
 	}
 	public int getVersion() {
@@ -696,6 +707,7 @@ class ChromaseqBlock extends NexusBlock {
 		String blocks="BEGIN CHROMASEQ;" + StringUtil.lineEnding();
 		blocks += "\tVERSION " + version+ ";" + StringUtil.lineEnding();
 		blocks += "\tBuild " + build+ ";" + StringUtil.lineEnding();
+		blocks += "\tRegistrationBuild " + registrationBuild+ ";" + StringUtil.lineEnding();
 		blocks += contents;
 		blocks += "END;" + StringUtil.lineEnding();
 		return blocks;
@@ -705,5 +717,11 @@ class ChromaseqBlock extends NexusBlock {
 	}
 	public void setBuild(int build) {
 		this.build = build;
+	}
+	public int getRegistrationBuild() {
+		return registrationBuild;
+	}
+	public void setRegistrationBuild(int registrationBuild) {
+		this.registrationBuild = registrationBuild;
 	}
 }

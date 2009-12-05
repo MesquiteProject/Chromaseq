@@ -28,6 +28,7 @@ public class ChromaseqUtil{
 	
 	public static final int CHROMASEQBLOCKVERSION = 2;
 	public static final int ChromaseqBuild = 25;
+	public static final int ChromaseqRegistrationBuild = 25;
 	public static final int LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION = 25;
 
 	/*  
@@ -41,6 +42,9 @@ public class ChromaseqUtil{
 	public static final int BASECALLED=2;
 	public static final String PHPHMQVERSION ="2";
 
+	public static final String infoFileName = "info.xml";
+	public static final String processedACESuffix = "m";
+	public static final String processedFastaFolder = "processedFasta";
 
 	//===========================MATRIX TYPES==============================
 	public static final String QUALITYREF ="quality";
@@ -48,14 +52,14 @@ public class ChromaseqUtil{
 	public static final String EDITEDREF ="edited";
 	public static final String REGISTRYREF = "registration";
 	public static final String REVERSEREGISTRYREF = "reverse registration";
-//	public static final String ADDEDBASEREF = "added base";
+	public static final String ADDEDBASEREF = "added base";
 	public static final String MATRIXTODELETE = "matrix to delete";
 //	public static final String ADDEDDELETEDBASEREF = "added deleted base";
 
 	//===========================ATTACHABLE handling==============================
 	public static final String PHPHIMPORTIDREF = "phphImportID"; //MesquiteString: data
 	public static final String GENENAMEREF ="geneName";//MesquiteString: data
-	public static final String READBUILDREF ="chromaseqBuild";//MesquiteString: data
+	public static final String REGISTRATIONBUILDREF ="chromaseqRegistrationBuild";//MesquiteString: data
 	public static final String PHPHMQVERSIONREF ="phphmqVersion";//MesquiteString: data
 	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
 
@@ -66,6 +70,13 @@ public class ChromaseqUtil{
 	public static final int ADDEDBASEREGISTRY = -3;
 	public static final int MOVEDBASEREGISTRY = -4;
 */
+	
+	/*.................................................................................................................*/
+	public static void processInfoFile(String infoFilePath, MesquiteString fullName){
+		String s = MesquiteFile.getFileContentsAsString(infoFilePath);  //convert this so it is doing as XML file!
+		fullName.setValue(s);
+	}
+
 	public static void attachStringToMatrix(Attachable a, MesquiteString s){
 		a.attachIfUniqueName(s);
 	}
@@ -91,6 +102,8 @@ public class ChromaseqUtil{
 	public static final NameReference origTaxonNameRef= NameReference.getNameReference("origName");//String: taxa
 
 	public static final NameReference aceRef = NameReference.getNameReference("aceFile"); //String: tInfo
+	public static final NameReference reprocessContigRef = NameReference.getNameReference("reprocessContig"); //String: tInfo
+	
 	public static final NameReference chromatogramReadsRef = NameReference.getNameReference("chromatogramReads");//String: tInfo
 
 	public static final NameReference origReadFileNamesRef= NameReference.getNameReference("readFileNames");//Strings: tInfo
@@ -217,26 +230,26 @@ public class ChromaseqUtil{
 		return uid;
 	}
 
-	public static int getChromaseqBuildOfMatrix(DNAData data) {
+	public static int getChromaseqRegistrationBuildOfMatrix(DNAData data) {
 		if (data==null)
 			return 0;
-		Object obj = data.getAttachment(READBUILDREF, MesquiteLong.class);
+		Object obj = data.getAttachment(REGISTRATIONBUILDREF, MesquiteLong.class);
 		if (obj!=null && obj instanceof MesquiteLong) {
 			return (int)((MesquiteLong)obj).getValue();
 		}
 		return 0;
 		
 	}
-	public static void setChromaseqBuildOfMatrix(DNAData data, int build) {
+	public static void setChromaseqRegistrationBuildOfMatrix(DNAData data, int build) {
 		if (data==null)
 			return;
-		data.detachAllObjectsOfName(READBUILDREF);
-		data.attach(new MesquiteLong(READBUILDREF,build));
+		data.detachAllObjectsOfName(REGISTRATIONBUILDREF);
+		data.attach(new MesquiteLong(REGISTRATIONBUILDREF,build));
 	}
 
 
 	public static boolean buildRequiresForcedRegistration(DNAData data) {
-		int build = getChromaseqBuildOfMatrix(data);
+		int build = getChromaseqRegistrationBuildOfMatrix(data);
 		return build < LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION;
 	}
 
@@ -322,7 +335,7 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
-	public static String getAceFileDirectory(String directoryName, MesquiteModule ownerModule, DNAData data, int it, boolean returnOriginalAceFile) {
+	public static String getAceFileDirectory(String directoryName, MesquiteModule ownerModule, DNAData data, int it) {
 		if (data==null)
 			return null;
 		Associable tInfo = data.getTaxaInfo(false);
@@ -335,13 +348,41 @@ public class ChromaseqUtil{
 		path = StringUtil.getAllButLastItem(path,MesquiteFile.fileSeparator );
 		if (StringUtil.notEmpty(directoryName))
 			path = MesquiteFile.composePath(directoryName, path);
-		if (!MesquiteFile.fileExists(path))
+		if (!MesquiteFile.fileOrDirectoryExists(path))
 			return null;
 		return path;
 	}
 	/*.................................................................................................................*/
-	public static String getAceFileDirectory(MesquiteFile file, MesquiteModule ownerModule, DNAData data, int it,boolean returnOriginalAceFile) {
-		return getAceFileDirectory(file.getDirectoryName(),ownerModule,data,it,returnOriginalAceFile);
+	public static String getAceFileDirectory(MesquiteFile file, MesquiteModule ownerModule, DNAData data, int it) {
+		return getAceFileDirectory(file.getDirectoryName(),ownerModule,data,it);
+	}
+	/*.................................................................................................................*/
+	public static boolean reprocessContig(DNAData data, int it) {
+		if (data==null)
+			return false;
+		Associable tInfo = data.getTaxaInfo(false);
+		if (tInfo == null)
+			return false;
+		String s = ChromaseqUtil.getStringAssociated(tInfo, ChromaseqUtil.reprocessContigRef, it);
+		return (StringUtil.notEmpty(s));
+	}
+	/*.................................................................................................................*/
+	public static void setReprocessContig(DNAData data, int it) {
+		if (data==null)
+			return;
+		Associable tInfo = data.getTaxaInfo(true);
+		if (tInfo == null)
+			return;
+		ChromaseqUtil.setStringAssociated(tInfo, ChromaseqUtil.reprocessContigRef, it, "reprocess contig");
+	}
+	/*.................................................................................................................*/
+	public static void removeAssociatedObjects(DNAData data, NameReference nr) {
+		if (data==null)
+			return;
+		Associable tInfo = data.getTaxaInfo(true);
+		if (tInfo == null)
+			return;
+		tInfo.removeAssociatedObjects(nr);
 	}
 	/*.................................................................................................................*/
 	public static String getAceFilePath(String directoryName, MesquiteModule ownerModule, DNAData data, int it, boolean returnOriginalAceFile) {
@@ -438,7 +479,7 @@ public class ChromaseqUtil{
 		return StringArray.indexOf(MesquiteTrunk.startupArguments, "-chromaseqDev")>=0;
 	}
 
-	/*.................................................................................................................*
+	/*.................................................................................................................*/
 	public static CategoricalData getAddedBaseData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,ADDEDBASEREF);
 		if (d instanceof CategoricalData)
@@ -787,7 +828,7 @@ public class ChromaseqUtil{
 	}
 
 
-	/*.................................................................................................................*
+	/*.................................................................................................................*/
 	public static void setAddedBaseDataValues(CategoricalData addedBaseData, CharacterData data, String name, MesquiteString uid, MesquiteString gN) {
 		addedBaseData.saveChangeHistory = false;
 		data.addToLinkageGroup(addedBaseData); //link matrices!
@@ -869,6 +910,23 @@ public class ChromaseqUtil{
 			}
 	}
 	
+	/*.................................................................................................................*/
+
+	public synchronized static void simpleFillRegistryData(CharacterData data) {
+		DNAData editedData = getEditedData(data);
+		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return;
+		for (int it=0; it<registryData.getNumTaxa(); it++) {
+			for (int ic=0; ic<registryData.getNumChars(); ic++){
+				if (editedData.isValidStateOrUnassigned(ic, it))
+					registryData.setState(ic, it, 0, ic);
+				else
+					registryData.setToInapplicable(ic, it);
+
+			}
+		}
+	}
 	/*.................................................................................................................*/
 
 	public synchronized static void reFillRegistries(CharacterData data, int it) {
@@ -1016,6 +1074,14 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
+	public static int getWhichContig(DNAData editedData, int it) {
+		 Associable tInfo = editedData.getTaxaInfo(false);
+		 long whichContig = 0;
+		 if (tInfo != null)
+			 whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);
+		 return (int)whichContig;
+	}
+	/*.................................................................................................................*/
 	 public synchronized static void inferContigMapper(PairwiseAligner aligner, MesquiteFile file, DNAData editedData, int it) {
 		 if (aligner==null || editedData==null) 
 			 return;
@@ -1025,11 +1091,8 @@ public class ChromaseqUtil{
 			 // give warning!!!!!
 			 return;
 		 }
-		 Associable tInfo = editedData.getTaxaInfo(false);
-		 long whichContig = 0;
-		 if (tInfo != null)
-			 whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);
-		 Contig contig = ace.getContig((int)whichContig); 
+		 int whichContig = getWhichContig(editedData,it);
+		 Contig contig = ace.getContig(whichContig); 
 		 
 		 if (contig==null) {   // how can this happen???  it does, but how?
 			 return;
@@ -1347,25 +1410,6 @@ public class ChromaseqUtil{
 
 	}
 	
-	/*.................................................................................................................*/
-	public static Contig getContig(CharacterData data, int it, MesquiteModule ownerModule, boolean warnIfNoAce) {
-		DNAData editedData = getEditedData(data);
-		if (editedData==null)
-			return null;
-		Associable tInfo = data.getTaxaInfo(false);
-		if (tInfo == null)
-			return null;
-		AceFile ace = AceFile.getAceFile(ownerModule, editedData, it);
-		if (ace == null){
-			if (warnIfNoAce)
-				ownerModule.alert("Sorry, there seems to be no sequence for that taxon");
-			return null;
-		}
-		long whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);
-		if (whichContig < 0 || whichContig >= ace.getNumContigs())
-			return null;
-		return ace.getContig((int)whichContig);
-	}
 
 
 	/*.................................................................................................................*/
@@ -1431,12 +1475,11 @@ public class ChromaseqUtil{
 
 	/*.................................................................................................................*/
 	/* called if no registry data are available */
-	public static MeristicData createRegistryData(CharacterData data, MesquiteModule ownerModule) {
+	public static MeristicData createRegistryData(CharacterData data, MesquiteModule ownerModule, boolean defaultRegistry) {
 		DNAData editedData = getEditedData(data);
 		if (editedData==null)
 			return null;
-		editedData.detachObjectOfName(ChromaseqUtil.READBUILDREF);
-		editedData.attach(new MesquiteLong(ChromaseqUtil.READBUILDREF, ChromaseqBuild));
+		setChromaseqRegistrationBuildOfMatrix(editedData, ChromaseqRegistrationBuild);
 
 		MesquiteString uid = null;
 		Object obj = getStringAttached(data,PHPHIMPORTIDREF);
@@ -1461,8 +1504,12 @@ public class ChromaseqUtil{
 		registryData.setUserVisible(isChromaseqDevelopment());
 
 		setRegistryDataValues(registryData,  data, dataGeneName,  uid,  gN);
-
-		inferRegistryData(registryData, file);
+		
+		if (defaultRegistry){
+			simpleFillRegistryData(data);
+		}
+		else
+			inferRegistryData(registryData, file);
 
 		prepareOriginalAndQualityData(data);
 		
@@ -1470,5 +1517,26 @@ public class ChromaseqUtil{
 
 		return registryData;
 	}
-	
+	/*.................................................................................................................*/
+	public static Contig getContig(CharacterData data, int it, MesquiteModule ownerModule, boolean warnIfNoAce) {
+		DNAData editedData = getEditedData(data);
+		if (editedData==null)
+			return null;
+		Associable tInfo = data.getTaxaInfo(false);
+		if (tInfo == null)
+			return null;
+		AceFile ace = AceFile.getAceFile(ownerModule, editedData, it);
+		if (ace == null){
+			if (warnIfNoAce)
+				ownerModule.alert("Sorry, there seems to be no sequence for that taxon");
+			return null;
+		}
+		long whichContig = ChromaseqUtil.getLongAssociated(tInfo,ChromaseqUtil.whichContigRef, it);
+		if (whichContig < 0 || whichContig >= ace.getNumContigs())
+			return null;
+		return ace.getContig((int)whichContig);
+	}
+
+
+
 }

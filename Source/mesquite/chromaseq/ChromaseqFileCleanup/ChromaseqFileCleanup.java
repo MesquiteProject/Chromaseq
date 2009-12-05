@@ -1,10 +1,9 @@
 package mesquite.chromaseq.ChromaseqFileCleanup;
 
-import mesquite.categ.lib.CategoricalData;
-import mesquite.categ.lib.DNAData;
-import mesquite.categ.lib.MolecularData;
-import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.categ.lib.*;
+import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
+import mesquite.lib.duties.FileCoordinator;
 import mesquite.lib.duties.FileInit;
 import mesquite.lib.characters.*;
 import mesquite.meristic.lib.*;
@@ -12,6 +11,7 @@ import java.util.*;
 
 public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	Vector reverseRegistryVector ;
+	boolean resave = false;
 
 	public boolean startJob(String arguments, Object condition,boolean hiredByName) {
 		reverseRegistryVector = new Vector();
@@ -95,25 +95,18 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
 			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
-				/*				CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
-				boolean newAddedBase = false;
-				if (addedBaseData==null) {
-					ChromaseqUtil.createAddedBaseData(data);		
-					newAddedBase = true;
-				}
-				 */				
 				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 				 if (registryData==null) {
 					if (!registryMessageGiven)
 						logln("No chromaseq registry is stored in file; it will now be inferred.");
-					ChromaseqUtil.createRegistryData(data, this);		
+					ChromaseqUtil.createRegistryData(data, this, false);		
 					registryMessageGiven = true;
 				 }
 				 else if (ChromaseqUtil.buildRequiresForcedRegistration((DNAData)data)) {   //(DNAData)data
 					if (!registryMessageGiven)
 						logln("Chromaseq registry stored in file is of a defunct version and needs to be rebuilt.");
 					ChromaseqUtil.attachStringToMatrix(registryData, new MesquiteString(ChromaseqUtil.MATRIXTODELETE, "extra registration matrix"));
-					ChromaseqUtil.createRegistryData(data, this);		
+					ChromaseqUtil.createRegistryData(data, this, false);		
 					registryMessageGiven = true;
 				 }
 				 MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);		
@@ -136,6 +129,47 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		}
 		//ChromaseqUtil.setChromaseqBuildOfFile(this,  ChromaseqUtil.ChromaseqBuild);
 
+	}
+	/*.................................................................................................................*/
+	public void checkNoContigAceFiles(MesquiteFile f) {
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		count++;
+		boolean toChange = false;
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				if (AceDirectoryProcessor.checkNoContigAceFiles(data, this))
+					toChange = true;
+			}
+		}
+		resave = toChange;
+	}
+	/*.................................................................................................................*/
+	public boolean processNoContigAceFiles(MesquiteFile f) {
+		if (f==null)
+			return false;
+		if (f.getProject()==null)
+			return false;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		count++;
+		boolean changed=false;
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				CategoricalData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+				if (addedBaseData!=null){
+					addedBaseData.deleteMe(false);  // don't need this anymore
+					MesquiteTrunk.mesquiteTrunk.logln("Deleting unneeded added-bases matrix: " + addedBaseData.getName());
+				}
+				if (AceDirectoryProcessor.processNoContigAceFiles(data, this))
+					changed=true;		
+			}
+		}
+		return changed;
 	}
 	/*.................................................................................................................*/
 	public void deleteExtraRegistryMatrices(MesquiteFile f) {
@@ -177,6 +211,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	}
 	/*.................................................................................................................*/
 	public void aboutToReadMesquiteBlock(MesquiteFile f) {
+		checkNoContigAceFiles(f);
 		createRegistryDataIfNeeded(f);
 	}
 	/*.................................................................................................................*/
@@ -206,6 +241,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 			return;
 		if (f.getProject()==null)
 			return;
+		processNoContigAceFiles(f);
 		createRegistryDataIfNeeded(f);
 		deleteExtraRegistryMatrices(f);
 		//deattachChromaseqBuild(f);
@@ -217,22 +253,28 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				removeOldNameReferences(editedData);
 			}
 		}
-		if (!ChromaseqUtil.isChromaseqDevelopment())
-			return;
-		for (int i=0; i<matrices.size(); i++) {
-			CharacterData data = (CharacterData)matrices.elementAt(i);
-			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
-				CharacterData registryData = ChromaseqUtil.getRegistryData(data);
-				if (registryData != null) registryData.setUserVisible(true);
-				CharacterData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
-				if (reverseRegistryData != null) reverseRegistryData.setUserVisible(true);
-				CharacterData originalData = ChromaseqUtil.getOriginalData(data);
-				if (originalData != null) originalData.setUserVisible(true);
-				//				CharacterData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
-				//				if (addedBaseData != null) addedBaseData.setUserVisible(true);
+		if (ChromaseqUtil.isChromaseqDevelopment()){
+			for (int i=0; i<matrices.size(); i++) {
+				CharacterData data = (CharacterData)matrices.elementAt(i);
+				if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+					CharacterData registryData = ChromaseqUtil.getRegistryData(data);
+					if (registryData != null) registryData.setUserVisible(true);
+					CharacterData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(data);
+					if (reverseRegistryData != null) reverseRegistryData.setUserVisible(true);
+					CharacterData originalData = ChromaseqUtil.getOriginalData(data);
+					if (originalData != null) originalData.setUserVisible(true);
+					//				CharacterData addedBaseData = ChromaseqUtil.getAddedBaseData(data);
+					//				if (addedBaseData != null) addedBaseData.setUserVisible(true);
 
+				}
 			}
 		}
+		
+		if (resave) {
+			FileCoordinator coord = f.getProject().getCoordinatorModule();
+			coord.saveFile(f);
+		}
+
 
 	}
 }

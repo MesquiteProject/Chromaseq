@@ -785,46 +785,6 @@ public class ContigMapper {
 		}
 */
 	}
-	
-	/*...........................................................................*
-	public double calcMatchToEditedScoreOfRead(int whichRead, int it) {	
-		Read read = contig.getRead(whichRead);
-		double conflicts=0.0;
-		double bases=0.0;
-		for (int contigBase=0;contigBase < numBases;contigBase++) {
-			int readBase = read.getReadBaseFromContigBase(contigBase);
-			if (readBase>=0 && readBase<read.getBasesLength()) {
-				int qual = read.getPhdBaseQuality(readBase);
-				char c = read.getPhdBaseChar(readBase);
-				long readState = DNAState.fromCharStatic(c);
-
-				int matrixBase = getMatrixBaseFromContigBase(contigBase, it);
-				long editedState = editedData.getState(matrixBase,it);
-				if (qual>20) {
-					 if (!DNAState.equalsIgnoreCase(readState, editedState))
-						conflicts++;
-					 bases++;
-				}
-			} 
-		}
-		Debugg.println("      conflicts: " + conflicts + ", bases: " + bases);
-		if (bases==0)
-			return 0.0;
-		else
-			return conflicts/bases;
-	}
-	/*...........................................................................*
-	public double calcMatchToEditedScore(int it) {	
-		if (contig==null || contig.getNumReadsInContig()==0)
-			return 0.0;
-		double total = 0.0;
-		for (int whichRead = 0; whichRead<contig.getNumReadsInContig(); whichRead++) {
-			total += calcMatchToEditedScoreOfRead(whichRead,it);
-		}
-		double score = total/contig.getNumReadsInContig();
-		setMatchToEditedScore(score);
-		return score;
-	}
 	/*...........................................................................*/
 
 

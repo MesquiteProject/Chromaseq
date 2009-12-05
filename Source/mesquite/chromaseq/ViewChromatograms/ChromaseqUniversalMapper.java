@@ -18,6 +18,7 @@ import mesquite.categ.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.*;
 import mesquite.chromaseq.lib.*;
+import mesquite.cont.lib.ContinuousData;
 import mesquite.meristic.lib.*;
 
 public class ChromaseqUniversalMapper implements MesquiteListener {
@@ -48,6 +49,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	MeristicData reverseRegistryData=null;
 	int it=0;
 	boolean hasBeenSet = false;
+	
+	double registrationQuality =0.0;
 
 	int[][] universalBaseFromOtherBase;
 	int[][] otherBaseFromUniversalBase;
@@ -152,16 +155,14 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset(boolean forceFullContigMapSetup) {
-//	Debugg.println("\n======= Resetting Universal Base Registry ======= " + (resetCount++));
+//		Debugg.println("\n======= Resetting Universal Base Registry ======= " + (resetCount++));
 
 		it = contigDisplay.getTaxon().getNumber();
 		contigDisplay.setUniversalMapper(this);
 
-		//MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
 		reversedInEditData = contigDisplay.isReversedInEditedData();
 		complementedInEditData = contigDisplay.isComplementedInEditedData();
 		numTrimmedFromStart = contigMapper.getNumTrimmedFromStart();
-		//		Debugg.println("   numBasesOriginallyTrimmedFromStartOfPhPhContig: " + numBasesOriginallyTrimmedFromStartOfPhPhContig);
 
 		if (contigMapper==null){
 			contigMapper = ContigMapper.getContigMapper(editedData,contig, it,numTrimmedFromStart);
@@ -186,7 +187,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 		
 		int numResurrectedAtStart = contigMapper.getNumResurrectedAtStart();
-		//		int numBasesOriginallyTrimmedFromEndOfPhPhContig = contigMapper.getNumBasesOriginallyTrimmedFromEndOfPhPhContig();
 		int lastContigBaseBeforeTrimmedEnd = contig.getNumBases() - contigMapper.getNumTrimmedFromEnd();
 		int contigBase = numTrimmedFromStart-1;
 
@@ -219,7 +219,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 
 		// =========== Calculate mappings for the original untrimmed panel (i.e., the "Original Untrimmed" one) ===========
-
 
 		int prevNumPads = 0;
 		int startingNumAddedDeletedBefore = contigMapper.getNumAddedDeletedBefore(numTrimmedFromStart) ;
@@ -262,8 +261,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				//		addedBases[sequenceBase]++;
 			}
 			
-			
-
 			//............  now go through the contig.  note that for this, the sequenceBase IS the contigBase
 			for (int sequenceBase=0; sequenceBase<contigLength; sequenceBase++){
 				int universalBase = sequenceBase + contig.getReadExcessAtStart();
@@ -272,13 +269,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				//............  don't have to adjust for padding, as the pads are IN the original untrimmed/contig.  just have to adjust for added bases
 				if (universalBase>= totalUniversalBases)
 					continue;
-				
-				if (sequenceBase>=565 && sequenceBase<=580 && false){
-					Debugg.println("...........");
-					Debugg.println("   sequenceBase: " + sequenceBase);
-					Debugg.println("   universalBase: " + universalBase);
-					Debugg.println("   addedBases[sequenceBase]: " + addedBases[sequenceBase]);
-				}
 
 				if (universalBase<otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE].length)
 					otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase] = sequenceBase;
@@ -309,22 +299,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 					if (sequenceBase>=sequenceLength) continue;
 
 					int universalBase = startingUniversalBase + sequenceBase + contigMapper.getNumAddedBefore(contigBase)-startingAddedBeforeOriginalTrim;   
-					
-					
-//					int calculatedContigBase = otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase];
-/*					if (sequenceBase>=1003 && sequenceBase<=1008){
-						Debugg.println("----------------------------");
-						Debugg.println("   sequenceBase: " + sequenceBase);
-						Debugg.println("   universalBase: " + universalBase);
-						Debugg.println("   contigBase: " + contigBase);
-						Debugg.println("   calculatedContigBase: " + calculatedContigBase);
-						Debugg.println("   numPads: " + numPads);
-						Debugg.println("   prevNumPads: " + prevNumPads);
-						Debugg.println("   paddingBeforeOriginalTrim: " + paddingBeforeOriginalTrim);
-						Debugg.println("   otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]: " + otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
-					}
-*/
-					universalBase+=numPads;//-paddingBeforeOriginalTrim;  //don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
+					universalBase+=numPads;
 					prevNumPads = numPads;
 					if (universalBase<otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE].length)
 						otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE][universalBase] = sequenceBase;
@@ -333,47 +308,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 		}
 
-		
-		/* =========== Calculate mappings for the original import panel (i.e., the "Original.Trimmed" one - just like Original.Untrimmed but trimmed) ===========
-				prevNumPads = 0;
-				sequenceCanvas = originalTrimmedSequencePanel.getCanvas();
-				sequence = originalTrimmedSequencePanel.getSequence();
-				if (sequenceCanvas!=null && sequence!=null){
-					int sequenceLength = sequence.getLength();
-					int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart];
-
-					for (int sequenceBase=0; sequenceBase<sequenceLength; sequenceBase++){
-						contigBase = sequenceBase+numTrimmedFromStart;  // but trimmed doesn't have pads.
-						
-						// should the next line be contigMapper.getNumAddedBefore(contigBase) or contigMapper.getNumAddedBefore(contigBase+1)
-						int universalBase = startingUniversalBase + sequenceBase + contigMapper.getNumAddedBefore(contigBase)-startingAddedBeforeOriginalTrim;   
-						int calculatedContigBase = otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase];
-						int numPads = 0;
-						if (MesquiteInteger.isCombinable(contigBase)) {
-							numPads = contig.getNumPaddedBefore(contigBase)-paddingBeforeOriginalTrim;  // account for padding
-						} 
-						if (sequenceBase>=1003 && sequenceBase<=1008){
-							Debugg.println("----------------------------");
-							Debugg.println("   sequenceBase: " + sequenceBase);
-							Debugg.println("   universalBase: " + universalBase);
-							Debugg.println("   contigBase: " + contigBase);
-							Debugg.println("   calculatedContigBase: " + calculatedContigBase);
-							Debugg.println("   numPads: " + numPads);
-							Debugg.println("   prevNumPads: " + prevNumPads);
-							Debugg.println("   paddingBeforeOriginalTrim: " + paddingBeforeOriginalTrim);
-							Debugg.println("   otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]: " + otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
-						}
-						if (numPads<prevNumPads)
-							numPads=prevNumPads;
-						universalBase+=numPads;//-paddingBeforeOriginalTrim;  //don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
-						prevNumPads = numPads;
-						if (universalBase<otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE].length)
-							otherBaseFromUniversalBase[ORIGINALTRIMMEDSEQUENCE][universalBase] = sequenceBase;
-						universalBaseFromOtherBase[ORIGINALTRIMMEDSEQUENCE][sequenceBase] = universalBase;
-					}
-				}
-				
-				*/
 
 		// =========== Calculate mappings for EditedInMatrix sequence panel ===========
 
@@ -482,14 +416,12 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 		}
 		else {  // data are reversed!
-			//			Debugg.println("   startingUniversalBase: " + startingUniversalBase);
 			for (int matrixBase = numChars-1; matrixBase>=0 ; matrixBase--){  // going through the sourceData object.  This is either the edited matrix or the original matrix
 
 				if (!editedData.isInapplicable(matrixBase,it)){     // the only ones we record are the non-inapplicable ones
 					sequenceBase++;
 					int positionInOriginal = registryData.getState(matrixBase, it);
 					if (registryData.isCombinable(matrixBase, it) && positionInOriginal>=0){ 
-//						numOriginalBasesFound++;
 						matrixBasesSinceLastOriginal = 0;
 						lastPositionInOriginal=positionInOriginal;
 					} else
@@ -527,40 +459,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 					universalBase+=numPads;//-paddingBeforeOriginalTrim;  // don't need to deal with padding as padding is IN the original untrimmed sequence and is thus already in the "num deleted before"
 					prevNumPads = numPads;
 					
-					
-					if (contigBase>=1504 && false){
-						if (contigBase==1504) {
-							Debugg.println("   startingNumAddedDeletedBefore: " + startingNumAddedDeletedBefore);
-							Debugg.println("   startingAddedBeforeOriginalTrimm: " + startingAddedBeforeOriginalTrim);
-							Debugg.println("   startingDeletedBeforeOriginalTrimm: " + startingDeletedBeforeOriginalTrim);
-							Debugg.println("   numResurrectedAtStart: " + numResurrectedAtStart); 
-							Debugg.println("   lastContigBaseBeforeTrimmedEnd: " + lastContigBaseBeforeTrimmedEnd);
-						}
-						Debugg.println("----------------------------");
-						Debugg.println("   matrixBase: " + matrixBase);
-						Debugg.println("   universalBase: " + universalBase);
-						Debugg.println("   sequenceBase: " + sequenceBase);
-						Debugg.println("   contigBase: " + contigBase);
-						if (contig.getIsPadding(contigBase))
-							Debugg.println("!!!!!!!!!! is padding!!!!!!!!");
-						Debugg.println("   lastContigBase: " + lastContigBaseWithOriginalMatch);
-						Debugg.println("   calculatedContigBase: " + calculatedContigBase);
-						Debugg.println("   lastPositionInOriginal: " + lastPositionInOriginal);
-						Debugg.println("   numPads: " + numPads);
-						Debugg.println("   lastContigBaseWithOriginalMatch: " + lastContigBaseWithOriginalMatch);
-						Debugg.println("   additionalContigBases: " + additionalContigBases);
-						Debugg.println("   contigMapper.getNumDeletedBefore(contigBase): " + contigMapper.getNumDeletedBefore(contigBase));
-						if (contigBase>=lastContigBaseBeforeTrimmedEnd)
-							Debugg.println("   SWITCH  ");
-						Debugg.println("   contigMapper.getNumDeletedBefore(lastContigBaseBeforeTrimmedEnd): " + contigMapper.getNumDeletedBefore(lastContigBaseBeforeTrimmedEnd));
-						if (contigMapper.getDeletedBase(contigBase))
-							Debugg.println(" DELETED ");
-						else
-							Debugg.println(" NOT DELETED ");
-
-
-					}
-
 					if (sequenceBase>=0 && sequenceBase<universalBaseFromOtherBase[EDITEDMATRIXSEQUENCE].length)
 						universalBaseFromOtherBase[EDITEDMATRIXSEQUENCE][sequenceBase] = universalBase;
 					if (universalBase>=0 && universalBase<otherBaseFromUniversalBase[EDITEDMATRIXSEQUENCE].length)
@@ -573,41 +471,9 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 						otherBaseFromUniversalBase[EDITEDMATRIX][universalBase] = matrixBase;
 				} 
 
-				/*				if (ChromaseqUtil.isUniversalBase(editedData,matrixBase,it)){
-					numBasesFound++;
-					numOriginalBasesFound++;
-
-					int sequenceBase = numBasesFound;
-					int universalBase = startingUniversalBase+numBasesFound;
-					int numPads = 0;
-					if (universalBase>=0)
-						numPads = contig.getNumPaddedBefore(otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
-					if (numPads<prevNumPads)
-						numPads=prevNumPads;
-					universalBase+=numPads;  // account for padding
-					prevNumPads = numPads;
-
-					if (sequenceBase>=0 && sequenceBase<universalBaseFromOtherBase[EDITEDMATRIXSEQUENCE].length)
-						universalBaseFromOtherBase[EDITEDMATRIXSEQUENCE][sequenceBase] = universalBase;
-					if (universalBase>=0 && universalBase<otherBaseFromUniversalBase[EDITEDMATRIXSEQUENCE].length)
-						otherBaseFromUniversalBase[EDITEDMATRIXSEQUENCE][universalBase] = sequenceBase;
-
-					int reversedMatrixBase = numChars-matrixBase-1;
-					if (matrixBase>=0 && matrixBase<universalBaseFromOtherBase[EDITEDMATRIX].length)
-						universalBaseFromOtherBase[EDITEDMATRIX][matrixBase] = universalBase;
-					if (universalBase>=0 && universalBase<otherBaseFromUniversalBase[EDITEDMATRIX].length)
-						otherBaseFromUniversalBase[EDITEDMATRIX][universalBase] = matrixBase;
-
-				} 
-				 */
 			}
 		}
-		/*		int negativeBase = -1;
-		for (int universalBase = firstUniversalBase-1; universalBase>=0; universalBase--) {
-			otherBaseFromUniversalBase[EDITEDMATRIX][universalBase] = negativeBase;
-			negativeBase--;
-		}
-		 */
+
 		// =========== Now fill in the edges of each mapping ===========
 		for(int mapping=0; mapping<numMappings; mapping++) 
 			//			if (!(reversedInEditData && (mapping==EDITEDMATRIX)||(mapping==EDITEDMATRIXSEQUENCE))) {
@@ -660,17 +526,15 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				}
 		}
 
-		if (false) {
-			int start = 450;
-			int end = 510;
-			for (int universalBase = start; universalBase<end;universalBase++) {
-				Debugg.println(" universalBase: " + universalBase + ", otherBaseFromUniversalBase[editedMatrixSequence]: " + otherBaseFromUniversalBase[EDITEDMATRIXSEQUENCE][universalBase]);
-			}
-		}
-
-//		Debugg.println("======= End Resetting Universal Base Registry ======= " + resetCount + "\n");
-
+		double newRegistrationQuality = calcMatchToEditedScore(it);
+		
+		if (newRegistrationQuality>20.0)
+			if (registrationQuality<20.0)
+				MesquiteMessage.discreetNotifyUser("The reads and sequences appear to be improperly registered. You may wish to choose one of the Force Reregistration items from the Chromatogram menu. ");
+		registrationQuality = newRegistrationQuality;
+	
 		hasBeenSet = true;
+//		Debugg.println("======= End Resetting Universal Base Registry ======= " + resetCount + "\n");
 	}
 	/*.................................................................................................................*/
 
@@ -747,9 +611,60 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	public int getNumUniversalBases() {
 		return totalUniversalBases;
 	}
+	
+	/*...........................................................................*/
+	public double calcMatchToEditedScoreOfRead(int whichRead, int it) {	
+		Read read = contig.getRead(whichRead);
+		double conflicts=0.0;
+		double bases=0.0;
+		for (int universalBase=0; universalBase < getNumUniversalBases(); universalBase++) {
+			int contigBase = getOtherBaseFromUniversalBase(ACEFILECONTIG, universalBase);
+			int readBase = read.getReadBaseFromContigBase(contigBase);
+			if (readBase>=0 && readBase<read.getBasesLength()) {
+				int qual = read.getPhdBaseQuality(readBase);
+				char c = read.getPhdBaseChar(readBase);
+				long readState = DNAState.fromCharStatic(c);
 
+				int matrixBase = getEditedMatrixBaseFromUniversalBase(universalBase);
+				long editedState = editedData.getState(matrixBase,it);
+				if (qual>20) {
+					 if (!DNAState.equalsIgnoreCase(readState, editedState))
+						conflicts++;
+					 bases++;
+				}
+			} 
+		}
 
-	/*.................................................................................................................*/
+		int editedBases = 0;
+		double editedBasesQuality = 0.0;
+		ContinuousData qualityData = ChromaseqUtil.getQualityData(editedData);
+		for (int ic=0; ic < qualityData.getNumChars(); ic++) {
+			double quality = qualityData.getState(ic, it, 0);
+			if (quality>20 && MesquiteDouble.isCombinable(quality)) {
+				editedBasesQuality+= quality;
+				editedBases++;
+			} 
+		}
+		if (editedBases>0)
+			editedBasesQuality = editedBasesQuality/editedBases;
+
+		if (bases==0  || editedBasesQuality<20.0)
+			return 0.0;
+		else
+			return (conflicts/bases)*editedBasesQuality;
+	}
+	/*...........................................................................*/
+	public double calcMatchToEditedScore(int it) {	
+		if (contig==null || contig.getNumReadsInContig()<=1)
+			return 0.0;
+		double total = 0.0;
+		for (int whichRead = 0; whichRead<contig.getNumReadsInContig(); whichRead++) {
+			total += calcMatchToEditedScoreOfRead(whichRead,it);
+		}
+		double score = total/contig.getNumReadsInContig();
+		return score;
+	}
+/*.................................................................................................................*/
 
 
 	public String toString() {

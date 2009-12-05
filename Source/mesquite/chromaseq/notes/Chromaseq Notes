@@ -2,7 +2,8 @@ Necessary pre-beta
 
 1. trivial: when display is graphically reversed, the little birds eye box in upper overview loses its moorings
 
-- single read legacy
+- add taxainfo for parameters for AceDirectoryProcess and NEXUS read/ write
+- add controls for parameters for AceDirectoryProcess
 
 - move from sequence panel to matrix not functioning
 - remove startTrimRef
