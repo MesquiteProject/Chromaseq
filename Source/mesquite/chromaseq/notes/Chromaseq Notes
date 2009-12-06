@@ -1,7 +1,7 @@
 Necessary pre-alpha
 
 - saveas for forced reprocessing?
-- bad registration matrices
+- bad checksum registration matrices
 - test out opening BTOL and looking to see if registration is good
 
 1. trivial: when display is graphically reversed, the little birds eye box in upper overview loses its moorings
