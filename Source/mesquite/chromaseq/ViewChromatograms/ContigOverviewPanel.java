@@ -114,8 +114,9 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 			else 
 				positionOverview(i-numBasesVisible+boundary);
 		}
-		contigOverviewCanvas.repaint();
 		
+		contigOverviewCanvas.repaint();
+	
 	}
 	public void centerPanelAtUniversalBase(int i, boolean trueCenter){
 		centerBase = i;
@@ -149,6 +150,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 
 			}
 		}
+		
 		contigOverviewCanvas.repaint();
 
 	}

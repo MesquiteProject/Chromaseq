@@ -244,6 +244,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		processNoContigAceFiles(f);
 		createRegistryDataIfNeeded(f);
 		deleteExtraRegistryMatrices(f);
+		
 		//deattachChromaseqBuild(f);
 		ListableVector matrices = f.getProject().getCharacterMatrices();
 		for (int i=0; i<matrices.size(); i++) {

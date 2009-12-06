@@ -157,6 +157,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	public synchronized void reset(boolean forceFullContigMapSetup) {
 //	Debugg.println("\n======= Resetting Universal Base Registry ======= " + (resetCount++));
 
+//	Debugg.println(toString());
 		it = contigDisplay.getTaxon().getNumber();
 		contigDisplay.setUniversalMapper(this);
 		reversedInEditData = contigDisplay.isReversedInEditedData();
@@ -601,20 +602,59 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		double score = total/contig.getNumReadsInContig();
 		return score;
 	}
-/*.................................................................................................................*/
-
+	/*.................................................................................................................*/
+	private String firstApplicable(CharacterData data, int it, int num) {
+		StringBuffer sb = new StringBuffer();
+		boolean foundOne = false;
+		int count = 0;
+		for (int ic=0; ic<data.getNumChars(); ic++) {
+			if (!data.isInapplicable(ic, it)){
+				if (!foundOne)
+					sb.append("["+ic+"] ");
+				foundOne = true;
+			}
+			if (foundOne && count<num) {
+				if (data instanceof MeristicData){
+					sb.append(" ");
+					((MeristicData)data).statesIntoStringBuffer(ic, it, sb, true);
+				}
+				else if (data instanceof DNAData)
+					((DNAData)data).statesIntoStringBuffer(ic, it, sb, true);
+				count++;
+			}
+		}
+		return sb.toString();
+	}
+	/*.................................................................................................................*/
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		int newTotalUniversalBases = getNumUniversalBases();
-
-		for (int universalBase=0; universalBase<newTotalUniversalBases; universalBase++){
+	
+		b.append("\n\n\n=========  ChromaseqUniversalMapper =============\n");
+		b.append("\n"+ editedData.getTaxa().getName(it));
+		b.append(contigMapper.toString());
+		b.append("\n.........");
+		b.append("\n totalUniversalBases: " + totalUniversalBases);
+		b.append("\n numTrimmedFromStart: " + numTrimmedFromStart);
+		b.append("\n.........");
+		
+		b.append("\n....  registryData ");
+		b.append("\n" + firstApplicable(registryData,it,20));
+		b.append("\n....  editedData ");
+		b.append("\n" + firstApplicable(editedData,it,20));
+		b.append("\n....  originalData ");
+		b.append("\n" + firstApplicable(originalData,it,20));
+		b.append("\n....  reverseRegistryData");
+		b.append("\n" + firstApplicable(reverseRegistryData,it,20));
+	/*	for (int universalBase=0; universalBase<newTotalUniversalBases; universalBase++){
 			b.append(" "+otherBaseFromUniversalBase[ORIGINALUNTRIMMEDSEQUENCE][universalBase]);
 		}
 		b.append("\n\n");
 		for (int i=0; i<originalUntrimmedPanel.getSequence().getLength(); i++){
 			b.append(" "+universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][i]);
 		}
+		*/
+		b.append("\n============================================\n");
 		return b.toString();
 	}
 

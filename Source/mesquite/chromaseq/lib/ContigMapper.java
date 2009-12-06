@@ -371,7 +371,9 @@ public class ContigMapper {
 							addedToEnd++;
 					}
 					else { // it is in original; now record added bases
-						setAddedBases(getContigBaseFromOriginalMatrixBase(positionInOriginal, it), addedBase);
+						contigBase = getContigBaseFromOriginalMatrixBase(positionInOriginal, it);
+						setAddedBases(contigBase, addedBase);
+						
 						addedBase=0;
 					}
 				}
@@ -386,10 +388,10 @@ public class ContigMapper {
 							addedToEnd++;
 					}
 					else { // it is in original; now record added bases
-						if (addedBase>0) {
+					//	if (addedBase>0) {
 							contigBase = getContigBaseFromOriginalMatrixBase(positionInOriginal, it);
 							setAddedBases(contigBase, addedBase);
-						}
+					//	}
 						addedBase=0;
 					}
 				}
