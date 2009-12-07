@@ -12,8 +12,6 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.ViewChromatograms;
 
 import mesquite.chromaseq.lib.*;
-import mesquite.chromaseq.lib.ChromatogramPanel;
-import mesquite.chromaseq.lib.ChromatogramCanvas;
 import mesquite.lib.*;
 
 import java.awt.*;
@@ -174,7 +172,9 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 	}
 	public void positionOverview(int pos){
 		firstBase=pos;
+
 		contigOverviewCanvas.setPosition(firstBase);
+//		Debugg.println("firstBase: " + firstBase);
 		contigOverviewCanvas.repaint();
 	}
 
@@ -277,33 +277,48 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		window = (VChromWindow)chromatogramPanel.getMesquiteWindow();
 
 		int halfPeaks = contigDisplay.getApproximateNumberOfPeaksVisible()/2;
-		int centerConsensusBase = window.getCenterBase()-firstBase;//-panel.getContig().getReadExcessAtStart();
-		int firstConsensusBase = centerConsensusBase-halfPeaks;
-		//	firstConsensusBase = panel.getOverallBaseFromConsensusBase(firstConsensusBase);
-		int lastConsensusBase = centerConsensusBase+halfPeaks;
+		int centerUniversalBase = window.getCenterBase();//-firstBase;//-panel.getContig().getReadExcessAtStart();
+		int firstUniversalBase = centerUniversalBase-halfPeaks;
+		int lastUniversalBase = centerUniversalBase+halfPeaks;
+		//	firstUniversalBase = panel.getOverallBaseFromUniversalBase(firstUniversalBase);
 		int left = getLeftBoundaryOfOverview(g);
 		int top = getTopOfRead(0)-5;
 		int bottom = getTopOfRead(numChromatograms-1)+readBaseHeight + 5;
 		int width = contigDisplay.getApproximateNumberOfPeaksVisible();
-		if (firstConsensusBase+contigDisplay.getApproximateNumberOfPeaksVisible()> contigDisplay.getTotalNumUniversalBases()){
-			width =  contigDisplay.getTotalNumUniversalBases()-firstConsensusBase;
+/*		if (firstUniversalBase+contigDisplay.getApproximateNumberOfPeaksVisible()> contigDisplay.getTotalNumUniversalBases()){
+			width =  contigDisplay.getTotalNumUniversalBases()-firstUniversalBase;
 			if (width<0) width=0;
 		}
-		return new Rectangle(left+firstConsensusBase*singleBaseWidth, top, width*singleBaseWidth,bottom-top);
+	*/	
+		int leftBoundary = getLeftBoundaryOfOverview(g)-firstBase*singleBaseWidth;
+		int cwidth = getBounds().width-leftBoundary;
+		int pixelWidth = width*singleBaseWidth;
+		if (contigDisplay.isShownReversed()){
+			int leftPixel = left+(firstUniversalBase-firstBase)*singleBaseWidth;
+			return new Rectangle(cwidth-(leftPixel+pixelWidth), top, pixelWidth,bottom-top);
+		}
+		else {
+			int leftPixel = left+(firstUniversalBase-firstBase)*singleBaseWidth;
+			return new Rectangle(leftPixel, top, pixelWidth,bottom-top);
+		}
 	}	
+	protected void fillRect(Graphics g, int width, int x, int y, int w, int h){
+		if (isShownReversed()){
+			g.fillRect(width-(x+w), y, w, h);
+		}
+		else {
+			g.fillRect(x, y, w, h);
+		}
+	}
 
-	/*...........................................................................*/
-	public int getOverallBaseLocation(int overallBase, int left, Graphics g) {
-		return left+(overallBase)*singleBaseWidth;
-	}
-	/*...........................................................................*/
-	public int getBaseFromLocation(int location, int left, Graphics g) {
-		return (location-left)/singleBaseWidth;
-	}
+
 	/*...........................................................................*/
 	public int getUniversalBaseFromLocation(int location, Graphics g) {
 		int left = getLeftBoundaryOfOverview(g);
-		return (location-left)/singleBaseWidth+firstBase;
+		if (contigDisplay.isShownReversed())
+			return contigDisplay.getTotalNumUniversalBases()-((location-left)/singleBaseWidth)-firstBase;
+		else
+			return (location-left)/singleBaseWidth+firstBase;
 	}
 	/*...........................................................................*/
 	public void paint(Graphics g) {	
@@ -401,22 +416,22 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 		g.setColor(Color.lightGray);
 		if (chromatograms[whichRead].getRead().getComplemented()){
 			if (firstLocation>lineLength+getLeftBoundaryOfOverview(g)) {
-				g.drawLine(firstLocation-2, topOfRead + readBaseHeight/2, firstLocation-2-lineLength, topOfRead + readBaseHeight/2);
-				g.drawLine(firstLocation-2-lineLength, topOfRead + readBaseHeight/2, firstLocation-2-lineLength+readBaseHeight/2, topOfRead);
-				g.drawLine(firstLocation-2-lineLength, topOfRead + readBaseHeight/2, firstLocation-2-lineLength+readBaseHeight/2, topOfRead+readBaseHeight);
+				drawLine(g, cwidth, firstLocation-2, topOfRead + readBaseHeight/2, firstLocation-2-lineLength, topOfRead + readBaseHeight/2);
+				drawLine(g, cwidth, firstLocation-2-lineLength, topOfRead + readBaseHeight/2, firstLocation-2-lineLength+readBaseHeight/2, topOfRead);
+				drawLine(g, cwidth, firstLocation-2-lineLength, topOfRead + readBaseHeight/2, firstLocation-2-lineLength+readBaseHeight/2, topOfRead+readBaseHeight);
 			}
-			g.drawLine(lastLocation+2, topOfRead + readBaseHeight/2, lastLocation+lineLength, topOfRead + readBaseHeight/2);
-			g.drawLine(lastLocation+lineLength, topOfRead + readBaseHeight/2, lastLocation+lineLength+readBaseHeight/2, topOfRead);
-			g.drawLine(lastLocation+lineLength, topOfRead + readBaseHeight/2, lastLocation+lineLength+readBaseHeight/2, topOfRead+readBaseHeight);
+			drawLine(g, cwidth, lastLocation+2, topOfRead + readBaseHeight/2, lastLocation+lineLength, topOfRead + readBaseHeight/2);
+			drawLine(g, cwidth, lastLocation+lineLength, topOfRead + readBaseHeight/2, lastLocation+lineLength+readBaseHeight/2, topOfRead);
+			drawLine(g, cwidth, lastLocation+lineLength, topOfRead + readBaseHeight/2, lastLocation+lineLength+readBaseHeight/2, topOfRead+readBaseHeight);
 		} else {
 			if (firstLocation>lineLength+getLeftBoundaryOfOverview(g)) {
-				g.drawLine(firstLocation-2, topOfRead + readBaseHeight/2, firstLocation-lineLength, topOfRead + readBaseHeight/2);
-				g.drawLine(firstLocation-lineLength, topOfRead + readBaseHeight/2, firstLocation-lineLength-readBaseHeight/2, topOfRead);
-				g.drawLine(firstLocation-lineLength, topOfRead + readBaseHeight/2, firstLocation-lineLength-readBaseHeight/2, topOfRead+readBaseHeight);
+				drawLine(g, cwidth, firstLocation-2, topOfRead + readBaseHeight/2, firstLocation-lineLength, topOfRead + readBaseHeight/2);
+				drawLine(g, cwidth, firstLocation-lineLength, topOfRead + readBaseHeight/2, firstLocation-lineLength-readBaseHeight/2, topOfRead);
+				drawLine(g, cwidth, firstLocation-lineLength, topOfRead + readBaseHeight/2, firstLocation-lineLength-readBaseHeight/2, topOfRead+readBaseHeight);
 			}
-			g.drawLine(lastLocation+2, topOfRead + readBaseHeight/2, lastLocation+2+lineLength, topOfRead + readBaseHeight/2);
-			g.drawLine(lastLocation+2+lineLength, topOfRead + readBaseHeight/2, lastLocation+2+lineLength-readBaseHeight/2, topOfRead);
-			g.drawLine(lastLocation+2+lineLength, topOfRead + readBaseHeight/2, lastLocation+2+lineLength-readBaseHeight/2, topOfRead+readBaseHeight);
+			drawLine(g, cwidth, lastLocation+2, topOfRead + readBaseHeight/2, lastLocation+2+lineLength, topOfRead + readBaseHeight/2);
+			drawLine(g, cwidth, lastLocation+2+lineLength, topOfRead + readBaseHeight/2, lastLocation+2+lineLength-readBaseHeight/2, topOfRead);
+			drawLine(g, cwidth, lastLocation+2+lineLength, topOfRead + readBaseHeight/2, lastLocation+2+lineLength-readBaseHeight/2, topOfRead+readBaseHeight);
 
 		}
 
@@ -427,9 +442,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 	
 	boolean mouseDownInBox = false;
 	int offsetInBox = 0;
-//	int mouseDownRead = -1;
-	/*--------------------------------------*/
-	/* to be used by subclasses to tell that panel touched */
+	/*_________________________________________________*/
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
 		mouseDownInBox = false;
 		int offsetInBox = 0;
@@ -438,8 +451,18 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 			mouseDownInBox = true;
 			int centerOfBox = (box.x+box.width/2);
 			offsetInBox = x-centerOfBox;
-
-		} else {
+			int universalBase = getUniversalBaseFromLocation(x-offsetInBox,getGraphics()); 
+	/*		Debugg.println("...........");
+			Debugg.println("x: " + x);
+			Debugg.println("centerOfBox: " + centerOfBox);
+			Debugg.println("offsetInBox: " + offsetInBox);
+			Debugg.println("x-offsetInBox (location): " + (x-offsetInBox));
+			Debugg.println("firstBase: " + firstBase);
+			Debugg.println("getLeftBoundaryOfOverview(g) (left): " + getLeftBoundaryOfOverview(getGraphics()));
+			Debugg.println("contigDisplay.getTotalNumUniversalBases(): " + contigDisplay.getTotalNumUniversalBases());
+			
+			Debugg.println("touch universalBase in box: " + universalBase);
+	*/	} else {
 			int numBases = contigDisplay.getUniversalMapper().getNumUniversalBases();
 			int universalBase = getUniversalBaseFromLocation(x-offsetInBox,getGraphics()); 
 			if (MesquiteInteger.isCombinable(universalBase) && universalBase>=0 && universalBase<numBases){
@@ -448,6 +471,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 			}
 		}
 	}
+	/*_________________________________________________*/
 	public void mouseDrag (int modifiers, int x, int y, MesquiteTool tool) {
 		//ChromatogramTool chromTool = (ChromatogramTool)tool;
 		if (mouseDownInBox) {
@@ -460,6 +484,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 			}
 		}
 	}
+	/*_________________________________________________*/
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseUp(int modifiers, int x, int y, MesquiteTool tool) {
 		int whichRead = findRead(y);
