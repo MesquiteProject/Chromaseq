@@ -779,7 +779,7 @@ public class ChromaseqUtil{
 		for (int ic = 0; ic<numChars; ic++){
 			long s =  editedData.getState(ic, it);
 			if (editedData.isComplemented(it)) 
-				s = DNAData.complement(s);
+				s = DNAState.complement(s);
 			int base = ic;
 			if (editedData.isReversed(it))
 				base = numChars-ic-1;
