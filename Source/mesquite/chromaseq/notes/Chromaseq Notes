@@ -1,3 +1,9 @@
+- double peak count
+- untrim ends
+
+- clean up file option to purge of Chromaseq stuff.
+
+
 Necessary pre-alpha
 
 - phone home
@@ -5,6 +11,10 @@ Necessary pre-alpha
 ==========
 
 necessary pre-beta
+
+
+
+
 
 - saveas for forced reprocessing?
 - bad checksum registration matrices
