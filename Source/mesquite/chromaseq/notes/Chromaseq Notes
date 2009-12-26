@@ -2,6 +2,7 @@
 - untrim ends
 
 - clean up file option to purge of Chromaseq stuff.
+- Voucher ID on Phred/Phrap processing
 
 
 Necessary pre-alpha
@@ -11,9 +12,6 @@ Necessary pre-alpha
 ==========
 
 necessary pre-beta
-
-
-
 
 
 - saveas for forced reprocessing?
@@ -43,7 +41,6 @@ other base is selected for editing.  Maybe happens once in every 5-10 such click
 the method that it claims is chewing up time doesn't actually seem to be. I just thought of a possible source 
 (notifyListeners?) and so I might check that out, but I thought I'd just give you a heads up on the issue.
 
-reverse complement
 
 ======================
 MANUAL
@@ -51,9 +48,6 @@ MANUAL
 	
 ======================
 ---------
-
-- lock matrices
-- registration matrix - fill end with inapplicable
 
 
 - why ignore called bases reset between each chromatogram

@@ -88,7 +88,7 @@ public class NumberOfReads extends NumberForTaxon {
 		return false;
 	}
 	public String getParameters() {
-		return "Numberof Reads in matrix from: " + matrixSourceTask.getParameters();
+		return "Number of Reads in sequence from: " + matrixSourceTask.getParameters();
 	}
 	/*.................................................................................................................*/
 
