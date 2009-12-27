@@ -98,53 +98,7 @@ public class ChromaseqUtil{
 	public static final NameReference paddingRef = NameReference.getNameReference("paddingBefore"); //MesquiteInteger: data(cells)
 	//public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //MesquiteInteger: data(cells)
 
-
 	/*.................................................................................................................*/
-	public static boolean createInfoFile(String filePath, String fullName, String voucherCode){
-		if (StringUtil.blank(filePath))
-			return false;
-		Element rootElement = DocumentHelper.createElement("mesquite");
-		Document doc = DocumentHelper.createDocument(rootElement);
-		Element chromaseqElement = rootElement.addElement("chromaseq");
-		chromaseqElement.addAttribute("version", "1");
-		Element processedFolderElement = chromaseqElement.addElement("processedFolder");
-		Element sampleElement = processedFolderElement.addElement("sample");
-		sampleElement.addAttribute("fullName", fullName);
-		sampleElement.addAttribute("voucherCode", voucherCode);
-		String xml = XMLUtil.getDocumentAsXMLString(doc, false);
-		if (!StringUtil.blank(xml))
-			MesquiteFile.putFileContents(filePath, xml, true);
-		rootElement = null;
-		doc = null;
-		chromaseqElement = null;
-		return true;
-	}
-
-	/*.................................................................................................................*/
-	public static void processInfoFile(String infoFilePath, MesquiteString fullName, MesquiteString voucherCode){
-		String s = MesquiteFile.getFileContentsAsString(infoFilePath); 
-		Document doc = XMLUtil.getDocumentFromString(s);
-		if (doc == null) {  // must be old format
-			fullName.setValue(s);
-		} else {
-			Element rootElement = doc.getRootElement();
-			Element chromaseqElement = rootElement.element("chromaseq");
-			if (chromaseqElement != null) {
-				String versionString = chromaseqElement.attributeValue("version");
-				int versionInXml = MesquiteInteger.fromString(versionString);
-				if (versionInXml==1) {
-					Element processedFolderElement = chromaseqElement.element("processedFolder");
-					Element sampleElement = processedFolderElement.element("sample");
-					String name = sampleElement.attributeValue("fullName");
-					if (fullName!=null) fullName.setValue(name);
-					String voucher = sampleElement.attributeValue("voucherCode");
-					if (voucherCode!=null) voucherCode.setValue(voucher);
-				}
-
-			}
-		}
-		
-	}
 
 	public static void attachStringToMatrix(Attachable a, MesquiteString s){
 		a.attachIfUniqueName(s);

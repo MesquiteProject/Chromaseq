@@ -155,7 +155,7 @@ public class AceDirectoryProcessor {
 								ace.setBaseName(baseName);
 								fullName = new MesquiteString(baseName);
 								voucherCode = new MesquiteString();
-								ChromaseqUtil.processInfoFile(infoFilePath, fullName, voucherCode);
+								ChromaseqInfoFile.processInfoFile(infoFilePath, fullName, voucherCode);
 								String fragmentDirPath = StringUtil.getAllButLastItem(StringUtil.getAllButLastItem(aceFileDirectoryPath,MesquiteFile.fileSeparator ),MesquiteFile.fileSeparator );								
 								ace.setLongSequenceName(fullName.toString());
 								if (ace.getNumContigs()>=1) {
