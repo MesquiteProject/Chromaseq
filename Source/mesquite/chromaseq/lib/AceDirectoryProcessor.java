@@ -65,7 +65,7 @@ public class AceDirectoryProcessor {
 
 	}
 	/*.................................................................................................................*/
-	public void processAceFileWithContig(CharacterData data, MesquiteModule ownerModule, String processedAceFilePath, String fragmentDirPath, AceFile ace, SequenceUploader uploader, String geneName, MesquiteString fullName, String baseName, int it) {
+	public void processAceFileWithContig(CharacterData data, MesquiteModule ownerModule, String processedAceFilePath, String fragmentDirPath, AceFile ace, SequenceUploader uploader, String geneName, MesquiteString fullName, String baseName, MesquiteString voucherCode, int it) {
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
 		DNAData originalData = ChromaseqUtil.getOriginalData(data);
 		Taxa taxa = data.getTaxa();
@@ -87,12 +87,12 @@ public class AceDirectoryProcessor {
 		System.out.println("\n\nfasta file name: " + baseName + " ace file: " + ace);
 		MesquiteFile.putFileContents(fragmentDirPath  + MesquiteFile.fileSeparator + ChromaseqUtil.processedFastaFolder + MesquiteFile.fileSeparator + baseName+".fas", ace.toFASTAString(processPolymorphisms, qualThresholdForTrim), true);
 		MesquiteFile.putFileContents(processedAceFilePath, ace.toString(processPolymorphisms), true);
-		ace.importSequence(taxa, editedData, it, originalData, ChromaseqUtil.getQualityData(data), ChromaseqUtil.getRegistryData(data), singleTaxaBlock, processPolymorphisms, maxChar," contig ", false);
+		ace.importSequence(taxa, editedData, it, originalData, ChromaseqUtil.getQualityData(data), ChromaseqUtil.getRegistryData(data), singleTaxaBlock, processPolymorphisms, maxChar," contig ", false, voucherCode);
 		
 	}
 
 	/*.................................................................................................................*/
-	public void processAceFileWithoutContig(DNAData data, String processedAceFilePath, AceFile ace, String geneName, MesquiteString fullName, int it) {
+	public void processAceFileWithoutContig(DNAData data, String processedAceFilePath, AceFile ace, String geneName, MesquiteString fullName, int it, MesquiteString voucherCode) {
 		DNAData editedData = ChromaseqUtil.getEditedData(data);
 		DNAData originalData = ChromaseqUtil.getOriginalData(data);
 		Taxa taxa = data.getTaxa();
@@ -106,7 +106,7 @@ public class AceDirectoryProcessor {
 			ace.trimMixedEnds(mixedEndThreshold, mixedEndWindow, qualThresholdForTrim, addPhrapFailures);
 		}
 		MesquiteFile.putFileContents(processedAceFilePath, ace.toString(processPolymorphisms), true);
-		ace.importSequence(taxa, editedData, it, originalData, ChromaseqUtil.getQualityData(data), ChromaseqUtil.getRegistryData(data), singleTaxaBlock, processPolymorphisms, maxChar,"", true);
+		ace.importSequence(taxa, editedData, it, originalData, ChromaseqUtil.getQualityData(data), ChromaseqUtil.getRegistryData(data), singleTaxaBlock, processPolymorphisms, maxChar,"", true, voucherCode);
 	}
 	/*.................................................................................................................*/
 	public void reprocessAceFileDirectory(MesquiteFile file, MesquiteModule ownerModule, DNAData data, int it) {
@@ -124,6 +124,7 @@ public class AceDirectoryProcessor {
 			return;
 		String processedAceFilePath = "";
 		MesquiteString fullName = null;
+		MesquiteString voucherCode = null;
 		String geneName = ChromaseqUtil.getGeneName(data);
 		if (aceFileDirectory.isDirectory()) {
 			int numPhdFiles = getNumPhdFilesInDirectory(aceFileDirectory, aceFileDirectoryPath);
@@ -153,11 +154,12 @@ public class AceDirectoryProcessor {
 								
 								ace.setBaseName(baseName);
 								fullName = new MesquiteString(baseName);
-								ChromaseqUtil.processInfoFile(infoFilePath, fullName);
+								voucherCode = new MesquiteString();
+								ChromaseqUtil.processInfoFile(infoFilePath, fullName, voucherCode);
 								String fragmentDirPath = StringUtil.getAllButLastItem(StringUtil.getAllButLastItem(aceFileDirectoryPath,MesquiteFile.fileSeparator ),MesquiteFile.fileSeparator );								
 								ace.setLongSequenceName(fullName.toString());
 								if (ace.getNumContigs()>=1) {
-									processAceFileWithContig(data,  ownerModule, processedAceFilePath,  fragmentDirPath,  ace,  null,  geneName,  fullName,  baseName, it);
+									processAceFileWithContig(data,  ownerModule, processedAceFilePath,  fragmentDirPath,  ace,  null,  geneName,  fullName,  baseName, voucherCode, it);
 								}
 								else {
 									ownerModule.logln("   ACE file contains no contigs!"); 
@@ -187,7 +189,7 @@ public class AceDirectoryProcessor {
 		if (addingPhrapFailures && ace!=null) {  // have to process AceFile that we have manually made
 			MesquiteFile.putFileContents(processedAceFilePath, ace.toString(processPolymorphisms), true);
 			if (project != null){
-				processAceFileWithoutContig(data, processedAceFilePath,  ace,  geneName,  fullName,it);
+				processAceFileWithoutContig(data, processedAceFilePath,  ace,  geneName,  fullName,it, voucherCode);
 			}
 			ace.dispose();
 		}
