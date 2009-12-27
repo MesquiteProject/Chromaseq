@@ -57,6 +57,14 @@ public class ChromaseqInfoFile {
 		XMLUtil.addFilledElement(processedFolderElement, "phrapOptions", phrapOptions);
 	}
 	/*.................................................................................................................*/
+	public  void addSampleCodeFile(String sampleCodeFilePath){
+		XMLUtil.addFilledElement(processedFolderElement, "sampleCodeTranslationFilePath", sampleCodeFilePath);
+	}
+	/*.................................................................................................................*/
+	public  void addPrimerFile(String primerFile){
+		XMLUtil.addFilledElement(processedFolderElement, "primerInformationFilePath", primerFile);
+	}
+	/*.................................................................................................................*/
 	public  void addChromaseqProcessingOptions(int qualThresholdForLowerCase, boolean processPolymorphisms, double polyThreshold, boolean truncateMixedEnds, int qualThresholdForTrim, int mixedEndWindow, int mixedEndThreshold){
 		Element chromaseqProcessingOptionsElement = processedFolderElement.addElement("chromaseqProcessingOptions");
 		chromaseqProcessingOptionsElement.addAttribute("ambiguityThreshold", ""+polyThreshold);
