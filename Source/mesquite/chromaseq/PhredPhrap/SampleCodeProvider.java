@@ -50,11 +50,24 @@ public class SampleCodeProvider {
 	
 	public static String[] getSeqNamesFromTabDelimitedFile(MesquiteString sampleCode, Parser sampleCodeListParser) {
 		String sampleCodeString  = sampleCode.getValue();
-		
 		sampleCodeListParser.setPosition(0);
 		Parser subParser = new Parser();
 		String line = sampleCodeListParser.getRawNextDarkLine();
 		while (StringUtil.notEmpty(line)) {
+			if (line.indexOf("\t")>=0){
+				StringTokenizer tokenizer = new StringTokenizer(line, "\t", false);
+				String code = tokenizer.nextToken();
+				if (sampleCodeString.equalsIgnoreCase(code)) {
+					String seq = tokenizer.nextToken();
+					if (seq.equals(";") || StringUtil.blank(seq))
+						seq="";
+					String fullseq = tokenizer.nextToken();
+					if (StringUtil.blank(fullseq) || fullseq.equals(";"))
+						fullseq=seq;
+					return new String[]{seq, fullseq};
+				}
+			}
+			else {
 			subParser.setString(line);
 			String code = subParser.getFirstToken();
 			if (sampleCodeString.equalsIgnoreCase(code)) {
@@ -65,6 +78,7 @@ public class SampleCodeProvider {
 				if (StringUtil.blank(fullseq) || fullseq.equals(";"))
 					fullseq=seq;
 				return new String[]{seq, fullseq};
+			}
 			}
 			line = sampleCodeListParser.getRawNextDarkLine();
 			

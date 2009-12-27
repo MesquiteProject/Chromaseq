@@ -277,6 +277,8 @@ public class ContigMapper {
 		if (deleted==null || deleted.length!=numBases)
 			init(numBases);
 		
+		if (registryData == null)
+			return;
 		// =========== cleanup RegistryData from earlier versions ===========
 		for (int ic = 0; ic< registryData.getNumChars(); ic++){  
 			int icOriginal = registryData.getState(ic, it,0);
