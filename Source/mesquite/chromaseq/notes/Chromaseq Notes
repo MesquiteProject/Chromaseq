@@ -1,16 +1,14 @@
-- turn info.XML file into real XML file, store voucher code in there
-
-
 - double peak count
 - untrim ends
 
 - clean up file option to purge of Chromaseq stuff.
-- Voucher ID on Phred/Phrap processing
 
 
 Necessary pre-alpha
 
 - phone home
+
+
 
 ==========
 
