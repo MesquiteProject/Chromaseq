@@ -1,5 +1,3 @@
-- double peak count
-- untrim ends
 
 - clean up file option to purge of Chromaseq stuff.
 
@@ -50,6 +48,8 @@ MANUAL
 ======================
 ---------
 
+- double peak count
+- untrim ends
 
 - why ignore called bases reset between each chromatogram
 
