@@ -241,7 +241,11 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 									seqName = results[0];
 									fullSeqName = results[1];
 								} else {
-									loc = sampleCodeList.indexOf(sampleCode.getValue());   //��� problem:  if have 551A and 551, this will pick up 551
+									String[] results = SampleCodeProvider.getSeqNamesFromTabDelimitedFile(sampleCode, sampleCodeListParser);
+									seqName = results[0];
+									fullSeqName = results[1];
+
+						/*			loc = sampleCodeList.indexOf(sampleCode.getValue());   //��� problem:  if have 551A and 551, this will pick up 551
 
 									if (loc<0 && !(sampleCode.getValue().equalsIgnoreCase("0000")||sampleCode.getValue().equalsIgnoreCase("000"))) {
 										seqName = sampleCode.getValue();
@@ -254,6 +258,7 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 										if (!";".equals(sampleCodeListParser.getNextToken()))
 											fullSeqName = seqName;
 									}
+									*/
 								}
 							}
 							else {
