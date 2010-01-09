@@ -68,20 +68,20 @@ public class SampleCodeProvider {
 				}
 			}
 			else {
-			subParser.setString(line);
-			String code = subParser.getFirstToken();
-			if (sampleCodeString.equalsIgnoreCase(code)) {
-				String seq = subParser.getNextToken();
-				if (seq.equals(";") || StringUtil.blank(seq))
-					seq="";
-				String fullseq = subParser.getNextToken();
-				if (StringUtil.blank(fullseq) || fullseq.equals(";"))
-					fullseq=seq;
-				return new String[]{seq, fullseq};
-			}
+				subParser.setString(line);
+				String code = subParser.getFirstToken();
+				if (sampleCodeString.equalsIgnoreCase(code)) {
+					String seq = subParser.getNextToken();
+					if (seq.equals(";") || StringUtil.blank(seq))
+						seq="";
+					String fullseq = subParser.getNextToken();
+					if (StringUtil.blank(fullseq) || fullseq.equals(";"))
+						fullseq=seq;
+					return new String[]{seq, fullseq};
+				}
 			}
 			line = sampleCodeListParser.getRawNextDarkLine();
-			
+
 		}
 		// got here and no match found -- log an error
 		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code xml file.");

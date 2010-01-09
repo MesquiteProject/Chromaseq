@@ -24,8 +24,8 @@
 <div id="masthead">
   <div id="banner"><img src="splash.gif" width="164" height="64"></div>
   <div id="mainTitle"><font id="packageName"><b>Chromaseq</b></font><BR>
-  <font id="version">Test Version 0.97<br>
-  1 December 2009</font><BR>
+  <font id="version">Test Version 0.973<br>
+  8 January 2010</font><BR>
          David R. Maddison and Wayne P. Maddison</div>
   <div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Sample Codes &amp; Names File <!-- InstanceEndEditable --></div>
  
@@ -34,23 +34,44 @@
 <!-- end masthead -->
 <div id="content"><!-- InstanceBeginEditable name="content" -->
   <p>If you wish to have the sample codes that are contained in the chromatogram file names translated into other names (for example, the full names of the species or samples), you will need to provide a sample codes &amp; names file. </p>
-  <p>The format of  the sample codes &amp; names file is:</p>
-  <p class="style2">&lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br>
-    &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br>
-    &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;</p>
-  <p>The sample code is the code present in the chromatogram file name. The short sample name is the name to which this will be translated in some places in the Phred/Phrap/Mesquite system. The long sample name is the name to which it will be translated to in the sequence names of process sequences. The long name is optional. The short name is used for file names, to ensure that file names are not longer the maximum file name length of the operation system. </p>
+  <p>There are two allowed formats for the sample codes &amp; names file, tab-delimited and  space-delimited. In both formats, each line of the file contains the information for one sample code. Each line consists of four parts: (1) the sample code, (2) a short name of the sample, (3) a long name of the sample, and (4) an ending semicolon. The sample code is the code present in the chromatogram file name. The short sample name is the name to which this will be translated in some places in the Phred/Phrap/Mesquite system. The long sample name is the name to which it will be translated to in the sequence names of process sequences. The long name is optional. The short name is used for file names, to ensure that file names are not longer the maximum file name length of the operation system. The two formats differ in the character that separates the parts (a tab or space) and the structure of the first three elements. </p>
+  <h3>Delimited by tabs</h3>
+  <p>In this format, the elements on each line are separated by tabs (<span class="style2"><img src="images/tab.gif" alt="" width="8" height="13"></span>), including a tab between the long sample name and the semicolon:</p>
+  <p class="style2">&lt;sample code&gt;<img src="images/tab.gif" width="8" height="13">&lt;short sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">&lt;long sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    &lt;sample code&gt;<img src="images/tab.gif" width="8" height="13">&lt;short sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">&lt;long sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    &lt;sample code&gt;<img src="images/tab.gif" width="8" height="13">&lt;short sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">&lt;long sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">;  </p>
   <p>Here is part of an example file: </p>
-  <p class="style2">1839	'Bemb honestum VA 1839'	'Bemb honestum VA:Wingina 1839' ;<br>
-    1840	'Bemb honestum VA 1840'	'Bemb honestum VA:New Canton 1840' ;<br>
-    1841	'Bemb honestum VA 1841'	'Bemb honestum VA:New Canton 1841' ;<br>
-    1842	'Bemb arenobilis NC 1842'	'Bemb arenobilis NC:Bynum 1842' ;<br>
-    1843	'Bemb arenobilis VA 1843'	'Bemb arenobilis VA:Brookneal 1843' ;<br>
+  <p class="style2">1839<img src="images/tab.gif" alt="" width="8" height="13">Bemb honestum VA 1839<img src="images/tab.gif" alt="" width="8" height="13">Bembidion honestum VA:Wingina 1839<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    1840<img src="images/tab.gif" alt="" width="8" height="13">Bemb honestum VA 1840<img src="images/tab.gif" alt="" width="8" height="13">Bembidion honestum VA:New Canton 1840<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    1841<img src="images/tab.gif" alt="" width="8" height="13">Bemb honestum VA 1841<img src="images/tab.gif" alt="" width="8" height="13">Bembidion honestum VA:New Canton 1841<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    1842<img src="images/tab.gif" alt="" width="8" height="13">Bemb arenobilis NC 1842<img src="images/tab.gif" alt="" width="8" height="13">Bembidion arenobilis NC:Bynum 1842<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    1843<img src="images/tab.gif" alt="" width="8" height="13">Bemb arenobilis VA 1843<img src="images/tab.gif" alt="" width="8" height="13">Bembidion arenobilis VA:Brookneal 1843<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    2082<img src="images/tab.gif" alt="" width="8" height="13">Amerizus spectabile CA 2082<img src="images/tab.gif" alt="" width="8" height="13">Amerizus spectabile CA 2082<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    2083<img src="images/tab.gif" alt="" width="8" height="13">Bemb complanulum BC 2083<img src="images/tab.gif" alt="" width="8" height="13">Bembidion complanulum BC 2083<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    2084<img src="images/tab.gif" alt="" width="8" height="13">Bemb farrarae BC 2084<img src="images/tab.gif" alt="" width="8" height="13">Bembidion farrarae BC 2084<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    2085<img src="images/tab.gif" alt="" width="8" height="13">Bemb improvidens BC 2085<img src="images/tab.gif" alt="" width="8" height="13">Bembidion improvidens BC 2085<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    2086<img src="images/tab.gif" alt="" width="8" height="13">Bemb mimus IA 2086<img src="images/tab.gif" alt="" width="8" height="13">Bembidion mimus IA:Manchester 2086<img src="images/tab.gif" alt="" width="8" height="13">;<br>
+    2087<img src="images/tab.gif" alt="" width="8" height="13">Bemb platynoides OR 2087<img src="images/tab.gif" alt="" width="8" height="13">Bembidion platynoides OR 2087<img src="images/tab.gif" alt="" width="8" height="13">;</p>
+  <p>In this format, the elements can consist of multiple tokens.</p>
+  <h3>Delimited by spaces</h3>
+<p>In this format, the elements on each line are separated by spaces; there does not need to be a space between the long sample name and the semicolon:</p>
+  <p class="style2">&lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br>
+  &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br>
+  &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;  </p>
+  <p>Each element in this format must consist of exactly one token. If the sample name would naturally consist of more than one token, it must be &quot;tokenized&quot; by surrounding it by single quotes, and converting any contained single quotes into two consecutive quotes. Here is part of an example file: </p>
+  <p class="style2">1839	'Bemb honestum VA 1839'	'Bembidion honestum VA:Wingina 1839' ;<br>
+    1840	'Bemb honestum VA 1840'	'Bembidion honestum VA:New Canton 1840' ;<br>
+    1841	'Bemb honestum VA 1841'	'Bembidion honestum VA:New Canton 1841' ;<br>
+    1842	'Bemb arenobilis NC 1842'	'Bembidion arenobilis NC:Bynum 1842' ;<br>
+    1843	'Bemb arenobilis VA 1843'	'Bembidion arenobilis VA:Brookneal 1843' ;<br>
     2082	'Amerizus spectabile CA 2082'	'Amerizus spectabile CA 2082' ;<br>
-    2083	'Bemb complanulum BC 2083'	'Bemb complanulum BC 2083' ;<br>
-    2084	'Bemb farrarae BC 2084'	'Bemb farrarae BC 2084' ;<br>
-    2085	'Bemb improvidens BC 2085'	'Bemb improvidens BC 2085' ;<br>
-    2086	'Bemb mimus IA 2086'	'Bemb mimus IA:Manchester 2086' ;<br>
-    2087	'Bemb platynoides OR 2087'	'Bemb platynoides OR 2087' ;</p>
+    2083	'Bemb complanulum BC 2083'	'Bembidion complanulum BC 2083' ;<br>
+    2084	'Bemb farrarae BC 2084'	'Bembidion farrarae BC 2084' ;<br>
+    2085	'Bemb improvidens BC 2085'	'Bembidion improvidens BC 2085' ;<br>
+    2086	'Bemb mimus IA 2086'	'Bembidion mimus IA:Manchester 2086' ;<br>
+    2087	'Bemb platynoides OR 2087'	'Bembidion platynoides OR 2087' ;</p>
+  <p class="style2"></p>
+  <p class="style2">&nbsp;</p>
   <h2>Future directions </h2>
   <p>An XML format is being developed for this information, but it is not yet supported. </p>
 <!-- InstanceEndEditable --></div>
@@ -79,6 +100,7 @@
   			<li><a href="display.html">Display Options</a></li>
   			<li><a href="callingBases.html">Calling Bases</a></li>
 		</ul>
+      <li><a href="genbank.html">GenBank</a></li>
       <li><a href="otherPrograms.html">Sequencher &amp; Others </a></li>
       <li><a href="acknowledgements.html">Acknowledgements</a></li>
       <li><a href="citation.html">Citation</a></li>
@@ -95,7 +117,7 @@
 </div>
 <div id="navBarExtension">&nbsp;</div>
 <!--end navbar -->
-<div id="siteInfo"> Copyright &copy; 2009 <a href="http://david.bembidion.org">David
+<div id="siteInfo"> Copyright &copy; 2010 <a href="http://david.bembidion.org">David
     R. Maddison</a> and <a href="http://salticidae.org/wpm/home.html">Wayne P.
     Maddison</a> </div>
 <br>
