@@ -20,6 +20,7 @@ public class ChromaseqInfoFile {
 	Document doc = null;
 	Element rootElement = null;
 	Element chromaseqElement = null;
+	Element sampleElement;
 	Element processedFolderElement= null;
 	String filePath = null;
 	String directoryPath = null;
@@ -37,6 +38,7 @@ public class ChromaseqInfoFile {
 		doc = null;
 		chromaseqElement = null;
 		processedFolderElement= null;
+		sampleElement=null;
 	}
 
 	/*.................................................................................................................*/
@@ -71,6 +73,16 @@ public class ChromaseqInfoFile {
 		}
 	}
 	/*.................................................................................................................*/
+	public static void dispose(Vector infoFiles) {
+		if (infoFiles==null)
+				return;
+		for (int i=0; i<infoFiles.size(); i++) {
+			ChromaseqInfoFile infoFile = (ChromaseqInfoFile) infoFiles.get(i);
+			infoFile.dispose();
+		}
+		infoFiles.removeAllElements();
+	}
+	/*.................................................................................................................*/
 	public  boolean write(){
 		if (StringUtil.blank(filePath))
 			return false;
@@ -81,7 +93,7 @@ public class ChromaseqInfoFile {
 	}
 	/*.................................................................................................................*/
 	public  Element addSample(String fullName, String voucherCode){
-		Element sampleElement = processedFolderElement.addElement("sample");
+		sampleElement = processedFolderElement.addElement("sample");
 		sampleElement.addAttribute("fullName", fullName);
 		sampleElement.addAttribute("voucherCode", voucherCode);
 		return sampleElement;
@@ -112,7 +124,7 @@ public class ChromaseqInfoFile {
 	}
 
 	/*.................................................................................................................*/
-	public void addChromatogramInfo(Element sampleElement, String originalChromFileName, String newChromFileName, String primerName){
+	public void addChromatogramInfo(String originalChromFileName, String newChromFileName, String primerName){
 		if (sampleElement==null)
 			return;
 		Element chromatogramElement = sampleElement.addElement("chromatogram");
