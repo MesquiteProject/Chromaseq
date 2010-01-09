@@ -1,5 +1,7 @@
 package mesquite.chromaseq.lib;
 
+import java.util.Vector;
+
 import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
@@ -19,6 +21,8 @@ public class ChromaseqInfoFile {
 	Element rootElement = null;
 	Element chromaseqElement = null;
 	Element processedFolderElement= null;
+	String filePath = null;
+	String directoryPath = null;
 
 	public ChromaseqInfoFile() {
 		rootElement = DocumentHelper.createElement("mesquite");
@@ -36,7 +40,38 @@ public class ChromaseqInfoFile {
 	}
 
 	/*.................................................................................................................*/
-	public  boolean write(String filePath){
+	public void setFilePath(String path) {
+		this.filePath = path;
+	}
+	public void setDirectoryPath(String path) {
+		this.directoryPath = path;
+	}
+	public String getDirectoryPath() {
+		return directoryPath;
+	}
+	/*.................................................................................................................*/
+	public static ChromaseqInfoFile getInfoFile(Vector infoFiles, String directoryPath) {
+		if (infoFiles==null || StringUtil.blank(directoryPath))
+				return null;
+		for (int i=0; i<infoFiles.size(); i++) {
+			ChromaseqInfoFile infoFile = (ChromaseqInfoFile) infoFiles.get(i);
+			if (directoryPath.equals(infoFile.getDirectoryPath()))
+					return infoFile;
+		}
+		return null;
+	}
+	/*.................................................................................................................*/
+	public static void writeInfoFiles(Vector infoFiles) {
+		if (infoFiles==null)
+				return;
+		for (int i=0; i<infoFiles.size(); i++) {
+			ChromaseqInfoFile infoFile = (ChromaseqInfoFile) infoFiles.get(i);
+			if (infoFile!=null)
+				infoFile.write();
+		}
+	}
+	/*.................................................................................................................*/
+	public  boolean write(){
 		if (StringUtil.blank(filePath))
 			return false;
 		String xml = XMLUtil.getDocumentAsXMLString(doc, false);
