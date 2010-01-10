@@ -123,7 +123,8 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 		storePreferences();
 		if (directory.exists() && directory.isDirectory()) {
 			logBuffer.setLength(0);
-			progIndicator = new ProgressIndicator(getProject(),"Preparing for Phred/Phrap");
+			String[] files = directory.list();
+			progIndicator = new ProgressIndicator(getProject(),"Segregating Chromatograms", files.length);
 			progIndicator.setStopButtonName("Stop");
 			progIndicator.start();
 			boolean abort = false;
@@ -151,7 +152,6 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 
 			int loc = 0;
 
-			String[] files = directory.list();
 			
 			String processedDirPath = directoryPath + MesquiteFile.fileSeparator;
 			if (StringUtil.notEmpty(sampleNameToMatch) && StringUtil.notEmpty(geneNameToMatch))  // if both not empty have to match both
@@ -192,7 +192,7 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 				lowerCaseFragmentNameToMatch= geneNameToMatch.toLowerCase();
 
 			for (int i=0; i<files.length; i++) {
-				progIndicator.spin();
+				progIndicator.setCurrentValue(i);
 				if (progIndicator.isAborted())
 					abort = true;
 				if (abort)
@@ -275,7 +275,7 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 						fullSeqName = StringUtil.cleanseStringOfFancyChars(fullSeqName + sampleCodeSuffix.getValue());
 
 
-						progIndicator.spin();
+						//progIndicator.spin();
 						
 						boolean matchesSampleName = (StringUtil.notEmpty(lowerCaseSampleNameToMatch) && (seqName.toLowerCase().indexOf(lowerCaseSampleNameToMatch)>=0 || fullSeqName.toLowerCase().indexOf(lowerCaseSampleNameToMatch)>=0));
 						boolean matchesFragmentName = (StringUtil.notEmpty(lowerCaseFragmentNameToMatch) && (fragName.toLowerCase().indexOf(lowerCaseFragmentNameToMatch)>=0));
