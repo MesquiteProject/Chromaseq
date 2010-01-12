@@ -192,9 +192,12 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 				lowerCaseFragmentNameToMatch= geneNameToMatch.toLowerCase();
 
 			for (int i=0; i<files.length; i++) {
-				progIndicator.setCurrentValue(i);
-				if (progIndicator.isAborted())
-					abort = true;
+				if (progIndicator!=null){
+					progIndicator.setCurrentValue(i);
+					progIndicator.setText("Number of files segregated: " + numPrepared);
+					if (progIndicator.isAborted())
+						abort = true;
+				}
 				if (abort)
 					break;
 				fragName = "";
