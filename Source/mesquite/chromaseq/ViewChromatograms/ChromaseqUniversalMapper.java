@@ -50,7 +50,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	int it=0;
 	boolean hasBeenSet = false;
 	
-	double registrationQuality =0.0;
+	double registrationConflict =0.0;
 
 	int[][] universalBaseFromOtherBase;
 	int[][] otherBaseFromUniversalBase;
@@ -461,12 +461,17 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 				}
 		}
 
-		double newRegistrationQuality = calcMatchToEditedScore(it);
+		double newRegistrationConflict = calcMatchToEditedScore(it);
 		
-		if (newRegistrationQuality>20.0)
-			if (registrationQuality<20.0)
-				MesquiteMessage.discreetNotifyUser("\nThe reads and sequences appear to be improperly registered. You may wish to choose one of the Force Reregistration items from the Chromatogram menu. ");
-		registrationQuality = newRegistrationQuality;
+		if (newRegistrationConflict>20.0)
+			if (registrationConflict<20.0)
+				MesquiteMessage.discreetNotifyUser("\nThe reads and sequences appear to be improperly registered. You may wish to choose one of the Force Reregistration items from the Chromatogram menu. \n[New registration conflict score: " + newRegistrationConflict + ", Previous registration conflict score: " + registrationConflict+"]");
+		registrationConflict = newRegistrationConflict;
+		
+		if (MesquiteTrunk.debugMode){
+			System.out.println("ChromaseqUniversalMapper");
+			System.out.println("     Registration conflict score: "+newRegistrationConflict);
+		}
 	
 		hasBeenSet = true;
 
@@ -560,12 +565,15 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			int readBase = read.getReadBaseFromContigBase(contigBase);
 			if (readBase>=0 && readBase<read.getBasesLength()) {
 				int qual = read.getPhdBaseQuality(readBase);
-				char c = read.getPhdBaseChar(readBase);
-				long readState = DNAState.fromCharStatic(c);
 
-				int matrixBase = getEditedMatrixBaseFromUniversalBase(universalBase);
-				long editedState = editedData.getState(matrixBase,it);
 				if (qual>20) {
+					char c = read.getPhdBaseChar(readBase);
+					long readState = DNAState.fromCharStatic(c);
+					int matrixBase = getEditedMatrixBaseFromUniversalBase(universalBase);
+					
+					long editedState = editedData.getState(matrixBase,it);
+					if (complementedInEditData) 
+						editedState = DNAState.complement(editedState);
 					 if (!DNAState.equalsIgnoreCase(readState, editedState))
 						conflicts++;
 					 bases++;
