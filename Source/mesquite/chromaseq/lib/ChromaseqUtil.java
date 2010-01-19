@@ -89,7 +89,7 @@ public class ChromaseqUtil{
 	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
 	public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //long: tInfo, data(ch); MesquiteInteger: data(cells)
 
-	public static final NameReference contigMapperRef = NameReference.getNameReference("contigMapper");//long: tInfo
+	public static final NameReference contigMapperRef = NameReference.getNameReference("contigMapper");
 
 	public static final NameReference qualityNameRef = NameReference.getNameReference("phredPhrapQuality"); //double: tinfo
 
@@ -97,6 +97,7 @@ public class ChromaseqUtil{
 
 	public static final NameReference paddingRef = NameReference.getNameReference("paddingBefore"); //MesquiteInteger: data(cells)
 	//public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //MesquiteInteger: data(cells)
+
 
 	/*.................................................................................................................*/
 
@@ -786,6 +787,62 @@ public class ChromaseqUtil{
 		}
 		return editedBases;
 	}
+	/*.................................................................................................................*/
+	public static void purgeChromaseqData(CharacterData data) {
+		DNAData editedData = getEditedData(data);
+		CategoricalData addedBaseData = getAddedBaseData(data);
+		if (addedBaseData!=null){
+			addedBaseData.deleteMe(false);  
+		}
+		MeristicData registryData = getRegistryData(data);
+		if (registryData!=null){
+			registryData.deleteMe(false);  
+		}
+		MeristicData reverseRegistryData = getReverseRegistryData(data);
+		if (reverseRegistryData!=null){
+			reverseRegistryData.deleteMe(false);  
+		}
+		DNAData originalData = getOriginalData(data);
+		if (originalData!=null){
+			originalData.deleteMe(false);  
+		}
+		ContinuousData qualityData = getQualityData(data);
+		if (qualityData!=null){
+			qualityData.deleteMe(false);  
+		}
+
+		editedData.detachAllObjectsOfName(ChromaseqUtil.PHPHMQVERSIONREF);
+		editedData.detachAllObjectsOfName(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
+		editedData.detachAllObjectsOfName(ChromaseqUtil.PHPHIMPORTIDREF);
+		editedData.detachAllObjectsOfName(ChromaseqUtil.GENENAMEREF);
+		editedData.detachAllObjectsOfName(ChromaseqUtil.REGISTRATIONBUILDREF);
+
+		removeAssociatedObjects(editedData, origTaxonNameRef);
+		removeAssociatedObjects(editedData, aceRef);
+		removeAssociatedObjects(editedData, reprocessContigRef);
+		removeAssociatedObjects(editedData, chromatogramReadsRef);
+		
+		 Associable tInfo = editedData.getTaxaInfo(false);
+		 if (tInfo != null){
+			 tInfo.removeAssociatedLongs(numChromatogramsRef);
+			 tInfo.removeAssociatedLongs(whichContigRef);
+			 tInfo.removeAssociatedLongs(startTrimRef);
+			 tInfo.removeAssociatedLongs(trimmableNameRef);
+			 tInfo.removeAssociatedDoubles(qualityNameRef);
+		 }
+		removeAssociatedObjects(editedData, paddingRef);
+	//	removeAssociatedObjects(editedData, qualityNameRef);
+		removeAssociatedObjects(editedData, contigMapperRef);
+		removeAssociatedObjects(editedData, trimmableNameRef);
+	//	removeAssociatedObjects(editedData, whichContigRef);
+		removeAssociatedObjects(editedData, startTrimRef);
+		removeAssociatedObjects(editedData, sampleCodeRef);
+		removeAssociatedObjects(editedData, sampleCodeNamesRef);
+		removeAssociatedObjects(editedData, primerForEachReadNamesRef);
+		removeAssociatedObjects(editedData, origReadFileNamesRef);
+		
+}
+
 
 	/*.................................................................................................................*/
 	public static int getWhichContig(DNAData editedData, int it) {

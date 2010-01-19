@@ -336,7 +336,7 @@ public class StateConsistencyInWindowStrip extends DataColumnNamesAssistant {
 				 int start = ic-length+j;
 				 if (start<0) continue;
 				 int end = start+length-1;
-				 if (end>numChars) continue;
+				 if (end>=numChars) continue;
 				 primers++;
 
 				 currentScore = scoreForPrimer(start, end);
