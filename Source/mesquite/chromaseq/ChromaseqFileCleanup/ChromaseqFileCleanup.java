@@ -131,6 +131,22 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 
 	}
 	/*.................................................................................................................*/
+	public boolean hasDisconnectedAceFiles(MesquiteFile f) {
+		if (f==null)
+			return false;
+		if (f.getProject()==null)
+			return false;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				if (AceDirectoryProcessor.hasDisconnectedAceFiles(data, this))
+					return true;
+			}
+		}
+		return false;
+	}
+	/*.................................................................................................................*/
 	public void checkNoContigAceFiles(MesquiteFile f) {
 		if (f==null)
 			return;
@@ -172,6 +188,25 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		return changed;
 	}
 	/*.................................................................................................................*/
+	public void removeAllChromaseqLinks(MesquiteFile f) {
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		count++;
+		boolean toChange = false;
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+				ChromaseqUtil.purgeChromaseqData(data);
+				data.notifyListeners(this, new Notification(MesquiteListener.DATA_CHANGED));
+				data.setDirty(true);
+			}
+		}
+		resave = toChange;
+	}
+	/*.................................................................................................................*/
 	public void deleteExtraRegistryMatrices(MesquiteFile f) {
 		if (f==null)
 			return;
@@ -209,9 +244,21 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 			}
 		}
 	}
+	
+	boolean removeChromaseqLinks = false;
 	/*.................................................................................................................*/
 	public void aboutToReadMesquiteBlock(MesquiteFile f) {
-		checkNoContigAceFiles(f);
+		boolean disconnected = hasDisconnectedAceFiles(f);
+		boolean checkNoContig = true;
+		if (disconnected){
+			if (AlertDialog.query(containerOfModule(), "Chromaseq data disconnected", "The file specifies that Chromaseq data (chromatograms, ACE files) are linked to sequences, but some of these data can not be found. "+
+					"Do you want to remove all Chromaseq data?", "Remove Links", "Keep Links", -1)) {
+				removeChromaseqLinks = true;
+			} 
+			checkNoContig=false;
+		}
+		if (checkNoContig)
+			checkNoContigAceFiles(f);
 		createRegistryDataIfNeeded(f);
 	}
 	/*.................................................................................................................*/
@@ -244,6 +291,9 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		processNoContigAceFiles(f);
 		createRegistryDataIfNeeded(f);
 		deleteExtraRegistryMatrices(f);
+		if (removeChromaseqLinks)
+			removeAllChromaseqLinks(f);
+		removeChromaseqLinks = false;
 		
 		//deattachChromaseqBuild(f);
 		ListableVector matrices = f.getProject().getCharacterMatrices();

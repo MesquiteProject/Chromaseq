@@ -1175,7 +1175,7 @@ public class ChromaseqUtil{
 		PairwiseAligner aligner = PairwiseAligner.getDefaultAligner(editedData);
 		int count=0;
 		for (int it=0; it<registryData.getNumTaxa(); it++)  
-			if (AceFile.hasAceFile(editedData, it)){
+			if (AceFile.hasAceFilePath(editedData, it)){
 				if (count==0) 
 					MesquiteTrunk.mesquiteTrunk.logln("Creating Registry Data [" + editedData.getName() + "]");
 				else

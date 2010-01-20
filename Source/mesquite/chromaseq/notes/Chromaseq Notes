@@ -2,6 +2,8 @@
 - reconnect directories for Kojun
 - speed up primers
 
+- on purging of Chromaseq data, have it switch off ColorByQuality
+
 - on RC sequences primers shown in wrong place?
 
 
