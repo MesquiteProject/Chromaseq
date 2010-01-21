@@ -167,6 +167,12 @@ public class ChromaseqUtil{
 	}
 	
 
+	public static boolean validChromaseqMatrix(CharacterData data) {
+		DNAData originalData = getOriginalData(data);
+		if (originalData==null)
+			return false;
+		return true;
+	}
 
 	/*.................................................................................................................*/
 	public static ContigMapper getContigMapperAssociated(MolecularData data, int it) {

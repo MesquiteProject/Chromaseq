@@ -1,5 +1,6 @@
+- reconnect to m.ace file in other way.
 
-- reconnect directories for Kojun
+
 - speed up primers
 
 - on purging of Chromaseq data, have it switch off ColorByQuality

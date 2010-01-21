@@ -52,6 +52,8 @@ public class ContigMapper {
 		if (editedData==null || contig==null)
 			return originalMatrixBase;
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
+		if (originalData==null)
+			return originalMatrixBase;
 		int trimmedBase = originalData.numValidStateOrUnassigned(0, originalMatrixBase, it)-1;  // how many trimmed bases are up to that point
 		int contigBase = contig.getContigBaseFromTrimmedBase(trimmedBase);
 		return contigBase;  //-startingAddedBeforeOriginalTrim

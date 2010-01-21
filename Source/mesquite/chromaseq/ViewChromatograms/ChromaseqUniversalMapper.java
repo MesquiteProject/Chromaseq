@@ -90,10 +90,11 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		if (obj instanceof CharacterData) {
 			
 //Debugg.println("---- ChromaseqUniversalMapper.changed()");
-
-			reset(true);
-			ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
-			contigDisplay.repaintPanels();
+			if (ChromaseqUtil.validChromaseqMatrix((CharacterData)obj)) {
+				reset(true);
+				ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
+				contigDisplay.repaintPanels();
+			}
 		} 
 	}
 	/** passes which object was disposed*/
