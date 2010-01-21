@@ -222,7 +222,7 @@ public class AceDirectoryProcessor {
 		if( editedData==null)
 			return true;
 		for (int it=0; it<editedData.getNumTaxa(); it++)  
-			if (AceFile.hasAceFilePath(editedData, it) && !AceFile.hasAceFile(editedData,it)) {
+			if (AceFile.hasAceFilePath(editedData, it) && !AceFile.hasAceFile(ownerModule, editedData,it)) {
 				return true;
 			}
 		return false;
@@ -238,7 +238,7 @@ public class AceDirectoryProcessor {
 			boolean warn = false;
 			for (int it=0; it<editedData.getNumTaxa(); it++)  
 				if (AceFile.hasAceFilePath(editedData, it)){
-					if (!AceFile.hasAceFile(editedData,it)) {
+					if (!AceFile.hasAceFile(ownerModule,editedData,it)) {
 					}
 					AceFile ace = AceFile.getAceFile(ownerModule, editedData, it);
 					if (ace!=null) {

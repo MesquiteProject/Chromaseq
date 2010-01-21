@@ -251,8 +251,11 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		boolean disconnected = hasDisconnectedAceFiles(f);
 		boolean checkNoContig = true;
 		if (disconnected){
+			String helpString = "If you choose the remove the data, it will be more difficult to reconnect the sequence to your chromatograms in the future. " +
+			"If you choose to keep the data, you can later reconnect the sequence to your ACE files and chromatograms by using the Show Chromatograms tool "+
+			"in the matrix editor.";
 			if (AlertDialog.query(containerOfModule(), "Chromaseq data disconnected", "The file specifies that Chromaseq data (chromatograms, ACE files) are linked to sequences, but some of these data can not be found. "+
-					"Do you want to remove all Chromaseq data?", "Remove Links", "Keep Links", -1)) {
+					"Do you want to remove all Chromaseq data?", "Remove Chromaseq Data", "Keep Data", -1, helpString)) {
 				removeChromaseqLinks = true;
 			} 
 			checkNoContig=false;
