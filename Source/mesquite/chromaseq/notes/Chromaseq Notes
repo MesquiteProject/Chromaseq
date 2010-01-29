@@ -1,5 +1,7 @@
 - speed up primers
 
+have taxa boolean - rev comp
+
 - on purging of Chromaseq data, have it switch off ColorByQuality
 
 - on RC sequences primers shown in wrong place?
@@ -46,6 +48,7 @@ the method that it claims is chewing up time doesn't actually seem to be. I just
 ======================
 MANUAL
 	code or sample names can't start with "."
+	note oddities of Phrap, e.g., trimming ends, e.g., choosing source read
 	
 ======================
 ---------

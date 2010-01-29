@@ -465,8 +465,10 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		double newRegistrationConflict = calcMatchToEditedScore(it);
 		
 		if (newRegistrationConflict>20.0)
-			if (registrationConflict<20.0)
-				MesquiteMessage.discreetNotifyUser("\nThe reads and sequences appear to be improperly registered. You may wish to choose one of the Force Reregistration items from the Chromatogram menu. \n[New registration conflict score: " + newRegistrationConflict + ", Previous registration conflict score: " + registrationConflict+"]");
+			if (registrationConflict<20.0){
+				String name = contigDisplay.getTaxon().getName();
+				MesquiteMessage.discreetNotifyUser("\nThe reads and sequences for " + name + " appear to be improperly registered. You may wish to choose Force Reregistration from the Chromatogram menu to resolve this. \n\n[New registration conflict score: " + newRegistrationConflict + ", Previous registration conflict score: " + registrationConflict+"]");
+			}
 		registrationConflict = newRegistrationConflict;
 		
 		if (MesquiteTrunk.debugMode){
