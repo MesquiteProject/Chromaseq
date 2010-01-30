@@ -68,14 +68,22 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 					DNAData editedData= (DNAData)((CharacterData)obj);
 					//MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
 					//ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
-					if (editedData!=null) {
-						for (int it=0; it<editedData.getNumTaxa(); it++) {
-							ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
-							if (contigMapper!=null) {
-								contigMapper.inferFromExistingRegistry(editedData, it, this);
+					boolean recalcMappers = parameters==null;
+					if (!recalcMappers) {
+						if (parameters.length<3 || parameters[2]!=MesquiteListener.CELL_SUBSTITUTION)
+							recalcMappers=true;
+					}
+					if (recalcMappers){
+						if (editedData!=null) {
+							for (int it=0; it<editedData.getNumTaxa(); it++) {
+								ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
+								if (contigMapper!=null) {
+									contigMapper.inferFromExistingRegistry(editedData, it, this);
+								}
 							}
 						}
 					}
+					
 				}
 		} 
 	}

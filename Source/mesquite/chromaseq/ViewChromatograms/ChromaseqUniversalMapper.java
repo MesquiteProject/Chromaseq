@@ -91,9 +91,16 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			
 //Debugg.println("---- ChromaseqUniversalMapper.changed()");
 			if (ChromaseqUtil.validChromaseqMatrix((CharacterData)obj)) {
-				reset(true);
-				ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
-				contigDisplay.repaintPanels();
+				boolean recalcMappers = parameters==null;
+				if (!recalcMappers) {
+					if (parameters.length<3 || parameters[2]!=MesquiteListener.CELL_SUBSTITUTION || !ChromaseqUtil.isChromaseqEditedMatrix((CharacterData)obj))
+						recalcMappers=true;
+				}
+				if (recalcMappers){
+					reset(true);
+					ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
+					contigDisplay.repaintPanels();
+				}
 			}
 		} 
 	}
