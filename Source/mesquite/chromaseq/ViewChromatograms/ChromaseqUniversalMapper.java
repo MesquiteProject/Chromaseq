@@ -88,15 +88,11 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		int code = Notification.getCode(notification);
 		int[] parameters = Notification.getParameters(notification);
 		if (obj instanceof CharacterData) {
+			CharacterData data = (CharacterData)obj;
 			
 //Debugg.println("---- ChromaseqUniversalMapper.changed()");
-			if (ChromaseqUtil.validChromaseqMatrix((CharacterData)obj)) {
-				boolean recalcMappers = parameters==null;
-				if (!recalcMappers) {
-					if (parameters.length<3 || parameters[2]!=MesquiteListener.CELL_SUBSTITUTION || !ChromaseqUtil.isChromaseqEditedMatrix((CharacterData)obj))
-						recalcMappers=true;
-				}
-				if (recalcMappers){
+			if (ChromaseqUtil.validChromaseqMatrix(data)) {
+				if (!(data.singleCellSubstitution(notification) && ChromaseqUtil.isChromaseqEditedMatrix(data))){
 					reset(true);
 					ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
 					contigDisplay.repaintPanels();
