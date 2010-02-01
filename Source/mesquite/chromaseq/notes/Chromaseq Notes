@@ -1,10 +1,7 @@
-- store current tool on setting defaults
-- skip jump site if don't touch for focus
 
 - speed up primers
 - undo within chromatogram viewer
 
-have taxa boolean - rev comp
 
 - on purging of Chromaseq data, have it switch off ColorByQuality
 

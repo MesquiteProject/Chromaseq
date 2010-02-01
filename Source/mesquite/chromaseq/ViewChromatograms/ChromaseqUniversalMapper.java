@@ -79,6 +79,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 		contigMapper = ContigMapper.getContigMapper(editedData,contig, it);
 
+
 		init();
 	}
 

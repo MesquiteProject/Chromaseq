@@ -73,13 +73,22 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 					int itEnd = editedData.getNumTaxa();
 					if (editedData.singleCellSubstitution(notification))
 						recalcMappers = false;
-					else if (editedData.singleTaxonCellChanges(notification)){
+					else if (editedData.singleCellChange(notification)){
 						recalcMappers = true;
-						if (parameters!=null && parameters.length==1) {  //get first parameter, which is taxon changed
+						if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
+							itStart=parameters[1];
+							itEnd=parameters[1];
+						}
+					} 
+					else if (editedData.singleTaxonChange(notification)){
+						recalcMappers = true;
+						if (parameters!=null && parameters.length>=1) {  //get first parameter, which is taxon changed
 							itStart=parameters[0];
 							itEnd=parameters[0];
 						}
-					}
+					} 
+					else 
+						logln("Re-inferring all contig mappers.");
 					if (recalcMappers){
 						if (editedData!=null) {
 							for (int it=itStart; it<itEnd; it++) {
@@ -90,6 +99,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 							}
 						}
 					}
+
 					
 				}
 		} 

@@ -45,7 +45,7 @@ public class ChromatogramCanvas extends MousePanel {
 		this.id = id;
 		chromatogramPanel = parentV;
 		contigDisplay = chromatogramPanel.contigDisplay;
-		addKeyListener(contigDisplay);
+	//	addKeyListener(contigDisplay);   if this is in then skips problems with jump keys
 		chromatograms = parentV.chromatograms;
 		numChromatograms = parentV.getNumChromatograms();
 //		setBackground(Color.white);
