@@ -64,44 +64,50 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 			 if (code==MesquiteListener.NAMES_CHANGED || code==MesquiteListener.SELECTION_CHANGED) {
 				//	contigDisplay.repaintPanels();
 			}
-				else if (ChromaseqUtil.isChromaseqEditedMatrix((CharacterData)obj)){
-					DNAData editedData= (DNAData)((CharacterData)obj);
-					//MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
-					//ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
-					boolean recalcMappers = true;
-					int itStart = 0;
-					int itEnd = editedData.getNumTaxa();
-					if (editedData.singleCellSubstitution(notification))
-						recalcMappers = false;
-					else if (editedData.singleCellChange(notification)){
-						recalcMappers = true;
-						if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
-							itStart=parameters[1];
-							itEnd=parameters[1];
-						}
-					} 
-					else if (editedData.singleTaxonChange(notification)){
-						recalcMappers = true;
-						if (parameters!=null && parameters.length>=1) {  //get first parameter, which is taxon changed
-							itStart=parameters[0];
-							itEnd=parameters[0];
-						}
-					} 
-					else 
-						logln("Re-inferring all contig mappers.");
-					if (recalcMappers){
-						if (editedData!=null) {
-							for (int it=itStart; it<itEnd; it++) {
-								ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
-								if (contigMapper!=null) {
-									contigMapper.inferFromExistingRegistry(editedData, it, this);
-								}
-							}
-						}
-					}
+			 else if (!Notification.appearsCosmetic(notification) && ChromaseqUtil.isChromaseqEditedMatrix((CharacterData)obj)){
+				 if (!((code==MesquiteListener.PARTS_CHANGED || code==MesquiteListener.PARTS_MOVED) && notification.subcodesContains(MesquiteListener.TAXA_CHANGED))) {
+					 DNAData editedData= (DNAData)((CharacterData)obj);
+					 boolean recalcMappers = true;
+					 int itStart = 0;
+					 int itEnd = editedData.getNumTaxa();
+					 if (editedData.singleCellSubstitution(notification) || editedData.onlyAllCellsShifted(notification))
+						 recalcMappers = false;
+					 else if (editedData.singleCellChange(notification)){
+						 recalcMappers = true;
+						 if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
+							 itStart=parameters[1];
+							 itEnd=parameters[1];
+						 }
+					 } 
+					 else if (editedData.singleTaxonChange(notification)){
+						 recalcMappers = true;
+						 if (parameters!=null && parameters.length>=1) {  //get first parameter, which is taxon changed
+							 itStart=parameters[0];
+							 itEnd=parameters[0];
+						 }
+					 } 
 
-					
-				}
+					 if (recalcMappers){
+						 if (editedData!=null) {
+							 MesquiteTimer timer = null;
+							 if (itStart!=itEnd) {
+								 logln("Re-inferring all contig mappers.");
+								 timer = new MesquiteTimer();
+								 timer.start();
+							 }
+							 for (int it=itStart; it<itEnd; it++) {
+								 ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
+								 if (contigMapper!=null) {
+									 contigMapper.inferFromExistingRegistry(editedData, it, this);
+								 }
+							 }
+							 if (itStart!=itEnd && timer!=null) 
+								 logln("Contig mapper re-inference complete, time: " + timer.timeSinceLastInSeconds() + " seconds");
+						 }
+					 }
+
+				 }
+			 }
 		} 
 	}
 
