@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
+import mesquite.chromaseq.ViewChromatograms.ChromatogramCloseupPanel;
 import mesquite.lib.ColorDistribution;
 import mesquite.lib.Debugg;
 import mesquite.lib.IntegerArray;
@@ -17,6 +18,7 @@ import mesquite.lib.StringUtil;
 
 public class ChromatogramCanvas extends MousePanel {
 
+	protected ChromatogramCloseupPanel closeupPanel;
 	protected ChromatogramPanel chromatogramPanel;
 	protected ContigDisplay contigDisplay;
 	protected Chromatogram[] chromatograms; 
@@ -65,6 +67,53 @@ public class ChromatogramCanvas extends MousePanel {
 		}
 
 	}
+	/*..........................*/
+	public void setChromatograms(Chromatogram[] chromatograms) {
+		this.chromatograms = chromatograms;
+		if (chromatograms!=null && chromatograms[0]!=null) {
+			numChromatograms = chromatograms.length;
+			//		setBackground(Color.white);
+			reads =new Read[numChromatograms];
+			for (int i = 0; i<numChromatograms; i++)
+				reads[i] = chromatograms[i].getRead();
+			if (numChromatograms==1 && reads[0].getComplemented()) 
+				setBackground(ColorDistribution.veryVeryLightGray);
+			int i;
+			maxValue = 0;
+			if (canShowTraces())
+				initTraces(0);
+			selected = new boolean[contigDisplay.getTotalNumUniversalBases()];   // uses local read as index
+
+			for (i=0;i<contigDisplay.getTotalNumUniversalBases();i++) {
+				selected[i] = false;
+			}
+		}else
+			numChromatograms=0;
+
+	}
+	/*..........................*
+	public void setChromatogramPanel(ChromatogramPanel parentV) {
+		chromatogramPanel = parentV;
+		contigDisplay = chromatogramPanel.contigDisplay;
+		chromatograms = parentV.chromatograms;
+		numChromatograms = parentV.getNumChromatograms();
+		reads =new Read[numChromatograms];
+		for (int i = 0; i<numChromatograms; i++)
+			reads[i] = chromatograms[i].getRead();
+		if (numChromatograms==1 && reads[0].getComplemented()) 
+			setBackground(ColorDistribution.veryVeryLightGray);
+		int i;
+		maxValue = 0;
+		if (canShowTraces())
+			initTraces(0);
+		selected = new boolean[contigDisplay.getTotalNumUniversalBases()];   // uses local read as index
+
+		for (i=0;i<contigDisplay.getTotalNumUniversalBases();i++) {
+			selected[i] = false;
+		}
+
+	}
+	/*..........................*/
 	public boolean canShowTraces() {
 		return true;
 	}
@@ -206,6 +255,8 @@ public class ChromatogramCanvas extends MousePanel {
 	/** Given a pixel offset from left, returns the consensus position at that point. This is not the overall consensus position, zero-based,
 	 * but instead the position from the start of the main contig. Thus,  positions to the left of the main contig are -ve */
 	public int findConsensusBaseNumber(int whichRead, int xPixel, int firstReadBase, int lastReadBase, int firstReadLocation){ //this needs to return consensus position!
+		if (chromatograms==null || chromatograms.length==0 || chromatograms[whichRead]==null)
+			return MesquiteInteger.unassigned;
 		Graphics g = getGraphics();
 		Font f = null;
 		if (g != null)
@@ -323,6 +374,8 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 
 	protected int getPhdLocation(Read read, int width, int center, ContigDisplay panel, boolean calcAverageIfZero){
+		if (read==null)
+			return 0;
 		return read.getPhdLocation(center,panel,calcAverageIfZero);
 	}
 
@@ -630,8 +683,10 @@ public class ChromatogramCanvas extends MousePanel {
 			ic = findUniversalBaseNumber(SETREAD, x); 
 			readBaseNumber = ic;
 		}
+		Debugg.println("ChromatogramCanvas  closeupPanel: " + closeupPanel);
+		if (closeupPanel!=null)
+			closeupPanel.setReadBaseNumber(readBaseNumber);
 
-		
 		int quality = reads[SETREAD].getPhdBaseQuality(readBaseNumber);
 		double averageQuality = reads[SETREAD].getAverageQuality();
 		int numBasesHighQuality = reads[SETREAD].getNumBasesHighQuality();
@@ -659,5 +714,11 @@ public class ChromatogramCanvas extends MousePanel {
 		if (tool == null)
 			return;
 		setCurrentCursor(modifiers, x, y, (ChromatogramTool)tool);
+	}
+	public ChromatogramCloseupPanel getCloseupPanel() {
+		return closeupPanel;
+	}
+	public void setCloseupPanel(ChromatogramCloseupPanel closeupPanel) {
+		this.closeupPanel = closeupPanel;
 	}
 }
