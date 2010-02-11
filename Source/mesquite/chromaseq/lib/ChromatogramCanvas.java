@@ -240,6 +240,7 @@ public class ChromatogramCanvas extends MousePanel {
 
 		int firstReadLocation = getPhdLocation(reads[whichRead], cwidth, centerReadBase,contigDisplay,true) - cwidth/2;
 		int count = 0;
+		
 		while (getPhdLocation(reads[whichRead], cwidth, firstReadBase,contigDisplay,true)  - firstReadLocation >0 && firstReadLocation>0 && count++<200)
 			firstReadBase--; //correcting for error in numpeaksvisible for this read
 		count = 0;
@@ -269,7 +270,7 @@ public class ChromatogramCanvas extends MousePanel {
 		int cwidth = getBounds().width;
 		if (isShownReversed()) {
 			xPixel = cwidth - xPixel;
-			for (int i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
+			for (int i=firstReadBase; i<=lastReadBase;i++) {
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
 
 					int cmid = 10;
@@ -301,7 +302,7 @@ public class ChromatogramCanvas extends MousePanel {
 
 		}
 		else
-			for (int i=firstReadBase;i < chromatograms[whichRead].getBaseNumber() && i<=lastReadBase;i++) {
+			for (int i=firstReadBase; i<=lastReadBase;i++) { //i < chromatograms[whichRead].getBaseNumber() &&
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
 
 					int cmid = 10;
@@ -324,7 +325,6 @@ public class ChromatogramCanvas extends MousePanel {
 					}
 					if (xPixel < h + w){
 						int cons = getContigBaseFromReadBase(whichRead,i);
-						//	Debugg.println("xPixel " + xPixel + " cons " + cons);
 						return MesquiteInteger.unassigned;
 					}
 				}
