@@ -211,6 +211,11 @@ public class PrimerList {
 			tempList = tempList.substring(tempList.indexOf(";")+1, tempList.length());
 			tempList.trim();
 		}
+		if (numPrimers==0){
+			MesquiteMessage.discreetNotifyUser("No primers found in primer file; file may be in wrong format");
+			return;
+		}
+			
 		initializeArrays(numPrimers);
 
 		int count = -1;
