@@ -239,7 +239,10 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		int cwidth = getBounds().width;
 		double vertScale = 4.0;
 		double horizScale = 2.0;
-		int halfPeaks = 1;
+		int widthPerPeak = 40;
+		int approximatePeaks = cwidth/widthPerPeak;
+		int halfPeaks = approximatePeaks/2;
+		if (halfPeaks<1) halfPeaks=1;
 
 		centerBase=contigDisplay.getCenterBase();
 		if  (!MesquiteInteger.isCombinable(centerReadBase)) {
@@ -281,8 +284,8 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		}
 
 
-		int firstReadBase = centerReadBase - 2;
-		int lastReadBase = centerReadBase+2;
+		int firstReadBase = centerReadBase - halfPeaks;
+		int lastReadBase = centerReadBase+ halfPeaks;
 		
 		int maxHeight = 0;
 		for (int i=0; i<A.length;i++) {
