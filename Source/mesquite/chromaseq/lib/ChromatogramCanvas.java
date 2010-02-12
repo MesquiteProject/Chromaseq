@@ -54,8 +54,7 @@ public class ChromatogramCanvas extends MousePanel {
 		reads =new Read[numChromatograms];
 		for (int i = 0; i<numChromatograms; i++)
 			reads[i] = chromatograms[i].getRead();
-		if (numChromatograms==1 && reads[0].getComplemented()) 
-			setBackground(ColorDistribution.veryVeryLightGray);
+		setBackgroundColor();
 		int i;
 		maxValue = 0;
 		if (canShowTraces())
@@ -67,6 +66,10 @@ public class ChromatogramCanvas extends MousePanel {
 		}
 
 	}
+	public void setBackgroundColor() {
+		if (numChromatograms==1 && reads[0].getComplemented()) 
+			setBackground(ColorDistribution.veryVeryLightGray);
+	}
 	/*..........................*/
 	public void setChromatograms(Chromatogram[] chromatograms) {
 		this.chromatograms = chromatograms;
@@ -76,8 +79,7 @@ public class ChromatogramCanvas extends MousePanel {
 			reads =new Read[numChromatograms];
 			for (int i = 0; i<numChromatograms; i++)
 				reads[i] = chromatograms[i].getRead();
-			if (numChromatograms==1 && reads[0].getComplemented()) 
-				setBackground(ColorDistribution.veryVeryLightGray);
+			setBackgroundColor();
 			int i;
 			maxValue = 0;
 			if (canShowTraces())

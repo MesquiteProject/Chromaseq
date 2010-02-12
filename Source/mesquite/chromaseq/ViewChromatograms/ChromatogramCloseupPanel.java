@@ -122,7 +122,6 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 		this.readBaseNumber = readBaseNumber;
 		chromCanvas.setCenterReadBase(readBaseNumber);
 	}
-
 }
 
 class CloseupChromatogramCanvas extends ChromatogramCanvas {
@@ -164,6 +163,41 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		drawLine(g, width, pixels,getX(trace,peakBottom,pos,vertScale),pixels+2,getX(trace,peakBottom,pos+2,vertScale));
 	}
 	*/
+	public void setBackgroundColor() {
+		setBackground(Color.white);
+	}
+	
+	protected void drawBaseInfo(Graphics2D g, Color inverseBlackColor, long state, long complementState, String baseString, String complementString, int[] trace, int pos, int textLeft, int baseVert) {
+		Color baseColor;
+		if (isShownComplemented())
+			baseColor = contigDisplay.getBaseColor(complementState, contigDisplay.getBackgroundColor());
+		else 
+			baseColor = contigDisplay.getBaseColor(state,contigDisplay.getBackgroundColor());
+		if (baseColor.equals(Color.black) && darkBackground)
+			baseColor = inverseBlackColor;
+		g.setColor(baseColor);
+		if (isShownComplemented()) 
+			g.drawString(complementString+": " + trace[pos], textLeft,baseVert);
+		else
+			g.drawString(baseString+": " + trace[pos], textLeft,baseVert);
+	}
+
+	protected void drawBaseInfo(Graphics2D g, Color inverseBlackColor, long state, int pos, int textLeft, int baseVert) {
+		if (state==DNAState.A) {
+			drawBaseInfo(g,  inverseBlackColor, DNAState.A, DNAState.T, "A", "T", A, pos,  textLeft,  baseVert);
+		}
+		if (state==DNAState.C) {
+			drawBaseInfo(g,  inverseBlackColor, DNAState.C, DNAState.G, "C", "G", C, pos,  textLeft,  baseVert);
+		}
+		if (state==DNAState.G) {
+			drawBaseInfo(g,  inverseBlackColor, DNAState.G, DNAState.C, "G", "C", G, pos,  textLeft,  baseVert);
+		}
+		if (state==DNAState.T) {
+			drawBaseInfo(g,  inverseBlackColor, DNAState.T, DNAState.A, "T", "A", T, pos,  textLeft,  baseVert);
+		}
+	}
+
+
 	protected void drawLine(Graphics2D g, int width, int x, int y, int x2, int y2, int x3, int y3){
 		QuadCurve2D quadCurve = null;
 		if (isShownReversed()){
@@ -221,21 +255,18 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 			return;
 		if (!(g instanceof Graphics2D) || chromatograms==null || chromatograms.length==0 || chromatograms[SETREAD]==null)
 			return;
-		int v = -verticalPosition;
+		int v = 0;//-verticalPosition;
 		Graphics2D g2 = (Graphics2D)g;
-	    g2.setStroke(new BasicStroke(2));
 	    
 
 		if (chromatograms==null || chromatograms.length==0 || chromatograms[SETREAD]==null)
 			return;
 		Read read = chromatograms[SETREAD].getRead();
 		int cheight = getBounds().height;
-		int shadowHeight = 5;
-		int labelHeight = 18;
+//		int shadowHeight = 5;
+	//	int labelHeight = 18;
 	//	ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 
-		int labelBottom = v+cheight-shadowHeight;
-		int labelTop = labelBottom-labelHeight+1;
 		int cwidth = getBounds().width;
 		double vertScale = 4.0;
 		double horizScale = 2.0;
@@ -320,28 +351,26 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		Debugg.println("    +++++ firstReadLocation: " + firstReadLocation + " lastReadLocation: " + lastReadLocation);
 
 	*/	
-		/*David: here a correction is introduced to discover what is actually the first and last read bases visible.  Previously
-		these bases were calcualted incorrectly if some reads were effectively compressed, and thus drawing didn't go all the way to the edges
+		int peakBottom = cheight - 70; //+lines;
 
-		A similar problem of compression was affecting findConsensusBaseNumber, hence some of this code is repeated there.
+		g.setColor(Color.lightGray);
+	    g2.setStroke(new BasicStroke(1));
+		g2.drawLine(cwidth/2,0,cwidth/2, peakBottom);
+		g2.drawLine(0,peakBottom,cwidth, peakBottom);
+	    g2.setStroke(new BasicStroke(2));
 
-		 */
-		
 
 
 		Color inverseBlackColor = Color.white;
 
 		//		=====================  DRAWING THE PEAKS ==============================
-		int peakBottom = labelBottom - labelHeight; //+lines;
-		int prevCons = 0;
 		int lostSpaceByInsert = 0;
 		int lastReadPos = MesquiteInteger.unassigned;
-		int start= 0;
-		int end = cwidth-2;
 		int previousPosInChromatogram = firstReadLocation;
 		int previous2PosInChromatogram = firstReadLocation;
 		int nextPosInChromatogram = firstReadLocation;
-		
+		Color baseColor;
+
 	//	int half = firstReadLocation + (lastReadLocation-firstReadLocation)/2;
 
 		for (int posInChromatogram=firstReadLocation;posInChromatogram <= lastReadLocation;posInChromatogram++) {   //this goes through the pixels that are to be displayed, and sees if any from this read are in here
@@ -363,9 +392,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 						nextPosInChromatogram = posInChromatogram+1;
 						if (posInChromatogram>lastReadLocation)
 							posInChromatogram=lastReadLocation;
-						prevCons=ic;
 
-						Color baseColor;
 
 						if (closeupPanel.getShowA()) {
 							if (isShownComplemented())
@@ -429,6 +456,60 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 
 
 
+		int inc=15;
+		int baseVert = peakBottom+inc+5;
+		int textLeft = cwidth/2-20;
+		GraphicsUtil.setFontStyle(Font.BOLD,g);
+		GraphicsUtil.setFontSize(14,g);
+		int posInChromatogram = getPhdLocation(read, getBounds().width, centerReadBase,contigDisplay,true);
+		int ic = findConsensusBaseNumber(SINGLEREAD,posInChromatogram, firstReadBase, lastReadBase, firstReadLocation);
+
+		if (MesquiteInteger.isCombinable(ic)&&MesquiteInteger.isCombinable(firstReadLocation)){
+			if (MesquiteInteger.isCombinable(posInChromatogram) && (posInChromatogram>=0&&posInChromatogram+2<A.length )) {  //is it within bounds of read?
+				int minPeakHeightToDraw = 3;
+				if (A[posInChromatogram]>minPeakHeightToDraw || C[posInChromatogram]>minPeakHeightToDraw || G[posInChromatogram]>minPeakHeightToDraw || T[posInChromatogram]>minPeakHeightToDraw){
+					int[] traceHeights = new int[] {A[posInChromatogram],C[posInChromatogram],G[posInChromatogram],T[posInChromatogram]};
+					int[] originalTraceHeights = new int[] {A[posInChromatogram],C[posInChromatogram],G[posInChromatogram],T[posInChromatogram]};
+					IntegerArray.sort(traceHeights);
+					long[] order = new long[4];
+					int[] orderInt = new int[4];
+
+					for (int i=0; i<4;i++){
+						if (traceHeights[i]==A[posInChromatogram]){
+							order[i]=DNAState.A;
+							orderInt[i]=0;
+							traceHeights[i]=-1;
+						}else	if (traceHeights[i]==C[posInChromatogram]){
+							order[i]=DNAState.C;
+							orderInt[i]=1;
+							traceHeights[i]=-1;
+						}else	if (traceHeights[i]==G[posInChromatogram]){
+							order[i]=DNAState.G;
+							orderInt[i]=2;
+							traceHeights[i]=-1;
+						}else	if (traceHeights[i]==T[posInChromatogram]){
+							order[i]=DNAState.T;
+							orderInt[i]=3;
+							traceHeights[i]=-1;
+						}
+					}
+					
+					for (int i=3; i>=0;i--){
+						if (originalTraceHeights[orderInt[i]]>0) {
+							drawBaseInfo(g2,  inverseBlackColor, order[i], posInChromatogram,  textLeft,  baseVert);
+							baseVert+=inc;
+						}
+					}
+
+				}
+			}
+		}
+
+
+		
+		
+		
+		
 
 
 		MesquiteWindow.uncheckDoomed(this);
