@@ -197,6 +197,16 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		}
 	}
 
+	protected void drawAmbiguityInfo(Graphics2D g, long state, int textLeft, int ambiguityVert) {
+		g.setColor(Color.gray);
+		if (isShownComplemented()) 
+			g.drawString(DNAState.toNEXUSString(DNAState.complement(state)), textLeft,ambiguityVert);
+		else
+			g.drawString(DNAState.toNEXUSString(state), textLeft,ambiguityVert);
+
+
+	}
+
 
 	protected void drawLine(Graphics2D g, int width, int x, int y, int x2, int y2, int x3, int y3){
 		QuadCurve2D quadCurve = null;
@@ -458,6 +468,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 
 		int inc=15;
 		int baseVert = peakBottom+inc+5;
+		int ambiguityVert = peakBottom+inc+12;
 		int textLeft = cwidth/2-20;
 		GraphicsUtil.setFontStyle(Font.BOLD,g);
 		GraphicsUtil.setFontSize(14,g);
@@ -500,6 +511,23 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 							baseVert+=inc;
 						}
 					}
+					
+					long firstPair = DNAState.union(order[3], order[2]);
+					long firstTriplet = DNAState.union(order[3], order[2]);
+					firstTriplet = DNAState.union(firstTriplet,order[1]);
+					int ambShift=55;
+					if (originalTraceHeights[orderInt[2]]>originalTraceHeights[orderInt[3]]/10){
+						g2.setColor(Color.gray);
+					    g2.setStroke(new BasicStroke(1));
+						g.drawLine(textLeft+ambShift, ambiguityVert-inc-inc/2, textLeft+ambShift, ambiguityVert+inc/2);
+						drawAmbiguityInfo(g2,  firstPair,  textLeft+ambShift+4,  ambiguityVert);
+						ambiguityVert+=inc/2;
+						if (originalTraceHeights[orderInt[1]]>originalTraceHeights[orderInt[3]]/10){
+							g.drawLine(textLeft+ambShift+20, ambiguityVert-inc*2, textLeft+ambShift+20, ambiguityVert+inc);
+							drawAmbiguityInfo(g2,  firstTriplet,  textLeft+ambShift+25,  ambiguityVert);
+						}
+				}
+
 
 				}
 			}
