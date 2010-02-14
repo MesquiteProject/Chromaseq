@@ -257,7 +257,7 @@ public class ChromatogramCanvas extends MousePanel {
 	/*...........................................................................*/
 	/** Given a pixel offset from left, returns the consensus position at that point. This is not the overall consensus position, zero-based,
 	 * but instead the position from the start of the main contig. Thus,  positions to the left of the main contig are -ve */
-	public int findConsensusBaseNumber(int whichRead, int xPixel, int firstReadBase, int lastReadBase, int firstReadLocation){ //this needs to return consensus position!
+	public synchronized int findConsensusBaseNumber(int whichRead, int xPixel, int firstReadBase, int lastReadBase, int firstReadLocation){ //this needs to return consensus position!
 		if (chromatograms==null || chromatograms.length==0 || chromatograms[whichRead]==null)
 			return MesquiteInteger.unassigned;
 		Graphics g = getGraphics();
