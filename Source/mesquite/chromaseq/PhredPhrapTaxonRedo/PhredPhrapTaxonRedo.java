@@ -56,6 +56,11 @@ public class PhredPhrapTaxonRedo extends CategDataEditorInit {
 		if (ms!=null)
 			ms.setEnabled(b);
 	}
+	public void dispose(){
+		super.dispose();
+		if (data != null)
+			data.removeListener(this);
+	}
 
 	/** if returns true, then requests to remain on even after operateOnTaxa is called.  Default is false*/
 	public boolean pleaseLeaveMeOn(){

@@ -68,6 +68,12 @@ public class AceFileListAssistant extends TaxonListAssistant {
 		msSet = addMenuItem("Set path of m.ace file...", makeCommand("setFile", this));
 	}
 	/*.................................................................................................................*/
+	public void dispose() {
+		super.dispose();
+		if (taxa!=null)
+			taxa.removeListener(this);
+	}
+	/*.................................................................................................................*/
 	private void setFilePath(String arguments){
 		if (table !=null && taxa!=null) {
 			boolean changed=false;

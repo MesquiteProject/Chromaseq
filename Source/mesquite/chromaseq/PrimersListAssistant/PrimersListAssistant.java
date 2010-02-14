@@ -61,6 +61,12 @@ public class PrimersListAssistant extends TaxonListAssistant {
 		}
 		this.table = table;
 	}
+	/*.................................................................................................................*/
+	public void dispose() {
+		super.dispose();
+		if (taxa!=null)
+			taxa.removeListener(this);
+	}
 	/** Returns whether or not it's appropriate for an employer to hire more than one instance of this module.  
  	If false then is hired only once; second attempt fails.*/
 	public boolean canHireMoreThanOnce(){

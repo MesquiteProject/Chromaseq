@@ -31,6 +31,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		if (data!=null)
 			data.addListener(this);
 	}
+
 	/*.................................................................................................................*/
 	public MeristicData findReverseRegistry(CharacterData otherData) {
 		MeristicData possibleReverseRegistryData = ChromaseqUtil.getReverseRegistryData(otherData);

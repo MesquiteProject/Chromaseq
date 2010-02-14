@@ -112,6 +112,12 @@ public class StateConsistencyInWindowStrip extends DataColumnNamesAssistant {
 		calculateSequence();
 	}
 	/*.................................................................................................................*/
+	public void dispose() {
+		super.dispose();
+		if (data!=null)
+			data.removeListener(this);
+	}
+	/*.................................................................................................................*/
 	 public String getShortParameters() {
 		 String s = "(";
 		 if (stateTask!=null)

@@ -45,6 +45,8 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 	}
 	public void centerPanelAtOverallPosition(int i){
 		centerBase = i;
+		readBaseNumber = chromCanvas.getReadBaseFromUniversalBase(CloseupChromatogramCanvas.SINGLEREAD,centerBase);
+		chromCanvas.setCenterReadBase(readBaseNumber);
 		chromCanvas.repaint();
 	}
 	/*.................................................................................................................*/
@@ -209,7 +211,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 
 	/*...........................................................................*/
 
-	static final int SINGLEREAD = 0;
+	public static final int SINGLEREAD = 0;
 	
 	/*...........................................................................*/
 	public synchronized void paint(Graphics g) {	

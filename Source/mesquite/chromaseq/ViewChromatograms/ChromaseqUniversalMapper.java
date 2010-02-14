@@ -16,6 +16,7 @@ import java.awt.Graphics;
 
 import mesquite.categ.lib.*;
 import mesquite.lib.characters.*;
+import mesquite.lib.duties.FileCoordinator;
 import mesquite.lib.*;
 import mesquite.chromaseq.lib.*;
 import mesquite.cont.lib.ContinuousData;
@@ -25,6 +26,8 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	public ContigMapper getContigMapper() {
 		return contigMapper;
 	}
+	public static int totalCreated = 0;
+	public static int totalFinalized = 0;
 
 	public static final int ORIGINALUNTRIMMEDSEQUENCE = 0;   // this is the "Original Untrimmed" sequence line in the chromatogram viewer
 	public static final int ORIGINALTRIMMEDSEQUENCE = 3;    // this is the "Original Trimmed" sequence line in the chromatogram viewer.
@@ -79,6 +82,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 
 		contigMapper = ContigMapper.getContigMapper(editedData,contig, it);
 
+		ChromaseqUniversalMapper.totalCreated++;
 
 		init();
 	}
@@ -101,6 +105,16 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 			}
 		} 
 	}
+	public void finalize() throws Throwable {
+		ChromaseqUniversalMapper.totalFinalized++;
+		super.finalize();
+	}
+	/*.................................................................................................................*/
+	public void dispose() {
+		if (editedData!=null)
+			editedData.removeListener(this);
+	}
+
 	/** passes which object was disposed*/
 	public void disposing(Object obj){
 	}

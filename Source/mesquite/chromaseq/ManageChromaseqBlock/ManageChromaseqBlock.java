@@ -627,6 +627,27 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 			}
 		}
 	}
+	/*.................................................................................................................*/
+	public void removeListening(MesquiteFile f) {
+		if (f==null)
+			return;
+		if (f.getProject()==null)
+			return;
+		ListableVector matrices = f.getProject().getCharacterMatrices();
+		for (int i=0; i<matrices.size(); i++) {
+			CharacterData data = (CharacterData)matrices.elementAt(i);
+			if (ChromaseqUtil.isChromaseqRegistryMatrix(data)) {  // listen to registryData rather than editedData as the former needs to be changed first before the contigMapper can be updated
+				data.removeListener(this);
+			}
+			else if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {  // listen to registryData rather than editedData as the former needs to be changed first before the contigMapper can be updated
+				data.removeListener(this);
+			}
+		}
+	}
+	/*.................................................................................................................*/
+	public void dispose() {
+		super.dispose();
+	}
 
 	/*.................................................................................................................*/
 	/** A method called immediately after the file has been read in or completely set up (if a new file).*/

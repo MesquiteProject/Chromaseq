@@ -262,6 +262,8 @@ public class ChromatogramCanvas extends MousePanel {
 	public synchronized int findConsensusBaseNumber(int whichRead, int xPixel, int firstReadBase, int lastReadBase, int firstReadLocation){ //this needs to return consensus position!
 		if (chromatograms==null || chromatograms.length==0 || chromatograms[whichRead]==null)
 			return MesquiteInteger.unassigned;
+		if (reads==null || reads.length==0 || reads[whichRead]==null)
+			return MesquiteInteger.unassigned;
 		Graphics g = getGraphics();
 		Font f = null;
 		if (g != null)
@@ -275,7 +277,11 @@ public class ChromatogramCanvas extends MousePanel {
 		if (isShownReversed()) {
 			xPixel = cwidth - xPixel;
 			for (int i=firstReadBase; i<=lastReadBase;i++) {
+				if (reads==null || reads.length==0 || reads[whichRead]==null)
+					return MesquiteInteger.unassigned;
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
+					if (chromatograms==null || chromatograms.length==0 || chromatograms[whichRead]==null)
+						return MesquiteInteger.unassigned;
 
 					int cmid = 10;
 					if (fm != null)
@@ -307,7 +313,11 @@ public class ChromatogramCanvas extends MousePanel {
 		}
 		else
 			for (int i=firstReadBase; i<=lastReadBase;i++) { //i < chromatograms[whichRead].getBaseNumber() &&
+				if (reads==null || reads.length==0 || reads[whichRead]==null)
+					return MesquiteInteger.unassigned;
 				if (i>=0 && i<reads[whichRead].getBasesLength()) {
+					if (chromatograms==null || chromatograms.length==0 || chromatograms[whichRead]==null)
+						return MesquiteInteger.unassigned;
 
 					int cmid = 10;
 					if (fm != null)
@@ -450,7 +460,9 @@ public class ChromatogramCanvas extends MousePanel {
 	/*--------------------------------------*/
 	/*This returns for overall position i, what is the position in the read. */
 	public int getReadBaseFromUniversalBase(int whichRead,int i){
-		if (!contigDisplay.contigExists())
+		if (chromatograms==null || chromatograms.length==0 || chromatograms[whichRead]==null)
+			return i;
+		if (contigDisplay==null || !contigDisplay.contigExists())
 			return i;
 		int contigBase = contigDisplay.getContigBaseFromUniversalBase(i);
 		if (!MesquiteInteger.isCombinable(contigBase))
