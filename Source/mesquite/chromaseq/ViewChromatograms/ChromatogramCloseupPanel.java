@@ -207,58 +207,10 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 
 	}
 
-
-	protected void drawLine(Graphics2D g, int width, int x, int y, int x2, int y2, int x3, int y3){
-		QuadCurve2D quadCurve = null;
-		if (isShownReversed()){
-			quadCurve = new QuadCurve2D.Double(width-x,y,width-x2,y2,width-x3,y3);
-			g.draw(quadCurve);
-		}
-		else {
-			quadCurve = new QuadCurve2D.Double(x,y,x2,y2,x3,y3);
-			g.draw(quadCurve);
-		}
-	}
-	protected void drawLine(Graphics2D g, int width, int x, int y, int x2, int y2, int x3, int y3, int x4, int y4){
-		CubicCurve2D curve = null;
-		if (isShownReversed()){
-			curve = new CubicCurve2D.Double(width-x,y,width-x2,y2,width-x3,y3,width-x4,y4);
-			g.draw(curve);
-		}
-		else {
-			curve = new CubicCurve2D.Double(x,y,x2,y2,x3,y3, x4, y4);
-			g.draw(curve);
-		}
-	}
-	protected void drawLine(Graphics2D g, int width, int posPrev, int pos, int posNext, int[] trace, int peakBottom, double vertScale, double horizScale, int firstReadLocation){
-		int x1 = (int)((posPrev-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
-		int x2 = (int)((pos-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
-		int x3 = (int)((posNext-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
-		int y1 = getY(trace,peakBottom,posPrev,vertScale);
-		int y2 = getY(trace,peakBottom,pos,vertScale);
-		int y3 = getY(trace,peakBottom,posNext,vertScale);
-		drawLine(g, width, x1,y1,x2,y2,x3,y3);
-		//Debugg.println("x1 " + x1 + ", x2 " + x2 + ", x3 " + x3);
-	//	Debugg.println("y1 " + y1 + ", y2 " + y2 + ", y3 " + y3);
-
-		//offset+=10;
-	}
-	protected void drawLine(Graphics2D g, int width, int posPrev2, int posPrev, int pos, int posNext, int[] trace, int peakBottom, double vertScale, double horizScale, int firstReadLocation){
-		int pixels1 = (int)((posPrev2-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
-		int pixels2 = (int)((posPrev-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
-		int pixels3 = (int)((pos-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
-		int pixels4 = (int)((posNext-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
-		drawLine(g, width, pixels1,getY(trace,peakBottom,posPrev2,vertScale),pixels2,getY(trace,peakBottom,posPrev,vertScale),pixels3,getY(trace,peakBottom,pos,vertScale),pixels4,getY(trace,peakBottom,posNext,vertScale));
-	}
+	/*...........................................................................*/
 
 	static final int SINGLEREAD = 0;
 	
-	protected int getY (int[] trace, int peakBottom, int posInChromatogram, double vertScale) {
-		if (shadowOffset != 0 && (posInChromatogram-shadowOffset>=0&&posInChromatogram-shadowOffset<A.length ))
-			return peakBottom-(int)((trace[posInChromatogram] - shadowReduction*trace[posInChromatogram-shadowOffset]) / vertScale);
-		else
-			return peakBottom-(int)(trace[posInChromatogram] / vertScale);
-	}
 	/*...........................................................................*/
 	public synchronized void paint(Graphics g) {	
 		if (MesquiteWindow.checkDoomed(this)) 
@@ -412,7 +364,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 							if (baseColor.equals(Color.black) && darkBackground)
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
-							drawLine(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,A,peakBottom, vertScale, horizScale, firstReadLocation);
+							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,A,peakBottom, vertScale, horizScale, firstReadLocation);
 						//	Debugg.println("A: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowC()) {
@@ -423,7 +375,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 							if (baseColor.equals(Color.black) && darkBackground)
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
-							drawLine(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,C,peakBottom, vertScale,  horizScale, firstReadLocation);
+							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,C,peakBottom, vertScale,  horizScale, firstReadLocation);
 						//	Debugg.println("C: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowG()) {
@@ -434,7 +386,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 							if (baseColor.equals(Color.black) && darkBackground)
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
-							drawLine(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,G,peakBottom, vertScale, horizScale, firstReadLocation);
+							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,G,peakBottom, vertScale, horizScale, firstReadLocation);
 						//	Debugg.println("G: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowT()) {
@@ -445,7 +397,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 							if (baseColor.equals(Color.black) && darkBackground)
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
-							drawLine(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,T,peakBottom, vertScale,  horizScale, firstReadLocation);
+							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,T,peakBottom, vertScale,  horizScale, firstReadLocation);
 						//	Debugg.println("T: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 					}

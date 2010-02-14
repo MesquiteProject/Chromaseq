@@ -4,6 +4,8 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.QuadCurve2D;
 
 import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.chromaseq.ViewChromatograms.ChromatogramCloseupPanel;
@@ -552,6 +554,35 @@ public class ChromatogramCanvas extends MousePanel {
 			setCursor(tool.getCursor());
 		else
 			setCursor(getDisabledCursor());
+	}
+	/*...........................................................................*/
+	protected int getY (int[] trace, int peakBottom, int posInChromatogram, double vertScale) {
+		if (shadowOffset != 0 && (posInChromatogram-shadowOffset>=0&&posInChromatogram-shadowOffset<A.length ))
+			return peakBottom-(int)((trace[posInChromatogram] - shadowReduction*trace[posInChromatogram-shadowOffset]) / vertScale);
+		else
+			return peakBottom-(int)(trace[posInChromatogram] / vertScale);
+	}
+	/*...........................................................................*/
+	protected void drawCurve(Graphics2D g, int width, int x, int y, int x2, int y2, int x3, int y3){
+		QuadCurve2D quadCurve = null;
+		if (isShownReversed()){
+			quadCurve = new QuadCurve2D.Double(width-x,y,width-x2,y2,width-x3,y3);
+			g.draw(quadCurve);
+		}
+		else {
+			quadCurve = new QuadCurve2D.Double(x,y,x2,y2,x3,y3);
+			g.draw(quadCurve);
+		}
+	}
+	/*...........................................................................*/
+	protected void drawCurve(Graphics2D g, int width, int posPrev, int pos, int posNext, int[] trace, int peakBottom, double vertScale, double horizScale, int firstReadLocation){
+		int x1 = (int)((posPrev-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
+		int x2 = (int)((pos-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
+		int x3 = (int)((posNext-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
+		int y1 = getY(trace,peakBottom,posPrev,vertScale);
+		int y2 = getY(trace,peakBottom,pos,vertScale);
+		int y3 = getY(trace,peakBottom,posNext,vertScale);
+		drawCurve(g, width, x1,y1,x2,y2,x3,y3);
 	}
 
 	public static int SETREAD = 0;
