@@ -339,6 +339,8 @@ public class ChromatogramCanvas extends MousePanel {
 					}
 					if (xPixel < h + w){
 						int cons = getContigBaseFromReadBase(whichRead,i);
+						if (cons>=0 && MesquiteInteger.isCombinable(cons))
+							return cons;
 						return MesquiteInteger.unassigned;
 					}
 				}
@@ -365,6 +367,7 @@ public class ChromatogramCanvas extends MousePanel {
 			g.drawRect(x, y, w, h);
 		}
 	}
+	
 	protected void drawLine(Graphics g, int width, int x, int y, int x2, int y2){
 		if (isShownReversed()){
 			g.drawLine(width-x, y, width-x2, y2);
@@ -569,6 +572,8 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 	/*...........................................................................*/
 	protected int getY (int[] trace, int peakBottom, int posInChromatogram, double vertScale) {
+		if (posInChromatogram<0)
+			return 0;
 		if (shadowOffset != 0 && (posInChromatogram-shadowOffset>=0&&posInChromatogram-shadowOffset<A.length ))
 			return peakBottom-(int)((trace[posInChromatogram] - shadowReduction*trace[posInChromatogram-shadowOffset]) / vertScale);
 		else
