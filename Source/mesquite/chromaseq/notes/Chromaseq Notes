@@ -12,6 +12,18 @@ Necessary pre-alpha
 
 - phone home
 
+======================
+Notes for next alpha release
+	- navigation: up and down arrows
+	- opens chromatogram window in same place as last one if popped out
+	- closeup panel
+
+======================
+MANUAL
+	code or sample names can't start with "."
+	note oddities of Phrap, e.g., trimming ends, e.g., choosing source read
+	navigation: up and down arrows
+	
 
 ==========
 
@@ -39,18 +51,6 @@ Luxuries
 =========
 
 
-2. Sometimes when editing sites in the chromatogram window, if you have a base highlighted that you just changed, 
-and then you click to another base to edit it, there is a very long delay (maybe up to 10 seconds) before that 
-other base is selected for editing.  Maybe happens once in every 5-10 such clicks.  I tried using Shark but 
-the method that it claims is chewing up time doesn't actually seem to be. I just thought of a possible source 
-(notifyListeners?) and so I might check that out, but I thought I'd just give you a heads up on the issue.
-
-
-======================
-MANUAL
-	code or sample names can't start with "."
-	note oddities of Phrap, e.g., trimming ends, e.g., choosing source read
-	
 ======================
 ---------
 

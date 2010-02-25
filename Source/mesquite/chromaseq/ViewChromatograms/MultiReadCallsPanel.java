@@ -461,9 +461,9 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		}
 		if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())){
 			if (!MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()))
-				contigDisplay.focusMatrixOn(contigDisplay.getFirstTouchedOverall(), MesquiteInteger.unassigned);
+				contigDisplay.focusMatrixOnUniversalBases(contigDisplay.getFirstTouchedOverall(), MesquiteInteger.unassigned);
 			else
-				contigDisplay.focusMatrixOn(contigDisplay.getFirstTouchedOverall(), contigDisplay.getSecondTouchedConsensus());
+				contigDisplay.focusMatrixOnUniversalBases(contigDisplay.getFirstTouchedOverall(), contigDisplay.getSecondTouchedConsensus());
 		}
 		if (chromatogramPanel.getScrollToTouched()) {
 			int ic = findConsensusBaseNumber(whichRead,x);

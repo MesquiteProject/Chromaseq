@@ -705,10 +705,10 @@ public class ChromatogramCanvas extends MousePanel {
 		}
 		if (MesquiteInteger.isCombinable(contigDisplay.getFirstTouchedOverall())){
 			if (!MesquiteInteger.isCombinable(contigDisplay.getSecondTouchedOverall()))
-				contigDisplay.focusMatrixOn(contigDisplay.getFirstTouchedOverall(), MesquiteInteger.unassigned);
+				contigDisplay.focusMatrixOnUniversalBases(contigDisplay.getFirstTouchedOverall(), MesquiteInteger.unassigned);
 //				contigDisplay.focusMatrixOn(contigDisplay.getContigBaseFromUniversalBase(contigDisplay.getFirstTouchedOverall()), MesquiteInteger.unassigned);
 			else
-				contigDisplay.focusMatrixOn(contigDisplay.getFirstTouchedOverall(), contigDisplay.getSecondTouchedOverall());
+				contigDisplay.focusMatrixOnUniversalBases(contigDisplay.getFirstTouchedOverall(), contigDisplay.getSecondTouchedOverall());
 //			contigDisplay.focusMatrixOn(contigDisplay.getContigBaseFromUniversalBase(contigDisplay.getFirstTouchedOverall()), contigDisplay.getContigBaseFromUniversalBase(contigDisplay.getSecondTouchedOverall()));
 		}
 		if (chromatogramPanel.getScrollToTouched()) {
