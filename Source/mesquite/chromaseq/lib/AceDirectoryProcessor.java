@@ -54,13 +54,38 @@ public class AceDirectoryProcessor {
 		String[] fileNames = ChromaseqUtil.getStringsAssociated(as,  ChromaseqUtil.origReadFileNamesRef, it);
 		String[] primerNames = ChromaseqUtil.getStringsAssociated(as,  ChromaseqUtil.primerForEachReadNamesRef, it);
 		String[] sampleCodes = ChromaseqUtil.getStringsAssociated(as,  ChromaseqUtil.sampleCodeNamesRef, it);
+		
 
 		for (int i=0; i<numReads; i++){
-			fileNameTranslation[0][i] = fileNames[i*2];
-			fileNameTranslation[1][i] = fileNames[i*2+1];
-			fileNameTranslation[2][i] = primerNames[i*2+1];
-			fileNameTranslation[3][i] = sampleCodes[i*3+1];
-			fileNameTranslation[4][i] = sampleCodes[i*3+2];
+			
+			if (fileNames==null) {
+				if (i==0)
+					MesquiteMessage.warnProgrammer("fileNames NULL in AceDirectoryProcess.fileNameTranslation");
+			}
+			else if (i*2+1<fileNames.length) {
+				fileNameTranslation[0][i] = fileNames[i*2];
+				fileNameTranslation[1][i] = fileNames[i*2+1];
+			} else
+				MesquiteMessage.warnProgrammer("fileNames.length too small in AceDirectoryProcess.fileNameTranslation: fileNames.length = " + fileNames.length + ", numReads: " + numReads);
+			
+			if (primerNames==null){
+				if (i==0)
+					MesquiteMessage.warnProgrammer("primerNames NULL in AceDirectoryProcess.fileNameTranslation");
+			}
+			else if (i*2+1<primerNames.length)
+				fileNameTranslation[2][i] = primerNames[i*2+1];
+			else
+				MesquiteMessage.warnProgrammer("primerNames.length too small in AceDirectoryProcess.fileNameTranslation: primerNames.length = " + primerNames.length + ", numReads: " + numReads);
+			
+			if (sampleCodes==null){
+				if (i==0)
+					MesquiteMessage.warnProgrammer("sampleCodes NULL in AceDirectoryProcess.fileNameTranslation");
+			}
+			else if (i*3+2<sampleCodes.length) {
+				fileNameTranslation[3][i] = sampleCodes[i*3+1];
+				fileNameTranslation[4][i] = sampleCodes[i*3+2];
+			} else
+				MesquiteMessage.warnProgrammer("sampleCodes.length too small in AceDirectoryProcess.fileNameTranslation: sampleCodes.length = " + sampleCodes.length + ", numReads: " + numReads);
 		}
 
 	}
