@@ -1,8 +1,8 @@
-package mesquite.chromaseq.PhredPhrapTaxonRedo;
+package mesquite.chromaseq.ProcessChromatogramsTaxonRedo;
 
 import mesquite.chromaseq.lib.AceFile;
 import mesquite.chromaseq.lib.ChromaseqUtil;
-import mesquite.chromaseq.lib.PhPhRunner;
+import mesquite.chromaseq.lib.ChromatogramProcessor;
 import mesquite.lib.*;
 import mesquite.categ.lib.*;
 import mesquite.lib.characters.*;
@@ -24,7 +24,7 @@ import mesquite.lib.table.MesquiteTable;
  */
 
 /* ======================================================================== */
-public class PhredPhrapTaxonRedo extends CategDataEditorInit {
+public class ProcessChromatogramsTaxonRedo extends CategDataEditorInit {
 	MesquiteMenuItemSpec ms = null;
 	MesquiteTable table;
 	DNAData data;
@@ -32,7 +32,7 @@ public class PhredPhrapTaxonRedo extends CategDataEditorInit {
 
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName){
-		//ms = addMenuItem(null, "Phred-Phrap Contig of Taxa", makeCommand("phredPhrapContig", this));
+		//ms = addMenuItem(null, "Rebuild Contig of Taxa", makeCommand("reprocessContig", this));
 		return true;
 	}
 	/*.................................................................................................................*/
@@ -79,8 +79,8 @@ public class PhredPhrapTaxonRedo extends CategDataEditorInit {
 		Taxa taxa = data.getTaxa();
 		int numSelected = taxa.numberSelected();
 
-		PhPhRunner phphTask = (PhPhRunner)hireEmployee(PhPhRunner.class, "Module to run Phred & Phrap");
-		if (phphTask == null)
+		ChromatogramProcessor chromatogramProcessorTask = (ChromatogramProcessor)hireEmployee(ChromatogramProcessor.class, "Module to process chromatograms/");
+		if (chromatogramProcessorTask == null)
 			return false;
 
 		boolean[] selected = new boolean[taxa.getNumTaxa()];
@@ -133,7 +133,7 @@ public class PhredPhrapTaxonRedo extends CategDataEditorInit {
 			MesquiteFile.copyFileFromPaths(chromatoPathArray.getValue(i),newPath, false);
 		}
 
-		if (phphTask.doPhredPhrap(getProject(), true, newDirectoryPath)) {
+		if (chromatogramProcessorTask.processChromatograms(getProject(), true, newDirectoryPath)) {
 		/*	for (int it =  taxa.getNumTaxa() -1; it> firstSelected; it--){
 				if (selected[it]) {
 					taxa.deleteTaxa(it, 1, false);
@@ -154,7 +154,7 @@ public class PhredPhrapTaxonRedo extends CategDataEditorInit {
 		return true;
 	}
 	public Object doCommand(String commandName, String arguments, CommandChecker checker) {
-		if (checker.compare(this.getClass(), "Prepare ABI files for processing by Phred and Phrap and run them", null, commandName, "phredPhrapContig")) {
+		if (checker.compare(this.getClass(), "Prepare ABI files for processing by chromatogram processor, and process them", null, commandName, "reprocessContig")) {
 
 			reContig();
 		}
@@ -165,12 +165,12 @@ public class PhredPhrapTaxonRedo extends CategDataEditorInit {
 
 	/*.................................................................................................................*/
 	public String getName() {
-		return "Phred-Phrap Contig of Taxa";
+		return "Rebuild Contig of Taxa";
 	}
 
 	/*.................................................................................................................*/
 	public String getExplanation() {
-		return "Recontigs taxa using Phred/Phrap/Chromaseq.";
+		return "Recontigs taxa using chromatogram processor.";
 	}
 	/*.................................................................................................................*/
 	/** returns the version number at which this module was first released.  If 0, then no version number is claimed.  If a POSITIVE integer

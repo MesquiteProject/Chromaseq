@@ -1,4 +1,36 @@
 
+Necessary pre-alpha
+
+- phone home
+
+
+1. PhPhRunner generalize into ChromatogramProcessor, and FileInits etc. that call this
+
+2. make SequenceNameSource and PrimerInfoSource and hire these by ChromatogramProcessor
+
+3. make ChromatogramSource and hire by ChromatogramProcessor
+
+4. move hiring of previous three sources into FileInit successor, and have them hire a ChromatogramProcessor that gets fed SequenceNameSource, PrimerInfoSource, ChromatogramSource
+
+5. work on design of sinks for this info (both processed and not).
+
+
+
+
+======
+
+OTHER ISSUE:
+Remove copy of PhredPhrap versus local (e.g. remote, http & cgi-bin etc.; local: shell script)
+
+may require a module for PhredPhrap communication
+a module telling where to find chromatograms
+a module for returning results to Mesquite
+
+
+-------------------
+
+
+
 - speed up primers
 - undo within chromatogram viewer
 
@@ -7,10 +39,6 @@
 
 - on RC sequences primers shown in wrong place?
 
-
-Necessary pre-alpha
-
-- phone home
 
 ======================
 Notes for next alpha release

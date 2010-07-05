@@ -19,7 +19,7 @@ import mesquite.lib.*;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
 public class AbiDownloaderImpl extends AbiDownloader {
-	private PhPhRunner phredPhrap;
+	private ChromatogramProcessor phredPhrap;
 	private String gene;
 	private String taxon;
 	private String batchName;
@@ -34,7 +34,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 	}
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		if (phredPhrap == null) {
-			phredPhrap = (PhPhRunner)hireEmployee(PhPhRunner.class, "Module to run Phred & Phrap");
+			phredPhrap = (ChromatogramProcessor)hireEmployee(ChromatogramProcessor.class, "Module to run Phred & Phrap");
 		}
 		if (phredPhrap != null) {
 			return true;
@@ -111,7 +111,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		boolean downloadOk = downloadAndUnzipChromatograms(databaseURLSource,args, directoryPath);
 		if (downloadOk) {
 			// (5) run p/p on that directory
-			return phredPhrap.doPhredPhrap(project, false, directoryPath);
+			return phredPhrap.processChromatograms(project, false, directoryPath);
 		} else {
 			MesquiteMessage.warnUser("Problems downloading and unzipping chromatograms, phred/phrap will not proceed.");
 		}
