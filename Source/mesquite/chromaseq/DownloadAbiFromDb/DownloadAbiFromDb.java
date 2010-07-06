@@ -7,12 +7,11 @@ import mesquite.lib.duties.UtilitiesAssistant;
 
 public class DownloadAbiFromDb extends UtilitiesAssistant {
 	private static final String COMMAND_NAME = "downloadAbiFromDb";
-	private static final String EXPLANATION = "Download abi files from a database and phred/phrap them.";
+	private static final String EXPLANATION = "Download abi files from a database and process them.";
 
 	/* ................................................................................................................. */
-	public boolean startJob(String arguments, Object condition,
-			boolean hiredByName) {
-		addMenuItem(null, "Run Phred/Phrap on database...", makeCommand(
+	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
+		addMenuItem(null, "Process Chromatograms from Database...", makeCommand(
 				COMMAND_NAME, this));
 		return true;
 	}
