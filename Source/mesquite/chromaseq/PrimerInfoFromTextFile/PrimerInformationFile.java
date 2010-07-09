@@ -11,7 +11,7 @@ This source code and its compiled class files are free and modifiable under the 
 GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 
-package mesquite.chromaseq.lib;
+package mesquite.chromaseq.PrimerInfoFromTextFile;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -26,7 +26,7 @@ import mesquite.tol.lib.XMLConstants;
 //import mesquite.BTOL.lib.*;
 
 /* ======================================================================== */
-public class PrimerList { 
+public class PrimerInformationFile { 
 	String [] primerNames;
 	String token;
 	String [] fragmentNames;
@@ -35,42 +35,9 @@ public class PrimerList {
 	String primerName;
 	String fragmentName;
 	int numPrimers;
-	private boolean useDb;
-	private String databaseURL;
-	private DNADatabaseURLSource databaseURLSource =null;
 
-	public PrimerList(String primerList) {
-		this(primerList, false, null);
-	}
-	public PrimerList(boolean useDb, DNADatabaseURLSource databaseURLSource) {
-		this.databaseURLSource = databaseURLSource;
-		if (databaseURLSource!=null)
-			databaseURL = databaseURLSource.getBaseURL();
-		this.databaseURL = databaseURL;
-		if (useDb) {
-			this.useDb = useDb;
-		} else {
-			readTabbedPrimerFile(null);
-		}
-	}
-	
-	public PrimerList(boolean useDb, String databaseURL) {
-		this.databaseURL = databaseURL;
-		if (useDb) {
-			this.useDb = useDb;
-		} else {
-			readTabbedPrimerFile(null);
-		}
-	}
-
-
-	public PrimerList(String primerListPathOrDbUrl, boolean useDb, String databaseURL) {
-		this.databaseURL = databaseURL;
-		if (useDb) {
-			this.useDb = useDb;
-		} else {
-			readTabbedPrimerFile(primerListPathOrDbUrl);
-		}
+	public PrimerInformationFile(String primerList) {
+		readTabbedPrimerFile(primerList);
 	}
 
 	
@@ -121,21 +88,6 @@ public class PrimerList {
 		sequences = new String[numPrimers];
 		forward = new boolean[numPrimers];
 	}
-	public void readPrimerInfoFromDatabase() {
-		if (databaseURLSource==null)
-			return;
-		Map args = new Hashtable();
-		if (databaseURLSource.needsKeyValuePairAuthorization())
-			args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.AUTHORIZATION_KEY), databaseURLSource.getKey());
-
-		Document doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(),databaseURLSource.getPage(DNADatabaseURLSource.PRIMER_SERVICE), args);
-		if (doc != null) {
-			// xml format so parse accordingly
-			parsePrimerXML(doc);
-			return;
-		}
-	}
-
 	public String[][] getPrimerArray () {
 		String [][] primers = new String[numPrimers][2];
 		for (int i=0; i<numPrimers; i++)
@@ -204,51 +156,6 @@ public class PrimerList {
 		}
 	}
 
-	/*.................................................................................................................*/
-	public String getFragmentName(String primerName, MesquiteString stLouisString) {
-		if (!StringUtil.blank(primerName)) {
-			if (getUseDb()) {
-				Map args = new Hashtable();
-				if (databaseURLSource!=null)
-					args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.PRIMER_NAME), primerName);
-				if (databaseURLSource!=null && databaseURLSource.needsKeyValuePairAuthorization())
-					args.put(databaseURLSource.getKeyString(DNADatabaseURLSource.AUTHORIZATION_KEY), databaseURLSource.getKey());
-				Document doc = null;
-//				try {
-				doc = MesquiteXMLUtilities.getDocumentFromTapestryPageName(databaseURLSource.getBaseURL(),databaseURLSource.getPage(DNADatabaseURLSource.PRIMER_SERVICE), args);
-//				}
-				// problems contacting the db!
-				if (doc == null) {
-					// TODO: There should be some kind of dialog error message here, how do we make it
-					//		 popup at this point?
-					MesquiteMessage.warnUser("Primer name not found in database: " + primerName+"\n");
-					return "";
-				} else {
-					String s = doc.toString();
-					Element root = doc.getRootElement();
-					if (root!=null) {
-						Element primer = root.element("primer");
-						if (primer!=null) {
-							MesquiteBoolean isForward = new MesquiteBoolean(false);
-							MesquiteString geneName = new MesquiteString();
-							parseSinglePrimerElement(primer, geneName, null, null,isForward);
-							assignStLouisString(stLouisString, isForward.getValue());
-							return geneName.getValue();
-						}
-					}
-				}
-			} else {
-				for (int i=0; i<primerNames.length; i++) {
-					if (primerName.trim().equalsIgnoreCase(primerNames[i])) {
-						assignStLouisString(stLouisString, forward[i]);
-						String returnVal = fragmentNames[i];
-						return returnVal;
-					}
-				}
-			}
-		}
-		return "";
-	}
 	/*.................................................................................................................*/
 	public String getFragmentName(String primerName) {
 		if (!StringUtil.blank(primerName)) {
@@ -327,12 +234,6 @@ public class PrimerList {
 			}
 		}
 	}
-	private void assignStLouisString(MesquiteString stLouisString, boolean isForward) {
-		if (isForward)
-			stLouisString.setValue("b.");
-		else
-			stLouisString.setValue("g.");		
-	}
 	/*.................................................................................................................*/
 	int getNumPrimers(String oneFragment) {
 		int count = 0;
@@ -379,18 +280,6 @@ public class PrimerList {
 			sequenceList[i][1] = sequences[i];
 		}
 		return sequenceList;
-	}
-	public boolean getUseDb() {
-		return useDb;
-	}
-	public void setUseDb(boolean useDb) {
-		this.useDb = useDb;
-	}
-	public String getDatabaseURL() {
-		return databaseURL;
-	}
-	public void setDatabaseURL(String databaseURL) {
-		this.databaseURL = databaseURL;
 	}
 }
 

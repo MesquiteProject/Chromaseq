@@ -29,10 +29,10 @@ public abstract class PrimerInfoSource extends MesquiteModule {
  	public abstract boolean isForward(String ID);
 
  	//returns name of primer as a string
- 	public abstract boolean getPrimerName(String ID);
+ 	public abstract String getPrimerName(String ID);
 
  	//returns sequence of primer as a string
- 	public abstract boolean getPrimerSequenceString(String ID);
+ 	public abstract String getPrimerSequenceString(String ID);
 
  	// returns length of primer sequence
  	public abstract int getPrimerSequenceLength(String ID);
@@ -42,5 +42,7 @@ public abstract class PrimerInfoSource extends MesquiteModule {
 
  	//returns whether source has all relevant data supplied (e.g. address of database, etc.)
  	public abstract boolean isReady();
+
+ 	public abstract void echoParametersToFile(StringBuffer logBuffer);
 
 }

@@ -26,7 +26,7 @@ import mesquite.chromaseq.PhredPhrap.SampleCodeProvider;
 import mesquite.chromaseq.lib.*;
 
 /* ======================================================================== */
-public class ExtractChromatograms extends UtilitiesAssistant implements ActionListener{ 
+public class ExtractChromatograms extends UtilitiesAssistant{ 
 	//for importing sequences
 	MesquiteProject proj = null;
 	FileCoordinator coord = null;
@@ -36,10 +36,10 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 	//String editNameParserButtonString = "Edit Naming Rules...";
 	ChromFileNameParsing nameParsingRule;
 
-	String primerListPath;
-	String sampleCodeListPath;
-	SingleLineTextField primerListField = null;
-	SingleLineTextField dnaCodesField = null;
+//	String primerListPath;
+//	String sampleCodeListPath;
+//	SingleLineTextField primerListField = null;
+//	SingleLineTextField dnaCodesField = null;
 	String fileExtension = ".ab1";
 	boolean requiresExtension=true;
 	boolean translateSampleCodes = true;
@@ -58,14 +58,34 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 
 	boolean preferencesSet = false;
 	boolean verbose=false;
+	SequenceNameSource sequenceNameTask = null;
+	PrimerInfoSource primerInfoTask = null;
+
+	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
+		EmployeeNeed e1 = registerEmployeeNeed(SequenceNameSource.class, "Phred/Phrap processing requires a source of sequence names.", "This is activated automatically.");
+		EmployeeNeed e2 = registerEmployeeNeed(PrimerInfoSource.class, "Phred/Phrap processing requires a source of primer information.", "This is activated automatically.");
+	}
 
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName){
 		loadPreferences();
+
 		addMenuItem(null, "Segregate Chromatograms...", makeCommand("extract", this));
 		return true;
 	}
 	/*.................................................................................................................*/
+	public boolean hireRequired(){
+		sequenceNameTask = (SequenceNameSource)hireEmployee(SequenceNameSource.class,  "Supplier of sequence names.");
+		if (sequenceNameTask==null) 
+			return false;
+		
+		primerInfoTask = (PrimerInfoSource)hireEmployee(PrimerInfoSource.class,  "Supplier of information about primers.");
+		if (primerInfoTask==null) 
+			return false;
+
+		return true;
+	}
+	/*.................................................................................................................*
 	public PrimerList getPrimers(){
 		String primerList = "";
 		PrimerList primers = null;
@@ -91,6 +111,15 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 	}
 	
 	/*.................................................................................................................*/
+	private void assignStLouisString(MesquiteString stLouisString, boolean isForward) {
+		if (isForward)
+			stLouisString.setValue("b.");
+		else
+			stLouisString.setValue("g.");		
+	}
+
+	
+	/*.................................................................................................................*/
 	public boolean extractChromatograms(String directoryPath){
 		if ( logBuffer==null)
 			logBuffer = new StringBuffer();
@@ -104,12 +133,12 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 			storePreferences();
 
 	// ============  getting primer info  ===========
-		PrimerList primers = getPrimers();
+/*		PrimerList primers = getPrimers();
 		if (primers==null) {
 			MesquiteMessage.warnUser("Primer information could not be obtained.");			
 			return false;
 		}
-		
+	*/	
 		// if not passed-in, then ask
 		if (StringUtil.blank(directoryPath)) {
 			directoryPath = MesquiteFile.chooseDirectory("Choose directory containing ABI files:", previousDirectory); //MesquiteFile.saveFileAsDialog("Base name for files (files will be named <name>1.nex, <name>2.nex, etc.)", baseName);
@@ -135,16 +164,6 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 			boolean haveNameList = false;
 			Document namesDoc = null;
 			boolean namesInXml = false;
-			if (!StringUtil.blank(sampleCodeListPath) && translateSampleCodes) {
-				sampleCodeList = MesquiteFile.getFileContentsAsString(sampleCodeListPath);
-
-				if (!StringUtil.blank(sampleCodeList)) {
-					// check to see if xml
-					namesDoc = XMLUtil.getDocumentFromString("samplecodes", sampleCodeList);
-					sampleCodeListParser = new Parser(sampleCodeList);
-					haveNameList = true;
-				}
-			}			
 			String cPath;
 			String seqName;
 			String fullSeqName;
@@ -168,8 +187,10 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 			echoStringToFile(" Searching for chromatograms that match the specified criteria. ", logBuffer);
 			echoStringToFile(" Processing directory: ", logBuffer);
 			echoStringToFile("  "+directoryPath+"\n", logBuffer);
-			echoStringToFile("Using names and codes file: " +sampleCodeListPath+"\n", logBuffer);
-			echoStringToFile("Using primers file: " + primerListPath+"\n", logBuffer);
+			if (sequenceNameTask!=null)
+				sequenceNameTask.echoParametersToFile(logBuffer);
+			if (primerInfoTask!=null)
+				primerInfoTask.echoParametersToFile(logBuffer);
 
 			File newDir;
 			int numPrepared = 0;
@@ -236,36 +257,16 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 							startTokenResult.setValue("");
 
 						MesquiteString stLouisString = new MesquiteString("");
-						if (primers != null)
-							fragName = primers.getFragmentName(primerName.getValue(),stLouisString);
+						if (primerInfoTask != null){
+							fragName = primerInfoTask.getGeneFragmentName(primerName.getValue());
+							assignStLouisString(stLouisString,primerInfoTask.isForward(primerName.getValue()));
+						}
 						if (!StringUtil.blank(sampleCode.getValue())) {
 							/* Translate code number to sample name if requested  */
-							 if (haveNameList && translateSampleCodes) {
-								if (namesInXml) {
-									String[] results = SampleCodeProvider.getSeqNamesFromXml(sampleCode, namesDoc);
-									seqName = results[0];
-									fullSeqName = results[1];
-								} else {
-									String[] results = SampleCodeProvider.getSeqNamesFromTabDelimitedFile(sampleCode, sampleCodeListParser);
-									seqName = results[0];
-									fullSeqName = results[1];
-
-						/*			loc = sampleCodeList.indexOf(sampleCode.getValue());   //��� problem:  if have 551A and 551, this will pick up 551
-
-									if (loc<0 && !(sampleCode.getValue().equalsIgnoreCase("0000")||sampleCode.getValue().equalsIgnoreCase("000"))) {
-										seqName = sampleCode.getValue();
-										fullSeqName = sampleCode.getValue();
-									}
-									else {
-										sampleCodeListParser.setPosition(loc+sampleCode.getValue().length()+1);
-										seqName = StringUtil.removeNewLines(sampleCodeListParser.getNextToken());
-										fullSeqName = StringUtil.removeNewLines(sampleCodeListParser.getNextToken());
-										if (!";".equals(sampleCodeListParser.getNextToken()))
-											fullSeqName = seqName;
-									}
-									*/
+							 if (sequenceNameTask!=null && sequenceNameTask.isReady()) {
+								seqName = sequenceNameTask.getAlternativeName(startTokenResult.getValue(), sampleCode.getValue());
+								fullSeqName = sequenceNameTask.getSequenceName(startTokenResult.getValue(), sampleCode.getValue());
 								}
-							}
 							else {
 								seqName = sampleCode.getValue();
 								fullSeqName = sampleCode.getValue();
@@ -354,10 +355,6 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 	public void processSingleXMLPreference (String tag, String content) {
 		if ("requiresExtension".equalsIgnoreCase(tag))
 			requiresExtension = MesquiteBoolean.fromTrueFalseString(content);
-		else if ("primerListPath".equalsIgnoreCase(tag))
-			primerListPath = StringUtil.cleanXMLEscapeCharacters(content);
-		else if ("sampleCodeListPath".equalsIgnoreCase(tag))
-			sampleCodeListPath = StringUtil.cleanXMLEscapeCharacters(content);
 		else if ("previousDirectory".equalsIgnoreCase(tag))
 			previousDirectory = StringUtil.cleanXMLEscapeCharacters(content);
 		else if ("fileExtension".equalsIgnoreCase(tag))
@@ -373,8 +370,6 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 		StringBuffer buffer = new StringBuffer(200);
 		StringUtil.appendXMLTag(buffer, 2, "requiresExtension", requiresExtension);  
 		StringUtil.appendXMLTag(buffer, 2, "translateSampleCodes", translateSampleCodes);  
-		StringUtil.appendXMLTag(buffer, 2, "primerListPath", primerListPath);  
-		StringUtil.appendXMLTag(buffer, 2, "sampleCodeListPath", sampleCodeListPath);  
 		StringUtil.appendXMLTag(buffer, 2, "previousDirectory", previousDirectory);  
 		StringUtil.appendXMLTag(buffer, 2, "fileExtension", fileExtension);  
 		StringUtil.appendXMLTag(buffer, 2, "nameParsingRulesName", nameParsingRulesName);  
@@ -389,15 +384,6 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 		ChromFileNameDialog dialog = new ChromFileNameDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
 				"Segregate Chromatograms Options", buttonPressed, nameParserManager, nameParsingRulesName);		
 
-		dnaCodesField = dialog.addTextField("Codes & names file:", sampleCodeListPath,26);
-		final Button dnaCodesBrowseButton = dialog.addAListenedButton("Browse...",null, this);
-		dnaCodesBrowseButton.setActionCommand("DNANumbersBrowse");
-
-		Checkbox translateCodesBox = dialog.addCheckBox("translate sample codes using name file", translateSampleCodes);
-
-		primerListField = dialog.addTextField("Primer list file:", primerListPath,26);
-		final Button primerBrowseButton = dialog.addAListenedButton("Browse...",null, this);
-		primerBrowseButton.setActionCommand("primerBrowse");
 
 		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
 		SingleLineTextField fileExtensionField = dialog.addTextField("file extension for chromatogram copies:", fileExtension, 8, true);
@@ -423,9 +409,6 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 			nameParsingRulesName = nameParsingRule.getName();
 			fileExtension = fileExtensionField.getText();
 			requiresExtension = requiresExtensionBox.getState();
-			translateSampleCodes = translateCodesBox.getState();//			runPhredPhrap = runPhredPhrapBox.getState();
-			primerListPath = primerListField.getText();
-			sampleCodeListPath = dnaCodesField.getText();
 			sampleNameToMatch = sampleNameToMatchField.getText();
 			geneNameToMatch = geneNameToMatchField.getText();
 		}
@@ -444,6 +427,9 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 				Debugg.println("nameParserManager NULL!");
 				return null;
 			}
+			if (!hireRequired())
+				return null;
+			
 			if (queryOptions()) {
 				extractChromatograms(null);
 			}
@@ -472,29 +458,6 @@ public class ExtractChromatograms extends UtilitiesAssistant implements ActionLi
 	}
 	/*.................................................................................................................*/
 
-	/*.................................................................................................................*/
-	public  void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equalsIgnoreCase("primerBrowse")) {
-			MesquiteString primerListDir = new MesquiteString();
-			MesquiteString primerListFile = new MesquiteString();
-			String s = MesquiteFile.openFileDialog("Choose file containing primer list", primerListDir, primerListFile);
-			if (!StringUtil.blank(s)) {
-				primerListPath = s;
-				if (primerListField!=null) 
-					primerListField.setText(primerListPath);
-			}
-		}
-		else if (e.getActionCommand().equalsIgnoreCase("DNANumbersBrowse")) {
-			MesquiteString dnaNumberListDir = new MesquiteString();
-			MesquiteString dnaNumberListFile = new MesquiteString();
-			String s = MesquiteFile.openFileDialog("Choose file containing sample codes and names", dnaNumberListDir, dnaNumberListFile);
-			if (!StringUtil.blank(s)) {
-				sampleCodeListPath = s;
-				if (dnaCodesField!=null) 
-					dnaCodesField.setText(sampleCodeListPath);
-			}
-		}
-	}
 }
 
 
