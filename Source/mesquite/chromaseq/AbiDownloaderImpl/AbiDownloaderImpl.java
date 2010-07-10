@@ -32,12 +32,27 @@ import mesquite.lib.*;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
 public class AbiDownloaderImpl extends AbiDownloader {
-	private ChromatogramProcessor phredPhrap;
+	protected DNADatabaseURLSource databaseURLSource = null;
+	private ChromatogramProcessor chromatogramProcessorTask;
 	private String gene;
 	private String taxon;
 	private String batchName;
 	private String extraction;
 	private String dbUrl;
+
+	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
+		EmployeeNeed e1 = registerEmployeeNeed(ChromatogramProcessor.class, "Requires a processor of chromatograms.", "This is activated automatically.");
+	}
+	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
+		if (chromatogramProcessorTask == null) {
+			chromatogramProcessorTask = (ChromatogramProcessor)hireEmployee(ChromatogramProcessor.class, "Module to process chromatograms");
+		}
+		if (chromatogramProcessorTask != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public Class getDutyClass() {
 		return AbiDownloaderImpl.class;
@@ -45,19 +60,15 @@ public class AbiDownloaderImpl extends AbiDownloader {
 	public String getName() {
 		return "Abi Downloader";
 	}
-	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
-		if (phredPhrap == null) {
-			phredPhrap = (ChromatogramProcessor)hireEmployee(ChromatogramProcessor.class, "Module to run Phred & Phrap");
-		}
-		if (phredPhrap != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 	public boolean downloadAbiFilesFromDb() {
 		return downloadAbiFilesFromDb(null);
 	}
+	/*.................................................................................................................*/
+	public void checkDatabaseSource() {
+		if (databaseURLSource==null)
+			databaseURLSource= (DNADatabaseURLSource)hireEmployee(DNADatabaseURLSource.class, "Source of Database Connectivity");
+	}
+	/*.................................................................................................................*/
 	public boolean downloadAbiFilesFromDb(MesquiteProject project) {
 		loadPreferences();
 		// general plan:
@@ -67,7 +78,8 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		}
 		// (2) check for results (give number)
 		Hashtable args = new Hashtable();
-		DNADatabaseURLSource databaseURLSource = phredPhrap.getDatabaseURLSource();
+		checkDatabaseSource();
+
 		if (databaseURLSource!=null) {
 			conditionallyAddQueryArg(args, getGene(), databaseURLSource.getKeyString(DNADatabaseURLSource.GENE));
 			conditionallyAddQueryArg(args, getTaxon(), databaseURLSource.getKeyString(DNADatabaseURLSource.TAXON));		
@@ -124,7 +136,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		boolean downloadOk = downloadAndUnzipChromatograms(databaseURLSource,args, directoryPath);
 		if (downloadOk) {
 			// (5) run p/p on that directory
-			return phredPhrap.processChromatograms(project, false, directoryPath);
+			return chromatogramProcessorTask.processChromatograms(project, false, directoryPath);
 		} else {
 			MesquiteMessage.warnUser("Problems downloading and unzipping chromatograms, phred/phrap will not proceed.");
 		}
@@ -205,7 +217,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 
 	private boolean queryOptions() {
 		loadPreferences();
-		MesquiteInteger buttonPressed = new MesquiteInteger(ChromFileNameDialog.CANCEL);		
+		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);		
 		ExtensibleDialog dialog = new ExtensibleDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
 				"Download ABI Options", buttonPressed);
 		int fieldLength = 26;
@@ -216,7 +228,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		SingleLineTextField batchNameField = dialog.addTextField("ABI Batch", getBatchName(), fieldLength);
 		SingleLineTextField extractionField = dialog.addTextField("Extraction", getExtraction(), fieldLength);		
 		dialog.completeAndShowDialog(true);
-		boolean success = buttonPressed.getValue()== ChromFileNameDialog.OK; 
+		boolean success = buttonPressed.getValue()== dialog.defaultOK; 
 		if (success) {
 			setDbUrl(urlField.getText());
 			setGene(geneField.getText());

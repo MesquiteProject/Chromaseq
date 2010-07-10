@@ -4,11 +4,11 @@ Necessary pre-alpha
 - phone home
 
 
-1. PhPhRunner generalize into ChromatogramProcessor, and FileInits etc. that call this
+1. PhPhRunner generalize into ChromatogramProcessor, and FileInits etc. that call this  [DONE]
 
-2. make SequenceNameSource and PrimerInfoSource and hire these by ChromatogramProcessor
+2. make SequenceNameSource and PrimerInfoSource and hire these by ChromatogramProcessor  [DONE]
 
-3. make ChromatogramSource and hire by ChromatogramProcessor
+3. make ChromatogramSource and hire by ChromatogramProcessor 
 
 4. move hiring of previous three sources into FileInit successor, and have them hire a ChromatogramProcessor that gets fed SequenceNameSource, PrimerInfoSource, ChromatogramSource
 

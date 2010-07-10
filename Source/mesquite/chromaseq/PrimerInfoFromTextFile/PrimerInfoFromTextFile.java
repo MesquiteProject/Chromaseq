@@ -5,8 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import org.dom4j.Document;
+import org.dom4j.Element;
 
-import mesquite.chromaseq.lib.ChromFileNameDialog;
+import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameDialog;
 import mesquite.chromaseq.lib.PrimerInfoSource;
 import mesquite.chromaseq.lib.PrimerList;
 import mesquite.lib.ExtensibleDialog;
@@ -31,6 +32,11 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
 		return queryOptions();
+	}
+
+	/*.................................................................................................................*/
+	public  void addXMLAttributes(Element element){
+		element.addAttribute("primerListPath", primerListPath);
 	}
 
 	/*.................................................................................................................*/
@@ -59,11 +65,13 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 
 
 
-		String s = "This file should contain, either in a tab delimited format or in XML, information about the primers (names, sequences, forward/reverse, etc.).\n\n";
+		String s = "This file should contain, either in a tab-delimited format or in XML, information about the primers (names, sequences, forward/reverse, etc.).\n\n";
+		s += "<BR>If it is a tab-delimited file, each line should be in the following format:<br><br>\n";
+		s += "  &lt;primer name&gt;&lt;tab&gt;&lt;gene fragment name&gt;&lt;tab&gt;&lt;F for forward primers or R for reverse&gt;&lt;tab&gt;&lt;primer sequence&gt;&lt;tab&gt;;<br><br>\n";
 		dialog.appendToHelpString(s);
 
 		dialog.completeAndShowDialog(true);
-		boolean success=(buttonPressed.getValue()== ChromFileNameDialog.OK);
+		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
 			primerListPath = primerFileField.getText();
 			prepareFile();

@@ -6,11 +6,12 @@ import java.awt.TextArea;
 import java.io.File;
 
 import mesquite.chromaseq.ChromaseqAuthorDefaults.ChromaseqAuthorDefaults;
+import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameDialog;
+import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameParsing;
 import mesquite.chromaseq.lib.AbiUploader;
-import mesquite.chromaseq.lib.ChromFileNameDialog;
-import mesquite.chromaseq.lib.ChromFileNameParsing;
-import mesquite.chromaseq.lib.NameParserManager;
+import mesquite.chromaseq.lib.ChromatogramFileNameParser;
 import mesquite.chromaseq.lib.SequenceUploader;
+import mesquite.lib.ExtensibleDialog;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteMessage;
@@ -27,8 +28,7 @@ import mesquite.molec.lib.DNADatabaseURLSource;
  *
  */
 public class AbiUploaderImpl extends AbiUploader {
-	private NameParserManager nameParserManager;
-	private ChromFileNameParsing nameParsingRule;
+	private ChromatogramFileNameParser nameParserManager;
 	private ChromaseqAuthorDefaults authorDefaults;
 	private String url;
 	private SingleLineTextField uploadBatchNameField;
@@ -44,7 +44,7 @@ public class AbiUploaderImpl extends AbiUploader {
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
 		if (nameParserManager == null) {
-			nameParserManager = (NameParserManager)MesquiteTrunk.mesquiteTrunk.findEmployeeWithName("#ChromFileNameParsManager");
+			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Manager for determining how to determine sample code and primer name.");
 		}
 		if (authorDefaults == null) {
 			authorDefaults = (ChromaseqAuthorDefaults)MesquiteTrunk.mesquiteTrunk.findEmployeeWithName("#ChromaseqAuthorDefaults");
@@ -101,9 +101,9 @@ public class AbiUploaderImpl extends AbiUploader {
 						MesquiteString primerName = new MesquiteString();
 						MesquiteString dnaCodeResult = new MesquiteString();
 						//here's where the names parser processes the name
-						if (nameParsingRule!=null && nextAbi != null && !nextAbi.isDirectory()
+						if (nameParserManager!=null && nextAbi != null && !nextAbi.isDirectory()
 								&& nextAbi.exists()) {
-							if (!nameParsingRule.parseFileName(this, nextAbi.getName(), sampleCode, sampleCodeSuffix, primerName, logBuffer, dnaCodeResult)) {
+							if (!nameParserManager.parseFileName(nextAbi.getName(), sampleCode, sampleCodeSuffix, primerName, logBuffer, dnaCodeResult)) {
 								MesquiteMessage.warnUser("Can't upload file: " + nextAbi + " to database because it doesn't match the naming rule.");
 							} else {
 								MesquiteMessage.warnUser("Going to upload file: " + nextAbi + " to server.");
@@ -123,16 +123,14 @@ public class AbiUploaderImpl extends AbiUploader {
 	}
 	
 	private boolean queryNames() {
-		MesquiteInteger buttonPressed = new MesquiteInteger(ChromFileNameDialog.CANCEL);
-		ChromFileNameDialog dialog = new ChromFileNameDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
-				"Upload ABI Options", buttonPressed, nameParserManager, "");  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
+		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);
+		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Upload ABI Options",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 		urlField = dialog.addTextField("URL", getUrl(), 26);
 		uploadBatchNameField = dialog.addTextField("ABI Batch Name", "", 26);
 		dialog.addLabel("ABI Batch Description", Label.LEFT);
 		uploadBatchDescriptionArea = dialog.addTextArea("", 4);
 		dialog.completeAndShowDialog(true);
-		nameParsingRule = dialog.getNameParsingRule();
-		boolean success=(buttonPressed.getValue()== ChromFileNameDialog.OK);
+		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		return success;
 	}
 	public String getUrl() {

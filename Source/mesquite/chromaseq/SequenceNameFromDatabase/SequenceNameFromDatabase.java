@@ -1,13 +1,15 @@
 package mesquite.chromaseq.SequenceNameFromDatabase;
 
 
+import org.dom4j.Element;
+
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
 public class SequenceNameFromDatabase extends SequenceNameSource  {
 	boolean preferencesSet = false;
-	private String databaseURL = "";
+//	private String databaseURL = "";
 	protected DNADatabaseURLSource databaseURLSource = null;
 
 	
@@ -20,12 +22,17 @@ public class SequenceNameFromDatabase extends SequenceNameSource  {
 		}
 
 	/*.................................................................................................................*/
+	public  void addXMLAttributes(Element element){
+		element.addAttribute("databaseURLSource", databaseURLSource.getClassName());
+	}
+
+	/*.................................................................................................................*
 	public void processSingleXMLPreference (String tag, String content) {
 		 if ("databaseURL".equalsIgnoreCase(tag))
 				databaseURL = StringUtil.cleanXMLEscapeCharacters(content);
 		preferencesSet = true;
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public String preparePreferencesForXML () {
 		StringBuffer buffer = new StringBuffer(200);
 		StringUtil.appendXMLTag(buffer, 2, "databaseURL", databaseURL);
@@ -37,54 +44,12 @@ public class SequenceNameFromDatabase extends SequenceNameSource  {
 		echoStringToFile("Using names from database\n", logBuffer);
 	}
 
-	/*.................................................................................................................*
-	public boolean queryOptions() {
-		if (MesquiteThread.isScripting())
-			return true;
-		MesquiteInteger buttonPressed = new MesquiteInteger(1);
-		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Location of Database with Sequence Names",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
-
-		final SingleLineTextField databaseURLField = dialog.addTextField("Database URL:", databaseURL, 26, true);		
-
-		dialog.completeAndShowDialog(true);
-		boolean success=(buttonPressed.getValue()== ChromFileNameDialog.OK);
-		if (success)  {
-			databaseURL = databaseURLField.getText();
-		}
-		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
-		dialog.dispose();
-		return success;
-	}
 	/*.................................................................................................................*/
 	
 	public boolean isReady() {
 		return databaseURLSource!=null;
 	}
 
-	/*.................................................................................................................*
-	private void prepareFile() {
-		if (!StringUtil.blank(sampleCodeListPath)) {
-			sampleCodeList = MesquiteFile.getFileContentsAsString(sampleCodeListPath);
-
-			if (!StringUtil.blank(sampleCodeList)) {
-				// check to see if xml
-				namesDoc = XMLUtil.getDocumentFromString("samplecodes", sampleCodeList);
-				/*
-				 * 					if (namesInXml) {
-					// check root element
-					String rootElementName = namesDoc.getRootElement().getName();
-					if (!rootElementName.equals("samplecodes")) {
-						// bad root, warn user
-						MesquiteMessage.warnUser("Sample codes xml file has a bad format.  Ignoring.");
-						namesInXml = false;
-					}
-				}
-				 
-				sampleCodeListParser = new Parser(sampleCodeList);
-			}
-		}			
-		
-	}
 	/*.................................................................................................................*/
 
 	public String getExtractionCode(String prefix, String ID) {
@@ -93,34 +58,6 @@ public class SequenceNameFromDatabase extends SequenceNameSource  {
 
 	public String getSampleCode(String prefix, String ID) {
 		return ID;
-	}
-	/*.................................................................................................................*
-
-	public String[] getSeqNamesFromXml(MesquiteString sampleCode) {
-		String elementName = "samplecode";
-		String nameAttrName = "name";
-		String sequenceElementName = "sequence";
-		String fullSequenceElementName = "fullsequence";
-		String sampleCodeString  = sampleCode.getValue();
-		List sampleCodeElements = namesDoc.getRootElement().elements(elementName);
-		for (Iterator iter = sampleCodeElements.iterator(); iter.hasNext();) {
-			Element nextSampleCodeElement = (Element) iter.next();
-			String name = nextSampleCodeElement.attributeValue(nameAttrName);
-			if (!StringUtil.blank(name)) {
-				if (sampleCodeString.equals(name)) {
-					// have a match
-					String seq = nextSampleCodeElement.elementText(sequenceElementName);
-					String fullseq = seq;
-					if (nextSampleCodeElement.element(fullSequenceElementName) != null) {
-						fullseq = nextSampleCodeElement.elementText(fullSequenceElementName);
-					}
-					return new String[]{seq, fullseq};
-				}
-			}
-		}
-		// got here and no match found -- log an error
-		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code xml file.");
-		return new String[]{"", ""};
 	}
 	/*.................................................................................................................*/
 	public void checkDatabaseSource() {

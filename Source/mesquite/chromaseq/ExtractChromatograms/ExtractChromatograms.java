@@ -31,15 +31,8 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 	MesquiteProject proj = null;
 	FileCoordinator coord = null;
 	MesquiteFile file = null;
-	NameParserManager nameParserManager;
-	String nameParsingRulesName="";
-	//String editNameParserButtonString = "Edit Naming Rules...";
-	ChromFileNameParsing nameParsingRule;
+	ChromatogramFileNameParser nameParserManager;
 
-//	String primerListPath;
-//	String sampleCodeListPath;
-//	SingleLineTextField primerListField = null;
-//	SingleLineTextField dnaCodesField = null;
 	String fileExtension = ".ab1";
 	boolean requiresExtension=true;
 	boolean translateSampleCodes = true;
@@ -62,40 +55,39 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 	PrimerInfoSource primerInfoTask = null;
 
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		EmployeeNeed e1 = registerEmployeeNeed(SequenceNameSource.class, "Phred/Phrap processing requires a source of sequence names.", "This is activated automatically.");
-		EmployeeNeed e2 = registerEmployeeNeed(PrimerInfoSource.class, "Phred/Phrap processing requires a source of primer information.", "This is activated automatically.");
+		EmployeeNeed e1 = registerEmployeeNeed(SequenceNameSource.class, "Phred/Phrap processing requires a source of sequence names; choose the one that appropriately determines the sequence names from the sample codes.", "This is activated automatically.");
+		EmployeeNeed e2 = registerEmployeeNeed(PrimerInfoSource.class, "Phred/Phrap processing requires a source of information about primers, including their names, direction, and sequence, as well as the gene fragments to which they correspond.", "This is activated automatically.");
+		EmployeeNeed e3 = registerEmployeeNeed(ChromatogramFileNameParser.class, "Phred/Phrap processing requires a means to determine the sample code and primer name.", "This is activated automatically.");
 	}
 
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName){
 		loadPreferences();
+		
 
 		addMenuItem(null, "Segregate Chromatograms...", makeCommand("extract", this));
 		return true;
 	}
 	/*.................................................................................................................*/
 	public boolean hireRequired(){
-		sequenceNameTask = (SequenceNameSource)hireEmployee(SequenceNameSource.class,  "Supplier of sequence names.");
+
+		if (nameParserManager == null)
+			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Supplier of sample code and primer name from the chromatogram file name.");
+		if (nameParserManager == null) {
+			return false;
+		} else if (!nameParserManager.queryOptions())
+				return false;
+
+		sequenceNameTask = (SequenceNameSource)hireEmployee(SequenceNameSource.class,  "Supplier of sequence names from sample codes");
 		if (sequenceNameTask==null) 
 			return false;
 		
-		primerInfoTask = (PrimerInfoSource)hireEmployee(PrimerInfoSource.class,  "Supplier of information about primers.");
+		primerInfoTask = (PrimerInfoSource)hireEmployee(PrimerInfoSource.class,  "Supplier of information about primers and gene fragments");
 		if (primerInfoTask==null) 
 			return false;
 
+
 		return true;
-	}
-	/*.................................................................................................................*
-	public PrimerList getPrimers(){
-		String primerList = "";
-		PrimerList primers = null;
-		if (!StringUtil.blank(primerListPath)) {
-			primerList = MesquiteFile.getFileContentsAsString(primerListPath);				
-			if ( !StringUtil.blank(primerList)) {
-				primers = new PrimerList(primerList);
-			}
-		}
-		return primers;
 	}
 	/*.................................................................................................................*/
 	boolean makeDirectoriesForMatch(String matchStringPath){
@@ -110,14 +102,6 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		return true;
 	}
 	
-	/*.................................................................................................................*/
-	private void assignStLouisString(MesquiteString stLouisString, boolean isForward) {
-		if (isForward)
-			stLouisString.setValue("b.");
-		else
-			stLouisString.setValue("g.");		
-	}
-
 	
 	/*.................................................................................................................*/
 	public boolean extractChromatograms(String directoryPath){
@@ -132,13 +116,6 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		if (pleaseStorePrefs.getValue())
 			storePreferences();
 
-	// ============  getting primer info  ===========
-/*		PrimerList primers = getPrimers();
-		if (primers==null) {
-			MesquiteMessage.warnUser("Primer information could not be obtained.");			
-			return false;
-		}
-	*/	
 		// if not passed-in, then ask
 		if (StringUtil.blank(directoryPath)) {
 			directoryPath = MesquiteFile.chooseDirectory("Choose directory containing ABI files:", previousDirectory); //MesquiteFile.saveFileAsDialog("Base name for files (files will be named <name>1.nex, <name>2.nex, etc.)", baseName);
@@ -159,11 +136,6 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 			progIndicator.setStopButtonName("Stop");
 			progIndicator.start();
 			boolean abort = false;
-			String sampleCodeList = "";
-			Parser sampleCodeListParser = null;
-			boolean haveNameList = false;
-			Document namesDoc = null;
-			boolean namesInXml = false;
 			String cPath;
 			String seqName;
 			String fullSeqName;
@@ -245,8 +217,8 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 						MesquiteString startTokenResult = new MesquiteString();
 						//here's where the names parser processes the name
 
-						if (nameParsingRule!=null) {
-							if (!nameParsingRule.parseFileName(this, chromFileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult))
+						if (nameParserManager!=null) {
+							if (!nameParserManager.parseFileName(chromFileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult))
 								continue;
 						}
 						else {
@@ -256,10 +228,8 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 						if (startTokenResult.getValue() == null)
 							startTokenResult.setValue("");
 
-						MesquiteString stLouisString = new MesquiteString("");
 						if (primerInfoTask != null){
 							fragName = primerInfoTask.getGeneFragmentName(primerName.getValue());
-							assignStLouisString(stLouisString,primerInfoTask.isForward(primerName.getValue()));
 						}
 						if (!StringUtil.blank(sampleCode.getValue())) {
 							/* Translate code number to sample name if requested  */
@@ -359,8 +329,6 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 			previousDirectory = StringUtil.cleanXMLEscapeCharacters(content);
 		else if ("fileExtension".equalsIgnoreCase(tag))
 			fileExtension = StringUtil.cleanXMLEscapeCharacters(content);
-		else if ("nameParsingRulesName".equalsIgnoreCase(tag))
-			nameParsingRulesName = StringUtil.cleanXMLEscapeCharacters(content);
 		else if ("translateSampleCodes".equalsIgnoreCase(tag))
 			translateSampleCodes = MesquiteBoolean.fromTrueFalseString(content);
 		preferencesSet = true;
@@ -372,17 +340,13 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		StringUtil.appendXMLTag(buffer, 2, "translateSampleCodes", translateSampleCodes);  
 		StringUtil.appendXMLTag(buffer, 2, "previousDirectory", previousDirectory);  
 		StringUtil.appendXMLTag(buffer, 2, "fileExtension", fileExtension);  
-		StringUtil.appendXMLTag(buffer, 2, "nameParsingRulesName", nameParsingRulesName);  
 		preferencesSet = true;
 		return buffer.toString();
 	}
 	/*.................................................................................................................*/
 	public boolean queryOptions() {
-		if (nameParserManager == null)
-			return false;
-		MesquiteInteger buttonPressed = new MesquiteInteger(ChromFileNameDialog.CANCEL);
-		ChromFileNameDialog dialog = new ChromFileNameDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
-				"Segregate Chromatograms Options", buttonPressed, nameParserManager, nameParsingRulesName);		
+		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);
+		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Segregate Chromatograms Options",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 
 
 		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
@@ -403,10 +367,8 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		dialog.appendToHelpString(s);
 
 		dialog.completeAndShowDialog(true);
-		boolean success=(buttonPressed.getValue()== ChromFileNameDialog.OK);
+		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
-			nameParsingRule = dialog.getNameParsingRule();
-			nameParsingRulesName = nameParsingRule.getName();
 			fileExtension = fileExtensionField.getText();
 			requiresExtension = requiresExtensionBox.getState();
 			sampleNameToMatch = sampleNameToMatchField.getText();
@@ -421,22 +383,12 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 	public Object doCommand(String commandName, String arguments, CommandChecker checker) {
 		if (checker.compare(this.getClass(), "Segregates into a new folder all chromatograms whose sample names and gene fragment names contain a particular string.", null, commandName, "extract")) {
 
-			if (nameParserManager == null)
-				nameParserManager= (NameParserManager)MesquiteTrunk.mesquiteTrunk.findEmployeeWithName("#ChromFileNameParsManager");
-			if (nameParserManager == null) {
-				Debugg.println("nameParserManager NULL!");
-				return null;
-			}
 			if (!hireRequired())
 				return null;
 			
 			if (queryOptions()) {
 				extractChromatograms(null);
 			}
-			//	PhPhRunner phphTask = (PhPhRunner)hireEmployee(PhPhRunner.class, "Module to run Phred & Phrap");
-			//	}
-			//	if (phphTask != null)
-			//		phphTask.doPhredPhrap(null, false);
 		}
 		else
 			return  super.doCommand(commandName, arguments, checker);

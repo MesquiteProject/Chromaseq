@@ -1,5 +1,7 @@
 package mesquite.chromaseq.PrimerInfoFromDatabase;
 
+import org.dom4j.Element;
+
 import mesquite.chromaseq.lib.PrimerInfoSource;
 import mesquite.lib.StringUtil;
 import mesquite.molec.lib.DNADatabaseURLSource;
@@ -8,7 +10,7 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 	boolean preferencesSet = false;
 	PrimerInformationDatabase primers = null;
 	protected DNADatabaseURLSource databaseURLSource = null;
-	private String databaseURL = "";
+//	private String databaseURL = "";
 
 	
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
@@ -25,18 +27,11 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 	}
 
 	/*.................................................................................................................*/
-	public void processSingleXMLPreference (String tag, String content) {
-		 if ("databaseURL".equalsIgnoreCase(tag))
-				databaseURL = StringUtil.cleanXMLEscapeCharacters(content);
-		preferencesSet = true;
+	public  void addXMLAttributes(Element element){
+		element.addAttribute("databaseURLSource", databaseURLSource.getClassName());
 	}
-	/*.................................................................................................................*/
-	public String preparePreferencesForXML () {
-		StringBuffer buffer = new StringBuffer(200);
-		StringUtil.appendXMLTag(buffer, 2, "databaseURL", databaseURL);
-		preferencesSet = true;
-		return buffer.toString();
-	}
+
+
 	/*.................................................................................................................*/
 	public void echoParametersToFile(StringBuffer logBuffer) {
 		echoStringToFile("Using primers database\n", logBuffer);
