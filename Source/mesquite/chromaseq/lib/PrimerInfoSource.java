@@ -13,6 +13,8 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.lib;
 
+import org.dom4j.Element;
+
 import mesquite.lib.MesquiteModule;
 
 public abstract class PrimerInfoSource extends MesquiteModule {
@@ -44,5 +46,9 @@ public abstract class PrimerInfoSource extends MesquiteModule {
  	public abstract boolean isReady();
 
  	public abstract void echoParametersToFile(StringBuffer logBuffer);
+
+	/*.................................................................................................................*/
+	public  void addXMLAttributes(Element element){
+	}
 
 }

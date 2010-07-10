@@ -18,6 +18,7 @@ import java.util.Vector;
 import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.StringUtil;
 import mesquite.lib.XMLUtil;
@@ -28,7 +29,11 @@ import org.dom4j.Element;
 
 public class ChromaseqInfoFile {
 
-	static final int infoFileVersion = 1;
+	static final int infoFileVersion = 2;
+	
+	/*
+	 * file version changes:  with version 2, added formal SequenceNameSource and PrimerInfoSource module info
+	 */
 
 	Document doc = null;
 	Element rootElement = null;
@@ -117,12 +122,28 @@ public class ChromaseqInfoFile {
 		XMLUtil.addFilledElement(processedFolderElement, "phrapOptions", phrapOptions);
 	}
 	/*.................................................................................................................*/
+	public  void addPrimerInfoSource(PrimerInfoSource primerInfoSource){
+		Element element = processedFolderElement.addElement("primerInfoSource");
+		element.addAttribute("module", ""+primerInfoSource.getClassName());
+		primerInfoSource.addXMLAttributes(element);
+	}
+	/*.................................................................................................................*/
+	public  void addSequenceNameSource(SequenceNameSource sequenceNameSource){
+		Element element = processedFolderElement.addElement("sequenceNameSource");
+		element.addAttribute("module", ""+sequenceNameSource.getClassName());
+		sequenceNameSource.addXMLAttributes(element);
+}
+	/*.................................................................................................................*
 	public  void addSampleCodeFile(String sampleCodeFilePath){
 		XMLUtil.addFilledElement(processedFolderElement, "sampleCodeTranslationFilePath", sampleCodeFilePath);
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public  void addPrimerFile(String primerFile){
 		XMLUtil.addFilledElement(processedFolderElement, "primerInformationFilePath", primerFile);
+	}
+	/*.................................................................................................................*/
+	public  Element getProcessedFolderElement(){
+		return processedFolderElement;
 	}
 	/*.................................................................................................................*/
 	public  void addChromaseqProcessingOptions(int qualThresholdForLowerCase, boolean processPolymorphisms, double polyThreshold, boolean truncateMixedEnds, int qualThresholdForTrim, int mixedEndWindow, int mixedEndThreshold){

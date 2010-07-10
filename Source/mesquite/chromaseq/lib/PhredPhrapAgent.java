@@ -13,6 +13,8 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.lib;
 
+import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameParsing;
+
 public class PhredPhrapAgent {
 	
 	ChromFileNameParsing nameParsingRule;
