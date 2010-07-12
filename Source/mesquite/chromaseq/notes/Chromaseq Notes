@@ -2,14 +2,10 @@
 Necessary pre-beta
 
 - phone home
-- show primers use PrimerInfoSource
-- database options can be hidden
 - SequenceNameSource and PrimerInfoSource for BP-style systems
 - SequenceNameSource and PrimerInfoSource for 96-well/Excel style systems
 - XML support in SequenceNameFromTextFile and PrimerInfoFromTextFile
 
-
-in PCRD use "return MesquiteTrunk.mesquiteTrunk.numModulesAvailable(AbiDownloader.class)
 
 
 =====
