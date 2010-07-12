@@ -282,4 +282,24 @@ public class AbiDownloaderImpl extends AbiDownloader {
 		AbiDownloaderImpl downloader = new AbiDownloaderImpl();
 		downloader.downloadAbiFilesFromDb();
 	}*/
+	
+	/*.................................................................................................................*/
+	/** Returns CompatibilityTest so other modules know if this is compatible with some object. */
+	public CompatibilityTest getCompatibilityTest(){return new ABID();}
+
+	
 }
+
+
+
+class ABID extends CompatibilityTest {
+	public  boolean isCompatible(Object obj, MesquiteProject project, EmployerEmployee prospectiveEmployer){
+		
+		if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(DNADatabaseURLSource.class)<=0)
+			return false;
+		
+		return true;
+	}
+}
+
+

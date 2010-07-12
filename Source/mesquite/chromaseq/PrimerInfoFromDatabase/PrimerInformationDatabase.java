@@ -50,8 +50,8 @@ public class PrimerInformationDatabase {
 	/**
 	 * format:
 	 * <primers>
-	 * 	<primer name="SSU4F" genename="18S" forward="1"/>
-	 * 	<primer name="SS1554R" genename="18S" forward="0"/>
+	 * 	<primer name="SSU4F" genename="18S" forward="1" sequence="CTGGTTGATCCTGCCAG"/>
+	 * 	<primer name="SS1554R" genename="18S" forward="0" sequence="GTCCTGTTCCATTATTCCAT"/>
 	 *  ...
 	 * </primers>
 	 * @param doc

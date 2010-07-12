@@ -3,8 +3,12 @@ package mesquite.chromaseq.PrimerInfoFromDatabase;
 import org.dom4j.Element;
 
 import mesquite.chromaseq.lib.PrimerInfoSource;
+import mesquite.lib.CompatibilityTest;
+import mesquite.lib.EmployerEmployee;
 import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteProject;
 import mesquite.lib.MesquiteSubmenuSpec;
+import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.StringUtil;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
@@ -116,9 +120,22 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 		return "Provides primer information from a database.";
 	}
 
+	/*.................................................................................................................*/
+	/** Returns CompatibilityTest so other modules know if this is compatible with some object. */
+	public CompatibilityTest getCompatibilityTest(){return new PIFD();}
 
 }
 
+
+class PIFD extends CompatibilityTest {
+	public  boolean isCompatible(Object obj, MesquiteProject project, EmployerEmployee prospectiveEmployer){
+		
+		if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(DNADatabaseURLSource.class)<=0)
+			return false;
+		
+		return true;
+	}
+}
 
 
 
