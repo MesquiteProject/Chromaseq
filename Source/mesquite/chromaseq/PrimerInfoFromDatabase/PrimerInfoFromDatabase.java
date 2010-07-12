@@ -3,6 +3,8 @@ package mesquite.chromaseq.PrimerInfoFromDatabase;
 import org.dom4j.Element;
 
 import mesquite.chromaseq.lib.PrimerInfoSource;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteSubmenuSpec;
 import mesquite.lib.StringUtil;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
@@ -15,6 +17,8 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 	
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
+		
+		
 		if (databaseURLSource==null)
 			databaseURLSource= (DNADatabaseURLSource)hireEmployee(DNADatabaseURLSource.class, "Source of Database Connectivity");
 		if (databaseURLSource==null)
@@ -26,6 +30,13 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 		return true;
 	}
 
+	/*.................................................................................................................*
+	public  void addMenuItemsForPrimerSubmenu(MesquiteSubmenuSpec primerSubmenu){
+		if (primerSubmenu!=null)
+			addItemToSubmenu(null, primerSubmenu, "Choose Primer Information Database Source...", MesquiteModule.makeCommand("choosePrimerDatabaseSource",  this));
+		else
+			addMenuItem( "Choose Primer Information Database Source...", MesquiteModule.makeCommand("choosePrimerDatabaseSource",  this));
+	}
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){
 		element.addAttribute("databaseURLSource", databaseURLSource.getClassName());
@@ -65,6 +76,23 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 		}
 		return null;
 	}
+	
+ 	// returns array of all primer sequences
+ 	public  String[][] getPrimerSequences(){
+		if (primers!=null) {
+			return primers.getAllSequences();
+		}
+		return null;
+ 	}
+
+ 	// returns array of all primer sequences that correspond to the given gene fragment name (ignoring case)
+ 	public  String[][] getPrimerSequences(String geneFragmentName){
+		if (primers!=null) {
+			return primers.getAllSequences(geneFragmentName);
+		}
+		return null;
+ 	}
+
 
 	public boolean isForward(String ID) {
 		if (primers!=null) {

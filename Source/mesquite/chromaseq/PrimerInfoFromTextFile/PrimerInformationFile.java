@@ -178,6 +178,33 @@ public class PrimerInformationFile {
 		}
 		return "";
 	}
+	/** returns all primer sequences that correspond to the given gene fragment name, 
+	[numPrimers][2], with [i][0] containing the primer name of the i'th primer, and [i][1] containing the primer sequence */
+	/*.................................................................................................................*/
+	public String[][] getAllSequences(String geneFragmentName) {
+		if (sequences==null || sequences.length==0)
+			return null;
+
+		int count = 0;
+		for (int i=0; i<sequences.length; i++) {
+			if (StringUtil.notEmpty(sequences[i]) && (StringUtil.blank(geneFragmentName)|| geneFragmentName.equalsIgnoreCase(fragmentNames[i])))
+				count++;
+		}
+		String [][] seq = new String[count][2];
+		count=0;
+		for (int i=0; i<sequences.length; i++) {
+			if (StringUtil.notEmpty(sequences[i]) && (StringUtil.blank(geneFragmentName)|| geneFragmentName.equalsIgnoreCase(fragmentNames[i]))) {
+				seq[count][0] = primerNames[i];
+				seq[count][1] = sequences[i];
+				count++;
+			}
+		}
+		return seq;
+	}
+	/*.................................................................................................................*/
+	public String[][] getAllSequences() {
+		return getAllSequences(null);
+	}
 	/*.................................................................................................................*/
 	public boolean isForward(String primerName) {
 		if (!StringUtil.blank(primerName)) {

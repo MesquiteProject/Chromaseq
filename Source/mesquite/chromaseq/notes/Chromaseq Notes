@@ -1,7 +1,18 @@
 
-Necessary pre-alpha
+Necessary pre-beta
 
 - phone home
+- show primers use PrimerInfoSource
+- database options can be hidden
+- SequenceNameSource and PrimerInfoSource for BP-style systems
+- SequenceNameSource and PrimerInfoSource for 96-well/Excel style systems
+- XML support in SequenceNameFromTextFile and PrimerInfoFromTextFile
+
+
+in PCRD use "return MesquiteTrunk.mesquiteTrunk.numModulesAvailable(AbiDownloader.class)
+
+
+=====
 
 
 1. PhPhRunner generalize into ChromatogramProcessor, and FileInits etc. that call this  [DONE]
@@ -30,6 +41,9 @@ a module for returning results to Mesquite
 -------------------
 
 
+- have pre-flight option to check plumbing is in place and names and primer sources all OK
+- closeup panel remember the last panel on which you touched, and that becomes the default if the cursor is out of the zone?
+
 
 - speed up primers
 - undo within chromatogram viewer
@@ -45,6 +59,7 @@ Notes for next alpha release
 	- navigation: up and down arrows
 	- opens chromatogram window in same place as last one if popped out
 	- closeup panel
+	
 
 ======================
 MANUAL

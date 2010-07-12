@@ -22,7 +22,6 @@ import org.dom4j.Document;
 
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
-import mesquite.chromaseq.PhredPhrap.SampleCodeProvider;
 import mesquite.chromaseq.lib.*;
 
 /* ======================================================================== */
@@ -55,9 +54,9 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 	PrimerInfoSource primerInfoTask = null;
 
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		EmployeeNeed e1 = registerEmployeeNeed(SequenceNameSource.class, "Phred/Phrap processing requires a source of sequence names; choose the one that appropriately determines the sequence names from the sample codes.", "This is activated automatically.");
-		EmployeeNeed e2 = registerEmployeeNeed(PrimerInfoSource.class, "Phred/Phrap processing requires a source of information about primers, including their names, direction, and sequence, as well as the gene fragments to which they correspond.", "This is activated automatically.");
-		EmployeeNeed e3 = registerEmployeeNeed(ChromatogramFileNameParser.class, "Phred/Phrap processing requires a means to determine the sample code and primer name.", "This is activated automatically.");
+		EmployeeNeed e1 = registerEmployeeNeed(SequenceNameSource.class, "Chromatogram processing requires a source of sequence names; choose the one that appropriately determines the sequence names from the sample codes.", "This is activated automatically.");
+		EmployeeNeed e2 = registerEmployeeNeed(PrimerInfoSource.class, "Chromatogram processing requires a source of information about primers, including their names, direction, and sequence, as well as the gene fragments to which they correspond.", "This is activated automatically.");
+		EmployeeNeed e3 = registerEmployeeNeed(ChromatogramFileNameParser.class, "Chromatogram processing requires a means to determine the sample code and primer name.", "This is activated automatically.");
 	}
 
 	/*.................................................................................................................*/

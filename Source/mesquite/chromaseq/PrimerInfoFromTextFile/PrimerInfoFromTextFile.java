@@ -7,17 +7,9 @@ import java.awt.event.ActionListener;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
-import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameDialog;
-import mesquite.chromaseq.lib.PrimerInfoSource;
-import mesquite.chromaseq.lib.PrimerList;
-import mesquite.lib.ExtensibleDialog;
-import mesquite.lib.MesquiteFile;
-import mesquite.lib.MesquiteInteger;
-import mesquite.lib.MesquiteString;
-import mesquite.lib.MesquiteThread;
-import mesquite.lib.Parser;
-import mesquite.lib.SingleLineTextField;
-import mesquite.lib.StringUtil;
+import mesquite.chromaseq.lib.*;
+import mesquite.lib.*;
+import mesquite.lib.duties.CharSourceCoordObed;
 
 public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionListener {
 	String primerListPath = null;
@@ -28,15 +20,37 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 	Document primerDoc = null;
 	boolean primersInXml = false;
 	PrimerInformationFile primers = null;
+	
+	MesquiteMenuItemSpec chooseInfoMenu = null;
 
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		return queryOptions();
+		if (StringUtil.blank(primerListPath))
+			if (!queryOptions())
+				return false;
+		if (StringUtil.notEmpty(primerListPath))
+			prepareFile();
+		return true;
 	}
 
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){
 		element.addAttribute("primerListPath", primerListPath);
+	}
+	/*.................................................................................................................*/
+	public  void addMenuItemsForPrimerSubmenu(MesquiteSubmenuSpec primerSubmenu){
+		if (primerSubmenu!=null)
+			chooseInfoMenu = addItemToSubmenu(null, primerSubmenu, "Choose Primer Information File ...", MesquiteModule.makeCommand("choosePrimerFile",  this));
+		else
+			chooseInfoMenu= addMenuItem( "Choose Primer Information File...", MesquiteModule.makeCommand("choosePrimerFile",  this));
+	}
+
+	/*.................................................................................................................*/
+	public  void removeMenuItemsFromPrimerSubmenu(MesquiteSubmenuSpec primerSubmenu){
+		if (chooseInfoMenu!=null){
+			deleteMenuItem(chooseInfoMenu);
+			chooseInfoMenu=null;
+		}
 	}
 
 	/*.................................................................................................................*/
@@ -81,6 +95,17 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 		return success;
 	}
 	/*.................................................................................................................*/
+	public Object doCommand(String commandName, String arguments, CommandChecker checker) {
+		if (checker.compare(this.getClass(), "Allows the user to choose the primer information file", "[name of module]", commandName, "choosePrimerFile")) {
+			if (!MesquiteThread.isScripting())
+				queryOptions();
+		}
+
+		else
+			return  super.doCommand(commandName, arguments, checker);
+		return null;
+	}
+	/*.................................................................................................................*/
 	public void echoParametersToFile(StringBuffer logBuffer) {
 		echoStringToFile("Using primers file: " + primerListPath+"\n", logBuffer);
 	}
@@ -123,6 +148,23 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 		}
 		return null;
 	}
+	
+ 	// returns array of all primer sequences
+ 	public  String[][] getPrimerSequences(){
+		if (primers!=null) {
+			return primers.getAllSequences();
+		}
+		return null;
+ 	}
+
+ 	// returns array of all primer sequences that correspond to the given gene fragment name (ignoring case)
+ 	public  String[][] getPrimerSequences(String geneFragmentName){
+		if (primers!=null) {
+			return primers.getAllSequences(geneFragmentName);
+		}
+		return null;
+ 	}
+
 
 	public boolean isForward(String ID) {
 		if (primers!=null) {

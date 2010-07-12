@@ -40,6 +40,7 @@ public class PrimerInformationDatabase {
 
 	public PrimerInformationDatabase(DNADatabaseURLSource databaseURLSource) {
 		this.databaseURLSource = databaseURLSource;
+		readPrimerInfoFromDatabase();
 //		if (databaseURLSource!=null)
 //			databaseURL = databaseURLSource.getBaseURL();
 //		this.databaseURL = databaseURL;
@@ -104,7 +105,9 @@ public class PrimerInformationDatabase {
 			// xml format so parse accordingly
 			parsePrimerXML(doc);
 			return;
-		}
+		} else
+			MesquiteMessage.discreetNotifyUser("The Primer Information Database appears to be unavailable.  Perhaps you are not connected to the internet, or the server is down.");
+
 	}
 
 	public String[][] getPrimerArray () {
@@ -222,6 +225,37 @@ public class PrimerInformationDatabase {
 		}
 		return "";
 	}
+	
+	/** returns all primer sequences that correspond to the given gene fragment name, 
+	[numPrimers][2], with [i][0] containing the primer name of the i'th primer, and [i][1] containing the primer sequence */
+	/*.................................................................................................................*/
+	public String[][] getAllSequences(String geneFragmentName) {
+		if (sequences==null || sequences.length==0)
+			return null;
+		
+		int count = 0;
+		for (int i=0; i<sequences.length; i++) {
+			if (StringUtil.notEmpty(sequences[i]) && (StringUtil.blank(geneFragmentName)|| geneFragmentName.equalsIgnoreCase(fragmentNames[i])))
+				count++;
+		}
+		String [][] seq = new String[count][2];
+		count=0;
+		for (int i=0; i<sequences.length; i++) {
+			if (StringUtil.notEmpty(sequences[i]) && (StringUtil.blank(geneFragmentName)|| geneFragmentName.equalsIgnoreCase(fragmentNames[i]))) {
+				seq[count][0] = primerNames[i];
+				seq[count][1] = sequences[i];
+				count++;
+			}
+		}
+		return seq;
+	}
+	/*.................................................................................................................*/
+	public String[][] getAllSequences() {
+		return getAllSequences(null);
+	}
+
+	
+	
 
 	/**
 	 * gets the gene name and whether the primer is forward
@@ -304,7 +338,7 @@ public class PrimerInformationDatabase {
 		}
 		return count;
 	}
-	/*.................................................................................................................*/
+	/*.................................................................................................................*
 	public String[][] getPrimerSequences() {
 		if (primerNames==null || sequences==null)
 			return null;

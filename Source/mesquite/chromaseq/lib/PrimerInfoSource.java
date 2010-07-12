@@ -16,6 +16,7 @@ package mesquite.chromaseq.lib;
 import org.dom4j.Element;
 
 import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteSubmenuSpec;
 
 public abstract class PrimerInfoSource extends MesquiteModule {
 
@@ -38,6 +39,16 @@ public abstract class PrimerInfoSource extends MesquiteModule {
 
  	// returns length of primer sequence
  	public abstract int getPrimerSequenceLength(String ID);
+ 	
+
+ 	// returns array of all primer sequences, 
+ 	// [numPrimers][2], with [i][0] containing the primer name of the i'th primer, and [i][0] containing the primer sequence
+ 	public abstract String[][] getPrimerSequences();
+
+ 	// returns array of all primer sequences that correspond to the given gene fragment name (ignoring case), 
+ 	// [numPrimers][2], with [i][0] containing the primer name of the i'th primer, and [i][0] containing the primer sequence
+ 	public abstract String[][] getPrimerSequences(String geneFragmentName);
+
 
  	// returns gene fragment name
  	public abstract String getGeneFragmentName(String ID);
@@ -50,5 +61,13 @@ public abstract class PrimerInfoSource extends MesquiteModule {
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){
 	}
+	
+	/*.................................................................................................................*/
+	public  void addMenuItemsForPrimerSubmenu(MesquiteSubmenuSpec primerSubmenu){
+	}
+	/*.................................................................................................................*/
+	public  void removeMenuItemsFromPrimerSubmenu(MesquiteSubmenuSpec primerSubmenu){
+	}
+
 
 }

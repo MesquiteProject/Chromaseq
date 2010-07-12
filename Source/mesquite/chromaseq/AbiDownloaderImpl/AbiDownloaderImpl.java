@@ -138,7 +138,7 @@ public class AbiDownloaderImpl extends AbiDownloader {
 			// (5) run p/p on that directory
 			return chromatogramProcessorTask.processChromatograms(project, false, directoryPath);
 		} else {
-			MesquiteMessage.warnUser("Problems downloading and unzipping chromatograms, phred/phrap will not proceed.");
+			MesquiteMessage.warnUser("Problems downloading and unzipping chromatograms, chromatogram processing will not proceed.");
 		}
 		return false;
 	}

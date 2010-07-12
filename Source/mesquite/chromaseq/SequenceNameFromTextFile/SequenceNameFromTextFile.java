@@ -1,12 +1,8 @@
 package mesquite.chromaseq.SequenceNameFromTextFile;
 
 import java.awt.Button;
-import java.awt.Checkbox;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -14,22 +10,8 @@ import java.util.StringTokenizer;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
-import mesquite.chromaseq.PhredPhrap.SampleCodeProvider;
-import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameDialog;
 import mesquite.chromaseq.lib.SequenceNameSource;
-import mesquite.lib.ExtensibleDialog;
-import mesquite.lib.MesquiteBoolean;
-import mesquite.lib.MesquiteDouble;
-import mesquite.lib.MesquiteFile;
-import mesquite.lib.MesquiteInteger;
-import mesquite.lib.MesquiteMessage;
-import mesquite.lib.MesquiteString;
-import mesquite.lib.MesquiteThread;
-import mesquite.lib.MesquiteTrunk;
-import mesquite.lib.Parser;
-import mesquite.lib.SingleLineTextField;
-import mesquite.lib.StringUtil;
-import mesquite.lib.XMLUtil;
+import mesquite.lib.*;
 
 public class SequenceNameFromTextFile extends SequenceNameSource implements ActionListener {
 	String sampleCodeListPath = null;
@@ -46,22 +28,6 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		return queryOptions();
 	}
 
-/*
- * 	private boolean findFile() {
-		MesquiteString dnaNumberListDir = new MesquiteString();
-		MesquiteString dnaNumberListFile = new MesquiteString();
-		sampleCodeListPath = MesquiteFile.openFileDialog("Choose file containing sample codes and names", dnaNumberListDir, dnaNumberListFile);
-		if (StringUtil.blank(sampleCodeListPath))
-			return false;
-		return true;
-	}
-	
-	private boolean findFileIfNeeded() {
-		if (sampleCodeListPath==null)
-			return findFile();
-		return true;
-	}
-	*/
 	
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){
@@ -91,16 +57,6 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		dnaCodesField = dialog.addTextField("Sequence names file:", sampleCodeListPath,26);
 		final Button dnaCodesBrowseButton = dialog.addAListenedButton("Browse...",null, this);
 		dnaCodesBrowseButton.setActionCommand("DNANumbersBrowse");
-
-		/*		String s = "Mesquite searches within the name of each chromatogram file for both a code indicating the sample (e.g., a voucher number) and the primer name. ";
-		s+= "To allow this, you must first define an rule that defines how the chromatogram file names are structured.\n\n";
-		s+= "If you so choose, Mesquite will search for the sample code within a sample names file you select, on each line of which is:\n";
-		s+= "   <code><tab><short sample name><tab><long sample name>;\n";
-		s+= "where the code, short sample name, and long sample name are all single tokens (you can force a multi-word name to be a single token by surrounding the name with single quotes). ";
-		s+= "The short sample name is for the file names, and must be <27 characters; the long sample name is the name you wish to have within the FASTA file.\n\n";
-		dialog.appendToHelpString(s);
-*/
-
 
 		String s = "This file should contain, either in a tab delimited format or in XML, the names to be used for the sequences, and the sample codes to which each corresponds.\n\n";
 		s+= "<BR>If it is a tab-delimited text file, each line should look like this:<br><br>\n";
