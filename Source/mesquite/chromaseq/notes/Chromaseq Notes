@@ -7,6 +7,13 @@ Necessary pre-beta
 - XML support in SequenceNameFromTextFile and PrimerInfoFromTextFile
 
 
+SAM DONNELLY
+
+I was not including a trailing slash under "Phred, Phrap, & Phd2Fasta path" and this resulted in errors in the console like this, which I apologize for not seeing sooner: 
+
+./info.xml: file read error: unknown file type
+
+
 
 =====
 
