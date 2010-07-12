@@ -111,12 +111,4 @@ public class SequenceUploader {
 		}
 	}
 	
-	/*public static void main(String[] args) {
-		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-		System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-		System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
-		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");	
-		SequenceUploader uploader = new SequenceUploader();
-		uploader.uploadAB1ToServer("BP1560", "BP1560.ab1", new File("/home/dmandel/btolchromatograms/BTOL001/Chromatograms.original/A01_A01BP1560_CD439F_538892.ab1"));
-	}*/
 }

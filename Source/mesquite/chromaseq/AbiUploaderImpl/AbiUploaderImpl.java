@@ -35,12 +35,6 @@ public class AbiUploaderImpl extends AbiUploader {
 	private SingleLineTextField urlField;
 	private TextArea uploadBatchDescriptionArea;
 	
-	public Class getDutyClass() {
-		return AbiUploaderImpl.class;
-	}
-	public String getName() {
-		return "Abi Uploader";
-	}
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
 		if (nameParserManager == null) {
@@ -55,6 +49,14 @@ public class AbiUploaderImpl extends AbiUploader {
 			return false;
 		}
 	}
+	
+	public Class getDutyClass() {
+		return AbiUploaderImpl.class;
+	}
+	public String getName() {
+		return "Abi Uploader";
+	}
+
 	/**
 	 * loops through a user-specified directory on the filesystem
 	 * and uploads abi files to a database url
