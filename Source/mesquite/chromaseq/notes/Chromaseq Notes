@@ -1,17 +1,15 @@
 
 Necessary pre-beta
 
+-issue with PrimerInfoFromTextFile and when it does and doesn't ask you for the path to the file
+
 - phone home
 - SequenceNameSource and PrimerInfoSource for BP-style systems
 - SequenceNameSource and PrimerInfoSource for 96-well/Excel style systems
 - XML support in SequenceNameFromTextFile and PrimerInfoFromTextFile
 
 
-SAM DONNELLY
-
-I was not including a trailing slash under "Phred, Phrap, & Phd2Fasta path" and this resulted in errors in the console like this, which I apologize for not seeing sooner: 
-
-./info.xml: file read error: unknown file type
+clean up  "./info.xml: file read error: unknown file type" by hiding it in a subdirectory?
 
 
 
