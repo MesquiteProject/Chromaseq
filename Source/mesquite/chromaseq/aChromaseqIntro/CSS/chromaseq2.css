@@ -1,0 +1,94 @@
+
+body {
+ margin:20px;
+ background:#e8e3cf;
+ color: #333333;
+ text-align:center;
+ padding:0;
+ background-image: url(mesquitePlain.gif);
+ background-position: 0 0;
+ background-repeat: no-repeat;
+ }
+ 
+#outer {
+ text-align:left;
+ border:1px solid #877c6a;
+ width:750px;
+ margin:auto;
+ }
+
+#hdr {
+ height:60px;
+ background:#f4f0e2;
+ color: #877c6a;
+ }
+
+#bar {
+ height:45px;
+ background:#f4f0e2;
+ color: #877c6a;
+ border:solid #877c6a;	
+ border-width:1px 0 1px 0;
+ }
+
+#bodyblock {
+ position:relative;
+ background: #f4f0e2;
+ color: #877c6a;
+ width:750px;
+ padding:0;
+ }
+
+#l-col {
+ float:left;
+ background:#f4f0e2; 
+ color: #877c6a;
+ width:145px;
+ }
+ 
+#l-col a:link {color:#877c6a; text-decoration:none;}
+#l-col a:hover {color:#000000; text-decoration:bold;}
+#l-col a:visited {color:#aba697; text-decoration:none;}
+
+
+
+#cont {
+ width:595px;
+ background:#ffffff;
+ color: #333333;
+ border:solid #877c6a;	
+ border-width:0 0 0 1px;
+ text-align:left;
+ }
+
+#ftr {
+ height:25px;
+ background:#e8e3cf;
+ color: #333333;
+ border:solid  #877c6a;
+ border-width:1px 0 0 0;
+ margin:0;
+ }
+ 
+ h3 {
+ margin:0;
+ padding:15px;
+ color:#877c6a;
+ }
+ 
+p {
+ margin:0;
+ padding:15px;
+ }
+
+h4 {
+ margin:0; 
+ padding: 5px 0;
+ color:#877c6a;
+ }
+ 
+
+
+
+
+#pad {height:140px;}

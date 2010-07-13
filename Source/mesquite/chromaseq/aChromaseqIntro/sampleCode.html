@@ -1,12 +1,102 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html><!-- InstanceBegin template="/Templates/standard.dwt" codeOutsideHTMLIsLocked="false" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>Sample Code File</title>
 <!-- InstanceEndEditable -->
-<link rel="stylesheet" href="styles/mesquitePackage.css" type="text/css">
+
+<![endif]--><!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.thrColFixHdr #sidebar2, .thrColFixHdr #sidebar1 { padding-top: 30px; }
+.thrColFixHdr #mainContent { zoom: 1; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+<script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
+<script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
+<script type="text/javascript">
+var params = Spry.Utils.getLocationParamsAsObject();
+
+var qsParm = new Array();
+
+qsParm['ProcessingChromatoPanel'] = null;
+qsParm['GettingStartedPanel'] = null;
+qsParm['ChromatogramViewerPanel'] = null;
+qsParm['PreparingDataPanel'] = null;
+qsParm['CreditPanel'] = null;
+qsParm['HelpPanel'] = null;
+qsParm['OtherFeaturesPanel'] = null;
+qsParm['TechnicalPanel'] = null;
+
+qs();
+
+function qs() {
+	var query = window.location.search.substring(1);
+	var parms = query.split('&');
+	for (var i=0; i<parms.length; i++) {
+		var pos = parms[i].indexOf('=');
+		if (pos > 0) {
+			var key = parms[i].substring(0,pos);
+			var val = parms[i].substring(pos+1);
+			qsParm[key] = val;
+		}
+	}
+}
+
+parameterString = function()
+{
+	var paramString = '';
+	if (GettingStartedPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'GettingStartedPanel=open';
+	}
+	if (PreparingDataPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'PreparingDataPanel=open';
+	}
+	if (ProcessingChromatoPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ProcessingChromatoPanel=open';
+	}
+	if (ChromatogramViewerPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ChromatogramViewerPanel=open';
+	}
+	if (CreditPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'CreditPanel=open';
+	}
+	if (HelpPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'HelpPanel=open';
+	}
+	if (OtherFeaturesPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'OtherFeaturesPanel=open';
+	}
+	if (TechnicalPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'TechnicalPanel=open';
+	}
+	document.write('Parameter string: ' + paramString);
+
+	return paramString;
+};
+
+
+pageLink = function(page)
+{
+	document.location.href = page + parameterString();
+};
+
+
+
+</script>
+<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
+<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
 <!-- InstanceBeginEditable name="head" -->
 <style type="text/css">
 <!--
@@ -19,107 +109,223 @@
 <!-- InstanceEndEditable -->
 </head>
 
+<body class="thrColFixHdr">
 
-<body>
-<div id="masthead">
-  <div id="banner"><img src="splash.gif" width="164" height="64"></div>
-  <div id="mainTitle"><font id="packageName"><b>Chromaseq</b></font><BR>
-  <font id="version">Test Version 0.973<br>
-  8 January 2010</font><BR>
-         David R. Maddison and Wayne P. Maddison</div>
-  <div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Sample Codes &amp; Names File <!-- InstanceEndEditable --></div>
- 
+<div id="container">
+  <div id="header">
+    <table width="100%" border="0" cellpadding="4">
+  <tr>
+    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Sample Codes &amp; Names File <!-- InstanceEndEditable --></div></td>
+    <td width="2%">&nbsp;</td>
+    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+  </tr>
+</table>
+
 </div>
-<div>
-<!-- end masthead -->
-<div id="content"><!-- InstanceBeginEditable name="content" -->
-  <p>If you wish to have the sample codes that are contained in the chromatogram file names translated into other names (for example, the full names of the species or samples), you will need to provide a sample codes &amp; names file. </p>
-  <p>There are two allowed formats for the sample codes &amp; names file, tab-delimited and  space-delimited. In both formats, each line of the file contains the information for one sample code. Each line consists of four parts: (1) the sample code, (2) a short name of the sample, (3) a long name of the sample, and (4) an ending semicolon. The sample code is the code present in the chromatogram file name. The short sample name is the name to which this will be translated in some places in the Phred/Phrap/Mesquite system. The long sample name is the name to which it will be translated to in the sequence names of process sequences. The long name is optional. The short name is used for file names, to ensure that file names are not longer the maximum file name length of the operation system. The two formats differ in the character that separates the parts (a tab or space) and the structure of the first three elements. </p>
-  <h3>Delimited by tabs</h3>
-  <p>In this format, the elements on each line are separated by tabs (<span class="style2"><img src="images/tab.gif" alt="" width="8" height="13"></span>), including a tab between the long sample name and the semicolon:</p>
-  <p class="style2">&lt;sample code&gt;<img src="images/tab.gif" width="8" height="13">&lt;short sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">&lt;long sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    &lt;sample code&gt;<img src="images/tab.gif" width="8" height="13">&lt;short sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">&lt;long sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    &lt;sample code&gt;<img src="images/tab.gif" width="8" height="13">&lt;short sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">&lt;long sample name&gt;<img src="images/tab.gif" alt="" width="8" height="13">;  </p>
-  <p>Here is part of an example file: </p>
-  <p class="style2">1839<img src="images/tab.gif" alt="" width="8" height="13">Bemb honestum VA 1839<img src="images/tab.gif" alt="" width="8" height="13">Bembidion honestum VA:Wingina 1839<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    1840<img src="images/tab.gif" alt="" width="8" height="13">Bemb honestum VA 1840<img src="images/tab.gif" alt="" width="8" height="13">Bembidion honestum VA:New Canton 1840<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    1841<img src="images/tab.gif" alt="" width="8" height="13">Bemb honestum VA 1841<img src="images/tab.gif" alt="" width="8" height="13">Bembidion honestum VA:New Canton 1841<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    1842<img src="images/tab.gif" alt="" width="8" height="13">Bemb arenobilis NC 1842<img src="images/tab.gif" alt="" width="8" height="13">Bembidion arenobilis NC:Bynum 1842<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    1843<img src="images/tab.gif" alt="" width="8" height="13">Bemb arenobilis VA 1843<img src="images/tab.gif" alt="" width="8" height="13">Bembidion arenobilis VA:Brookneal 1843<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    2082<img src="images/tab.gif" alt="" width="8" height="13">Amerizus spectabile CA 2082<img src="images/tab.gif" alt="" width="8" height="13">Amerizus spectabile CA 2082<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    2083<img src="images/tab.gif" alt="" width="8" height="13">Bemb complanulum BC 2083<img src="images/tab.gif" alt="" width="8" height="13">Bembidion complanulum BC 2083<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    2084<img src="images/tab.gif" alt="" width="8" height="13">Bemb farrarae BC 2084<img src="images/tab.gif" alt="" width="8" height="13">Bembidion farrarae BC 2084<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    2085<img src="images/tab.gif" alt="" width="8" height="13">Bemb improvidens BC 2085<img src="images/tab.gif" alt="" width="8" height="13">Bembidion improvidens BC 2085<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    2086<img src="images/tab.gif" alt="" width="8" height="13">Bemb mimus IA 2086<img src="images/tab.gif" alt="" width="8" height="13">Bembidion mimus IA:Manchester 2086<img src="images/tab.gif" alt="" width="8" height="13">;<br>
-    2087<img src="images/tab.gif" alt="" width="8" height="13">Bemb platynoides OR 2087<img src="images/tab.gif" alt="" width="8" height="13">Bembidion platynoides OR 2087<img src="images/tab.gif" alt="" width="8" height="13">;</p>
-  <p>In this format, the elements can consist of multiple tokens.</p>
-  <h3>Delimited by spaces</h3>
-<p>In this format, the elements on each line are separated by spaces; there does not need to be a space between the long sample name and the semicolon:</p>
-  <p class="style2">&lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br>
-  &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br>
-  &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;  </p>
-  <p>Each element in this format must consist of exactly one token. If the sample name would naturally consist of more than one token, it must be &quot;tokenized&quot; by surrounding it by single quotes, and converting any contained single quotes into two consecutive quotes. Here is part of an example file: </p>
-  <p class="style2">1839	'Bemb honestum VA 1839'	'Bembidion honestum VA:Wingina 1839' ;<br>
-    1840	'Bemb honestum VA 1840'	'Bembidion honestum VA:New Canton 1840' ;<br>
-    1841	'Bemb honestum VA 1841'	'Bembidion honestum VA:New Canton 1841' ;<br>
-    1842	'Bemb arenobilis NC 1842'	'Bembidion arenobilis NC:Bynum 1842' ;<br>
-    1843	'Bemb arenobilis VA 1843'	'Bembidion arenobilis VA:Brookneal 1843' ;<br>
-    2082	'Amerizus spectabile CA 2082'	'Amerizus spectabile CA 2082' ;<br>
-    2083	'Bemb complanulum BC 2083'	'Bembidion complanulum BC 2083' ;<br>
-    2084	'Bemb farrarae BC 2084'	'Bembidion farrarae BC 2084' ;<br>
-    2085	'Bemb improvidens BC 2085'	'Bembidion improvidens BC 2085' ;<br>
-    2086	'Bemb mimus IA 2086'	'Bembidion mimus IA:Manchester 2086' ;<br>
-    2087	'Bemb platynoides OR 2087'	'Bembidion platynoides OR 2087' ;</p>
-  <p class="style2"></p>
-  <p class="style2">&nbsp;</p>
-  <h2>Future directions </h2>
-  <p>An XML format is being developed for this information, but it is not yet supported. </p>
-<!-- InstanceEndEditable --></div>
-<!--end content -->
-<div id="navBar">
-  <div id="sectionLinks">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="overview.html">Overview</a></li>
-      <li><a href="quickstart.html">Quickstart</a></li>
-	  <li><a href="tutorial.html">Tutorial</a></li>
-	  <li><a href="phredphrap.html">Phred / Phrap with Chromaseq</a></li>
-	  <ul id="subUL">
-	  	<li><a href="installingPP.html">Installing Phred &amp; Phrap </a></li>
-  		<li><a href="primers.html">Primer List File</a></li>
-  		<li><a href="sampleCode.html">Sample Codes &amp; Names File</a></li>
-  		<li></li>
-  		<li><a href="runningPP.html">Running Phred/Phrap</a></li>
-	  	<li><a href="namingRules.html">Chromatogram File Naming Rules </a></li>
-		<li><a href="quality.html">Quality Scores</a></li>
-		<li><a href="postPhrap.html">Post-Phrap Options</a></li>
-	  </ul>
-      <li><a href="viewer.html">Chromatogram Viewer</a></li>
-  		<ul id="subUL">
-	  		<li><a href="navigation.html">Navigation</a></li>
-  			<li><a href="display.html">Display Options</a></li>
-  			<li><a href="callingBases.html">Calling Bases</a></li>
-		</ul>
-      <li><a href="genbank.html">GenBank</a></li>
-      <li><a href="otherPrograms.html">Sequencher &amp; Others </a></li>
-      <li><a href="acknowledgements.html">Acknowledgements</a></li>
-      <li><a href="citation.html">Citation</a></li>
-      <li><a href="faq.html">FAQs</a></li>
-      <li><a href="future.html">Future Directions</a></li>
-      <li style="margin-top: 20px;"><a href="download.html">Download</a></li>
-      <li><a href="sourceCode.html">Source Code</a></li>
-    </ul>
-	<p>&nbsp;</p>
-	<ul><li> <a href="http://mesquiteproject.org"  style="border: 0px;"><img src="images/mesquiteIcon.gif" alt="Mesquite Home" width="32" height="32"> Mesquite Home</a> </li>
-    </ul>
+  
+  
+  <div id="sidebar1">
+  
+  
+  
+  
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('index.html')">Home</a>
+  </div>
+  
+  <div id="GettingStartedPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('download.html');">Download</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('installation.html');">Installation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('quickstart.html');">Quick Start</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorials</a></td></tr>
+		</table>
+    </div>
+  </div>
+  <div id="PreparingDataPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primers.html');">Primers</a></td></tr>
+		</table>
+    </div>
+  </div>
+  
+<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('runningPP.html');">Running Phred/Phrap</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('interpretingResults.html');">Interpreting Results</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram FIles</a></td></tr>
+		</table>
   </div>
 </div>
+
+
+<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
+  			<tr>
+  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+		</table>
+  </div>
 </div>
-<div id="navBarExtension">&nbsp;</div>
-<!--end navbar -->
-<div id="siteInfo"> Copyright &copy; 2010 <a href="http://david.bembidion.org">David
-    R. Maddison</a> and <a href="http://salticidae.org/wpm/home.html">Wayne P.
-    Maddison</a> </div>
-<br>
+
+<div id="OtherFeaturesPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('vouchers.html');">Voucher Information</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="HelpPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Help & Info</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Sequencher & Others</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
+	</table>
+  </div>
+</div>
+
+<div id="TechnicalPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Technical Details</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('sourceCode.html');">Source Code</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('technicalFAQ.html');">Technical FAQ</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="CreditPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('acknowledgements.html');">Acknowledgements</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<h3>&nbsp;</h3>
+  <!-- end #sidebar1 --></div>
+
+  <div id="mainContent">
+    
+<!-- InstanceBeginEditable name="content" -->
+  <p>If you wish to have the sample codes that are contained in the chromatogram file names translated into other names (for example, the full names of the species or samples), you will need to provide a sample codes &amp; names file. </p>
+  <p>The format of  the sample codes &amp; names file is:</p>
+  <p class="style2">&lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br />
+    &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br />
+    &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;</p>
+  <p>The sample code is the code present in the chromatogram file name. The short sample name is the name to which this will be translated in some places in the Phred/Phrap/Mesquite system. The long sample name is the name to which it will be translated to in the sequence names of process sequences. The long name is optional. The short name is used for file names, to ensure that file names are not longer the maximum file name length of the operation system. </p>
+  <p>Here is part of an example file: </p>
+  <p class="style2">1839	'Bemb honestum VA 1839'	'Bemb honestum VA:Wingina 1839' ;<br />
+    1840	'Bemb honestum VA 1840'	'Bemb honestum VA:New Canton 1840' ;<br />
+    1841	'Bemb honestum VA 1841'	'Bemb honestum VA:New Canton 1841' ;<br />
+    1842	'Bemb arenobilis NC 1842'	'Bemb arenobilis NC:Bynum 1842' ;<br />
+    1843	'Bemb arenobilis VA 1843'	'Bemb arenobilis VA:Brookneal 1843' ;<br />
+    2082	'Amerizus spectabile CA 2082'	'Amerizus spectabile CA 2082' ;<br />
+    2083	'Bemb complanulum BC 2083'	'Bemb complanulum BC 2083' ;<br />
+    2084	'Bemb farrarae BC 2084'	'Bemb farrarae BC 2084' ;<br />
+    2085	'Bemb improvidens BC 2085'	'Bemb improvidens BC 2085' ;<br />
+    2086	'Bemb mimus IA 2086'	'Bemb mimus IA:Manchester 2086' ;<br />
+    2087	'Bemb platynoides OR 2087'	'Bemb platynoides OR 2087' ;</p>
+  <h2>Future directions </h2>
+  <p>An XML format is being developed for this information, but it is not yet supported. </p>
+<!-- InstanceEndEditable -->
+
+    
+    
+    </div>
+	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
+  <div id="footer">
+    <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
+  <!-- end #footer --></div>
+<!-- end #container --></div>
+<script type="text/javascript">
+<!--
+
+
+var GettingStartedPanel = null;
+var ChromatogramViewerPanel = null;
+var ProcessingChromatoPanel = null;
+var PreparingDataPanel = null;
+var CreditPanel = null;
+var HelpPanel = null;
+var OtherFeaturesPanel = null;
+var TechnicalPanel = null;
+
+if (qsParm['ProcessingChromatoPanel']=='open')
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+else
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+	
+if (qsParm['GettingStartedPanel']=='open')
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
+else
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
+	
+if (qsParm['ChromatogramViewerPanel']=='open')
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+else
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
+
+if (qsParm['PreparingDataPanel']=='open')
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
+else
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+
+if (qsParm['CreditPanel']=='open')
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});
+else
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: false});
+
+if (qsParm['HelpPanel']=='open')
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: true});
+else
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: false});
+
+if (qsParm['OtherFeaturesPanel']=='open')
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: true});
+else
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: false});
+    
+if (qsParm['TechnicalPanel']=='open')
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: true});
+else
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: false});
+
+
+
+//-->
+</script>
 </body>
 <!-- InstanceEnd --></html>

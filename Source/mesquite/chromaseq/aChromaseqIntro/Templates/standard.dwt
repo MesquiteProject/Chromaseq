@@ -39,7 +39,7 @@
   		<li><a href="../sampleCode.html">Sample Codes &amp; Names File</a></li>
   		<li></li>
   		<li><a href="../runningPP.html">Running Phred/Phrap</a></li>
-	  	<li><a href="../namingRules.html">Chromatogram File Naming Rules </a></li>
+	  	<li><a href="../chromatograms.html">Chromatogram File Naming Rules </a></li>
 		<li><a href="../quality.html">Quality Scores</a></li>
 		<li><a href="../postPhrap.html">Post-Phrap Options</a></li>
 	  </ul>
