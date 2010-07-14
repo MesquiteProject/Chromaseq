@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Submitting sequences to GenBank</title>
+<!-- InstanceEndEditable -->
+
+<![endif]--><!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.thrColFixHdr #sidebar2, .thrColFixHdr #sidebar1 { padding-top: 30px; }
+.thrColFixHdr #mainContent { zoom: 1; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+<script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
+<script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
+<script type="text/javascript">
+var params = Spry.Utils.getLocationParamsAsObject();
+
+var qsParm = new Array();
+
+qsParm['ProcessingChromatoPanel'] = null;
+qsParm['GettingStartedPanel'] = null;
+qsParm['ChromatogramViewerPanel'] = null;
+qsParm['PreparingDataPanel'] = null;
+qsParm['CreditPanel'] = null;
+qsParm['HelpPanel'] = null;
+qsParm['OtherFeaturesPanel'] = null;
+qsParm['TechnicalPanel'] = null;
+
+qs();
+
+function qs() {
+	var query = window.location.search.substring(1);
+	var parms = query.split('&');
+	for (var i=0; i<parms.length; i++) {
+		var pos = parms[i].indexOf('=');
+		if (pos > 0) {
+			var key = parms[i].substring(0,pos);
+			var val = parms[i].substring(pos+1);
+			qsParm[key] = val;
+		}
+	}
+}
+
+parameterString = function()
+{
+	var paramString = '';
+	if (GettingStartedPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'GettingStartedPanel=open';
+	}
+	if (PreparingDataPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'PreparingDataPanel=open';
+	}
+	if (ProcessingChromatoPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ProcessingChromatoPanel=open';
+	}
+	if (ChromatogramViewerPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ChromatogramViewerPanel=open';
+	}
+	if (CreditPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'CreditPanel=open';
+	}
+	if (HelpPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'HelpPanel=open';
+	}
+	if (OtherFeaturesPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'OtherFeaturesPanel=open';
+	}
+	if (TechnicalPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'TechnicalPanel=open';
+	}
+	document.write('Parameter string: ' + paramString);
+
+	return paramString;
+};
+
+
+pageLink = function(page)
+{
+	document.location.href = page + parameterString();
+};
+
+
+
+</script>
+<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
+<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
+<!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+</head>
+
+<body class="thrColFixHdr" bgcolor="#f4f0e2">
+
+<div id="container">
+  <div id="header">
+    <table width="100%" border="0" cellpadding="4">
+  <tr>
+    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Submitting
+      Sequences to GenBank<!-- InstanceEndEditable --></div></td>
+    <td width="2%">&nbsp;</td>
+    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+  </tr>
+</table>
+
+</div>
+  
+  
+  <div id="sidebar1">
+  
+  
+  
+  
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('index.html')">Home</a>
+  </div>
+  
+  <div id="GettingStartedPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('download.html');">Download</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('installation.html');">Installation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('quickstart.html');">Quick Start</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorials</a></td></tr>
+		</table>
+    </div>
+  </div>
+  <div id="PreparingDataPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primers.html');">Primers</a></td></tr>
+		</table>
+    </div>
+  </div>
+  
+<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('runningPP.html');">Running Phred/Phrap</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('interpretingResults.html');">Interpreting Results</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram FIles</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
+  			<tr>
+  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="OtherFeaturesPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('vouchers.html');">Voucher Information</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="HelpPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Help & Info</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Sequencher & Others</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
+	</table>
+  </div>
+</div>
+
+<div id="TechnicalPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Technical Details</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('sourceCode.html');">Source Code</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('technicalFAQ.html');">Technical FAQ</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="CreditPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('acknowledgements.html');">Acknowledgements</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<h3>&nbsp;</h3>
+  <!-- end #sidebar1 --></div>
+
+  <div id="mainContent">
+    
+<!-- InstanceBeginEditable name="content" -->
+There are two mechanisms for submitting sequences contained in a Mesquite file to GenBank.  The first involves preparation of files for submission by Sequin; the second involves direction submission from Mesquite.  
+
+<h2>Preparation of files for submission by Sequin</h2>
+
+<p>This system is built to submit sequences from one gene at a time.</p>
+<p>To prepare
+    files for submission by Sequin, you will need the following: </p>
+<ol>
+  <li>A Mesquite file containing your sequences from one gene.</li>
+  <li>A tab-delimited text file containing information about each sequence to
+    be submitted. This file contains organism's name, authority, locality data,
+    etc. This is called the &quot;Voucher Database&quot; or &quot;Voucher DB&quot; file in Mesquite.</li>
+  </ol>
+<p>The form of the tab-delimited Voucher DB file is as follows. The first row
+  must begin with the word &quot;code&quot;, followed by a tab-delimited list
+  of the official GenBank names of the fields that appear in each of the later
+  lines. For example,
+  if the fields to be included are the organismal name, the taxonomic authority,
+  the name of the person who identified the specimen, the country (locality)
+  field, the latitude and longitude, and the information identifying the specimen
+  voucher, then this first line would appear as follows:</p>
+<pre> code <img src="images/tab.gif" width="8" height="13" /> organism <img src="images/tab.gif" width="8" height="13" /> authority <img src="images/tab.gif" width="8" height="13" /> identified-by <img src="images/tab.gif" width="8" height="13" /> country <img src="images/tab.gif" width="8" height="13" /> lat-lon <img src="images/tab.gif" width="8" height="13" /> specimen-voucher</pre>
+<p>(The black triangle,  <img src="images/tab.gif" width="8" height="13" />, represents
+  a tab.)</p>
+<p>The official GenBank names of the fields and the definition of those fields
+  is given on the <a href="http://www.ncbi.nlm.nih.gov/Sequin/modifiers.html">Modifiers
+  for FASTA Definition Lines</a> page, with more information on the <a href="http://www.ncbi.nlm.nih.gov/Sequin/sequin.hlp.html#ModifiersPage">Sequin
+  Help</a>  page. You may include whatever fields you need.</p>
+<p> On the following lines are the data about  the specimens, one line
+  for each specimen. The first item in the line is and ID code. This ID code
+  could be your specimen voucher code, or some other unique identifying string.
+  You will enter these codes in Mesquite for each sequence, which will allow
+  the system to associate the Voucher DB information with that particular sequence.
+  The following tab-delimited items in the line are the entries for that particular
+  specimen. For the example file with the header line shown above, here are two
+  lines that contain the information for specimen number 1290, and specimen number
+  1633:</p>
+<pre>
+1290 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) paraenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion paraenulum Maddison <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> USA: Mississippi: Walthall Co., 5.9 mi S Tylertown, Magees Creek <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
+1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward, 1901 <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> USA: Iowa: Jones Co., Wapsipinicon River W of Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
+<p>&nbsp;</p>
+<h3>Creating the FASTA file</h3>
+<p>Once you have completed the Voucher DB file, then in
+    Mesquite open your file containing the sequences, and go to the Taxa List
+  Window (Taxa&amp;Treex&gt;List
+    of
+    Taxa). You will need to show two new columns in this table. Choose Columns&gt;Voucher
+    Database and Columns&gt;Voucher ID Code. This will show those two columns. Select
+    the entire table (with Select All), and touch on the title of the Voucher
+  DB column. A menu will appear in which you can choose to browse for your tab-delimited
+    Voucher DB file. Select that file. The Voucher DB column should indicate
+  which
+    voucher DB file to use for each sequence. (In this example, all sequences
+  are using the same voucher DB file.) </p>
+<p>Now you need to enter into the Voucher ID field the ID codes for each of the
+  sequences. In the example here, the voucher ID code for the first sequence
+  is 1290. This tells Mesquite to look
+   in the Voucher DB file for the line whose code is 1290 to get the voucher
+  information for that sequence. To enter ID codes, select the sequence, and
+  use the popup menu that appears when you touch on the Voucher ID title at the
+  top of the column. Once this is done, the Taxa List Window should look something
+  like this:</p>
+<p align="center"><img src="images/taxaListWindow.png" width="541" height="70" /></p>
+<p>At this point, you are ready to export a FASTA file with your voucher information
+  contained within it, ready to be imported in Sequin. Do this by choose File&gt;Export,
+  and in the dialog that appears, choose &quot;FASTA (DNA/RNA) for GenBank Deposition&quot;.
+  You will be queried for options:</p>
+<p align="center"><img src="images/ExportFASTA.jpg" width="477" height="321" /></p>
+<p>&nbsp;</p>
+<h3>Importing the FASTA file into Sequin and submitting your sequences</h3>
+<ul>
+  <li>Download the latest version of Sequin.</li>
+  <li>In the Welcome to Sequin window, press Start New Submission</li>
+  <li>In the Submitting Authors window, enter the appropriate information for
+    each of the 4 tabs. If you have more than one gene to submit, we recommend
+    that you click back to the Submission tab, and chose File&gt;Export Submitter
+    Info, and save a file containing the entries. For the next gene, you can
+    then choose File&gt;Import Submitter Info and choose that file, saving you the
+    effort of re-entering those data.</li>
+  <li>In the Sequence Format window, choose Phylogenetic Study, and Sequence
+    data format as FASTA. </li>
+  <li>In the Organism and Sequence window, choose Import Nucleotide FASTA</li>
+  <li>Struggle with the arcane interface of Sequin to complete your submission.</li>
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Direct submission from within Mesquite</h2>
+[Feature not yet available]
+
+<!-- InstanceEndEditable -->
+
+    
+    
+    </div>
+	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
+  <div id="footer">
+    <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
+  <!-- end #footer --></div>
+<!-- end #container --></div>
+<script type="text/javascript">
+<!--
+
+
+var GettingStartedPanel = null;
+var ChromatogramViewerPanel = null;
+var ProcessingChromatoPanel = null;
+var PreparingDataPanel = null;
+var CreditPanel = null;
+var HelpPanel = null;
+var OtherFeaturesPanel = null;
+var TechnicalPanel = null;
+
+if (qsParm['ProcessingChromatoPanel']=='open')
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+else
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+	
+if (qsParm['GettingStartedPanel']=='open')
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
+else
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
+	
+if (qsParm['ChromatogramViewerPanel']=='open')
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+else
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
+
+if (qsParm['PreparingDataPanel']=='open')
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
+else
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+
+if (qsParm['CreditPanel']=='open')
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});
+else
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: false});
+
+if (qsParm['HelpPanel']=='open')
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: true});
+else
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: false});
+
+if (qsParm['OtherFeaturesPanel']=='open')
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: true});
+else
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: false});
+    
+if (qsParm['TechnicalPanel']=='open')
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: true});
+else
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: false});
+
+
+
+//-->
+</script>
+</body>
+<!-- InstanceEnd --></html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Chromatogram File Names</title>
+<!-- InstanceEndEditable -->
+
+<![endif]--><!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.thrColFixHdr #sidebar2, .thrColFixHdr #sidebar1 { padding-top: 30px; }
+.thrColFixHdr #mainContent { zoom: 1; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+<script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
+<script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
+<script type="text/javascript">
+var params = Spry.Utils.getLocationParamsAsObject();
+
+var qsParm = new Array();
+
+qsParm['ProcessingChromatoPanel'] = null;
+qsParm['GettingStartedPanel'] = null;
+qsParm['ChromatogramViewerPanel'] = null;
+qsParm['PreparingDataPanel'] = null;
+qsParm['CreditPanel'] = null;
+qsParm['HelpPanel'] = null;
+qsParm['OtherFeaturesPanel'] = null;
+qsParm['TechnicalPanel'] = null;
+
+qs();
+
+function qs() {
+	var query = window.location.search.substring(1);
+	var parms = query.split('&');
+	for (var i=0; i<parms.length; i++) {
+		var pos = parms[i].indexOf('=');
+		if (pos > 0) {
+			var key = parms[i].substring(0,pos);
+			var val = parms[i].substring(pos+1);
+			qsParm[key] = val;
+		}
+	}
+}
+
+parameterString = function()
+{
+	var paramString = '';
+	if (GettingStartedPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'GettingStartedPanel=open';
+	}
+	if (PreparingDataPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'PreparingDataPanel=open';
+	}
+	if (ProcessingChromatoPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ProcessingChromatoPanel=open';
+	}
+	if (ChromatogramViewerPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ChromatogramViewerPanel=open';
+	}
+	if (CreditPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'CreditPanel=open';
+	}
+	if (HelpPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'HelpPanel=open';
+	}
+	if (OtherFeaturesPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'OtherFeaturesPanel=open';
+	}
+	if (TechnicalPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'TechnicalPanel=open';
+	}
+	document.write('Parameter string: ' + paramString);
+
+	return paramString;
+};
+
+
+pageLink = function(page)
+{
+	document.location.href = page + parameterString();
+};
+
+
+
+</script>
+<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
+<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
+<!-- InstanceBeginEditable name="head" -->
+<style type="text/css">
+<!--
+.style1 {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 12px;
+}
+-->
+</style>
+<!-- InstanceEndEditable -->
+</head>
+
+<body class="thrColFixHdr" bgcolor="#f4f0e2">
+
+<div id="container">
+  <div id="header">
+    <table width="100%" border="0" cellpadding="4">
+  <tr>
+    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Chromatogram File Naming Rules <!-- InstanceEndEditable --></div></td>
+    <td width="2%">&nbsp;</td>
+    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+  </tr>
+</table>
+
+</div>
+  
+  
+  <div id="sidebar1">
+  
+  
+  
+  
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('index.html')">Home</a>
+  </div>
+  
+  <div id="GettingStartedPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('download.html');">Download</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('installation.html');">Installation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('quickstart.html');">Quick Start</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorials</a></td></tr>
+		</table>
+    </div>
+  </div>
+  <div id="PreparingDataPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primers.html');">Primers</a></td></tr>
+		</table>
+    </div>
+  </div>
+  
+<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('runningPP.html');">Running Phred/Phrap</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('interpretingResults.html');">Interpreting Results</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram FIles</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
+  			<tr>
+  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="OtherFeaturesPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('vouchers.html');">Voucher Information</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="HelpPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Help & Info</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Sequencher & Others</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
+	</table>
+  </div>
+</div>
+
+<div id="TechnicalPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Technical Details</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('sourceCode.html');">Source Code</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('technicalFAQ.html');">Technical FAQ</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="CreditPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('acknowledgements.html');">Acknowledgements</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<h3>&nbsp;</h3>
+  <!-- end #sidebar1 --></div>
+
+  <div id="mainContent">
+    
+<!-- InstanceBeginEditable name="content" -->
+  <p>The file names of chromatograms are key in that they must contain both a sample code as well as a primer name. The names must follow the sample basic structure.</p>
+  <p>For example, in the following files, the sample code is the text that immediately follows the string of characters &quot;DNA&quot;, up until the first underscore (&quot;_&quot;) is encountered. The first two files are from sample 0446, the next two from 0678, and the last two from 0446. </p>
+  <p class="style1">F12_F12DNA0446-_wg578F_273063.ab1<br />
+    F12_F12DNA0446-_wgABR_273159.ab1<br />
+    51_DNA0678_WG2_27469.CRO<br />
+    50_DNA0678_WG1_27468.CRO<br />
+    A11_A11DNA0446_D3_340852.ab1<br />
+    A11_A11DNA0446_D1_340756.ab1</p>
+  <p>(The first two files have an extra hyphen added accidentally to the end of the sample code; you can ask such extra characters to be stripped from the code.) </p>
+  <p>The primers follow the sample codes in these names, and are preceded by and followed by underscores. Thus, six primers are represented, wg578F, wgABR, wg2, wg1, D3, and D1.</p>
+  <p>To define a rule that specifies how the file names are structured, you will use the following dialog box: </p>
+  <p align="center"><img src="images/nameRuleEditing.jpg" alt="Name Rules Dialog Box" width="255" height="299" /></p>
+  <p>The naming rule shown in the above dialog will work on the sequences mentioned above.</p>
+  <p>If you wish some characters to be automatically removed from the sample code, then enter these characters in the &quot;Characters to be removed from sample code&quot; box.  In the above example, hyphens are to be removed.</p>
+  <p>In some cases, the sample code name consists of two parts, a main sample code, and a suffix. For example, the following files are chromatograms from four clones (p, q, t, and u) of sample 1794. </p>
+  <p class="style1">
+  	C03_C03CL1794.p_B1490_287986.ab1<br />
+  	C03_C03CL1794.p_Pat_288082.ab1<br />
+  	C04_C04CL1794.q_B1490_287994.ab1<br />
+  	C04_C04CL1794.q_Pat_288090.ab1<br />
+  	C05_C05CL1794.t_B1490_288002.ab1<br />
+  	C05_C05CL1794.t_Pat_288098.ab1<br />
+  	C06_C06CL1794.u_B1490_288010.ab1<br />
+  	C06_C06CL1794.u_Pat_288106.ab1</p>
+  <p>The sample code thus consists of two parts , &quot;1794&quot;, and the suffix p, q, t, or u. The string before the sample code suffix is &quot;.&quot;. If Mesquite encounters in the sample code a string that matches that designated in &quot;string before sample code suffix&quot;, then it will split the sample code name in two, and consider the main sample code to be the first part. </p>
+  <p>If you have asked to have the sample code translated into full sample names, then Mesquite will use just the part before the suffix (if there is one) as the code to look up in the sample names file, but it will append the suffix on to the end of the full sample name. For example, for these two files:</p>
+  <p><span class="style1">C05_C05CL1794.t_B1490_288002.ab1<br />
+C05_C05CL1794.t_Pat_288098.ab1<br />
+  </span></p>
+  <p>the sequence produced will be a COI sequence (primers Pat and B1490), named &quot;Bemb integrum IL 1490 t&quot;, as &quot;Bemb integrum IL 1490&quot; is the sample name listed in the sample names file. </p>
+  <p>Some of the entries can be blanks. For example, in the following file names, the sample code is at the very start of the file name, and thus the string before sample code would be blank: </p>
+  <p class="style1">d124#050302-12261.ab1<br />
+    d096#041117-12261.ab1<br />
+    d124#050302-13398.ab1<br />
+    d096#041117-13398.ab1 </p>
+  <p>The string after the sample code is &quot;#&quot;, the string before the primer name is &quot;-&quot;, and the string after the primer name is &quot;.&quot;. </p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+<!-- InstanceEndEditable -->
+
+    
+    
+    </div>
+	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
+  <div id="footer">
+    <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
+  <!-- end #footer --></div>
+<!-- end #container --></div>
+<script type="text/javascript">
+<!--
+
+
+var GettingStartedPanel = null;
+var ChromatogramViewerPanel = null;
+var ProcessingChromatoPanel = null;
+var PreparingDataPanel = null;
+var CreditPanel = null;
+var HelpPanel = null;
+var OtherFeaturesPanel = null;
+var TechnicalPanel = null;
+
+if (qsParm['ProcessingChromatoPanel']=='open')
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+else
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+	
+if (qsParm['GettingStartedPanel']=='open')
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
+else
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
+	
+if (qsParm['ChromatogramViewerPanel']=='open')
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+else
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
+
+if (qsParm['PreparingDataPanel']=='open')
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
+else
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+
+if (qsParm['CreditPanel']=='open')
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});
+else
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: false});
+
+if (qsParm['HelpPanel']=='open')
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: true});
+else
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: false});
+
+if (qsParm['OtherFeaturesPanel']=='open')
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: true});
+else
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: false});
+    
+if (qsParm['TechnicalPanel']=='open')
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: true});
+else
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: false});
+
+
+
+//-->
+</script>
+</body>
+<!-- InstanceEnd --></html>

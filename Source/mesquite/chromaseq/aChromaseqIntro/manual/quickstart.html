@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Chromaseq Quickstart</title>
+<!-- InstanceEndEditable -->
+
+<![endif]--><!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.thrColFixHdr #sidebar2, .thrColFixHdr #sidebar1 { padding-top: 30px; }
+.thrColFixHdr #mainContent { zoom: 1; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+<script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
+<script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
+<script type="text/javascript">
+var params = Spry.Utils.getLocationParamsAsObject();
+
+var qsParm = new Array();
+
+qsParm['ProcessingChromatoPanel'] = null;
+qsParm['GettingStartedPanel'] = null;
+qsParm['ChromatogramViewerPanel'] = null;
+qsParm['PreparingDataPanel'] = null;
+qsParm['CreditPanel'] = null;
+qsParm['HelpPanel'] = null;
+qsParm['OtherFeaturesPanel'] = null;
+qsParm['TechnicalPanel'] = null;
+
+qs();
+
+function qs() {
+	var query = window.location.search.substring(1);
+	var parms = query.split('&');
+	for (var i=0; i<parms.length; i++) {
+		var pos = parms[i].indexOf('=');
+		if (pos > 0) {
+			var key = parms[i].substring(0,pos);
+			var val = parms[i].substring(pos+1);
+			qsParm[key] = val;
+		}
+	}
+}
+
+parameterString = function()
+{
+	var paramString = '';
+	if (GettingStartedPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'GettingStartedPanel=open';
+	}
+	if (PreparingDataPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'PreparingDataPanel=open';
+	}
+	if (ProcessingChromatoPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ProcessingChromatoPanel=open';
+	}
+	if (ChromatogramViewerPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ChromatogramViewerPanel=open';
+	}
+	if (CreditPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'CreditPanel=open';
+	}
+	if (HelpPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'HelpPanel=open';
+	}
+	if (OtherFeaturesPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'OtherFeaturesPanel=open';
+	}
+	if (TechnicalPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'TechnicalPanel=open';
+	}
+	document.write('Parameter string: ' + paramString);
+
+	return paramString;
+};
+
+
+pageLink = function(page)
+{
+	document.location.href = page + parameterString();
+};
+
+
+
+</script>
+<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
+<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
+<!-- InstanceBeginEditable name="head" -->
+<style type="text/css">
+<!--
+.style1 {	font-family: "Courier New", Courier, monospace;
+	font-size: 12px;
+}
+-->
+</style>
+<!-- InstanceEndEditable -->
+</head>
+
+<body class="thrColFixHdr" bgcolor="#f4f0e2">
+
+<div id="container">
+  <div id="header">
+    <table width="100%" border="0" cellpadding="4">
+  <tr>
+    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Quickstart<!-- InstanceEndEditable --></div></td>
+    <td width="2%">&nbsp;</td>
+    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+  </tr>
+</table>
+
+</div>
+  
+  
+  <div id="sidebar1">
+  
+  
+  
+  
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('index.html')">Home</a>
+  </div>
+  
+  <div id="GettingStartedPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('download.html');">Download</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('installation.html');">Installation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('quickstart.html');">Quick Start</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorials</a></td></tr>
+		</table>
+    </div>
+  </div>
+  <div id="PreparingDataPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primers.html');">Primers</a></td></tr>
+		</table>
+    </div>
+  </div>
+  
+<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('runningPP.html');">Running Phred/Phrap</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('interpretingResults.html');">Interpreting Results</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram FIles</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
+  			<tr>
+  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="OtherFeaturesPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('vouchers.html');">Voucher Information</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="HelpPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Help & Info</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Sequencher & Others</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
+	</table>
+  </div>
+</div>
+
+<div id="TechnicalPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Technical Details</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('sourceCode.html');">Source Code</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('technicalFAQ.html');">Technical FAQ</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="CreditPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('acknowledgements.html');">Acknowledgements</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<h3>&nbsp;</h3>
+  <!-- end #sidebar1 --></div>
+
+  <div id="mainContent">
+    
+<!-- InstanceBeginEditable name="content" -->
+  <h2>Preparing Phred, Phrap, and Phd2Fasta</h2>
+  <p>Make sure Phred, Phrap, and Phd2Fasta are <a href="installingPP.html">compiled and installed</a> correctly, and the phredpar.dat file is <a href="installingPP.html#phredpar">edited correctly</a>. </p>
+  <h2>Preparing the primer file</h2>
+  <p>You will need to create a <a href="primers.html">primer file</a> documenting the gene fragments and a list of the names of their forward and reverse primers. </p>
+  <h2>Preparing the sample names file</h2>
+  <p>If you wish for your sequences to be named by something other than the sample codes contained in the file name, then you will need to create a text file that contains a list of the sample codes and the names to which they should be translated. See <a href="sampleCode.html">&quot;Sample names file&quot;</a> for a description of the format of this text file.  </p>
+  <h2><a name="runningPhPh" id="runningPhPh"></a>Assembling the sequences: Running Phred and Phrap </h2>
+  <p>If you wish to ask Mesquite to organize the chromatogram files, have Phred and Phrap  assemble the contigs, and have Mesquite process the results, importing them into a new project, then choose <font id="menu">Open Other&gt;Phred/Phrap Import from Chromatograms...</font> from the <font id="menu">File</font> menu. </p>
+  <p>If you wish to ask Mesquite to do this but add the processed sequences to an existing project, then with that project open, choose <font id="menu">Edit&gt;Append Sequences From Chromatograms...</font></p>
+  <p>If you wish to ask Mesquite to do this but NOT import the sequences into a new or existing project, then choose <font id="menu">Utilites&gt;Run Phred and Phrap...</font> when the Mesquite Log window is the frontmost window.</p>
+  <p>You will then be presented with a dialog box that looks something like this: </p>
+  <p align="center"><img src="images/runPhredPhrapEmpty.jpg" alt="Run Phred Phrap Dialog" width="359" height="357" /></p>
+  <h3>Defining a naming rule</h3>
+  <p>The first thing to do is define a Naming Rule, which describes how the chromatogram files are named. In particular, you need to give Mesquite enough details so that it can exactly find the sample code and primer name within the file name. For example, one of the example chromatograms has as a file name:</p>
+  <p><span class="style1">&nbsp;&nbsp;&nbsp;A11_A11DNA0446_D3_340852.ab1</span></p>
+  <p>In this name, the sample code is present immediately following the distinctive string of characters &quot;DNA&quot;. The sample code ends with an underscore (&quot;_&quot;). The primer name in this file name is &quot;D3&quot;; it is preceded by an underscore, and followed by an underscore. The rest of the name (except, if you choose, the extension &quot;.ab1&quot;) is irrelevant to Mesquite. If you touch on Edit Naming Rule, and then in the list dialog that appears touch on New and give your rule a name, you will see a dialog in which you can edit the naming rule: </p>
+  <p align="center"><img src="images/nameRuleEditingDefault.jpg" alt="Name Rule Editing" width="249" height="295" /></p>
+  <p>The default naming rule is one that matches the file &quot;<span class="style1">A11_A11DNA0446_D3_340852.ab1</span>&quot;, as that's how David's files are named. </p>
+  <p>Adjust your naming rule to match your file name structure. Once a naming rule is defined, it will be saved to disk and it will be an option for you in the future in the popup menu beside &quot;File Naming Rules&quot; in the Phred/Phrap dialog box. All file names in the directory must use the same naming rule. </p>
+  <h3>Setting the locations of files</h3>
+  <p>Use the Browse button in the Phred/Phrap dialog box to choose the location of the file containing the sample names file (if you don't to translate the sample codes, then you can leave this box blank, but you should then uncheck &quot;translate sample codes using names file&quot;). </p>
+  <p>Use the Browse button to choose your primer  file. </p>
+  <p>Touch on the Phred Phrap Locations &amp; Options button to set the locations of both the directory containing Phred, Phrap, and Phd2Fasta, as well as the location of the phredpar.dat file.</p>
+  <h3>Setting other options</h3>
+  <p>You can also set other options, including for the processing Mesquite does after Phred and Phrap examine the files. Explore <a href="postPhrap.html">Post-Phrap Options</a> for some things you might change. </p>
+  <h3>Press OK</h3>
+  <p>You are now ready to have Phred and Phrap run. Press the OK button in the Run Phred Phrap dialog box. Mesquite's log window should show the details of the processing. You might want to bring this frontmost so that you can watch it. In addition, the operating system shell or Terminal should start up and you should see Phred and Phrap produce lots of information that scrolls by. </p>
+  <p>If you asked Mesquite to process your files and import the results into a Mesquite project, then you should see Mesquite open a character matrix editor and present you with the results.</p>
+  <h2>Viewing the sequences in Mesquite's editor</h2>
+  <p>Mesquite will present imported sequences organized with all sequences from one gene fragment together in one editor, with a different editor for each gene fragment. By default the editor will be shown in &quot;bird's eye view&quot; (as if from a distance, with each base occupying only a thin vertical strip), with the color of a base being related to the quality score for that base as judged by Phred and Phrap.</p>
+  <p><img src="images/importInitial.jpg" alt="Imported Sequences" width="638" height="400" /></p>
+  <p> If you turn on the character matrix's Colors Legend (by touching on the <img src="images/showLegendButton.jpg" alt="Show Colors Legend Button" width="16" height="12" /> button below the taxon names), you can see the meaning of the colors:</p>
+  <p><img src="images/importLegend.jpg" alt="ImportedSequences with Legend" width="782" height="406" /></p>
+  <p>The color of the taxon name is in proportion to the number of high-quality bases in its sequence, with darker taxon names indicating fewer high-quality bases.</p>
+  <h2>Viewing a sequence's chromatograms</h2>
+  <p>To view the chromatograms underlying a sequence, touch on that sequence using the View Chromatogram Tool (<img src="images/chromTool.jpg" alt="View Chromatogram Tool" width="30" height="29" align="absmiddle" />). A window will appear containing that sequence's chromatograms:</p>
+  <p><img src="images/viewerQS.jpg" alt="Chromatogram Viewer" width="497" height="407" /></p>
+  <p>The upper panels show the chromatogram traces. Ones with names in red and a pale gray background are reverse-complemented. The base colors under the traces are shown using the same quality score coloring as calculated by Phred and used in the imported matrix. At the bottom are three versions of the consensus sequence: the top one, the untrimmed version as produced by Phred/Phrap and as modified by Mesquite; the middle one, the trimmed version as originally imported into Mesquite; the bottom version, or edited version as it appears in the matrix. The bottom two will be identical unless you have changed the base calls. The colors of the bases in the top two of these sequences also indicates the base quality scores as determined by Phrap. </p>
+  <p>A few  graphical features of note are:</p>
+  <ul>
+    <li>Conflicts between reads are shown as pink or red bars in the &quot;Phred.Phrap.Mesquite&quot;
+      sequence panel. If the reads that conflict are of low quality, the bars
+      will be pink; if they are of high quality, they will be red. </li>
+    <li>The brown bars above a base call and under a peak in each read indicate
+      that that peak was the one used by Phrap as the primary peak on which the
+      call for the consensus was based. </li>
+    <li>You can show or hide various element by using the <font id="menu">Chromatograms&gt;Show</font>      submenu,
+      including traces of  bases (e.g., hide the G trace). </li>
+    <li>You can ask to have low-quality sections of reads dimmed so that they
+      don't visually distract from the high-quality reads in those some regions. </li>
+  </ul>
+  <p>One navigational feature of note is:</p>
+  <ul>
+    <li>The left and right arrow keys can be used to <a href="navigation.html">move along the chromatograms</a>.
+      You can choose (using the <font id="menu">Chromatograms&gt;Arrow Keys</font> submenu) whether these
+      move to the next base, the next base with a conflict, or the next low-quality
+      base.</li>
+  </ul>
+
+  <h2>Altering calls for existing bases </h2>
+  <table border="0" cellpadding="5px" cellspacing="0" width="100%">
+    <tr>
+	  <td valign="top" width="345px"><p>If you would like to edit a base call, use the pointer to select the desired site in the 
+	      &quot;Edited in Matrix&quot; sequence (at the bottom of the panel).</p>
+		<p>Type in the base you would like present at that site, and the corresponding character 
+		  matrix will be updated with the change.</p>
+		<p>Any base that has been so edited is marked by a black bar underneath it.</p></td>
+	  <td>
+  <p>
+  <img src="images/beforeBaseCall.gif" alt="before base Call" /><!--width="85" height="360"--> 
+  <img src="images/nextArrow.gif" />
+  <img src="images/beforeBaseCallSelected.gif" alt="selection before base call change" /><!--width="85" height="360"--> 
+  <img src="images/nextArrow.gif" />
+  <img src="images/baseCall.gif" alt="base Call" /><!--width="85" height="360"--> 
+  <img src="images/nextArrow.gif" />
+  <img src="images/afterBaseCall.gif" alt="after Base Call" /></p><!--width="85" height="360"-->
+      </td>
+    </tr>
+  </table>
+  <p>&nbsp; </p>
+<!-- InstanceEndEditable -->
+
+    
+    
+    </div>
+	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
+  <div id="footer">
+    <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
+  <!-- end #footer --></div>
+<!-- end #container --></div>
+<script type="text/javascript">
+<!--
+
+
+var GettingStartedPanel = null;
+var ChromatogramViewerPanel = null;
+var ProcessingChromatoPanel = null;
+var PreparingDataPanel = null;
+var CreditPanel = null;
+var HelpPanel = null;
+var OtherFeaturesPanel = null;
+var TechnicalPanel = null;
+
+if (qsParm['ProcessingChromatoPanel']=='open')
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+else
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+	
+if (qsParm['GettingStartedPanel']=='open')
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
+else
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
+	
+if (qsParm['ChromatogramViewerPanel']=='open')
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+else
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
+
+if (qsParm['PreparingDataPanel']=='open')
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
+else
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+
+if (qsParm['CreditPanel']=='open')
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});
+else
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: false});
+
+if (qsParm['HelpPanel']=='open')
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: true});
+else
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: false});
+
+if (qsParm['OtherFeaturesPanel']=='open')
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: true});
+else
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: false});
+    
+if (qsParm['TechnicalPanel']=='open')
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: true});
+else
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: false});
+
+
+
+//-->
+</script>
+</body>
+<!-- InstanceEnd --></html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Mesquite: Chromaseq</title>
+<!-- InstanceEndEditable -->
+
+<![endif]--><!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.thrColFixHdr #sidebar2, .thrColFixHdr #sidebar1 { padding-top: 30px; }
+.thrColFixHdr #mainContent { zoom: 1; }
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+<script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
+<script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
+<script type="text/javascript">
+var params = Spry.Utils.getLocationParamsAsObject();
+
+var qsParm = new Array();
+
+qsParm['ProcessingChromatoPanel'] = null;
+qsParm['GettingStartedPanel'] = null;
+qsParm['ChromatogramViewerPanel'] = null;
+qsParm['PreparingDataPanel'] = null;
+qsParm['CreditPanel'] = null;
+qsParm['HelpPanel'] = null;
+qsParm['OtherFeaturesPanel'] = null;
+qsParm['TechnicalPanel'] = null;
+
+qs();
+
+function qs() {
+	var query = window.location.search.substring(1);
+	var parms = query.split('&');
+	for (var i=0; i<parms.length; i++) {
+		var pos = parms[i].indexOf('=');
+		if (pos > 0) {
+			var key = parms[i].substring(0,pos);
+			var val = parms[i].substring(pos+1);
+			qsParm[key] = val;
+		}
+	}
+}
+
+parameterString = function()
+{
+	var paramString = '';
+	if (GettingStartedPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'GettingStartedPanel=open';
+	}
+	if (PreparingDataPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'PreparingDataPanel=open';
+	}
+	if (ProcessingChromatoPanel.isOpen()) {
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ProcessingChromatoPanel=open';
+	}
+	if (ChromatogramViewerPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'ChromatogramViewerPanel=open';
+	}
+	if (CreditPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'CreditPanel=open';
+	}
+	if (HelpPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'HelpPanel=open';
+	}
+	if (OtherFeaturesPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'OtherFeaturesPanel=open';
+	}
+	if (TechnicalPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'TechnicalPanel=open';
+	}
+	document.write('Parameter string: ' + paramString);
+
+	return paramString;
+};
+
+
+pageLink = function(page)
+{
+	document.location.href = page + parameterString();
+};
+
+
+
+</script>
+<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
+<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
+<!-- InstanceBeginEditable name="head" -->
+<style type="text/css">
+<!--
+.style1 {
+	color: #009999;
+	font-weight: bold;
+}
+-->
+</style>
+<!-- InstanceEndEditable -->
+</head>
+
+<body class="thrColFixHdr" bgcolor="#f4f0e2">
+
+<div id="container">
+  <div id="header">
+    <table width="100%" border="0" cellpadding="4">
+  <tr>
+    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" --><!-- InstanceEndEditable --></div></td>
+    <td width="2%">&nbsp;</td>
+    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+  </tr>
+</table>
+
+</div>
+  
+  
+  <div id="sidebar1">
+  
+  
+  
+  
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('index.html')">Home</a>
+  </div>
+  
+  <div id="GettingStartedPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('download.html');">Download</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('installation.html');">Installation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('quickstart.html');">Quick Start</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorials</a></td></tr>
+		</table>
+    </div>
+  </div>
+  <div id="PreparingDataPanel" class="CollapsiblePanel">
+    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
+    <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primers.html');">Primers</a></td></tr>
+		</table>
+    </div>
+  </div>
+  
+<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('runningPP.html');">Running Phred/Phrap</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('interpretingResults.html');">Interpreting Results</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram FIles</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
+  			<tr>
+  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="OtherFeaturesPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('vouchers.html');">Voucher Information</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="HelpPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Help & Info</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Sequencher & Others</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
+	</table>
+  </div>
+</div>
+
+<div id="TechnicalPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Technical Details</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('sourceCode.html');">Source Code</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('technicalFAQ.html');">Technical FAQ</a></td></tr>
+		</table>
+  </div>
+</div>
+
+<div id="CreditPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('acknowledgements.html');">Acknowledgements</a></td></tr>
+		</table>
+  </div>
+</div>
+
+
+<h3>&nbsp;</h3>
+  <!-- end #sidebar1 --></div>
+
+  <div id="mainContent">
+    
+<!-- InstanceBeginEditable name="content" -->
+  <h2><font face="Trebuchet MS">Chromaseq: a package for processing chromatograms and sequence data in Mesquite</font></h2>
+  <table width="346" border="0" cellpadding="8">
+    <tr>
+      <td width="326" bgcolor="#e8e3cf"><p><em>Lead Developers: </em><br />
+        David R. Maddison, Oregon State University<br />
+        Wayne P. Maddison, University of British Columbia</p>
+        <p><em>With code contributed by:</em><br />
+          Danny Mandel <br />
+        Jeremy Parson </p></td>
+    </tr>
+  </table>
+  <p><font face="Trebuchet MS">The Chromaseq
+    package allows one to organize a directory of chromatograms (1 &amp; 2, below),
+    assemble them into contigs (using Phred and Phrap, 3), import the consensus
+    sequences into Mesquite (4), view the chromatograms for each sequence (5),
+    and edit the calls in a chromatogram viewer (6).</font> Chromaseq requires <a href="http://mesquiteproject.org">Mesquite
+      2.72</a> or later, as well as <a href="phredphrap.html">Phred and Phrap</a>.
+    See the &quot;<a href="#isNot">What Chromaseq Is Not&quot;</a> section for
+    some comments on the limitations of Chromaseq. </p>
+  <p><strong><em>Note: Chromaseq has been undergoing fairly rapid development of late, with
+    several features added, and changes in the interface. This document is out
+    of date; sorry.</em></strong></p>
+  <p><img src="images/chromaseqOverview.jpg" alt="Overview" width="800" height="400" /></p>
+  <p>The following sections provide information about Chromaseq:</p>
+  <ul>
+    <li><a href="overview.html">Overview</a> gives a one-page tour of some of the features of Chromaseq, with images.</li>
+    <li><a href="quickstart.html">Quickstart</a> is a condensed guide to using Chromaseq, with many details missing, but if you really can't stand to read manuals, this is a good place to start.</li>
+    <li>The <a href="phredphrap.html">Phred/Phrap with Chromaseq</a> section describes how to install Phred and Phrap, and use Mesquite's features for automating these programs. It also describes Mesquite's tools for modifying the output of Phred and Phrap and import the consensus sequences into Mesquite. </li>
+    <li>Viewing chromatograms in contigs and calling bases can be done in the <a href="viewer.html">Chromatogram Viewer</a> </li>
+    <li>How Chromaseq compares to other programs, and how they might interact, is described on the <a href="otherPrograms.html">Sequencher &amp; Others</a> page. </li>
+    <li>The <a href="download.html">Download</a> page.</li>
+    <li><a href="acknowledgements.html">Acknowledgements</a>.</li>
+    <li><a href="citation.html">How to cite Chromaseq</a>.</li>
+    <li><a href="faq.html">Frequently Asked Questions</a>.</li>
+  </ul>
+  <h2><a name="isNot" id="isNot"></a>What Chromaseq Is Not</h2>
+  <p>Chromaseq is <em>not</em> intended as a full-featured replacement to programs
+    like <a href="http://www.genecodes.com">Sequencher</a>&#8482; or <a href="http://www.codoncode.com">Aligner</a>&#8482;.
+    Chromaseq was built by us for our personal needs in systematics. We obtain
+    many sequences of a few genes from beetles and spiders; many of these sequences
+    are high-quality, and don't require much processing other than assembly of
+    the read, trimming, and changing a few base calls. However, the tedium of
+    processing these many sequences, and the lack of integration of existing
+    tools within a systematics framework, led us to develop a solution that worked
+    for us. While it has many custom features for dealing with the sorts of sequence
+    data one acquires typically in systematics, it does not have the many features
+    one would want in a full chromatogram analysis package, including tools for
+    handling more difficult data.  </p>
+<!-- InstanceEndEditable -->
+
+    
+    
+    </div>
+	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
+  <div id="footer">
+    <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
+  <!-- end #footer --></div>
+<!-- end #container --></div>
+<script type="text/javascript">
+<!--
+
+
+var GettingStartedPanel = null;
+var ChromatogramViewerPanel = null;
+var ProcessingChromatoPanel = null;
+var PreparingDataPanel = null;
+var CreditPanel = null;
+var HelpPanel = null;
+var OtherFeaturesPanel = null;
+var TechnicalPanel = null;
+
+if (qsParm['ProcessingChromatoPanel']=='open')
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+else
+ 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+	
+if (qsParm['GettingStartedPanel']=='open')
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
+else
+ 	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
+	
+if (qsParm['ChromatogramViewerPanel']=='open')
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+else
+ 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
+
+if (qsParm['PreparingDataPanel']=='open')
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
+else
+ 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+
+if (qsParm['CreditPanel']=='open')
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});
+else
+ 	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: false});
+
+if (qsParm['HelpPanel']=='open')
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: true});
+else
+ 	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: false});
+
+if (qsParm['OtherFeaturesPanel']=='open')
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: true});
+else
+ 	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: false});
+    
+if (qsParm['TechnicalPanel']=='open')
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: true});
+else
+ 	TechnicalPanel = new Spry.Widget.CollapsiblePanel("TechnicalPanel", {contentIsOpen: false});
+
+
+
+//-->
+</script>
+</body>
+<!-- InstanceEnd --></html>
