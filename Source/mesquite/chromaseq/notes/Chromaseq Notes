@@ -4,14 +4,25 @@ Necessary pre-beta
 -issue with PrimerInfoFromTextFile and when it does and doesn't ask you for the path to the file
 
 - phone home
+
+
+
+Optional:
+
 - SequenceNameSource and PrimerInfoSource for BP-style systems
 - SequenceNameSource and PrimerInfoSource for 96-well/Excel style systems
 - XML support in SequenceNameFromTextFile and PrimerInfoFromTextFile
 
 
 clean up  "./info.xml: file read error: unknown file type" by hiding it in a subdirectory?
+- have pre-flight option to check plumbing is in place and names and primer sources all OK
+- closeup panel remember the last panel on which you touched, and that becomes the default if the cursor is out of the zone?
+- on purging of Chromaseq data, have it switch off ColorByQuality
+- on RC sequences primers shown in wrong place?
+- speed up primers
+- undo within chromatogram viewer
 
-
+-Remote copy of PhredPhrap versus local (e.g. remote, http & cgi-bin etc.; local: shell script)
 
 =====
 
@@ -26,35 +37,6 @@ clean up  "./info.xml: file read error: unknown file type" by hiding it in a sub
 
 5. work on design of sinks for this info (both processed and not).   E.g. SequenceUploader should be a module  
 
-
-
-
-
-
-======
-
-OTHER ISSUE:
-Remove copy of PhredPhrap versus local (e.g. remote, http & cgi-bin etc.; local: shell script)
-
-may require a module for PhredPhrap communication
-a module telling where to find chromatograms
-a module for returning results to Mesquite
-
-
--------------------
-
-
-- have pre-flight option to check plumbing is in place and names and primer sources all OK
-- closeup panel remember the last panel on which you touched, and that becomes the default if the cursor is out of the zone?
-
-
-- speed up primers
-- undo within chromatogram viewer
-
-
-- on purging of Chromaseq data, have it switch off ColorByQuality
-
-- on RC sequences primers shown in wrong place?
 
 
 ======================
@@ -134,9 +116,6 @@ Luxuries
 
 
 NumberOfReads deal with better
-
-BUGS
-- insert base.  touch on new ? base.  immediately scrolls to start of sequence.
 
 
 ====

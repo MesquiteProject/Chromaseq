@@ -79,8 +79,8 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 
 
 
-		String s = "This file should contain, either in a tab-delimited format or in XML, information about the primers (names, sequences, forward/reverse, etc.).\n\n";
-		s += "<BR>If it is a tab-delimited file, each line should be in the following format:<br><br>\n";
+		String s = "This file should contain, either in a tab-delimited format, information about the primers (names, sequences, forward/reverse, etc.).\n\n";
+		s += "<BR>Each line should be in the following format:<br><br>\n";
 		s += "  &lt;primer name&gt;&lt;tab&gt;&lt;gene fragment name&gt;&lt;tab&gt;&lt;F for forward primers or R for reverse&gt;&lt;tab&gt;&lt;primer sequence&gt;&lt;tab&gt;;<br><br>\n";
 		dialog.appendToHelpString(s);
 
@@ -192,7 +192,7 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 	/*.................................................................................................................*/
 
 	public String getExplanation() {
-		return "Provides primer information from a text file (either tab-delimited or XML).";
+		return "Provides primer information from a tab-delimited text file.";
 	}
 
 	/*.................................................................................................................*/

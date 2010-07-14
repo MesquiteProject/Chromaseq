@@ -58,8 +58,8 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		final Button dnaCodesBrowseButton = dialog.addAListenedButton("Browse...",null, this);
 		dnaCodesBrowseButton.setActionCommand("DNANumbersBrowse");
 
-		String s = "This file should contain, either in a tab delimited format or in XML, the names to be used for the sequences, and the sample codes to which each corresponds.\n\n";
-		s+= "<BR>If it is a tab-delimited text file, each line should look like this:<br><br>\n";
+		String s = "This file should contain,  in a tab delimited format, the names to be used for the sequences, and the sample codes to which each corresponds.\n\n";
+		s+= "<BR>Each line should look like this:<br><br>\n";
 		s+= "   &lt;code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br><br>\n";
 		s+= "where the code, short sample name, and long sample name are all single tokens (do NOT surround the name with quotes). ";
 		s+= "The short sample name is for the file names, and must be <27 characters; the long sample name is the name you wish to have within the FASTA file.\n\n";
@@ -235,7 +235,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	/*.................................................................................................................*/
 
 	public String getExplanation() {
-		return "Provides sequence names from a text file (either tab-delimited or XML).";
+		return "Provides sequence names from a tab-delimited text file.";
 	}
 
 	/*.................................................................................................................*/

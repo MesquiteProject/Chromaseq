@@ -56,7 +56,8 @@ public abstract class PrimerInfoSource extends MesquiteModule {
  	//returns whether source has all relevant data supplied (e.g. address of database, etc.)
  	public abstract boolean isReady();
 
- 	public abstract void echoParametersToFile(StringBuffer logBuffer);
+ 	//adds whatever parameter information it wishes to logBuffer so that that text will appear in the log
+	public abstract void echoParametersToFile(StringBuffer logBuffer);
 
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){

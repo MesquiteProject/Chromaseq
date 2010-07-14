@@ -11,7 +11,7 @@ This source code and its compiled class files are free and modifiable under the 
 GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 
-package mesquite.chromaseq.PrimerInfoFromTextFile;
+package mesquite.chromaseq.lib;
 
 import java.util.Hashtable;
 import java.util.Iterator;
