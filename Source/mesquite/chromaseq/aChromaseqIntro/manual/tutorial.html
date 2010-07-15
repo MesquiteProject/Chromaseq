@@ -15,6 +15,12 @@
 /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
 </style>
 <![endif]-->
+
+<style type="text/css">
+<!--
+-->
+</style>
+
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
 <script type="text/javascript">
@@ -97,7 +103,12 @@ pageLink = function(page)
 </script>
 <link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
 <link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
-<!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<style type="text/css">
+<!--
+-->
+</style>
+<!-- InstanceEndEditable -->
 </head>
 
 <body class="thrColFixHdr" bgcolor="#f4f0e2">
@@ -125,6 +136,9 @@ pageLink = function(page)
   
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('index.html')">Home</a>
+  </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('overview.html')">Overview</a>
   </div>
   
   <div id="GettingStartedPanel" class="CollapsiblePanel">
@@ -217,7 +231,7 @@ pageLink = function(page)
 </div>
 
 <div id="CreditPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelTab" tabindex="0">Citation & Credit</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
@@ -237,32 +251,33 @@ pageLink = function(page)
       you will go from chromatograms to having fully processed sequences, with
       final base calls.</p>
   <h2>Setup</h2>
-  <p>First, make sure that you the Chromaseq package installed, and that you
-    have <a href="installingPP.html">installed
-      Phred and Phrap</a>.</p>
-  <p>Download the <a href="http://mesquiteproject.org/packages/chromaseq/examples/ChromaseqExample.zip">ChromaseqExamples archive</a>,
-    and unzip it. You will have a folder containing four things:</p>
+  <p>First, make sure that you have <a href="javascript:pageLink('installation.html');">installed Chromaseq, Phred, and Phrap</a>. </p>
+  <p>Download the <a href="http://mesquiteproject.org/packages/chromaseq/examples/ChromaseqExamples.zip">ChromaseqExamples archive</a>,
+    and unzip it. You will have a folder containing two subfolders and two files:</p>
   <ul>
-    <li>a folder containing some example
+    <li>two folders, each containing some example
             chromatograms</li>
-    <li>a file called &quot;PrimerList&quot; containing the <a href="primers.html">names
-                of primers</a></li>
-    <li>a file called &quot;SampleCodes&quot; showing the correspondence between <a href="sampleCode.html">sample
-                codes and sample names</a></li>
-    <li>a  file called &quot;PrimerSequences&quot;
-      containing <a href="primerSequences.html">primer
-                sequences</a>.</li>
+    <li>a file called &quot;Primers.txt&quot; containing the <a href="javascript:pageLink('primers.html');">names and sequences
+                of primers, their direction, and the gene fragment to which they correspond</a>,</li>
+    <li>a file called &quot;SampleCodes&quot; showing the correspondence between <a href="javascript:pageLink('sampleCode.html');">sample
+                codes and sequence names</a></li>
     </ul>
-  <p>You will also need to modify the phredpar.dat file that come with Phred,
+  <p>You will also need to modify the phredpar.dat file that came with Phred,
     so that it can accommodate the chromatograms provided in the example. Open
-    up the phredpar.dat file in a simple text editor, and </p>
-  <p><font face="Courier New, Courier, mono">  &nbsp;&nbsp;&quot;BeckmanCEQ&quot; terminator
+    up the phredpar.dat file in a simple text editor, and find the line</p>
+  <p class="monospaced"><font face="Courier New, Courier, mono">  &nbsp;&nbsp;&quot;BeckmanCEQ&quot; terminator
     big-dye	Beckman_CEQ_2000</font></p>
   <p>and immediately below this add the following two lines:</p>
-  <p><font face="Courier New, Courier, mono">&nbsp;&nbsp;#Entry below added to accommodate Chromaseq example files<br />
+  <p class="monospaced"><font face="Courier New, Courier, mono">&nbsp;&nbsp;#Entry below added to accommodate Chromaseq example files<br />
 &nbsp;&nbsp;&quot;DT3730POP7{BDv3}.mob&quot; terminator big-dye ABI_373_377</font></p>
-  <p>From the File&gt;Open Other submenu in Mesquite, choose &quot;Phred/Phrap Import
-    from Local Chromatograms&quot;. You will see a dialog box that looks something
+  <p>With that done, you are ready to process some chromatograms.</p>
+  <h2>Process the Chromatograms</h2>
+  <p>From the File&gt;Open Other submenu in Mesquite, choose &quot;Process Chromatograms Files in Directory&quot;. You will be first asked to choose the rules used to name chromatogram files.</p>
+  <p><img src="images/namingRuleChoiceEmpty.png" width="318" height="138" /></p>
+  <p>If this is the first time Chromaseq has been used on this computer, there will be no naming rules. Let's presume that is the case. To create a new naming rule, touch on the &quot;Edit Naming Rules&quot; button, and you should see a dialog box like this:</p>
+  <p>This is the dialog box that lets you manage your different naming rules.</p>
+  <p>&nbsp;</p>
+  <p>You will see a dialog box that looks something
     like this:</p>
   <p align="center"><img src="images/mainPhPhDialogEmpty.gif" width="358" height="437" /></p>
   <p>&nbsp;</p>
@@ -343,7 +358,7 @@ pageLink = function(page)
 
     
     
-    </div>
+  </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>

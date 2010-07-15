@@ -15,6 +15,12 @@
 /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
 </style>
 <![endif]-->
+
+<style type="text/css">
+<!--
+-->
+</style>
+
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
 <script type="text/javascript">
@@ -124,6 +130,9 @@ pageLink = function(page)
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('index.html')">Home</a>
   </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('overview.html')">Overview</a>
+  </div>
   
   <div id="GettingStartedPanel" class="CollapsiblePanel">
     <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
@@ -215,7 +224,7 @@ pageLink = function(page)
 </div>
 
 <div id="CreditPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelTab" tabindex="0">Citation & Credit</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
@@ -235,7 +244,7 @@ pageLink = function(page)
   <p>Phred (Green and Ewing, 2002) is a program that examines chromatogram files, and makes base calls therefrom. It also judges the quality of the base calls, and assigns a score to each called base. </p>
   <p>Phrap (&quot;Phil's Revised Assembly Program&quot;; Green, 1999) is a program that takes the output of Phred, and forms contigs of the reads, producing in the process and ACE file.</p>
   <p>These programs were originally written for large-scale sequencing efforts such as the Human Genome Project. Their source code is currently (2005) available free for most academic uses; compiled versions are available for a cost. </p>
-  <p>Details about these two programs, including how to obtain their source code, is available on the <a href="http://phrap.org/phredphrapconsed.html">Phred and Phrap web site</a>. See the <a href="installingPP.html">Installing Phred &amp; Phrap</a> page in this manual for hints on compiling and installing Phred &amp; Phrap. </p>
+  <p>Details about these two programs, including how to obtain their source code, is available on the <a href="http://phrap.org/phredphrapconsed.html">Phred and Phrap web site</a>. See the <a href="installation.html">Installing Phred &amp; Phrap</a> page in this manual for hints on compiling and installing Phred &amp; Phrap. </p>
   <h2>References</h2>
   <p>Green, P. 1999. Phrap. http://phrap.org.</p>
   <p>Green, P. and Ewing, B. 2002. Phred. http://phrap.org</p>

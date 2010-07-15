@@ -15,6 +15,12 @@
 /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
 </style>
 <![endif]-->
+
+<style type="text/css">
+<!--
+-->
+</style>
+
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
 <script type="text/javascript">
@@ -125,6 +131,9 @@ pageLink = function(page)
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('index.html')">Home</a>
   </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('overview.html')">Overview</a>
+  </div>
   
   <div id="GettingStartedPanel" class="CollapsiblePanel">
     <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
@@ -216,7 +225,7 @@ pageLink = function(page)
 </div>
 
 <div id="CreditPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelTab" tabindex="0">Citation & Credit</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
@@ -232,7 +241,7 @@ pageLink = function(page)
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-There are two mechanisms for submitting sequences contained in a Mesquite file to GenBank.  The first involves preparation of files for submission by Sequin; the second involves direction submission from Mesquite.  
+Chromaseq has one feature designed to aid submitting sequences contained in a Mesquite file to GenBank.    
 
 <h2>Preparation of files for submission by Sequin</h2>
 
@@ -253,7 +262,7 @@ There are two mechanisms for submitting sequences contained in a Mesquite file t
   the name of the person who identified the specimen, the country (locality)
   field, the latitude and longitude, and the information identifying the specimen
   voucher, then this first line would appear as follows:</p>
-<pre> code <img src="images/tab.gif" width="8" height="13" /> organism <img src="images/tab.gif" width="8" height="13" /> authority <img src="images/tab.gif" width="8" height="13" /> identified-by <img src="images/tab.gif" width="8" height="13" /> country <img src="images/tab.gif" width="8" height="13" /> lat-lon <img src="images/tab.gif" width="8" height="13" /> specimen-voucher</pre>
+<pre class="monospaced"> code <img src="images/tab.gif" width="8" height="13" /> organism <img src="images/tab.gif" width="8" height="13" /> authority <img src="images/tab.gif" width="8" height="13" /> identified-by <img src="images/tab.gif" width="8" height="13" /> country <img src="images/tab.gif" width="8" height="13" /> lat-lon <img src="images/tab.gif" width="8" height="13" /> specimen-voucher</pre>
 <p>(The black triangle,  <img src="images/tab.gif" width="8" height="13" />, represents
   a tab.)</p>
 <p>The official GenBank names of the fields and the definition of those fields
@@ -269,14 +278,24 @@ There are two mechanisms for submitting sequences contained in a Mesquite file t
   specimen. For the example file with the header line shown above, here are two
   lines that contain the information for specimen number 1290, and specimen number
   1633:</p>
-<pre>
-1290 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) paraenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion paraenulum Maddison <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> USA: Mississippi: Walthall Co., 5.9 mi S Tylertown, Magees Creek <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
-1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward, 1901 <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> USA: Iowa: Jones Co., Wapsipinicon River W of Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
+<pre class="monospaced">
+1290 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) paraenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion paraenulum Maddison <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
+    USA: Mississippi: Walthall Co., Tylertown <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
+1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
+    USA: Iowa: Jones Co., Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
+<p>Each of these lines is shown extending over two lines, but that is only for ease of display on this web page. There are thus a total of three lines in this example Voucher DB file:</p>
+<pre class="monospaced">
+code <img src="images/tab.gif" width="8" height="13" /> organism <img src="images/tab.gif" width="8" height="13" /> authority <img src="images/tab.gif" width="8" height="13" /> identified-by <img src="images/tab.gif" width="8" height="13" /> country <img src="images/tab.gif" width="8" height="13" /> lat-lon <img src="images/tab.gif" width="8" height="13" /> specimen-voucher
+1290 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) paraenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion paraenulum Maddison <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
+    USA: Mississippi: Walthall Co., Tylertown <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
+1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
+    USA: Iowa: Jones Co., Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
+
 <p>&nbsp;</p>
 <h3>Creating the FASTA file</h3>
 <p>Once you have completed the Voucher DB file, then in
     Mesquite open your file containing the sequences, and go to the Taxa List
-  Window (Taxa&amp;Treex&gt;List
+  Window (Taxa&amp;Tree&gt;List
     of
     Taxa). You will need to show two new columns in this table. Choose Columns&gt;Voucher
     Database and Columns&gt;Voucher ID Code. This will show those two columns. Select
@@ -290,9 +309,9 @@ There are two mechanisms for submitting sequences contained in a Mesquite file t
   sequences. In the example here, the voucher ID code for the first sequence
   is 1290. This tells Mesquite to look
    in the Voucher DB file for the line whose code is 1290 to get the voucher
-  information for that sequence. To enter ID codes, select the sequence, and
+  information for that sequence. To enter ID codes, use the editing tool (<img src="images/ibeam.png" width="28" height="28" align="absmiddle" />) select the entry, or select the sequence and
   use the popup menu that appears when you touch on the Voucher ID title at the
-  top of the column. Once this is done, the Taxa List Window should look something
+  top of the column. Once you have entered all of the voucher ID codes, the Taxa List Window should look something
   like this:</p>
 <p align="center"><img src="images/taxaListWindow.png" width="541" height="70" /></p>
 <p>At this point, you are ready to export a FASTA file with your voucher information
@@ -311,21 +330,18 @@ There are two mechanisms for submitting sequences contained in a Mesquite file t
     Info, and save a file containing the entries. For the next gene, you can
     then choose File&gt;Import Submitter Info and choose that file, saving you the
     effort of re-entering those data.</li>
-  <li>In the Sequence Format window, choose Phylogenetic Study, and Sequence
+  <li>For standard phylogenetic matrices, in the Sequence Format window, choose Phylogenetic Study, and Sequence
     data format as FASTA. </li>
   <li>In the Organism and Sequence window, choose Import Nucleotide FASTA</li>
   <li>Struggle with the arcane interface of Sequin to complete your submission.</li>
 </ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h2>Direct submission from within Mesquite</h2>
-[Feature not yet available]
-
 <!-- InstanceEndEditable -->
 
     
     
-    </div>
+</div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>

@@ -15,6 +15,12 @@
 /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
 </style>
 <![endif]-->
+
+<style type="text/css">
+<!--
+-->
+</style>
+
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
 <script type="text/javascript">
@@ -124,6 +130,9 @@ pageLink = function(page)
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('index.html')">Home</a>
   </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('overview.html')">Overview</a>
+  </div>
   
   <div id="GettingStartedPanel" class="CollapsiblePanel">
     <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
@@ -215,7 +224,7 @@ pageLink = function(page)
 </div>
 
 <div id="CreditPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelTab" tabindex="0">Citation & Credit</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
@@ -239,6 +248,9 @@ pageLink = function(page)
   <h3>File Naming Rules </h3>
   <p>In the future a regular expression parsing rule system will be added,
     to handle a much broader array of file naming conventions.</p>
+  <h3>Databases</h3>
+  <p>There is a version of Chromaseq being developed that will interact with a database to find sequence names, primer information, chromatograms, and then store results, etc. </p>
+  <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 
     

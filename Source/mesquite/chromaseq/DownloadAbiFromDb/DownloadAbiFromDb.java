@@ -2,8 +2,13 @@ package mesquite.chromaseq.DownloadAbiFromDb;
 
 import mesquite.chromaseq.lib.AbiDownloader;
 import mesquite.lib.CommandChecker;
+import mesquite.lib.CompatibilityTest;
+import mesquite.lib.EmployerEmployee;
 import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.duties.UtilitiesAssistant;
+import mesquite.molec.lib.DNADatabaseURLSource;
 
 public class DownloadAbiFromDb extends UtilitiesAssistant {
 	private static final String COMMAND_NAME = "downloadAbiFromDb";
@@ -66,4 +71,20 @@ public class DownloadAbiFromDb extends UtilitiesAssistant {
 	public String getExplanation() {
 		return EXPLANATION;
 	}
+	/*.................................................................................................................*/
+
+	/** Returns CompatibilityTest so other modules know if this is compatible with some object. */
+	public CompatibilityTest getCompatibilityTest(){return new DAFD();}
+
 }
+
+class DAFD extends CompatibilityTest {
+	public  boolean isCompatible(Object obj, MesquiteProject project, EmployerEmployee prospectiveEmployer){
+		
+		if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(AbiDownloader.class)<=0)
+			return false;
+		
+		return true;
+	}
+}
+

@@ -15,6 +15,12 @@
 /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
 </style>
 <![endif]-->
+
+<style type="text/css">
+<!--
+-->
+</style>
+
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
 <script type="text/javascript">
@@ -125,6 +131,9 @@ pageLink = function(page)
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('index.html')">Home</a>
   </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('overview.html')">Overview</a>
+  </div>
   
   <div id="GettingStartedPanel" class="CollapsiblePanel">
     <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
@@ -216,7 +225,7 @@ pageLink = function(page)
 </div>
 
 <div id="CreditPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelTab" tabindex="0">Citation & Credit</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
@@ -232,8 +241,11 @@ pageLink = function(page)
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-  <p>The file names of chromatograms are key in that they must contain both a sample code as well as a primer name. The names must follow the sample basic structure.</p>
-  <p>For example, in the following files, the sample code is the text that immediately follows the string of characters &quot;DNA&quot;, up until the first underscore (&quot;_&quot;) is encountered. The first two files are from sample 0446, the next two from 0678, and the last two from 0446. </p>
+  <p>The main preparation you need to do with the chromatograms is to ensure that they have standardized names. The file names of chromatograms are key in that they must contain both a sample code as well as a primer name. It is critical that the file names be done in a  way that allows Chromaseq to easily find in the file names both the sample code and the primer name.</p>
+  <p>The chromatograms will also need to be in one single directory, and not subdirectories of it. For example, if Chromaseq is to asked to process the  directory shown below, it will only process the files in the directory itself, and <strong><em>not</em></strong> any contained subdirectories. Files in &quot;more chromatograms&quot; will be untouched:</p>
+  <p align="center"><img src="images/subdirectory.png" width="274" height="309" /></p>
+  <h2><a name="namingRule" id="namingRule"></a>Naming Rules</h2>
+  <p>In the following files, the sample code is the text that immediately follows the string of characters &quot;DNA&quot;, up until the first underscore (&quot;_&quot;) is encountered. The first two files are from sample 0446, the next two from 0678, and the last two from 0446. </p>
   <p class="monospaced">F12_F12DNA0446-_wg578F_273063.ab1<br />
     F12_F12DNA0446-_wgABR_273159.ab1<br />
     51_DNA0678_WG2_27469.CRO<br />
@@ -242,8 +254,13 @@ pageLink = function(page)
     A11_A11DNA0446_D1_340756.ab1</p>
   <p>(The first two files have an extra hyphen added accidentally to the end of the sample code; you can ask such extra characters to be stripped from the code.) </p>
   <p>The primers follow the sample codes in these names, and are preceded by and followed by underscores. Thus, six primers are represented, wg578F, wgABR, wg2, wg1, D3, and D1.</p>
-  <p>To define a rule that specifies how the file names are structured, you will use the following dialog box: </p>
-  <p align="center"><img src="images/nameRuleEditing.jpg" alt="Name Rules Dialog Box" width="255" height="299" /></p>
+  <p>To select a rule that specifies how the file names are structured, you will use the following dialog box: </p>
+  <p align="center"><img src="images/choosingNamingRule.png" width="349" height="138" /></p>
+  <p>But first you will need to define the naming rule. To do this, touch on the &quot;Edit Naming Rules&quot; button in the above dialog, and you will be presented with a list of available naming rules (when you first install Chromaseq, that list will likely be empty):</p>
+  <p align="center"><img src="images/listofnamingrules.png" width="397" height="256" /></p>
+  <p>To create a new naming rule, touch on the &quot;New&quot; button. To edit, rename, duplicate, or delete a rule, select it first from the list, then touch on the appropriate button.</p>
+  <p>If you make a new rule called &quot;myRule&quot;, this is the dialog box you will get to edit the naming rule:</p>
+  <p align="center"><img src="images/editNamingRule.png" width="279" height="296" /></p>
   <p>The naming rule shown in the above dialog will work on the sequences mentioned above.</p>
   <p>If you wish some characters to be automatically removed from the sample code, then enter these characters in the &quot;Characters to be removed from sample code&quot; box.  In the above example, hyphens are to be removed.</p>
   <p>In some cases, the sample code name consists of two parts, a main sample code, and a suffix. For example, the following files are chromatograms from four clones (p, q, t, and u) of sample 1794. </p>
@@ -274,7 +291,7 @@ C05_C05CL1794.t_Pat_288098.ab1<br />
 
     
     
-    </div>
+</div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>

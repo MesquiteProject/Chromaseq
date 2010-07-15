@@ -34,7 +34,7 @@
 	  <li><a href="../tutorial.html">Tutorial</a></li>
 	  <li><a href="../phredphrap.html">Phred / Phrap with Chromaseq</a></li>
 	  <ul id="subUL">
-	  	<li><a href="../installingPP.html">Installing Phred &amp; Phrap </a></li>
+	  	<li><a href="../installation.html">Installing Phred &amp; Phrap </a></li>
   		<li><a href="../primers.html">Primer List File</a></li>
   		<li><a href="../sampleCode.html">Sample Codes &amp; Names File</a></li>
   		<li></li>

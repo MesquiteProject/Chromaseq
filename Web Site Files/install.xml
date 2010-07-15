@@ -4,12 +4,11 @@
 		<version>1</version>
 
 		<notice><!--Chromaseq install -->
-			<forVersion>272</forVersion>
-			<forBuildNumberAtLeast>540</forBuildNumberAtLeast>
+			<forBuildNumberEqualOrGreater>540</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<noticeNumber>1</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>000</updateVersion>
+			<updateVersion>001</updateVersion>
 			<packageName>Chromaseq</packageName>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
@@ -24,8 +23,10 @@
 					<file>chromaseq</file>
 					<url>http://mesquiteproject.org/packages/chromaseq/chromaseq.zip</url>
 					<treatment>unzip</treatment>
-					<updateVersion>000</updateVersion>
+					<updateVersion>001</updateVersion>
 				</install>
 		</notice>
+		
+		
 	</MessagesFromHome>
 </mesquite>

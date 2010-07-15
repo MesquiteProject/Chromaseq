@@ -15,6 +15,12 @@
 /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
 </style>
 <![endif]-->
+
+<style type="text/css">
+<!--
+-->
+</style>
+
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
 <script type="text/javascript">
@@ -133,6 +139,9 @@ pageLink = function(page)
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('index.html')">Home</a>
   </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('overview.html')">Overview</a>
+  </div>
   
   <div id="GettingStartedPanel" class="CollapsiblePanel">
     <div class="CollapsiblePanelTab" tabindex="0">Getting Started</div>
@@ -224,7 +233,7 @@ pageLink = function(page)
 </div>
 
 <div id="CreditPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Credit</div>
+  <div class="CollapsiblePanelTab" tabindex="0">Citation & Credit</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('citation.html');">How to Cite</a></td></tr>
@@ -242,22 +251,21 @@ pageLink = function(page)
 <!-- InstanceBeginEditable name="content" -->
   <p>If you wish to have the sample codes that are contained in the chromatogram file names translated into other names (for example, the full names of the species or samples), you will need to provide a sample codes &amp; names file. </p>
   <p>The format of  the sample codes &amp; names file is:</p>
-  <p class="style2">&lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br />
-    &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;<br />
-    &lt;sample code&gt; &lt;short sample name&gt; &lt;long sample name&gt;;</p>
-  <p>The sample code is the code present in the chromatogram file name. The short sample name is the name to which this will be translated in some places in the Phred/Phrap/Mesquite system. The long sample name is the name to which it will be translated to in the sequence names of process sequences. The long name is optional. The short name is used for file names, to ensure that file names are not longer the maximum file name length of the operation system. </p>
+  <p class="monospaced">&lt;sample code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br />
+    &lt;sample code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br />
+    &lt;sample code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br />
+    &lt;sample code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;</p>
+<p>The sample code is the code present in the chromatogram file name. The short sample name is the name to which this will be translated in some places in the Phred/Phrap/Mesquite system. The long sample name is the name to which it will be translated to in the sequence names of process sequences. The long name is optional. The short name is used for file names, to ensure that file names are not longer the maximum file name length of the operation system. </p>
   <p>Here is part of an example file: </p>
-  <p class="style2">1839	'Bemb honestum VA 1839'	'Bemb honestum VA:Wingina 1839' ;<br />
-    1840	'Bemb honestum VA 1840'	'Bemb honestum VA:New Canton 1840' ;<br />
-    1841	'Bemb honestum VA 1841'	'Bemb honestum VA:New Canton 1841' ;<br />
-    1842	'Bemb arenobilis NC 1842'	'Bemb arenobilis NC:Bynum 1842' ;<br />
-    1843	'Bemb arenobilis VA 1843'	'Bemb arenobilis VA:Brookneal 1843' ;<br />
-    2082	'Amerizus spectabile CA 2082'	'Amerizus spectabile CA 2082' ;<br />
-    2083	'Bemb complanulum BC 2083'	'Bemb complanulum BC 2083' ;<br />
-    2084	'Bemb farrarae BC 2084'	'Bemb farrarae BC 2084' ;<br />
-    2085	'Bemb improvidens BC 2085'	'Bemb improvidens BC 2085' ;<br />
-    2086	'Bemb mimus IA 2086'	'Bemb mimus IA:Manchester 2086' ;<br />
-    2087	'Bemb platynoides OR 2087'	'Bemb platynoides OR 2087' ;</p>
+  <p class="style2">1120<span class="monospaced">&lt;tab&gt;</span>Bemb perspicuum AZ 1120<span class="monospaced">&lt;tab&gt;</span>Bembidion perspicuum AZ 1120	;<br />
+    1173<span class="monospaced">&lt;tab&gt;</span>Bemb antiquum ON 1173<span class="monospaced">&lt;tab&gt;</span>Bembidion antiquum ON 1173	;<br />
+    1250<span class="monospaced">&lt;tab&gt;</span>Bemb louisella NS 1250<span class="monospaced">&lt;tab&gt;</span>Bembidion louisella NS 1250	;<br />
+    1514<span class="monospaced">&lt;tab&gt;</span>Bemb antiquum NC 1514<span class="monospaced">&lt;tab&gt;</span>Bembidion antiquum NC 1514	;<br />
+    1598<span class="monospaced">&lt;tab&gt;</span>Bemb rufotinctum NC 1598<span class="monospaced">&lt;tab&gt;</span>Bembidion rufotinctum NC1598	;<br />
+    1626<span class="monospaced">&lt;tab&gt;</span>Bemb antiquum IA 1626<span class="monospaced">&lt;tab&gt;</span>Bembidion antiquum IA 1626	;<br />
+    1856<span class="monospaced">&lt;tab&gt;</span>Bemb paraenulum VA 1856<span class="monospaced">&lt;tab&gt;</span>Bembidion paraenulum VA 1856	;<br />
+    1960<span class="monospaced">&lt;tab&gt;</span>Bemb rothfelsi MO 1960<span class="monospaced">&lt;tab&gt;</span>Bembidion rothfelsi MO 1960	;<br />
+    2320<span class="monospaced">&lt;tab&gt;</span>Bemb perspicuum CA 2320<span class="monospaced">&lt;tab&gt;</span>Bembidion perspicuum CA 2320	;</p>
   <h2>Future directions </h2>
   <p>An XML format is being developed for this information, but it is not yet supported. </p>
 <!-- InstanceEndEditable -->
