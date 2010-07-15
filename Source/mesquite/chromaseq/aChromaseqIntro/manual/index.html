@@ -240,7 +240,7 @@ pageLink = function(page)
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-  <h2><font face="Trebuchet MS">Chromaseq: a package for processing chromatograms and sequence data in Mesquite</font></h2>
+  <h2><font >Chromaseq: a package for processing chromatograms and sequence data in Mesquite</font></h2>
   <table width="346" border="0" cellpadding="8">
     <tr>
       <td width="326" bgcolor="#e8e3cf"><p><em>Lead Developers: </em><br />
@@ -251,19 +251,21 @@ pageLink = function(page)
         Jeremy Parson </p></td>
     </tr>
   </table>
-  <p><font face="Trebuchet MS">The Chromaseq
-    package allows one to organize a directory of chromatograms (1 &amp; 2, below),
-    assemble them into contigs (using Phred and Phrap, 3), import the consensus
-    sequences into Mesquite (4), view the chromatograms for each sequence (5),
-    and edit the calls in a chromatogram viewer (6).</font> Chromaseq requires <a href="http://mesquiteproject.org">Mesquite
-      2.72</a> or later, as well as <a href="phredphrap.html">Phred and Phrap</a>.
-    See the &quot;<a href="#isNot">What Chromaseq Is Not&quot;</a> section for
-    some comments on the limitations of Chromaseq. </p>
-  <p><strong><em>Note: Chromaseq has been undergoing fairly rapid development of late, with
-    several features added, and changes in the interface. This document is out
-    of date; sorry.</em></strong></p>
-  <p><img src="images/chromaseqOverview.jpg" alt="Overview" width="800" height="400" /></p>
-  <p>The following sections provide information about Chromaseq:</p>
+  <p><font >The Chromaseq
+    package integrates the processing of chromatograms within Mesquite, as well as adding a few tools for processing sequence data. With Chromaseq installed, and the helping programs Phred and Phrap, you can:</font></p>
+  <ol>
+    <li><font >O</font><font >rganize a directory of chromatograms into subdirectories corresponding to genes and samples</font></li>
+    <li><font >Assemble them into contigs (with the help of Phred and Phrap)</font></li>
+    <li><font > Import the contig
+      sequences into Mesquite, and have Chromaseq automatically trim them, adjust base calls as appropriate, etc. </font></li>
+    <li><font >View the chromatograms for each sequence</font> by touching a special tool on that sequence in Mesquite's matrix editor</li>
+    <li><font >Edit the calls in a chromatogram viewer</font></li>
+  </ol>
+<p>Chromaseq requires <a href="http://mesquiteproject.org">Mesquite
+        2.73</a> or later, as well as <a href="phredphrap.html">Phred and Phrap</a>.
+      See the <a href="faq.html">FAQ page</a> for
+    some comments on the limitations of Chromaseq.</p>
+<p>The following sections provide information about Chromaseq:</p>
   <ul>
     <li><a href="overview.html">Overview</a> gives a one-page tour of some of the features of Chromaseq, with images.</li>
     <li><a href="quickstart.html">Quickstart</a> is a condensed guide to using Chromaseq, with many details missing, but if you really can't stand to read manuals, this is a good place to start.</li>
@@ -275,24 +277,15 @@ pageLink = function(page)
     <li><a href="citation.html">How to cite Chromaseq</a>.</li>
     <li><a href="faq.html">Frequently Asked Questions</a>.</li>
   </ul>
-  <h2><a name="isNot" id="isNot"></a>What Chromaseq Is Not</h2>
-  <p>Chromaseq is <em>not</em> intended as a full-featured replacement to programs
-    like <a href="http://www.genecodes.com">Sequencher</a>&#8482; or <a href="http://www.codoncode.com">Aligner</a>&#8482;.
-    Chromaseq was built by us for our personal needs in systematics. We obtain
-    many sequences of a few genes from beetles and spiders; many of these sequences
-    are high-quality, and don't require much processing other than assembly of
-    the read, trimming, and changing a few base calls. However, the tedium of
-    processing these many sequences, and the lack of integration of existing
-    tools within a systematics framework, led us to develop a solution that worked
-    for us. While it has many custom features for dealing with the sorts of sequence
-    data one acquires typically in systematics, it does not have the many features
-    one would want in a full chromatogram analysis package, including tools for
-    handling more difficult data.  </p>
+<strong><em>Note: Chromaseq has been undergoing fairly rapid development of late, with
+  several features added, and changes in the interface. This document is out
+  of date; sorry.</em></strong>
+<p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 
     
     
-    </div>
+</div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>

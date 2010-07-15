@@ -105,3 +105,8 @@ body  {
 
 .thrColFixHdr #sidebar1 { width: 180px; }
 .thrColFixHdr #sidebar2 { width: 190px; }
+
+.monospaced {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 12px;
+}

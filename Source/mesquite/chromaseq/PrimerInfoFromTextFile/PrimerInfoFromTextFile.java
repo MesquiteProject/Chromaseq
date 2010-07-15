@@ -25,7 +25,7 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		if (StringUtil.blank(primerListPath))
+		//if (StringUtil.blank(primerListPath))
 			if (!queryOptions())
 				return false;
 		if (StringUtil.notEmpty(primerListPath))
