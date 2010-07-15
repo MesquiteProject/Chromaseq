@@ -249,8 +249,8 @@ pageLink = function(page)
 <!-- InstanceBeginEditable name="content" -->
   <p>In this tutorial,
       you will go from chromatograms to having fully processed sequences, with
-      final base calls.</p>
-  <h2>Setup</h2>
+      final base calls. Much of what is described here only needs to be done the first time you use Chromaseq.</p>
+  <h2>Initial Setup</h2>
   <p>First, make sure that you have <a href="javascript:pageLink('installation.html');">installed Chromaseq, Phred, and Phrap</a>. </p>
   <p>Download the <a href="http://mesquiteproject.org/packages/chromaseq/examples/ChromaseqExamples.zip">ChromaseqExamples archive</a>,
     and unzip it. You will have a folder containing two subfolders and two files:</p>
@@ -270,19 +270,37 @@ pageLink = function(page)
   <p>and immediately below this add the following two lines:</p>
   <p class="monospaced"><font face="Courier New, Courier, mono">&nbsp;&nbsp;#Entry below added to accommodate Chromaseq example files<br />
 &nbsp;&nbsp;&quot;DT3730POP7{BDv3}.mob&quot; terminator big-dye ABI_373_377</font></p>
-  <p>With that done, you are ready to process some chromatograms.</p>
-  <h2>Process the Chromatograms</h2>
+  <p>With that done, you are ready to process some chromatograms. We are going to first process the 14 chromatogram files that are in the folder &quot;Chromatograms&quot;.</p>
+  <h2>Processing the Chromatograms  </h2>
+  <h3>Telling Chromaseq how the chromatogram files are named</h3>
   <p>From the File&gt;Open Other submenu in Mesquite, choose &quot;Process Chromatograms Files in Directory&quot;. You will be first asked to choose the rules used to name chromatogram files.</p>
-  <p><img src="images/namingRuleChoiceEmpty.png" width="318" height="138" /></p>
-  <p>If this is the first time Chromaseq has been used on this computer, there will be no naming rules. Let's presume that is the case. To create a new naming rule, touch on the &quot;Edit Naming Rules&quot; button, and you should see a dialog box like this:</p>
-  <p>This is the dialog box that lets you manage your different naming rules.</p>
-  <p>&nbsp;</p>
-  <p>You will see a dialog box that looks something
-    like this:</p>
-  <p align="center"><img src="images/mainPhPhDialogEmpty.gif" width="358" height="437" /></p>
-  <p>&nbsp;</p>
-  <p>Let's begin at the bottom, by telling Mesquite the locations of Phred, Phrap,
-    and various other files. </p>
+  <p align="center"><img src="images/namingRuleChoiceEmpty.png" width="318" height="138" /></p>
+  <p>If this is the first time Chromaseq has been used on this computer, there will be no naming rules. Let's presume that is the case. To create a new naming rule, touch on the &quot;Edit Naming Rules&quot; button, and you should see a dialog box, that helps you manage your various naming rules, like this:</p>
+  <p align="center"><img src="images/editNamingRulesEmpty.png" width="397" height="256" /></p>
+  <p>We want to make a new naming rule, so press the &quot;New&quot; button, and give the rule the name &quot;ExamplesNamingRule&quot;</p>
+  <p align="center"><img src="images/newNamingRuleEmpty.png" width="253" height="135" /></p>
+  <p>You will then be presented with the editor in which you can specify the naming rule:</p>
+  <p align="center"><img src="images/editingNamingRuleEmpty.png" width="321" height="296" /></p>
+  <p>If you look into the &quot;Chromatograms&quot; folder, you will see that the file names look like this:</p>
+  <p class="monospaced">	A01_A01DNA1120_B1490_411940.ab1</p>
+  <p>The first 7 characters (&quot;A01_A01&quot;) specify the position in the 96-well sequencing plate; we don't care about this; the last bit, &quot;411940&quot;, is also not important. The only thing we care about in this is the sample code (which will allow us to figure out what to call the sequences that are created), and the primer name. In this file, the sample code is &quot;1120&quot;, and the primer name is &quot;B1490&quot;. We need to tell Chromaseq how to find these two items. </p>
+  <p>As with all the files in that Chromatograms folder, the sample code precedes the primer name. The sample code is bounded by &quot;DNA&quot; and &quot;_&quot;. The primer name has a &quot;_&quot; in front of it, and a &quot;_&quot; following it. With those specified in the File Naming Rule dialog box, the naming rule is build. Not surprisingly, the default naming rule matches the file naming format used in these example files. </p>
+  <p>Press OK, and then Done, and then you will be back to the dialog box used to choose your naming rule. Make sure you choose the rule you just created:</p>
+  <p align="center"><img src="images/examplesNamingRule.png" width="382" height="138" /></p>
+  <p>and press OK.</p>
+  <h3>Choosing the method for naming sequences</h3>
+  <p>You will then be asked to choose a module to be used to deterimine the names to give your processed sequences. Currently there is only a choice between acquiring the sequence names for a text file, or simply using the sample code as the sequence name:</p>
+  <p align="center"><img src="images/sampleCodeModule.png" width="313" height="367" /></p>
+  <p>Choose the &quot;Sequence Names from Text File&quot; option, and press OK. You will then be asked for the location of the file containing the sequence names; use the Browse button to choose the &quot;SampleCodes.txt&quot; file in the ChromaseqExamples folder:</p>
+  <p align="center"><img src="images/exampleSampleCodeFileLocation.png" width="384" height="127" /></p>
+  <p>This file is already set up to contain the sample codes (e.g., &quot;1120&quot;) and the name that should be applied to sequences from that sample (e.g., &quot;Bembidion perspicuum AZ 1120&quot;).</p>
+  <h3>Choosing the file containing information about primers</h3>
+    <p>Next, you will be asked to specify the location of the file that contains information about primers. Choose the &quot;Primers.txt&quot; file in the ChromaseqExamples directory:	</p>
+    <p align="center"><img src="images/examplePrimerFileLocation.png" width="393" height="127" /></p>
+    <h3>And now to make base calls and contigs...</h3>
+  <p>We are getting close to being ready to do the processing. You should now see a dialog box that allows you to set things up for Phred and Phrap.</p>
+  <p align="center"><img src="images/phredPhrapOptions.png" width="340" height="265" /></p>
+  <p>We won't worry about most of this; the only thing we must do is to tell Chromaseq where the key helper programs it uses, including Phred and Phrap, are located. </p>
   <p>Press on the
       &quot;Phred Phrap Locations &amp; Options...&quot; button, and the dialog will appear
     that will
@@ -290,7 +308,7 @@ pageLink = function(page)
       you tell Mesquite
       where
       the programs are located, and where the Phred parameter file is:</p>
-  <p align="center"><img src="images/PhPhLocations.gif" width="503" height="200" /></p>
+  <p align="center"><img src="images/phredPhrapLocations.png" width="524" height="219" /></p>
   <p>Press the &quot;Browse...&quot; button beside the &quot;Phred, Phrap, &amp; Phd2Fasta&quot; to browse
     for the folder on your hard disk containing the three programs Chromaseq
     uses
@@ -301,64 +319,130 @@ pageLink = function(page)
     all of which must be in the same directory. Do the same for the Phred parameter
     file (&quot;phredpar.dat&quot;). You should only have to do this once on your computer,
     unless you move these files to other locations. </p>
-  <p>Once that is done, then you will need to tell Chromaseq three more things
-    to set up the system:</p>
-  <ul>
-    <li> How to find, in the file
-      names of the chromatograms, the sample codes and primer names. To do this
-      for your own sequences, you would need to create a <a href="chromatograms.html">naming
-      rule</a>. However, for these sample chromatogram files, the default naming
-      rule will work.</li>
-    <li><em> Where the file is that lists the sample codes and the
-      names of the samples.</em> Use the &quot;Browse&quot; button beside the Code &amp; Names File
-      area and choose the file &quot;SampleCodes&quot; from the download.</li>
-    <li> <em>Where the file is that lists the names of the primers, whether they
-      are forward or reverse primers, and the name of gene or genomic piece to
-      which the belong.</em> Use the &quot;Browse&quot; button beside the &quot;Primer
-      list file&quot; area and choose the file &quot;PrimerList&quot; from the download.</li>
-    </ul>
-  <p>When you use this system to process your own sequences, you would need to
-    provide your own naming rule, sample code file, and primer list. But, once
-    these are set up, you will in general not need to re-enter these. </p>
-  <h2>Asking Phred and Phrap to make base calls and assemble contigs</h2>
-  <p>With the set-up completed, you can now use the File&gt;Open Other&gt;Phred/Phrap
-    Import from Local Chromatograms dialog box to ask Phred and Phrap to process
-    your files. Press the &quot;OK&quot; button, and Chromaseq will ask you which directory
-    contains the chromatograms. Choose the &quot;Chromatograms&quot; folder from the
-    download. </p>
+  <p>Press OK on this &quot;Phred Phrap Locations &amp; Options&quot; dialog, and you will go back to the &quot;Phred/Phrap/Chromaseq Options&quot; dialog box. Press OK, and Chromaseq will then ask you for the directory that contains the chromatogram files to be processed. Find the chromatograms folder:</p>
+  <p align="center"><img src="images/selectDirectory.png" width="423" height="346" /></p>
+  <p>And press Choose, or OK, as appropriate.</p>
   <p>At this point, your computer's terminal shell should start. On a Mac, this
     will typically be the Terminal application; on Windows, it will be the Cygwin
     shell if that is what you installed. Phred and Phrap will then start processing
     the files, and the shell will be filled with the output of these programs.
     If you switch back to Mesquite, you will notice in the log information about
-    what is happening. Eventually, the processing will finish, and Mesquite will
+    what is happening. For example, here is the full log for processing the Chromatograms folder:  </p>
+  <p>&nbsp;</p>
+  <pre class="monospacedSmall">Phred Phrap processing of chromatograms as scripted by Mesquite
+ Processing directory: /ChromaseqExamples/Chromatograms</pre>
+  <pre class="monospacedSmall">Using names and codes file: /ChromaseqExamples/SampleCodes.txt</pre>
+  <pre class="monospacedSmall">Using primers file: /ChromaseqExamples/Primers.txt</pre>
+  <pre class="monospacedSmall">Parameters: Phred Options:  -id . -pd . -d 
+     Phrap Options:  -new_ace -qual_show 20 -vector_bound 0 
+     Chromaseq Options: 
+     Quality threshold for lower case: 49
+     Convert multiple-peaks sites to ambiguity codes: true
+     Minimum secondary peak fraction for ambiguity: 0.3
+     Trim low quality regions from ends: true
+     Quality threshold for trim: 20
+     Trim window length: 10
+     Trim window threshold: 5 </pre>
+  <pre class="monospacedSmall">Preparing Bemb perspicuum AZ 1120  (COI)
+     Preparing Bemb louisella NS 1250  (COI)
+     Preparing Bemb louisella NS 1250  (28S)
+     Preparing Bemb perspicuum CA 2320  (28S)
+     Preparing Bemb paraenulum VA 1856  (COI)
+     Preparing Bemb perspicuum AZ 1120  (28S)
+     Preparing Bemb paraenulum VA 1856  (28S)
+     Number of files prepared: 7</pre>
+  <pre class="monospacedSmall"> A01_A01DNA1120_B1490_411940.ab1  renamed to  DNA1120.b.B1490.ab1
+     A01_A01DNA1120_Bcoi2R_412036.ab1  renamed to  DNA1120.g.Bcoi2R.ab1
+     C07_C07DNA1250_B1490_208508.ab1  renamed to  DNA1250.b.B1490.ab1
+     C07_C07DNA1250_B2232_208604.ab1  renamed to  DNA1250.g.B2232.ab1
+     C12_C12DNA1250_D3aR_572645.ab1  renamed to  DNA1250.g.D3aR.ab1
+     C12_C12DNA1250_NLF184_572549.ab1  renamed to  DNA1250.b.NLF184.ab1
+     F06_F06DNA2320_D3aR_552091.ab1  renamed to  DNA2320.g.D3aR.ab1
+     F06_F06DNA2320_NLF184_551995.ab1  renamed to  DNA2320.b.NLF184.ab1
+     H05_H05DNA1856_B1490_237723.ab1  renamed to  DNA1856.b.B1490.ab1
+     H05_H05DNA1856_B2232_237819.ab1  renamed to  DNA1856.g.B2232.ab1
+     H07_H07DNA1120_D1_394061.ab1  renamed to  DNA1120.b.D1.ab1
+     H07_H07DNA1120_D3_394157.ab1  renamed to  DNA1120.g.D3.ab1
+     H09_H09DNA1856_D1_237563.ab1  renamed to  DNA1856.b.D1.ab1
+     H09_H09DNA1856_D3_237659.ab1  renamed to  DNA1856.g.D3.ab1
+  
+Execution of Phred-Phrap command file begun.</pre>
+<pre class="monospacedSmall">....1. Bemb perspicuum AZ 1120 (Phrap)
+     2. Bemb louisella NS 1250 (Phrap)
+     3. Bemb louisella NS 1250 (Phrap)
+     4. Bemb perspicuum CA 2320 (Phrap)
+     5. Bemb paraenulum VA 1856 (Phrap)
+     6. Bemb perspicuum AZ 1120 (Phrap)
+     7. Bemb paraenulum VA 1856 (Phrap)</pre>
+  <pre class="monospacedSmall">Phred &amp; Phrap analyses completed.
+     Post-Phrap processing begins.
+     
+     Processing ACE file: Bemb louisella NS 1250.ace
+     C12_C12DNA1250_D3aR_572645.ab1 (rev)
+     C12_C12DNA1250_NLF184_572549.ab1</pre>
+  <pre class="monospacedSmall">Processing ACE file: Bemb paraenulum VA 1856.ace
+     H09_H09DNA1856_D3_237659.ab1 (rev)
+     H09_H09DNA1856_D1_237563.ab1</pre>
+  <pre class="monospacedSmall">Processing ACE file: Bemb perspicuum AZ 1120.ace
+     H07_H07DNA1120_D3_394157.ab1 (rev)
+     H07_H07DNA1120_D1_394061.ab1</pre>
+  <pre class="monospacedSmall">Processing ACE file: Bemb perspicuum CA 2320.ace
+     F06_F06DNA2320_D3aR_552091.ab1 (rev)
+     F06_F06DNA2320_NLF184_551995.ab1</pre>
+  <pre class="monospacedSmall">Processing ACE file: Bemb louisella NS 1250.ace
+     C07_C07DNA1250_B2232_208604.ab1 (rev)
+     C07_C07DNA1250_B1490_208508.ab1</pre>
+  <pre class="monospacedSmall">Processing ACE file: Bemb paraenulum VA 1856.ace
+     H05_H05DNA1856_B2232_237819.ab1 (rev)
+     H05_H05DNA1856_B1490_237723.ab1</pre>
+  <pre class="monospacedSmall">Processing ACE file: Bemb perspicuum AZ 1120.ace
+     A01_A01DNA1120_Bcoi2R_412036.ab1 (rev)
+     A01_A01DNA1120_B1490_411940.ab1</pre>
+  <pre class="monospacedSmall">========================
+     Phred/Phrap processing report</pre>
+  <pre class="monospacedSmall">Multi-read sequences obtained from the following genes and samples:
+     (28S) -- Bembidion louisella NS 1250
+     (28S) -- Bembidion paraenulum VA 1856
+     (28S) -- Bembidion perspicuum AZ 1120
+     (28S) -- Bembidion perspicuum CA 2320
+     (COI) -- Bembidion louisella NS 1250
+     (COI) -- Bembidion paraenulum VA 1856
+     (COI) -- Bembidion perspicuum AZ 1120
+     ========================</pre>
+  <p>Your log should look like that above. </p>
+  <p>Eventually, the processing will finish, and Mesquite will
     import the resulting contigs into a Mesquite project, with one matrix for
     each gene.</p>
-  <p>In the example in this tutorial, the chromatograms come from three different
-    genes, and so three matrices will appear in the project once the processing
-    is done, one for 18S rDNA, one for COI, and the other for the gene <em>wingless</em>    (called
-    &quot;wg&quot; in the PrimerList file). The last matrix processed will be presented
+  <p>In the example in this tutorial, the chromatograms come from two different
+    genes, and so two matrices will appear in the project once the processing
+    is done, one for 28S rDNA, and one for COI. The last matrix processed will be presented
     to you, by default in Birds Eye View, and with the bases colored according
     to the quality score assigned to them by Phred and Phrap. White is high quality,
-    darker greens are moderate quality, and blue is poor quality:</p>
-  <p align="center"><img src="images/tutorialImport.gif" width="828" height="335" /></p>
-  <p>The pink sequence means the contig was not successfully assembled.</p>
+    darker greens are moderate quality, and blue is poorest quality:</p>
+  <p align="center"><img src="images/tutorialProcessed1.png" width="558" height="281" /></p>
+  <p>If you want to see the matrix with the colors being the standard ones for nucleotides, choose Matrix&gt;Color Matrix Cells&gt;Character State, and it should look like this:</p>
+  <p align="center"><img src="images/tutorialProcessByState.png" width="565" height="286" /></p>
+  <p>We could now align the sequences, and do other things with them, but let's now worry about that now, instead let's look at the contigs and chromatograms in detail.  </p>
   <h2>Examining a contig and its chromatograms</h2>
-  <p>To see the contig for the wg sequence of Bemb antiquum IA 1626 and its chromatograms,
-    touch the view chromatograms tool (<img src="images/chromTool.jpg" width="30" height="29" align="texttop" />)
-    on &quot;Bemb antiquum IA 1626&quot;. A new window will open, showing you the chromatograms
+  <p>To see the contig for the COI sequence of Bembidion louisella NS 1250 and its chromatograms,
+    touch the view chromatograms tool (<img src="images/chromTool.jpg" width="30" height="29" align="absmiddle" />)
+    on &quot;Bembidion louisella NS 1250&quot;. A new window will open, showing you the chromatograms
     and the contig:</p>
-  <p align="center"><img src="images/tutorialChromato1.gif" width="828" height="395" /></p>
+  <p align="center"><img src="images/tutorialProcessedViewer.png" width="651" height="374" /></p>
   <p>You may see a different part of the sequence than is shown in the above
     image; Chromaseq centers the view on the base upon which you clicked in the
     matrix.</p>
-  <p align="center"><img src="images/tutorialFirstChromView.gif" width="780" height="331" /></p>
+  <p align="center"><img src="images/tutorialFirstChromView.gif" width="657" height="278" /></p>
+  <h3>Navigating through a contig</h3>
+  <p>[to be added]</p>
+  <h3>Making base calls</h3>
+  <p>[to be added]</p>
   <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 
     
     
-  </div>
+</div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
