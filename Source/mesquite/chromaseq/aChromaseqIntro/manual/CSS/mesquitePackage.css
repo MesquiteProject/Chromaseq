@@ -13,7 +13,7 @@ body  {
 
 
 .thrColFixHdr #container { 
-	width: 86%;  /* using 20px less than a full 800px width allows for browser chrome and avoids a horizontal scroll bar */
+	width: 80%;  /* using 20px less than a full 800px width allows for browser chrome and avoids a horizontal scroll bar */
  	background:#f4f0e2;
 	margin: 0 auto; /* the auto margins (in conjunction with a width) center the page */
 	border: 1px solid #963;

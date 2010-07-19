@@ -5,7 +5,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Phred/Phrap</title>
+<title>File Naming Rules</title>
 <!-- InstanceEndEditable -->
 
 <![endif]--><!--[if IE]>
@@ -28,7 +28,8 @@
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
 <script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
 
-<!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
 </head>
 
 <body bgcolor="#f4f0e2" class="thrColFixHdr" >
@@ -38,7 +39,7 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Phred/Phrap<!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->File Naming Rules<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
   </tr>
@@ -166,18 +167,80 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-  <p>Chromaseq will, using Phred and Phrap, convert a directory of chromatograms into an organized collection of files, including consensus sequences produced by Phred and Phrap, as modified by Mesquite's Chromaseq. Vital to this are the programs Phred and Phrap.  </p>
-  <p>Phred (Green and Ewing, 2002) is a program that examines chromatogram files, and makes base calls therefrom. It also judges the quality of the base calls, and assigns a score to each called base. </p>
-  <p>Phrap (&quot;Phil's Revised Assembly Program&quot;; Green, 1999) is a program that takes the output of Phred, and forms contigs of the reads, producing in the process and ACE file.</p>
-  <p>These programs were originally written for large-scale sequencing efforts such as the Human Genome Project. Their source code is currently (2005) available free for most academic uses; compiled versions are available for a cost. </p>
-  <p>Details about these two programs, including how to obtain their source code, is available on the <a href="http://phrap.org/phredphrapconsed.html">Phred and Phrap web site</a>. See the <a href="javascript:pageLink('installation.html');">Installation</a> page in this manual for hints on compiling and installing Phred &amp; Phrap. </p>
-  <p>&nbsp;</p>
-  <p><img src="images/phredPhrapLocations.png" width="524" height="219" /></p>
-  <p>&nbsp;</p>
-  <h2>References</h2>
-  <p>Green, P. 1999. Phrap. <a href="http://phrap.org">http://phrap.org</a>.</p>
-  <p>Green, P. and Ewing, B. 2002. Phred. <a href="http://phrap.org">http://phrap.org</a></p>
-  <p>&nbsp;  </p>
+    
+    
+<p>Chromaseq uses the name of each chromatogram file to determine, directly or indirectly, the name to be given to each sequence and information about primers. You will need to define a naming rule that Chromaseq canuse to extract from the name of each chromatogram that chromatogram's sample code and primer name. Currently, the following styles of file names are supported:</p>
+<ol>
+  <li>	The file name contains embedded within it a sample code and the primer name, and those pieces can be found and then used to look up (via separate text files or databases) information about the names to call sequences and information about the primers, such as their sequences and the gene fragment to which they correspond. [Note: database support not yet available; if it is important to you, please contact <img src="images/email.jpg" width="189" height="17" align="absmiddle" />]</li>
+</ol>
+<p>The file names might look like this:</p>
+<p class="monospaced"> A01_A01DNA1120_B1490_411940.ab1</p>
+<p> In this file, the sample code is &quot;1120&quot;, and the primer name is &quot;B1490&quot;. A separate sample codes and names file will have a list of sample codes and sequence names, and will allow Chromaseq to look up the sequence name to use for sample code &quot;1120&quot;; there will similarly be a primer information file. However, Chromaseq will first have to be able to find the sample code and the primer name within the chromatogram file's name, and for this you need to give Chromaseq a file naming rule that will tell it how to find these elements.</p>
+<p>In the future, the following style of file names may be supported, but <em>it is not currently supported:</em></p>
+<ol start="2">
+  <li>The file names contain only a single code (e.g.,&quot; B03&quot;), which is either the cell in a spreadsheet or spreadsheets or database that contains the sample code or primer name, more details about which can be looked up in additional files or database tables.</li>
+</ol>
+<p>If this style of file names, or other ones, are the way you link information about the sequence names and primer information to your chromatograms, and it would be important to you for Chromaseq to support these, then please contact <img src="images/email.jpg" alt="" width="189" height="17" align="absmiddle" />.</p>
+<h2>An example naming rule</h2>
+<p>In the following files, the sample code is the text that immediately follows the string of characters &quot;DNA&quot;, up until the first underscore (&quot;_&quot;) is encountered. The first two files are from sample 1120, the last four from 1250. </p>
+<p class="monospaced">A01_A01DNA1120_B1490_411940.ab1<br />
+A01_A01DNA1120_Bcoi2R_412036.ab1<br />
+C07_C07DNA1250_B1490_208508.ab1<br />
+C07_C07DNA1250_B2232_208604.ab1<br />
+C12_C12DNA1250_D3aR_572645.ab1<br />
+C12_C12DNA1250_NLF184_572549.ab1</p>
+<p>The primers follow the sample codes in these names, and are preceded by and followed by underscores. Thus, five primers are represented, B1490, Bcoi2R, B2232, D2aR, and NLF184. As it turns out, the first three of these primers are for a piece of the mitochondrial gene cytochrome oxidase I, and the last two for nuclear large unit ribosomal DNA (28S rDNA).</p>
+<p>Thus, the naming rule for files with these sorts of names are:</p>
+<ul>
+  <li>sample code precedes the primer name</li>
+  <li>sample code immediately follows &quot;DNA&quot;</li>
+  <li>sample code is immediately followed by &quot;_&quot;</li>
+  <li>primer code is preceded by a &quot;_&quot; that follows the sample coe</li>
+  <li>primer code is immediately followed by a &quot;_&quot;</li>
+  </ul>
+<h2>Another example naming rule</h2>
+<p>In the following file names, the sample code is at the very start of the file name, and is followed by a &quot;#&quot;: </p>
+<p class="monospaced">d124#050302-12261.ab1<br />
+  d096#041117-12261.ab1<br />
+  d124#050302-13398.ab1<br />
+  d096#041117-13398.ab1 </p>
+<p>The primer names in these are the &quot;12261&quot; and the &quot;13398&quot;; the primer name follows a &quot;-&quot; and precedes a &quot;.&quot;. Thus, the naming rule for files with these sorts of names are:</p>
+<ul>
+  <li>sample code precedes the primer name</li>
+  <li>sample code is at the very start of the file name</li>
+  <li>sample code is immediately followed by &quot;#&quot;</li>
+  <li>primer code is preceded by a &quot;-&quot; that follows the sample coe</li>
+  <li>primer code is immediately followed by a &quot;.&quot;</li>
+</ul>
+<p>&nbsp;</p>
+<h2>Defining naming rules</h2>
+<p>To select a rule that specifies how the file names are structured, you will use the following dialog box, which will appear when you choose one of the menu items to process chromatograms: </p>
+<p align="center"><img src="images/choosingNamingRule.png" alt="" width="349" height="138" /></p>
+<p>When you first install Chromaseq, the only option will be &quot;default&quot;, and you will first need to define the naming rule that works for your files. To do this, touch on the &quot;Edit Naming Rules&quot; button in the above dialog, and you will be presented with a list of available naming rules (when you first install Chromaseq, that list will likely be empty):</p>
+<p align="center"><img src="images/listofnamingrules.png" alt="" width="397" height="256" /></p>
+<p>To create a new naming rule, touch on the &quot;New&quot; button. To edit, rename, duplicate, or delete a rule, select it first from the list, then touch on the appropriate button.</p>
+<p>If you make a new rule called &quot;myRule&quot;, this is the dialog box you will get to edit the naming rule:</p>
+<p align="center"><img src="images/editNamingRule.png" alt="" width="279" height="296" /></p>
+<p>The naming rule shown in the above dialog will work on the sequences mentioned above.</p>
+<p>If you wish some characters to be automatically removed from the sample code, then enter these characters in the &quot;Characters to be removed from sample code&quot; box. For example, in the sequencing facility that DRM uses, hyphens are occasionally (and apparently randomly) inserted in the file name as part of the sample code, and so those need to be automatically stripped out.</p>
+<p>In some cases, the sample code name consists of two parts, a main sample code, and a suffix. For example, the following files are chromatograms from four clones (p, q, t, and u) of sample 1794. </p>
+<p class="monospaced"> C03_C03CL1794.p_B1490_287986.ab1<br />
+  C03_C03CL1794.p_Pat_288082.ab1<br />
+  C04_C04CL1794.q_B1490_287994.ab1<br />
+  C04_C04CL1794.q_Pat_288090.ab1<br />
+  C05_C05CL1794.t_B1490_288002.ab1<br />
+  C05_C05CL1794.t_Pat_288098.ab1<br />
+  C06_C06CL1794.u_B1490_288010.ab1<br />
+  C06_C06CL1794.u_Pat_288106.ab1</p>
+<p>The sample code thus consists of two parts , &quot;1794&quot;, and the suffix p, q, t, or u. The string before the sample code suffix is &quot;.&quot;. If Mesquite encounters in the sample code a string that matches that designated in &quot;string before sample code suffix&quot;, then it will split the sample code name in two, and consider the main sample code to be the first part. </p>
+<p>If you have asked to have the sample code translated into full sample names, then Mesquite will use just the part before the suffix (if there is one) as the code to look up in the sample names file, but it will append the suffix on to the end of the full sample name. For example, for these two files:</p>
+<p><span class="monospaced">C05_C05CL1794.t_B1490_288002.ab1<br />
+  C05_C05CL1794.t_Pat_288098.ab1<br />
+</span></p>
+<p>the sequence produced will be a COI sequence (primers Pat and B1490), named &quot;Bembidion integrum IL 1490 t&quot;, as &quot;Bembidion integrum IL 1490&quot; is the sample name listed in the sample names file. </p>
+<p>If the sample code is at the very start of the file name, set the string before sample code to be blank.</p>
+<p><em>Note: only one naming rule is currently allowed for all files processed at one time.</em></p>
+<p></p>
 <!-- InstanceEndEditable -->
 
     

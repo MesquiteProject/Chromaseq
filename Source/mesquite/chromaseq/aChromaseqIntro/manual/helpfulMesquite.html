@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>Helpful Mesquite Features</title>
 <!-- InstanceEndEditable -->
@@ -20,94 +21,18 @@
 <!--
 -->
 </style>
+<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
+<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
 
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
-<script type="text/javascript">
-var params = Spry.Utils.getLocationParamsAsObject();
+<script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
 
-var qsParm = new Array();
-
-qsParm['ProcessingChromatoPanel'] = null;
-qsParm['GettingStartedPanel'] = null;
-qsParm['ChromatogramViewerPanel'] = null;
-qsParm['PreparingDataPanel'] = null;
-qsParm['CreditPanel'] = null;
-qsParm['HelpPanel'] = null;
-qsParm['OtherFeaturesPanel'] = null;
-qsParm['TechnicalPanel'] = null;
-
-qs();
-
-function qs() {
-	var query = window.location.search.substring(1);
-	var parms = query.split('&');
-	for (var i=0; i<parms.length; i++) {
-		var pos = parms[i].indexOf('=');
-		if (pos > 0) {
-			var key = parms[i].substring(0,pos);
-			var val = parms[i].substring(pos+1);
-			qsParm[key] = val;
-		}
-	}
-}
-
-parameterString = function()
-{
-	var paramString = '';
-	if (GettingStartedPanel.isOpen()) {
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'GettingStartedPanel=open';
-	}
-	if (PreparingDataPanel.isOpen()) {
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'PreparingDataPanel=open';
-	}
-	if (ProcessingChromatoPanel.isOpen()) {
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'ProcessingChromatoPanel=open';
-	}
-	if (ChromatogramViewerPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'ChromatogramViewerPanel=open';
-	}
-	if (CreditPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'CreditPanel=open';
-	}
-	if (HelpPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'HelpPanel=open';
-	}
-	if (OtherFeaturesPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'OtherFeaturesPanel=open';
-	}
-	if (TechnicalPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'TechnicalPanel=open';
-	}
-	document.write('Parameter string: ' + paramString);
-
-	return paramString;
-};
-
-
-pageLink = function(page)
-{
-	document.location.href = page + parameterString();
-};
-
-
-
-</script>
-<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
-<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 </head>
 
-<body class="thrColFixHdr" bgcolor="#f4f0e2">
+<body bgcolor="#f4f0e2" class="thrColFixHdr" >
 
 <div id="container">
   <div id="header">
@@ -123,7 +48,7 @@ pageLink = function(page)
 </div>
   
   
-  <div id="sidebar1">
+<div id="sidebar1">
   
   
   
@@ -142,7 +67,7 @@ pageLink = function(page)
   			<tr><td><a href="javascript:pageLink('download.html');">Download</a></td></tr>
   			<tr><td><a href="javascript:pageLink('installation.html');">Installation</a></td></tr>
   			<tr><td><a href="javascript:pageLink('quickstart.html');">Quick Start</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorials</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
 		</table>
     </div>
   </div>
@@ -151,8 +76,9 @@ pageLink = function(page)
     <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primers.html');">Primers</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('fileNamingRules.html');">File Naming Rules</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples & Sequence Names</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primers.html');">Primer & Gene Information</a></td></tr>
 		</table>
     </div>
   </div>
@@ -161,9 +87,9 @@ pageLink = function(page)
   <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('runningPP.html');">Running Phred/Phrap</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('interpretingResults.html');">Interpreting Results</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation & Workflow</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('phredPhrap.html');">Phred & Phrap Locations & Options</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
   			<tr><td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram FIles</a></td></tr>
 		</table>
   </div>
@@ -191,7 +117,6 @@ pageLink = function(page)
   <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('vouchers.html');">Voucher Information</a></td></tr>
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
   			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
@@ -207,6 +132,7 @@ pageLink = function(page)
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Sequencher & Others</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>

@@ -160,7 +160,7 @@ Spry.Widget.CollapsiblePanel.prototype.onTabClick = function(e)
 Spry.Widget.CollapsiblePanel.prototype.onFocus = function(e)
 {
 	this.hasFocus = true;
-	this.addClassName(this.element, this.focusedClass);
+    this.addClassName(this.element, this.focusedClass);
 	return false;
 };
 
@@ -246,6 +246,7 @@ Spry.Widget.CollapsiblePanel.prototype.attachPanelHandlers = function()
 			Spry.Widget.CollapsiblePanel.addEventListener(this.focusElement, "blur", function(e) { return self.onBlur(e); }, false);
 			Spry.Widget.CollapsiblePanel.addEventListener(this.focusElement, "keydown", function(e) { return self.onKeyDown(e); }, false);
 		}
+		
 	}
 };
 
@@ -346,7 +347,7 @@ Spry.Widget.CollapsiblePanel.PanelAnimator = function(panel, doOpen, opts)
 	this.interval = 0;
 
 	this.fps = 60;
-	this.duration = 200;
+	this.duration = 100;
 	this.startTime = 0;
 
 	this.transition = Spry.Widget.CollapsiblePanel.PanelAnimator.defaultTransition;

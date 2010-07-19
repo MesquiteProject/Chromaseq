@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>Primer File</title>
 <!-- InstanceEndEditable -->
@@ -20,89 +21,13 @@
 <!--
 -->
 </style>
+<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
+<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
 
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
-<script type="text/javascript">
-var params = Spry.Utils.getLocationParamsAsObject();
+<script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
 
-var qsParm = new Array();
-
-qsParm['ProcessingChromatoPanel'] = null;
-qsParm['GettingStartedPanel'] = null;
-qsParm['ChromatogramViewerPanel'] = null;
-qsParm['PreparingDataPanel'] = null;
-qsParm['CreditPanel'] = null;
-qsParm['HelpPanel'] = null;
-qsParm['OtherFeaturesPanel'] = null;
-qsParm['TechnicalPanel'] = null;
-
-qs();
-
-function qs() {
-	var query = window.location.search.substring(1);
-	var parms = query.split('&');
-	for (var i=0; i<parms.length; i++) {
-		var pos = parms[i].indexOf('=');
-		if (pos > 0) {
-			var key = parms[i].substring(0,pos);
-			var val = parms[i].substring(pos+1);
-			qsParm[key] = val;
-		}
-	}
-}
-
-parameterString = function()
-{
-	var paramString = '';
-	if (GettingStartedPanel.isOpen()) {
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'GettingStartedPanel=open';
-	}
-	if (PreparingDataPanel.isOpen()) {
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'PreparingDataPanel=open';
-	}
-	if (ProcessingChromatoPanel.isOpen()) {
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'ProcessingChromatoPanel=open';
-	}
-	if (ChromatogramViewerPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'ChromatogramViewerPanel=open';
-	}
-	if (CreditPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'CreditPanel=open';
-	}
-	if (HelpPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'HelpPanel=open';
-	}
-	if (OtherFeaturesPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'OtherFeaturesPanel=open';
-	}
-	if (TechnicalPanel.isOpen()){
-		if (paramString=='') paramString+='?'; else paramString+='&';
-		paramString+= 'TechnicalPanel=open';
-	}
-	document.write('Parameter string: ' + paramString);
-
-	return paramString;
-};
-
-
-pageLink = function(page)
-{
-	document.location.href = page + parameterString();
-};
-
-
-
-</script>
-<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
-<link href="CSS/mesquitePackage.css" rel="stylesheet" type="text/css" />
 <!-- InstanceBeginEditable name="head" -->
 <style type="text/css">
 <!--
@@ -112,15 +37,14 @@ pageLink = function(page)
 <!-- InstanceEndEditable -->
 </head>
 
-<body class="thrColFixHdr" bgcolor="#f4f0e2">
+<body bgcolor="#f4f0e2" class="thrColFixHdr" >
 
 <div id="container">
   <div id="header">
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Primer List
-      File <!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Primer &amp; Gene Information<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
   </tr>
@@ -129,7 +53,7 @@ pageLink = function(page)
 </div>
   
   
-  <div id="sidebar1">
+<div id="sidebar1">
   
   
   
@@ -148,7 +72,7 @@ pageLink = function(page)
   			<tr><td><a href="javascript:pageLink('download.html');">Download</a></td></tr>
   			<tr><td><a href="javascript:pageLink('installation.html');">Installation</a></td></tr>
   			<tr><td><a href="javascript:pageLink('quickstart.html');">Quick Start</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorials</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
 		</table>
     </div>
   </div>
@@ -157,8 +81,9 @@ pageLink = function(page)
     <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primers.html');">Primers</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('fileNamingRules.html');">File Naming Rules</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples & Sequence Names</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('primers.html');">Primer & Gene Information</a></td></tr>
 		</table>
     </div>
   </div>
@@ -167,9 +92,9 @@ pageLink = function(page)
   <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('runningPP.html');">Running Phred/Phrap</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('interpretingResults.html');">Interpreting Results</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation & Workflow</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('phredPhrap.html');">Phred & Phrap Locations & Options</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
   			<tr><td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram FIles</a></td></tr>
 		</table>
   </div>
@@ -197,7 +122,6 @@ pageLink = function(page)
   <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('vouchers.html');">Voucher Information</a></td></tr>
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
   			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
@@ -213,6 +137,7 @@ pageLink = function(page)
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Sequencher & Others</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
@@ -247,6 +172,7 @@ pageLink = function(page)
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
+  <p>MORE GENERAL INFO</p>
   <p>In order for Chromaseq to be able to process the chromatogram files so that Phred and Phrap can analyze them, Chromaseq needs to know the names of the primers associated with the various gene fragments or genes, and the relative direction of the primers. Other features in Chromaseq require the primer sequences.</p>
   <p>This information is provided to Chromaseq in the form of a tab-delimited text file with one row for each primer. That row contains first the primer name, then the gene fragment name, then an F it is a forward primer or an R if it is a reverse primer, then the primer's sequence, and finally a semicolon. Thus, the format of this text file is as follows:</p>
   <p class="style2">primer name &lt;tab&gt; fragment name &lt;tab&gt; F for forward or R for reverse &lt;tab&gt; primer sequence ;<br />
