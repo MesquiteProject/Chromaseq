@@ -1,5 +1,6 @@
 package mesquite.chromaseq.UploadAbiToDb;
 
+import mesquite.chromaseq.lib.AbiDownloader;
 import mesquite.chromaseq.lib.AbiUploader;
 import mesquite.lib.*;
 import mesquite.lib.duties.UtilitiesAssistant;
@@ -68,4 +69,20 @@ public class UploadAbiToDb extends UtilitiesAssistant {
 	public String getExplanation() {
 		return "Uploads a folder of abi files to a database.";
 	}
+	/*.................................................................................................................*/
+
+	/** Returns CompatibilityTest so other modules know if this is compatible with some object. */
+	public CompatibilityTest getCompatibilityTest(){return new UATD();}
+
 }
+
+class UATD extends CompatibilityTest {
+	public  boolean isCompatible(Object obj, MesquiteProject project, EmployerEmployee prospectiveEmployer){
+		
+		if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(AbiUploader.class)<=0)
+			return false;
+		
+		return true;
+	}
+}
+

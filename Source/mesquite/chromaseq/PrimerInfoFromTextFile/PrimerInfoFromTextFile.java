@@ -25,7 +25,10 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		//if (StringUtil.blank(primerListPath))
+		boolean alwaysAsk = false;
+		if (condition instanceof MesquiteString && condition !=null)
+			alwaysAsk = "alwaysAsk".equalsIgnoreCase(((MesquiteString)condition).getValue());
+		if (alwaysAsk || StringUtil.blank(primerListPath))
 			if (!queryOptions())
 				return false;
 		if (StringUtil.notEmpty(primerListPath))

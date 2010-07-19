@@ -143,6 +143,8 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	/*.................................................................................................................*/
 
 	public  String[] getSeqNamesFromTabDelimitedFile(MesquiteString sampleCode) {
+		if (sampleCodeListParser==null)
+			return null;
 		String sampleCodeString  = sampleCode.getValue();
 		sampleCodeListParser.setPosition(0);
 		Parser subParser = new Parser();
