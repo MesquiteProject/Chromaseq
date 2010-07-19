@@ -32,7 +32,6 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 	MesquiteFile file = null;
 	ChromatogramFileNameParser nameParserManager;
 
-	String fileExtension = ".ab1";
 	boolean requiresExtension=true;
 	boolean translateSampleCodes = true;
 	
@@ -81,7 +80,7 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		if (sequenceNameTask==null) 
 			return false;
 		
-		primerInfoTask = (PrimerInfoSource)hireEmployee(PrimerInfoSource.class,  "Supplier of information about primers and gene fragments");
+		primerInfoTask = (PrimerInfoSource)hireCompatibleEmployee(PrimerInfoSource.class,  new MesquiteString("alwaysAsk"), "Supplier of information about primers and gene fragments");
 		if (primerInfoTask==null) 
 			return false;
 
@@ -326,8 +325,6 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 			requiresExtension = MesquiteBoolean.fromTrueFalseString(content);
 		else if ("previousDirectory".equalsIgnoreCase(tag))
 			previousDirectory = StringUtil.cleanXMLEscapeCharacters(content);
-		else if ("fileExtension".equalsIgnoreCase(tag))
-			fileExtension = StringUtil.cleanXMLEscapeCharacters(content);
 		else if ("translateSampleCodes".equalsIgnoreCase(tag))
 			translateSampleCodes = MesquiteBoolean.fromTrueFalseString(content);
 		preferencesSet = true;
@@ -338,7 +335,6 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		StringUtil.appendXMLTag(buffer, 2, "requiresExtension", requiresExtension);  
 		StringUtil.appendXMLTag(buffer, 2, "translateSampleCodes", translateSampleCodes);  
 		StringUtil.appendXMLTag(buffer, 2, "previousDirectory", previousDirectory);  
-		StringUtil.appendXMLTag(buffer, 2, "fileExtension", fileExtension);  
 		preferencesSet = true;
 		return buffer.toString();
 	}
@@ -349,26 +345,24 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 
 
 		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
-		SingleLineTextField fileExtensionField = dialog.addTextField("file extension for chromatogram copies:", fileExtension, 8, true);
 		dialog.addHorizontalLine(2);
 
-		SingleLineTextField sampleNameToMatchField = dialog.addTextField("String to match in sample name", sampleNameToMatch,26);
-		SingleLineTextField geneNameToMatchField = dialog.addTextField("String to match in gene fragment name", geneNameToMatch,26);
+		SingleLineTextField sampleNameToMatchField = dialog.addTextField("Text to match in sample name", sampleNameToMatch,26);
+		SingleLineTextField geneNameToMatchField = dialog.addTextField("Text to match in gene fragment name", geneNameToMatch,26);
 
 
-		String s = "This will move all chromatograms whose sample names and gene fragment names contain the specified strings into their own folder.\n";
-		s+="Mesquite searches within the name of each chromatogram file for both a code indicating the sample (e.g., a voucher number) and the primer name. ";
+		String s = "This will move all chromatograms whose long sequence names and gene fragment names contain the specified text into their own folder.\n";
+		s+="Mesquite extracts from within the name of each chromatogram file for both a code indicating the sample (e.g., a voucher number) and the primer name. ";
 		s+= "To allow this, you must first define an rule that defines how the chromatogram file names are structured.\n\n";
 		s+= "If you so choose, Mesquite will search for the sample code within a sample names file you select, on each line of which is:\n";
-		s+= "   <code><tab><short sample name><tab><long sample name>;\n";
-		s+= "where the code, short sample name, and long sample name are all single tokens (you can force a multi-word name to be a single token by surrounding the name with single quotes). ";
-		s+= "The short sample name is for the file names, and must be <27 characters; the long sample name is the name you wish to have within the FASTA file.\n\n";
+		s+= "   <code><tab><short sequence name><tab><long sequence name>;\n";
+		s+= "where the code, short sequence name, and long sequence name are all single tokens (you can force a multi-word name to be a single token by surrounding the name with single quotes). ";
+		s+= "For Segregating Chromosomes, only the long sequence name is used.   If you wish, it can contain many taxa names, e.g. \"Insecta Coleoptera Carabidae Trechinae Bembidiini Bembidion (Pseudoperyphus) louisella\".\n\n";
 		dialog.appendToHelpString(s);
 
 		dialog.completeAndShowDialog(true);
 		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
-			fileExtension = fileExtensionField.getText();
 			requiresExtension = requiresExtensionBox.getState();
 			sampleNameToMatch = sampleNameToMatchField.getText();
 			geneNameToMatch = geneNameToMatchField.getText();
@@ -380,7 +374,7 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 
 	/*.................................................................................................................*/
 	public Object doCommand(String commandName, String arguments, CommandChecker checker) {
-		if (checker.compare(this.getClass(), "Segregates into a new folder all chromatograms whose sample names and gene fragment names contain a particular string.", null, commandName, "extract")) {
+		if (checker.compare(this.getClass(), "Segregates into a new folder all chromatograms whose sequence names and gene fragment names contain a particular string.", null, commandName, "extract")) {
 
 			if (!hireRequired())
 				return null;
@@ -405,7 +399,7 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 
 	/*.................................................................................................................*/
 	public String getExplanation() {
-		return "Segregates into a new folder all chromatograms whose sample names and gene fragment names contain a particular string.";
+		return "Segregates into a new folder all chromatograms whose sequence names and gene fragment names contain a particular string.";
 	}
 	/*.................................................................................................................*/
 

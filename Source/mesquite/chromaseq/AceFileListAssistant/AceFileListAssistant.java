@@ -45,6 +45,10 @@ public class AceFileListAssistant extends TaxonListAssistant {
 	public void setData() {
 			matrixSourceTask.initialize(currentTaxa);
 			MCharactersDistribution observedStates = matrixSourceTask.getCurrentMatrix(currentTaxa);
+			if (observedStates==null) {
+				data=null;
+				return;
+			}
 			CharacterData d = observedStates.getParentData();
 			if (d instanceof DNAData)
 				data = (DNAData)d;
