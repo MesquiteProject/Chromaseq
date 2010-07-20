@@ -135,8 +135,9 @@
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Sequencher & Others</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
 	</table>
@@ -312,7 +313,7 @@ Execution of Phred-Phrap command file begun.</pre>
   <li>Once Phred and Phrap have finished processing, Chromaseq will then examine each of the contigs produced by Phrap, and alter them as it deems appropriate, according to the options that were specified in the Post-Phrap Sequence Processing Options dialog box. For example, Phred and Phrap will never make a base call that is ambiguous. If there are two clear peaks at a particular site, representing both A and G, Phred and Phrap will always choose to call the base either A or G, never R. Chromaseq by default will look through the chromatograms for evidence of multiple peaks at a site, and change Phrap's base calls to ambiguity codes if there are. Chromaseq will also trim low-quality ends from the sequences. Chromaseq will keep a copy of Phred and Phrap's original contigs with the original calls (in the &quot;.ace&quot; file contained within the sequences subdirectory) and make a new &quot;m.ace&quot; file with the modified contigs. More details are on the <a href="javascript:pageLink('postPhrapOptions.html');">Post-Phrap Sequence Processing Options</a> page. </li>
   <li>If you have chosen to import the results into a Mesquite project (i.e., if you chose  <strong>File&gt;Open Other&gt;Process Chromatogram Files in Directory</strong>), then Chromaseq will create a new Mesquite project, containing one matrix per gene fragment, and it will read in the sequences into those matrices; the matrices will be displayed with the <a href="javascript:pageLink('matrixCells.html');">color of the cells</a> being related to the quality score of the base as judged by Phred and Phrap.</li>
 </ol>
-<p>At this point, if you wish, you can</p>
+<p>At this point, if you wish, you can examine the chromatograms for a sequence using the <a href="javascript:pageLink('viewer.html');">Chromatogram Viewer</a>.</p>
 <p>You can also align the sequences, reverse complement them, etc. As long as you do this from within Mesquite, you should still be able to examine the chromatograms for a particular sequence and make base calls. However, if you make these alternations by saving the sequences to a file, opening up that file in another alignment program, then importing the alignment back into Mesquite, for example, the connection between the sequence and the chromatograms will be lost, and there is currently no way to reconnect them.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -320,7 +321,7 @@ Execution of Phred-Phrap command file begun.</pre>
 
     
     
-</div>
+    </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
