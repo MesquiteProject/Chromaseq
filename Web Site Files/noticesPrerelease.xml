@@ -8,12 +8,13 @@
 			<downloadURL>http://mesquiteproject.org/packages/chromaseq/manual/download.html</downloadURL>
 		</currentReleaseVersion>
 		<notice><!--Chromaseq install -->
+			<forBuildNumberEqualOrGreater>542</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<forPackageVersionEqualOrLess>980</forPackageVersionEqualOrLess>
 			<noticeNumber>1</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
 			<updateVersion>981</updateVersion>
-			<packageName>Chromaseq v. 0.981</packageName>
+			<packageName>Chromaseq version 0.981</packageName>
 			<beforeMessage>This update may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
