@@ -11,11 +11,14 @@ import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameParsing;
 import mesquite.chromaseq.lib.AbiUploader;
 import mesquite.chromaseq.lib.ChromatogramFileNameParser;
 import mesquite.chromaseq.lib.SequenceUploader;
+import mesquite.lib.CompatibilityTest;
+import mesquite.lib.EmployerEmployee;
 import mesquite.lib.ExtensibleDialog;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteProject;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.SingleLineTextField;
@@ -62,6 +65,8 @@ public class AbiUploaderImpl extends AbiUploader {
 	 * and uploads abi files to a database url
 	 */
 	public boolean uploadAbiFilesToDb(DNADatabaseURLSource databaseURLSource) {
+		if (databaseURLSource==null)
+			return false;
 		if (nameParserManager!=null) {
 			//nameParsingRule = nameParserManager.chooseNameParsingRules(nameParsingRule);
 			if (!queryNames()) {
@@ -144,4 +149,22 @@ public class AbiUploaderImpl extends AbiUploader {
 	public String[] getPreferencePropertyNames() {
 		return new String[] {"url"};
 	}
+	/*.................................................................................................................*/
+	/** Returns CompatibilityTest so other modules know if this is compatible with some object. */
+	public CompatibilityTest getCompatibilityTest(){return new AUI();}
+
+	
 }
+
+
+
+class AUI extends CompatibilityTest {
+	public  boolean isCompatible(Object obj, MesquiteProject project, EmployerEmployee prospectiveEmployer){
+		
+		if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(DNADatabaseURLSource.class)<=0)
+			return false;
+		
+		return true;
+	}
+}
+

@@ -348,7 +348,7 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
 		dialog.addHorizontalLine(2);
 
-		SingleLineTextField sampleNameToMatchField = dialog.addTextField("Text to match in sample name", sampleNameToMatch,26);
+		SingleLineTextField sampleNameToMatchField = dialog.addTextField("Text to match in long sequence name", sampleNameToMatch,26);
 		SingleLineTextField geneNameToMatchField = dialog.addTextField("Text to match in gene fragment name", geneNameToMatch,26);
 
 
