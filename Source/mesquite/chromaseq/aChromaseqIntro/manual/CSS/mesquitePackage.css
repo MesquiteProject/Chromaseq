@@ -40,13 +40,18 @@ body  {
 	padding: 10px; /* padding keeps the content of the div away from the edges */
 }
 .thrColFixHdr #mainContent {
-	margin: 10px; /* the right and left margins on this div element creates the two outer columns on the sides of the page. No matter how much content the sidebar divs contain, the column space will remain. You can remove this margin if you want the #mainContent div's text to fill the sidebar spaces when the content in each sidebar ends. */
-	margin-left: 200px;
-	padding: 10px; /* remember that padding is the space inside the div box and margin is the space outside the div box */
+	margin-left: 200px; /* remember that padding is the space inside the div box and margin is the space outside the div box */
 	background:#FFFFFF;
 	color: #000000;
 	border: #000 thin;
 	text-align: left;
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 16px;
+	padding-left: 10px;
 } 
 
 .thrColFixHdr #footer { 
@@ -119,3 +124,12 @@ body  {
 	font-family: "Courier New", Courier, monospace;
 	font-size: 10px;
 }
+
+
+.thrColFixHdr #container #mainContent ul li {
+	padding-bottom: 6px;
+}
+.thrColFixHdr #container #mainContent ol li {
+	padding-bottom: 6px;
+}
+

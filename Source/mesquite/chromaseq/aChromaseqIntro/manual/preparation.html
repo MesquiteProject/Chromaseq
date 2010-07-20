@@ -30,10 +30,6 @@
 
 <!-- InstanceBeginEditable name="head" -->
 <style type="text/css">
-<!--
-.thrColFixHdr #container #mainContent ul li {
-	padding-bottom: 6px;
-}
 -->
 </style><!-- InstanceEndEditable -->
 </head>
@@ -45,7 +41,7 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Preparation &amp; Workflow<!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Preparation &amp; Processing<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
   </tr>
@@ -93,7 +89,8 @@
   <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('preparation.html');">Preparation & Workflow</a></td></tr>
+  			<tr>
+  			  <td><a href="javascript:pageLink('preparation.html');">Preparation & Processing</a></td></tr>
   			<tr><td><a href="javascript:pageLink('phredPhrap.html');">Phred & Phrap Locations & Options</a></td></tr>
   			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
   			<tr><td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram FIles</a></td></tr>
@@ -190,21 +187,133 @@
 </ul>
 <h2>Your next choices</h2>
 <p>Once you ask to start the processing, you will be asked to make some choices before you get to the main processing dialog box. In particular, you will be asked to </p>
-<p>1. Choose a <a href="javascript:pageLink('fileNamingRules.html');">file naming rule</a>; if the appropriate naming rule hasn't already been created, you will need to create one.</p>
-<p><img src="images/choosingNamingRule.png" width="349" height="138" /></p>
+<p>1. Choose a <a href="javascript:pageLink('fileNamingRules.html');">file naming rule</a>; if the appropriate naming rule hasn't already been created, you will need to <a href="javascript:pageLink('fileNamingRules.html#defineNamingRules');">create one</a>.</p>
+<p align="center"><img src="images/choosingNamingRule.png" width="349" height="138" /></p>
+<p>2. Select a method to determine <a href="javascript:pageLink('sampleCodes.html');">sequence names</a>. You will be asked to choose among the two options available:</p>
+<p align="center"><img src="images/sampleCodeModule.png" width="313" height="367" /></p>
+<p>The only choices currently offered are to look up the names for sequences in a <a href="javascript:pageLink('sampleCode.html');">sample codes and sequence names file</a>, or to simply use the sample code contained in the file name as the sequence name. If you choose to have the sequence names looked up in a file, you will be asked for the location of the file:</p>
+<p align="center"><img src="images/sampleCodeFIleLocation.png" width="384" height="127" /></p>
 <p>&nbsp;</p>
-<p>2. Select a method to determine <a href="javascript:pageLink('sampleCodes.html');">sequence names</a>. </p>
-<p><img src="images/sampleCodeModule.png" width="313" height="367" /></p>
+<p>3. Select a text file that contains <a href="javascript:pageLink('primers.html');">information about primers and genes</a>:</p>
+<p align="center"><img src="images/primerInfoFileLocation.png" width="393" height="127" /></p>
 <p>&nbsp;</p>
-<p><img src="images/sampleCodeFIleLocation.png" width="384" height="127" /></p>
+<h2><a name="processing" id="processing"></a>The Processing Options dialog box</h2>
+<p>At this point, you will be presented with the main dialog for processing chromatograms. After setting up the options, and pressing &quot;Process&quot;, Chromaseq will start processing the chromatograms. Details of that process are described next, but first you need to set the options appropriately.</p>
+<p align="center"><img src="images/phredPhrapOptions.png" width="391" height="276" /></p>
+<p>If you haven't already, you will need to tell Chromaseq where the helper programs are. You can do this by touching on the &quot;Phred Phrap Locations &amp; Options&quot; button; details are on the <a href="javascript:pageLink('phredPhrap.html');">Phred &amp; Phrap Locations &amp; Options</a> page.  On the same page are options within Phred and Phrap that you can set.</p>
+<p>In addition, you have the following choice of options that involve preparation before the Phred and Phrap processing, and that involve the process itself:</p>
+<ul>
+  <li>Choose whether to only process files with standard extensions (such as &quot;.ab1&quot; or &quot;.CRO&quot;). If you turn this option off, then Chromaseq will process all files in the directory, which will be problematic if you have additional files (such as &quot;.seq&quot; files) in the same directory.</li>
+  <li>Choose whether to have the extension of the chromatograms changed to a specified extension when they are organized into their subdirectories. If you enter text in the &quot;uniform file extension for organized chromatograms (if desired)&quot; box, then any old extension to the file names will be removed, and they will be replaced by the extension you specify. If you don't specify any extension, the extension on the original file names will be used. We frankly can't remember why this feature was added, but we have left it in as we suspect there are some contexts in which this is valuable.</li>
+  <li>Choose whether to have Chromaseq save a separate directory with copies of all of your original chromatograms in there. By default, Chromaseq will move all of the chromatograms into subdirectories, and rename the files in the process. If you wish to have backups saved of the chromatograms with their original file names, then check this box or save backups in some other way.</li>
+  <li>Choose the <a href="javascript:pageLink('phredPhrap.html');">location and options for Phred and Phrap</a>, as well as the location for the phredpar.dat file.</li>
+  </ul>
+<p>You may also choose to alter the options for how Chromaseq processes the sequences after Phred and Phrap do their thing:</p>
+<ul>
+  <li><a href="javascript:pageLink('postPhrapOptions.html');">Post-Phrap Sequence Processing Options</a>: This dialog box specifies how Chromaseq processes the contigs and sequences after Phred and Phrap are done with them. By default, Chromaseq trims the sequences, searches for multiple peaks that should be given ambiguity codes (e.g., R or Y), etc.</li>
+  <li>Choose whether or not a single or multiple taxon blocks should be created if there are multiple genes represented in the sequences. By default, Chromaseq creates a separate taxon block for each gene. However, if you check this option, only one taxon block will be created that will includes as taxa all of the distinct sequence names. This option is only available if you are importing the results into a a Mesquite project, i.e., if you have chosen <strong>File&gt;Open Other&gt;Process Chromatogram Files in Directory</strong>.</li>
+  <li>Choose whether matrices that are created in Mesquite are opened up in a bird's eye view, or instead in the normal view.</li>
+</ul>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>3. Select a text file that contains <a href="javascript:pageLink('primers.html');">information about primers and genes</a>.</p>
-<p><img src="images/primerInfoFileLocation.png" width="393" height="127" /></p>
-<p>&nbsp;</p>
-<h2>The processing dialog</h2>
-<p>&nbsp;</p>
-<p><img src="images/phredPhrapOptions.png" width="340" height="244" /></p>
+<h2><a name="duringProcessing" id="duringProcessing"></a>What happens during chromatogram processing</h2>
+<p>Once you press the Process button, the following things happen:</p>
+<ol>
+  <li>If you choose to save backups of the chromatograms, a directory called &quot;originals&quot; will be created, and copies of all of the chromatograms will be placed in there as backups.</li>
+  <li>Chromaseq creates a &quot;processed&quot; directory in the directory containing the chromatograms. </li>
+  <li>Chromaseq scans the chromatogram file names, finds the primer names contained within each, looks up the gene fragment each corresponds to, and accumulates a list of all available gene fragments represented among the chromatograms. It then creates one subdirectory within the &quot;processed&quot; directory for each gene fragment. </li>
+  <li>For each gene fragment, it scans the corresponding chromatogram files and find all the files with the same one sample code. It creates a subdirectory in that gene fragment directory for that sample, names it according to the short sequence name, and moves all of the chromatogram files for that sample and that gene fragment into the subdirectory. In so doing, it renames the chromatogram files so that they meet Phred's requirements.</li>
+  <li>Once the chromatograms are renamed and moved into their subdirectories, Chromaseq will create a shell script that will start up Phred and Phrap and ask them to process all of the chromatograms in each subdirectory. It will then invoke that shell script in the shell program of relevance for your computer's operating system. On a Mac, this
+    will typically be the Terminal application; on Windows, it will be the Cygwin
+    shell if that is what you installed; on a Linux variant, it will be the bash shell or something similar.</li>
+  <li>Once Phred and Phrap are invoked, you should see a lot of text whizzing by in the shell program. If at this point you go back into Mesquite, and look in the log window, you will see that Mesquite is reporting on the progress of the analysis. For example, it might look something like this:</li>
+</ol>
+<pre class="monospacedSmall">Phred Phrap processing of chromatograms as scripted by Mesquite
+ Processing directory: /ChromaseqExamples/Chromatograms</pre>
+<pre class="monospacedSmall">Using names and codes file: /ChromaseqExamples/SampleCodes.txt</pre>
+<pre class="monospacedSmall">Using primers file: /ChromaseqExamples/Primers.txt</pre>
+<pre class="monospacedSmall">Parameters: Phred Options:  -id . -pd . -d 
+     Phrap Options:  -new_ace -qual_show 20 -vector_bound 0 
+     Chromaseq Options: 
+     Quality threshold for lower case: 49
+     Convert multiple-peaks sites to ambiguity codes: true
+     Minimum secondary peak fraction for ambiguity: 0.3
+     Trim low quality regions from ends: true
+     Quality threshold for trim: 20
+     Trim window length: 10
+     Trim window threshold: 5 </pre>
+<pre class="monospacedSmall">Preparing Bemb perspicuum AZ 1120  (COI)
+     Preparing Bemb louisella NS 1250  (COI)
+     Preparing Bemb louisella NS 1250  (28S)
+     Preparing Bemb perspicuum CA 2320  (28S)
+     Preparing Bemb paraenulum VA 1856  (COI)
+     Preparing Bemb perspicuum AZ 1120  (28S)
+     Preparing Bemb paraenulum VA 1856  (28S)
+     Number of files prepared: 7</pre>
+<pre class="monospacedSmall"> A01_A01DNA1120_B1490_411940.ab1  renamed to  DNA1120.b.B1490.ab1
+     A01_A01DNA1120_Bcoi2R_412036.ab1  renamed to  DNA1120.g.Bcoi2R.ab1
+     C07_C07DNA1250_B1490_208508.ab1  renamed to  DNA1250.b.B1490.ab1
+     C07_C07DNA1250_B2232_208604.ab1  renamed to  DNA1250.g.B2232.ab1
+     C12_C12DNA1250_D3aR_572645.ab1  renamed to  DNA1250.g.D3aR.ab1
+     C12_C12DNA1250_NLF184_572549.ab1  renamed to  DNA1250.b.NLF184.ab1
+     F06_F06DNA2320_D3aR_552091.ab1  renamed to  DNA2320.g.D3aR.ab1
+     F06_F06DNA2320_NLF184_551995.ab1  renamed to  DNA2320.b.NLF184.ab1
+     H05_H05DNA1856_B1490_237723.ab1  renamed to  DNA1856.b.B1490.ab1
+     H05_H05DNA1856_B2232_237819.ab1  renamed to  DNA1856.g.B2232.ab1
+     H07_H07DNA1120_D1_394061.ab1  renamed to  DNA1120.b.D1.ab1
+     H07_H07DNA1120_D3_394157.ab1  renamed to  DNA1120.g.D3.ab1
+     H09_H09DNA1856_D1_237563.ab1  renamed to  DNA1856.b.D1.ab1
+     H09_H09DNA1856_D3_237659.ab1  renamed to  DNA1856.g.D3.ab1
+  
+Execution of Phred-Phrap command file begun.</pre>
+<pre class="monospacedSmall">....1. Bemb perspicuum AZ 1120 (Phrap)
+     2. Bemb louisella NS 1250 (Phrap)
+     3. Bemb louisella NS 1250 (Phrap)
+     4. Bemb perspicuum CA 2320 (Phrap)
+     5. Bemb paraenulum VA 1856 (Phrap)
+     6. Bemb perspicuum AZ 1120 (Phrap)
+     7. Bemb paraenulum VA 1856 (Phrap)</pre>
+<pre class="monospacedSmall">Phred &amp; Phrap analyses completed.
+     Post-Phrap processing begins.
+     
+     Processing ACE file: Bemb louisella NS 1250.ace
+     C12_C12DNA1250_D3aR_572645.ab1 (rev)
+     C12_C12DNA1250_NLF184_572549.ab1</pre>
+<pre class="monospacedSmall">Processing ACE file: Bemb paraenulum VA 1856.ace
+     H09_H09DNA1856_D3_237659.ab1 (rev)
+     H09_H09DNA1856_D1_237563.ab1</pre>
+<pre class="monospacedSmall">Processing ACE file: Bemb perspicuum AZ 1120.ace
+     H07_H07DNA1120_D3_394157.ab1 (rev)
+     H07_H07DNA1120_D1_394061.ab1</pre>
+<pre class="monospacedSmall">Processing ACE file: Bemb perspicuum CA 2320.ace
+     F06_F06DNA2320_D3aR_552091.ab1 (rev)
+     F06_F06DNA2320_NLF184_551995.ab1</pre>
+<pre class="monospacedSmall">Processing ACE file: Bemb louisella NS 1250.ace
+     C07_C07DNA1250_B2232_208604.ab1 (rev)
+     C07_C07DNA1250_B1490_208508.ab1</pre>
+<pre class="monospacedSmall">Processing ACE file: Bemb paraenulum VA 1856.ace
+     H05_H05DNA1856_B2232_237819.ab1 (rev)
+     H05_H05DNA1856_B1490_237723.ab1</pre>
+<pre class="monospacedSmall">Processing ACE file: Bemb perspicuum AZ 1120.ace
+     A01_A01DNA1120_Bcoi2R_412036.ab1 (rev)
+     A01_A01DNA1120_B1490_411940.ab1</pre>
+<pre class="monospacedSmall">========================
+     Phred/Phrap processing report</pre>
+<pre class="monospacedSmall">Multi-read sequences obtained from the following genes and samples:
+     (28S) -- Bembidion louisella NS 1250
+     (28S) -- Bembidion paraenulum VA 1856
+     (28S) -- Bembidion perspicuum AZ 1120
+     (28S) -- Bembidion perspicuum CA 2320
+     (COI) -- Bembidion louisella NS 1250
+     (COI) -- Bembidion paraenulum VA 1856
+     (COI) -- Bembidion perspicuum AZ 1120
+     ========================</pre>
+<p>If it doesn't look something like this, or if the shell program has very little text that appeared in it, then something might have gone wrong. Check to make sure you followed the previous steps carefully.</p>
+<ol start="7">
+  <li>Once Phred and Phrap have finished processing, Chromaseq will then examine each of the contigs produced by Phrap, and alter them as it deems appropriate, according to the options that were specified in the Post-Phrap Sequence Processing Options dialog box. For example, Phred and Phrap will never make a base call that is ambiguous. If there are two clear peaks at a particular site, representing both A and G, Phred and Phrap will always choose to call the base either A or G, never R. Chromaseq by default will look through the chromatograms for evidence of multiple peaks at a site, and change Phrap's base calls to ambiguity codes if there are. Chromaseq will also trim low-quality ends from the sequences. Chromaseq will keep a copy of Phred and Phrap's original contigs with the original calls (in the &quot;.ace&quot; file contained within the sequences subdirectory) and make a new &quot;m.ace&quot; file with the modified contigs. More details are on the <a href="javascript:pageLink('postPhrapOptions.html');">Post-Phrap Sequence Processing Options</a> page. </li>
+  <li>If you have chosen to import the results into a Mesquite project (i.e., if you chose  <strong>File&gt;Open Other&gt;Process Chromatogram Files in Directory</strong>), then Chromaseq will create a new Mesquite project, containing one matrix per gene fragment, and it will read in the sequences into those matrices; the matrices will be displayed with the <a href="javascript:pageLink('matrixCells.html');">color of the cells</a> being related to the quality score of the base as judged by Phred and Phrap.</li>
+</ol>
+<p>At this point, if you wish, you can</p>
+<p>You can also align the sequences, reverse complement them, etc. As long as you do this from within Mesquite, you should still be able to examine the chromatograms for a particular sequence and make base calls. However, if you make these alternations by saving the sequences to a file, opening up that file in another alignment program, then importing the alignment back into Mesquite, for example, the connection between the sequence and the chromatograms will be lost, and there is currently no way to reconnect them.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
@@ -217,6 +326,7 @@
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
+
 <script type="text/javascript">
 <!--
 

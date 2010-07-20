@@ -343,6 +343,7 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);
 		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Segregate Chromatograms Options",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 
+		dialog.setDefaultButton("Segregate");
 
 		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
 		dialog.addHorizontalLine(2);
