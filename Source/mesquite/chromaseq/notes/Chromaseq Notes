@@ -39,7 +39,7 @@ Optional:
 5. work on design of sinks for this info (both processed and not).   E.g. SequenceUploader should be a module  
 
 
-
+=====================
 ======================
 Notes for next alpha release
 	- navigation: up and down arrows
@@ -48,11 +48,26 @@ Notes for next alpha release
 	
 
 ======================
-MANUAL
-	code or sample names can't start with "."
-	note oddities of Phrap, e.g., trimming ends, e.g., choosing source read
-	navigation: up and down arrows
-	
+notes from Jeff Oliver
+
+3 - I'm not sure that Chromatograms > Arrows > Jump to next Read-Read Conflict is doing
+what it is supposed to do.  It wasn't doing anything despite conflicts being present between the 
+reads.  Other Arrow functions work fine.
+
+4 - The scroll bar does not appear when the chromatogram window opens.  Re-sizing the window forces re-
+drawing, and the scollbar appears then.  VM issue?
+
+6 - Should Chromatogram > Show Fades actually be a checkMenuItem?  It was once so (commented out), and 
+because it toggles whether the sequence is faded or not, a checkMenuItem (as opposed to a menuItem, which
+it is currently) might be more appropriate...line 113 in VChromWindow
+
+7 - Maybe a bigger issue than Chromaseq: When using Phred/phrap from within Mesquite 
+(File > Open other... or Utilities), the dialog asking the user to Choose directory containing ABI
+files is a bit confusing.  Clicking the 'Open' button will tell Mesquite to process files in the 
+selected directory.  Double-clicking on that directory will open ('go into') that directory.  Perhaps the 
+'Open' button should be a 'Choose' button.  Otherwise, users may try to navigate through the directory
+structure using it (which won't work, because Phred/Phrap starts upon the first click of 'Open').  That, 
+or add another, separate 'Choose' button to perform the function the 'Open' button currently performs. 
 
 ==========
 
