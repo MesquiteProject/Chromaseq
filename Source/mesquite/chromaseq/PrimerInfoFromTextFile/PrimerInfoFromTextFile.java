@@ -203,6 +203,13 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 	public boolean isPrerelease() {
 		return true;
 	}
+	/*.................................................................................................................*/
+
+	public String getParameters() {
+		if (StringUtil.blank(primerListPath))
+			return "";
+		return primerListPath;
+	}
 
 	/*.................................................................................................................*/
 	public  void actionPerformed(ActionEvent e) {

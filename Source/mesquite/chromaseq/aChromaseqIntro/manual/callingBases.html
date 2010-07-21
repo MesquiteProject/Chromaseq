@@ -43,7 +43,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Calling Bases <!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+    <td width="14%">Test Version 0.98<br />
+      20 July 2010<br /></td>
   </tr>
 </table>
 
@@ -104,14 +105,11 @@
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>
-  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
   </div>
 </div>
@@ -122,7 +120,7 @@
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix colors</a></td></tr>
   			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
@@ -172,65 +170,41 @@
     
 <!-- InstanceBeginEditable name="content" -->
   <h2>Altering calls for existing bases </h2>
-  <table border="0" cellpadding="5px" cellspacing="0" width="100%">
-    <tr>
-	  <td valign="top" width="345px"><p>If you would like to edit a base call, use the pointer to select the desired site in the 
-	      &quot;Edited in Matrix&quot; sequence (at the bottom of the panel).</p>
-		<p>Type in the base you would like present at that site, and the corresponding character 
-		  matrix will be updated with the change.</p>
-		<p>Any base that has been so edited is marked by a black bar underneath it.</p></td>
-	  <td>
-  <p>
-  <img src="images/beforeBaseCall.gif" alt="before base Call" /><!--width="85" height="360"--> 
-  <img src="images/nextArrow.gif" />
-  <img src="images/beforeBaseCallSelected.gif" alt="selection before base call change" /><!--width="85" height="360"--> 
-  <img src="images/nextArrow.gif" />
-  <img src="images/baseCall.gif" alt="base Call" /><!--width="85" height="360"--> 
-  <img src="images/nextArrow.gif" />
-  <img src="images/afterBaseCall.gif" alt="after Base Call" /></p><!--width="85" height="360"-->
-      </td>
-    </tr>
-  </table>
+  <p>If you would like to edit a base call, use the arrow tool to select the desired site in the 
+    &quot;Edited in Matrix&quot; sequence (at the bottom of the panel).</p>
+  <p>Type in the base you would like  at that site, and the base will be changed. The corresponding character 
+    matrix will be updated with the change.</p>
+  <p>Any base that has been so edited is marked by a black bar underneath it, and the background rectangle under the base will be yellow.</p>
+  <p>&nbsp;</p>
+  <p><img src="images/basecall1.png" width="93" height="302" /><img src="images/arrowRight.png" width="52" height="18" /> <img src="images/basecall2.png" width="93" height="302"  /><img src="images/arrowRight.png" width="52" height="18" /> <img src="images/basecall3.png" width="93" height="302"  /><img src="images/arrowRight.png" width="52" height="18" /> <img src="images/basecall4.png" width="93" height="302"  /></p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
   <h2>Moving new bases from a read into the matrix </h2>
   <p>In some cases, users may wish to include sequence information from reads that was not imported by
-    Phred/Phrap/Mesquite (Note: this only applies to sequence data from chromatograms that were processed
-	by Phred/Phrap/Mesquite.  You cannot currently import additional chromatogram sequence data in a post-processed
-	matrix.  If you wish to include additional chromatograms, you will need to run the Phred/Phrap process over from
-	the beginning).</p>  
-	<p>For example, users may wish to include data from the end of a read that lacked a complement:</p>
-
-  <table border="0" cellpadding="5px" cellspacing="0px" width="700px">
-    <tr>
-	  <td width="345px">
-	    <p>Let's say we'd like to move the sequence from the high qualilty read (second from the top) into the matrix.</p>
-	  </td>
-	  <td width="355px">
-	    <img src="images/movingBefore.gif" alt="before moving" />
-	  </td>
-	</tr>
-	<tr>
-	  <td width="345px" id="topBorder"><p>Begin by using the pointer (<img src="images/arrow.gif" />) to select the region 
-	    you would like to include in the matrix.</p></td>
-	  <td width="355px" id="topBorder">
-	    <img src="images/movingSelection.gif" alt="selection to move" />
-	  </td>
-	</tr>
-	<tr>
-	  <td width="345px" id="topBorder"><p>Next, using the move to matrix tool (<img src="images/moveToMatrix.gif" />), 
-	    click on the sequence you would like to move to the matrix.</p></td>
-	  <td width="355px" id="topBorder">
-	    <img src="images/movingSelectionTool.gif" alt="move to matrix tool" />
-	  </td>
-	</tr>
-	<tr>
-	  <td width="345px" id="topBorder"><p>The selected bases will now be present in the matrix, and are shown in the
-	    corresponding read of the chromatogram window.</p></td>
-	  <td width="355px" id="topBorder">
-	    <img src="images/movedSelection.gif" alt="moved selection" />
-	  </td>
-	</tr>
-  </table>
-  <p>&nbsp;</p>
+    Phred/Phrap/Chromaseq. This is especially true at the ends of reads, where Phrap ignores high-quality single reads. For example, in the Chromatograms2 example from the <a href="javascript:pageLink('tutorial.html');">tutorial</a>, the start of the Bembidion antiquum IA 1626 sequence of the gene <em>wg</em> is truncated too much because Phrap ignored the high-quality upper read at this point:</p>
+  <p><img src="images/moveToMatrix1.png" width="579" height="301" border="1"  /></p>
+  <p>&nbsp;</p>  
+	<p>To move the bases from that good read into the matrix, select them by touching on the first base in the read to be included, holding down the Shift key and touching on the last base to be included:</p>
+	<p><img src="images/moveToMatrix2.png" width="579" height="301" border="1" /></p>
+	<p>then choose the Move Read To Matrix tool (<img src="images/moveToMatrix.gif" width="16" height="16" />), and touch it <em>on the read you wish to move into the matrix</em>. The selected portion of that read will then be moved into the matrix:</p>
+	<p><img src="images/moveToMatrix3.png" width="579" height="301" border="1" /></p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<h2>Deleting bases</h2>
+	<p>Occassional one will need to delete bases that have been included in the sequence by Phred/Phrap/Chromaseq. One common use of this will be to remove primer sequences from the ends of the sequences. For example, in the following contig, Phred/Phrap/Chromaseq have included the end of the B1490 primer, which was used to generate the read shown on top.	</p>
+	<p><img src="images/deleteBases1.png" width="366" height="310" border="1" /></p>
+	<p>&nbsp;</p>
+	<p>You can see the B1490 primer's sequence written just over the peaks. Instructions for seeing primer sites is shown on the <a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a> page. </p>
+	<p> To remove those bases from the sequence in the editor,  select the bases to be deleted by touching on the first base to be deleted, holding down the Shift key, and touching on the last base to be deleted:	</p>
+	<p><img src="images/deleteBases2.png" width="366" height="310" border="1" /></p>
+	<p>&nbsp;</p>
+	<p>Then, after choosing Convert Selected to Gaps from the Chromatograms menu, the bases are deleted from the sequence in the matrix:	</p>
+	<p><img src="images/deleteBases3.png" width="366" height="310" border="1" /></p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 
     

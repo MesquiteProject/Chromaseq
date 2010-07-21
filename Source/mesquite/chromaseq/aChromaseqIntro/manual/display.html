@@ -41,9 +41,10 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Display Options <!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Other Display Options <!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+    <td width="14%">Test Version 0.98<br />
+      20 July 2010<br /></td>
   </tr>
 </table>
 
@@ -104,14 +105,11 @@
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>
-  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
   </div>
 </div>
@@ -122,7 +120,7 @@
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix colors</a></td></tr>
   			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
@@ -171,78 +169,84 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
+<p>In the Chromatogram Viewer window, the following additional display options are available.  </p>
+  <h2>Changing the height of peaks</h2>
+  <p>To change the height of peaks, use the control bar at the lower-left-hand corner of the Chromatogram Viewer window. For example, with the control set low, the peaks are low:</p>
+  <table width="200" border="0" cellpadding="8" align="center">
+    <tr>
+      <td><img src="images/heightAdjustControlLow.png" width="31" height="94" /></td>
+      <td><img src="images/heightAdjustLow.png" width="63" height="92" /></td>
+    </tr>
+  </table>
+  <p>With the control set higher, the peaks will be drawn higher:</p>
   <p>&nbsp;</p>
-  <p>Note that only the  center line will have bases lined up one read to the next; off center they may not line up.</p>
-  <p>&nbsp;</p>
-  <p>In the Chromatogram window, the following display options are available from the <font id="menu">Chromatograms</font> menu:
-  </p>
-  <p>&nbsp;</p>
-  <p>&nbsp;</p>
-  <p><strong>Show Control Bar</strong>: toggles the control bar immediately to the left of the chromatogram
-    traces.  There are three components to the control bar:<br />
-	</p><font size="-1">
-	<table width="70%" align="left" cellspacing="3px" cellpadding = "2px" border="none" id="indentTable">
+  <table width="200" border="0" cellpadding="8" align="center">
+    <tr>
+      <td><img src="images/heightAdjustControlHigh.png" width="31" height="94" /></td>
+      <td><img src="images/heightAdjustHigh.png" width="63" height="92" /></td>
+    </tr>
+  </table>
+  <p>&nbsp; </p>
+  <h2><strong>Graphically reversing or complementing sequences</strong></h2>
+  <p>To graphically reverse or complement the chromatograms, use the small toggles in the lower left hand side of the window:</p>
+	<table width="70%" cellspacing="3px" cellpadding = "2px" border="none">
 	  <tr>
 	    <td width="20" align="center"><img src="images/forward.gif" /></td>
 		<td>Forward view &ndash; a blue-boxed arrow pointing to the right indicates that all the chromatograms/sequences
-	      are shown in their forward direction.  Clicking on the arrow will reverse the chromatograms and corresponding sequences.</td>
+	      are shown in their forward direction.  </td>
 	  </tr>
 	  <tr>
 	    <td width="20" align="center"><img src="images/reverse.gif" /></td>
 		<td>Reverse view &ndash; a yellow-boxed arrow pointing to the left indicates that the chromatograms/sequences
-		  are shown in their reverse direction.  Clicking on the arrow will return the chromatograms and corresponding
-		  sequences to the forward direction.</td>
+		  are shown in their reverse direction.  </td>
 	  </tr>
 	  <tr>
 	    <td width="20" align="center"><img src="images/complementOff.gif" /></td>
 		<td>Complement off &ndash; a blue-boxed &quot;C&quot; indicates that the complements of chromatograms/sequences
-		  are <i>not</i> shown.  Clicking on the &quot;C&quot; will complement the chromatograms and corresonding sequences.</td>
+		  are <i>not</i> shown.  </td>
 	  </tr>
 	  <tr>
 	    <td width="20" align="center"><img src="images/complementOn.gif" /></td>
 		<td>Complement on &ndash; a yellow-boxed &quot;C&quot; indicates that the complements of the chromatograms/sequences
-		  are shown.  Clicking on the &quot;C&quot; will return the chromatograms and corresponding sequences to their normal 
-		  (non-complement) display.</td>
+		  are shown.  </td>
 	  </tr>
 	</table>
-	</font>
+    
 	</p>
-  <br clear="all" />
-  <p><strong>Show Matrix</strong>: Selecting this item will bring the corresponding Character Matrix window to the front.  If
-    the window is not open, Mesquite will open the window, then bring it to the front.</p>
-  <p><strong>Color By Quality</strong>: Toggles weather the base calls are shaded according to phred/phrap quality scores.  High
-    quality scores are paler (white), while low quality base calls are darker (green or blue).  Those sites which Mesquite
-	has called ambiguous are colored grey.</p>
-  <p><strong>Thick Trace Lines</strong>: Toggles the thickness of the chromatogram trace lines.</p>
-
-  <h2>Fade Low Quality</h2>
-  <p>Fading low quality bases for better visibility of good peaks allows one to focus on higher quality reads</p>
-  <table width="200" border="0" align="center" cellpadding="8">
-    <tr>
-      <td><div align="center"><img src="images/fadeLow1.jpg" alt="Low Quality Bases Unfaded" width="237" height="289" /></div></td>
-      <td bordercolor="0"><div align="center"> <img src="images/fadeLow2.jpg" alt="Low Quality Faded" width="264" height="289" /></div></td>
+	<p>These switches do <strong><em>not</em></strong> change the sequences as stored in the matrix or elsewhere; it is purely a graphical change.</p>
+	<h2>Fading sites</h2>
+    <p>Chromaseq can fade entire sections of reads so that you can focus on the most important reads.  Turn on fading by choosing Show Fades from the Chromatograms menu    </p>
+    <ul>
+      <li>Fade Low Quality. This will fade all sites in all reads whose bases are below a certain quality threshold at the site. You can set the threshold value in the Chromatograms&gt;Fade Quality Threshold menu item.</li>
+      <li>Fade Non-Source Read. This will fade out non-source reads so that you can more easily see which read is the source read.</li>
+      <li>Fade Non-Source Lower-Quality Reads. The sites that will be then shown unfaded will be those that are source reads, or non-source reads that are higher-quality than the source reads. </li>
+    </ul>
+    <p>
+      For example, if you choose to fade non-source reads, it will appear similar to that shown on the right:<br clear="all" />
+    </p>
+    <table width="200" border="0" align="center" cellpadding="8">
+      <tr>
+      <td><div align="center"></div>
+        <img src="images/nonSourceNotFaded.png" width="246" height="308" /></td>
+      <td bordercolor="0"><div align="center"><img src="images/nonSourceFaded.png" width="246" height="308" /></div></td>
     </tr>
     <tr>
-      <td><div align="center">Low quality bases not faded </div></td>
-      <td><div align="center">Low quality bases faded </div></td>
+      <td><div align="center">Non-source bases not faded </div></td>
+      <td><div align="center">Non-source bases faded </div></td>
     </tr>
   </table>
-  <p>The following options for fading reads are available from the <font id="menu">Chromatograms</font> menu:</p>
-  <p><strong>Show Fades</strong>: toggles the brightness of peaks based on quality criteria (below).</p>
-  <p><strong>Fade Low Quality</strong>: low quality peaks are faded, if &quot;Show Fades&quot; is checked.  Note, after 
-    checking <font id="menu">Fade Low Quality</font>, if the low quality peaks are not faded, you mush activate fading by 
-	selecting <font id="menu">Chromatograms &gt; Show Fades</font>.  You can set the quality threshold at which peaks are 
-	faded at <font id="menu">Chromatograms &gt; Fade Quality Threshold&hellip;</font>.</p>
-  <p><strong>Fade Non-Source Read</strong>: sets whether reads are dimmed in regions of where they are not the source.</p>
-  <p><strong>Fade Non-Source Lower-Quality Read</strong>: sets whether reads are dimmed in regions of where they are 
-    not the source AND of lower quality than the source</p>
-
-  <h2>&nbsp;</h2>
+  <p>&nbsp;</p>
+<h2>&nbsp;</h2>
+  <h2>Other options</h2>
+  <p><strong>Color By Quality</strong>: Toggles weather the base calls are shaded according to phred/phrap quality scores.  High
+      quality scores are paler (white), while low quality base calls are darker (green or blue).  Those sites which Mesquite
+    has called ambiguous are colored grey.</p>
+  <p><strong>Thick Trace Lines</strong>: Toggles the thickness of the chromatogram trace lines.</p>
 <!-- InstanceEndEditable -->
 
     
     
-  </div>
+</div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>

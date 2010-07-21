@@ -61,7 +61,6 @@ parameterString = function()
 		if (paramString=='') paramString+='?'; else paramString+='&';
 		paramString+= 'TechnicalPanel=open';
 	}
-	document.write('Parameter string: ' + paramString);
 
 	return paramString;
 };

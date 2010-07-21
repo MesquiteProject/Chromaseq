@@ -40,7 +40,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Chromatogram Navigation <!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+    <td width="14%">Test Version 0.98<br />
+      20 July 2010<br /></td>
   </tr>
 </table>
 
@@ -101,14 +102,11 @@
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>
-  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
   </div>
 </div>
@@ -119,7 +117,7 @@
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix colors</a></td></tr>
   			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
@@ -168,7 +166,7 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-  <p>In the chromatogram viewer, you can use the arrow keys to quickly jump to certain features of the 
+  <p>In the chromatogram viewer, you can use the left and right arrow keys to quickly jump to certain features of the 
   chromatogram.  These features can be toggled on/off from the <font id="menu">Chromatograms &gt; Arrow Keys</font> 
   menu.</p>
   <ul>
@@ -193,12 +191,15 @@
     <li><strong>Jump Quality Threshold&hellip;</strong>: Sets the threshold for quality scores (when <font id="menu">Jump to Next
       Low Quality</font> is toggled on, the cursor will move to the next site with a quality score less than the threshold)</li>
   </ul>
-  <p>- link to matrix  <strong>UPDATE or DELETE</strong></p>
+  <p>The up and down arrow keys will take you to the start and end, respectively, of the edited sequence.</p>
+  <p>You can also move around the chromatograms using the little box in the overview panel, which you can drag to reposition the chromatograms:</p>
+  <p><img src="images/overviewPanel2.png" width="623" height="74" /></p>
+  <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 
     
     
-    </div>
+  </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>

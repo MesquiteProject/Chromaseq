@@ -41,7 +41,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Detecting Conflicts<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+    <td width="14%">Test Version 0.98<br />
+      20 July 2010<br /></td>
   </tr>
 </table>
 
@@ -102,14 +103,11 @@
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>
-  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
   </div>
 </div>
@@ -120,7 +118,7 @@
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix colors</a></td></tr>
   			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
@@ -171,30 +169,37 @@
 <!-- InstanceBeginEditable name="content" -->
     
     
+<p>Chromaseq can highlight conflicts among reads and sequences. There are three primary types conflict displayed:</p>
+<ul>
+  <li><a href="#twoReads">Conflict between two reads</a></li>
+  <li><a href="#sourceReadHigherRead">Conflict between the source read and a higher quality read</a></li>
+  <li><a href="#readMatrix">Conflict between a read and the base  in the matrix</a></li>
+</ul>
+<p>&nbsp;</p>
+<h2><a name="twoReads" id="twoReads"></a>Conflicts between two reads</h2>
+<p>If Chromatograms&gt;Show Read-Read Conflict is turned on (which it is by default), then if the base call Phred makes for one read contradicts that made at the same site in another read, then a pink or red bar will be shown under the Original Untrimmed sequence. In the following image, the middle site in the top read is called as a T, wherease in the bottom read it is called a C. This conflict is shown as a red bar:</p>
+<p><img src="images/redBarConflict.png" width="66" height="289" /></p>
+<p>By default, the higher the minimum quality scores of the conflicting reads at that site, the darker the red will be; if one of the conflicting reads has a low quality score at that site, below a specified threshold, then the bar will be pink, and will be increasingly pale as the quality score of the conflicting read decreases. You can specify the threshold value using the Chromatograms&gt;Dim Conflict Marker Threshold. If you wish to always have the conflicts shown with undimmed, red bars, then uncheck Chromatograms&gt;Dim Conflict Markers if Low Quality. </p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<h2>Conflict Markers</h2>
-<p>Mesquite can highlight conflicts among reads and sequences</p>
-<table border="0" cellpadding="5px" cellspacing="5px" width="100%">
-  <tr>
-    <td valign="top" width="60%"><p><strong>Show Source Read Conflicts with Higher Quality Read</strong>: sets whether to draw a box around the 
-      Phred calls for which the a lower quality read is the source and this conflicts with a higher quality read.</p>
-      <p><strong>Show Read-Matrix Conflict</strong>: sets whether shading indicates whether a chromatogram's call is 
-        different from matrix state</p>
-      <p><strong>Show Read-Read Conflict</strong>: sets whether bar indicates differences among 
-        the Phred calls for each read.  These conflicts are shown as red boxes under the corresponding base calls in 
-        the Phred.Phrap.Mesquite listing (usually the third sequence from the bottom of the window).</p>
-      <p><strong>Dim Conflict Markers if Low Quality</strong>: Sets whether the red boxes for low quality conflicts 
-        are dimmed below the bases in the Phred.Phrap.Mesquite listing.  The degree to which the red box is dimmed is
-        based on the amount of conflict between reads.  When a high-quality base call conflicts with a low-quality base
-        call, the box is paler; however, when the low-quality conflict has a higher quality base call (i.e. a relatively 
-        high, single peak), the red box will be brighter.<br />
-        The threshold for dimming conflicts can be set at <font id="menu">Chromatograms &gt; Dim Conflict Marker Threshold&hellip;</font>;
-        the threshold is the quality score of the conflicting (low-quality) base call.</p></td>
-    <td align="center"><img src="images/doublePeaks.jpg" alt="" />
-      <p><font size="-1">An example showing conflicts between reads</font></p></td>
-  </tr>
-</table>
+<h2><a name="sourceReadHigherRead" id="sourceReadHigherRead"></a>Conflicts between the source read and a higher quality read</h2>
+<p>Chromaseq by default will also draw a box around any base in the Original Untrimmed sequence for which there is a conflict between the source read's called base and a base of higher quality in another read. This is common at the ends of sequences, where Phrap chooses a clearly inferior read as its source read; these bases are normally trimmed by Chromaseq.  For example, in this contig, many of the bases at the 5' end have the lower read as their source read, but the upper read, with conflicting bases, is clearly superior, and the boxes around the bases in the Original Untrimmed sequence indicate this:</p>
+<p><img src="images/boxConflict.png" width="329" height="304" /></p>
+<p>For a box to be shown, the source read must be at least 10 units lower in quality score than the conflicting, higher-quality read at that site.  If the source read is more than 20 units lower in quality, the box shown around the base is blue and thickened. In summary, if there is a conflicting higher-quality read at that site that is </p>
+<ul>
+  <li>0-9 quality units better than source read, no box is shown</li>
+  <li>10-19 quality units better than source read, a thin black box is shown</li>
+  <li>≥20 quality units better than source read, a thick blue box is shown</li>
+</ul>
+<p>You can turn this display off or on using the Chromatograms&gt;Show Source Read Conflicts with Higher Quality Read.</p>
+<h2><a name="readMatrix" id="readMatrix"></a>Conflicts between a read and the base in the matrix</h2>
+<p>If you turn on Chromatograms&gt;Show Read Matrix Conflict (which by default is off), then Chromaseq will display a brown bar at each site in a read whose called base conflicts with the base present in the sequence in the matrix:</p>
+<p>&nbsp;</p>
+<p><img src="images/readMatrixConflict.png" width="153" height="304" /></p>
+<p>By default, if the quality score of the read at that site is below a threshold, the brown bar will be dimmed, and will be dimmer for lower qualities. You can specify the threshold value using the Chromatograms&gt;Dim Conflict Marker Threshold. If you wish to always have the conflicts shown with undimmed, red bars, then uncheck Chromatograms&gt;Dim Conflict Markers if Low Quality. If you turn off the dimming, the conflict markers will be shown in their full color:</p>
+<p>&nbsp;</p>
+<p><img src="images/readMatrixConflictUndimmed.png" width="153" height="304" /></p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <!-- InstanceEndEditable -->

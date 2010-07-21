@@ -40,7 +40,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Chromatogram Viewer <!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Test Version 0.981<br />12 July 2010<br /></td>
+    <td width="14%">Test Version 0.98<br />
+      20 July 2010<br /></td>
   </tr>
 </table>
 
@@ -101,14 +102,11 @@
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>
-  			  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('addingDeletingBases.html');">Adding and Deleting Bases</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Display</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primerSites.html');">Seeing primer sites</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherDisplayOptions.html');">Other display options</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying primer sites</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
+			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
   </div>
 </div>
@@ -119,7 +117,7 @@
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix cell colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix colors</a></td></tr>
   			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
@@ -175,30 +173,41 @@
 <p>&nbsp;</p>
   <p>The default components of the chromatogram viewer are shown below:</p>
   <p align="center"><img src="images/viewerFirstView75.png" width="580" height="519" /></p>
+  <p>If the underlying sequence in the Mesquite's matrix has been reverse-complemented relative to how it came out of Phrap originally, a panel on the left will show up in dark orange rather than gray:</p>
+  <table width="400" border="0" align="center" cellpadding="8">
+    <tr>
+      <td align="center"><p>Sequence not reverse-complemented</p>
+        <p><img src="images/notRCpanel.png" width="71" height="168" /></p></td>
+      <td align="center"><p>Sequence reverse-complemented</p>
+        <p><img src="images/RCpanel.png" width="71" height="168" /></p></td>
+    </tr>
+  </table>
   <p>&nbsp;</p>
   <p>There are many options for the elements that are displayed, and how they are displayed. For example, you can choose to hide the overview panel, or the closeup panel, or show other panels not illustrated above. Some pre-built styles exist that set a number of options all at once; these are available in the Styles submenu of the Chromatograms menu.  </p>
   <p>There are various options changing the <a href="javascript:pageLink('display.html');">display</a> of the chromatograms. Once you have set up the display to meet your needs, you may wish to choose &quot;Save Current Settings as Defaults&quot; from the Chromatograms menu, which will establish your display settings as those to be used for future chromatograms you will view. To have these settings override even those stored in a file, choose &quot;Ignore File Settings; Use Defaults&quot; first, and then choose &quot;Save Current Settings as Defaults&quot;. </p>
   <p>There are various tools for <a href="javascript:pageLink('navigation.html');">navigating</a> quickly through the chromatograms. You can also change the <a href="javascript:pageLink('callingBases.html');">base calls</a> from within the chromatogram viewer.</p>
   <h2>Chromatogram Panel</h2>
-  <p><img src="images/chromatogramPanels.png" width="438" height="236" /></p>
+  <p>The chromatogram panel shows the chromatograms for individual reads, underneath which are the sequences from the contigs. The chromatograms themselves show Phred's base calls under each sequence, with the background colors of each base being the quality score as judged by Phrap. </p>
   <p>&nbsp;</p>
   <p align="center"><img src="images/sourceReadLabel.png" width="521" height="326" /></p>
-  <p>&nbsp;</p>
+  <p>In addition, for each site, one of the reads will have a brown bar under the read. This is the &quot;source read&quot;, which is the primary read Phrap used to make its base call. </p>
+  <p>The names of the reads are the same as the original chromatogram file names. If they are colored in red, then they are the 5' end of the read is on the right, and the read goes from right to left; if in black, then the orientation is from left to right:</p>
+  <p align="center"><img src="images/chromatogramPanelsArrows.png" width="438" height="232" /></p>
   <p>&nbsp;</p>
   <h2>Closeup Panel</h2>
-  <p>&nbsp;</p>
-  <p><img src="images/closeupPanel.png" width="199" height="347" /></p>
+  <p>The closeup panel shows a magnified view of the peaks in one read; it shows the peaks where the mouse is positioned.</p>
+  <p align="center"><img src="images/closeupPanel.png" width="199" height="347" /></p>
   <p>&nbsp;</p>
   <h2>Overview Panel</h2>
-  <p>&nbsp;</p>
-  <p><img src="images/overviewPanel.png" width="446" height="39" /></p>
+  <p>The overview panel shows a bird's eye view of all of the reads in the contig. The little box shows the current view in the chromatogram panel. You can navigate by grabbing the box and dragging it around.</p>
+  <p align="center"><img src="images/overviewPanel2.png" width="623" height="74" /></p>
   <p>&nbsp;</p>
 <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 
     
     
-</div>
+    </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
