@@ -168,7 +168,7 @@
     
 <!-- InstanceBeginEditable name="content" -->
 <p>Q: When I use a text editor to look into the NEXUS file produced after processing of chromatograms by Chromaseq, I see additional matrices.  </p>
-<p>A: ... matrices necessary for bookkeeping... describe them...</p>
+<p>A: When Chromaseq processes chromatograms, and brings the results into matrices within a Mesquite project, it creates a number of hidden matrices that are used by Mesquite to store various relevant piece of information. In particular, it stores a full matrix of quality scores, a matrix of unedited sequences as originally imported, and then a registration matrix which is for bookkeeping purposes.</p>
 <p>&nbsp;</p>
 <p>Q: Once chromaseq is done its processing, I notice that the chromatogram files are now buried within a processed directory, and within that in subdirectories by gene and then by sample. Within those directories for each sequence, the file names of the chromatograms have changed (except for any backups that were made). For example, one of my original chromatogram file names was called &quot;A08_A08DNA1566_B1490_204386.ab1&quot; and there is no file of that name any more. There is a file named &quot;DNA1566.b.B1490.ab1&quot;, which might or might not be the same one. How can I see old files names that correspond to these new file names? </p>
 <p>A: Within that subdirectory for that sequence, you will notice that there is an &quot;info.xml&quot; file. Look in that and you will see, among other things, the correspondence between the old file names and the new file names.</p>
