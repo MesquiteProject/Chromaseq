@@ -39,13 +39,6 @@ Optional:
 5. work on design of sinks for this info (both processed and not).   E.g. SequenceUploader should be a module  
 
 
-=====================
-======================
-Notes for next alpha release
-	- navigation: up and down arrows
-	- opens chromatogram window in same place as last one if popped out
-	- closeup panel
-	
 
 ======================
 notes from Jeff Oliver
