@@ -5,7 +5,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Mesquite: Chromaseq</title>
+<title>Known Issues</title>
 <!-- InstanceEndEditable -->
 
 <![endif]--><!--[if IE]>
@@ -29,14 +29,6 @@
 <script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
 
 <!-- InstanceBeginEditable name="head" -->
-<style type="text/css">
-<!--
-.style1 {
-	color: #009999;
-	font-weight: bold;
-}
--->
-</style>
 <!-- InstanceEndEditable -->
 </head>
 
@@ -47,7 +39,7 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" --><!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Known Issues<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%">Test Version 0.98<br />
       20 July 2010<br /></td>
@@ -179,52 +171,20 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-  <h2><font >Chromaseq: a package for processing chromatograms and sequence data in Mesquite</font></h2>
-  <table width="346" border="0" cellpadding="8">
-    <tr>
-      <td width="326" bgcolor="#e8e3cf"><p><em>Lead developers</em><br />
-          <strong>David R. Maddison</strong>, Oregon State University<br />
-          <strong>Wayne P. Maddison</strong>, University of British Columbia</p>
-        <p><em>Code contributors</em><br />
-          <strong>Danny Mandel</strong><br />
-          <strong>Jeremy Parson</strong></p></td>
-    </tr>
-  </table>
-  <p><font >The Chromaseq
-    package integrates the processing of chromatograms within Mesquite, as well as adding a few other tools for processing or viewing sequence data. With Chromaseq installed, and the  programs Phred and Phrap, you can:</font></p>
-  <ol>
-    <li><font >O</font><font >rganize a directory of chromatograms into subdirectories corresponding to genes and samples</font></li>
-    <li><font >Assemble them into contigs (with the help of Phred and Phrap)</font></li>
-    <li><font > Import the contig
-      sequences into Mesquite, and have Chromaseq automatically trim them, adjust base calls as appropriate, etc. </font></li>
-    <li><font >View the chromatograms for each sequence</font> by touching a special tool on that sequence in Mesquite's matrix editor</li>
-    <li><font >Edit the base calls in a chromatogram viewer</font></li>
-  </ol>
-<p>Chromaseq requires <a href="http://mesquiteproject.org">Mesquite
-        2.73</a> or later, as well as <a href="javascript:pageLink('phredphrap.html');">Phred and Phrap</a>.</p>
-<p align="center"><img src="images/homePageImage.png" width="741" height="841" /></p>
-<p>The following sections provide introductory information about Chromaseq:</p>
-  <ul>
-    <li><a href="javascript:pageLink('overview.html');">Overview</a> gives a one-page tour of some of the features of Chromaseq, with images.</li>
-    <li><a href="javascript:pageLink('quickstart.html');">Quickstart</a> is a condensed guide to using Chromaseq, with many details missing, but if you really can't stand to read manuals, this is a good place to start.</li>
-    <li>The <a href="javascript:pageLink('tutorial.html');">Tutorial</a> leads you through the use of Chromaseq.</li>
-    <li>The <a href="javascript:pageLink('installation.html');">Installation</a> section describes how to install Chromaseq, Phred and Phrap, and the <a href="javascript:pageLink('preparation.htmlPrepar');">Preparation &amp; Processing</a> section leads you through processing chroma. It also describes Mesquite's tools for modifying the output of Phred and Phrap and import the consensus sequences into Mesquite. </li>
-    <li>Viewing chromatograms in contigs and calling bases can be done in the <a href="javascript:pageLink('viewer.html');">Chromatogram Viewer</a> </li>
-    <li>How Chromaseq compares to other programs, and how they might interact, is described on the <a href="javascript:pageLink('otherprograms.html');">Sequencher &amp; Others</a> page.  You might also wish to look at the <a href="javascript:pageLink('limitations.html');">limitations</a> page.</li>
-    <li>The <a href="javascript:pageLink('download.html');">Download</a> page.</li>
-    <li><a href="javascript:pageLink('acknowledgements.html');">Acknowledgements</a>.</li>
-    <li><a href="javascript:pageLink('citation.html');">How to cite Chromaseq</a>.</li>
-    <li><a href="javascript:pageLink('faq.html');">Frequently Asked Questions</a>.</li>
-  </ul>
-  <p>More information is available by clicking on the links at the left.</p>
-  <p><strong><em>Note: This manual is not yet complete</em></strong>
-  </p>
-  <p>&nbsp;</p>
+    
+    
+<p>Known issues with this beta version of Chromaseq:</p>
+<ol>
+  <li>The little box visible in the Overview Panel may not function properly if the sequence is reverse complemented in the matrix</li>
+  <li>The little box visible in the Overview Panel may not function properly if Extra Sequence is being shown</li>
+  <li>If you choose Matrix&gt;Utilities&gt;Purge Chromaseq Data, coloring states by Quality Score should be turned off, but it's not.</li>
+  <li>There is no Undo available in the Chromatogram Viewer</li>
+</ol>
 <!-- InstanceEndEditable -->
 
     
     
-    </div>
+</div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
