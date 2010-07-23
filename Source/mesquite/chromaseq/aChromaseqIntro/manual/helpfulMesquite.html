@@ -105,7 +105,8 @@
   			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
   			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying primer sites</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('extraSequence.html');">Multiple Contigs at Once</a></td></tr>
   			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
 			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
@@ -118,10 +119,10 @@
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix colors</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
   			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq data</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite features</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
   </div>
 </div>
@@ -169,11 +170,30 @@
 <!-- InstanceBeginEditable name="content" -->
     
     
-<p>Some features of the basic Mesquite packages are useful in the context of Chromaseq.</p>
+<p>Many features of the basic Mesquite packages are useful in the context of Chromaseq. We here give a few examples that we have found useful.</p>
 <h2>Alignment tools</h2>
 <p>&nbsp;</p>
+<p>- manual alignment tools</p>
+<p>- Opal</p>
+<p>- Matrix&gt;Alter/Transform&gt;Shift Other to Match...</p>
+<p>&nbsp;</p>
 <h2>Reverse-complementing sequences</h2>
-<p>Matrix&gt;Alter/Transfer&gt;Reverse complemement</p>
+<p>- Matrix&gt;Alter/Transform&gt;Reverse Complement</p>
+<p>&nbsp;</p>
+<h2>Importing FASTA files</h2>
+<p>- drop FASTA files onto matrix</p>
+<h2>Charts</h2>
+<p>The charting tools in Mesquite can be useful with Chromaseq. For example, after doing some Chromaseq processing, imagine you wished to plot the variation in average quality score of your sequences. You can do this by choosing Analysis&gt;New Bar &amp; Line Chart For&gt;Taxa, and in the dialog box that comes up which asks you to choose the Value to Calculate for Taxa, choose &quot;Quality Score&quot;. Here's an example chart of this sort:</p>
+<p><img src="images/allSequences.png" width="626" height="376" /></p>
+<p>As you can see, for these data, most sequences have an average per-base quality score between 21 and 29. </p>
+<p>Let's imagine, though, that you wanted to see which of your primer pairs yielded the highest quality sequences. If you go to the List of Taxa, and choose Columns&gt;Primers In Reads, you will get a new column in the List of Taxa that shows the primers that are present in the chromatogram names. If you then use the magic wand tool and touch on one particular combination of primers, for example the primer pair 1089a, 791F2, then all sequences with that primer pair will be selected:</p>
+<p><img src="images/selectingPrimerPair.png" width="156" height="457" /></p>
+<p>If you then look back at your chart, you will see that the sequences based upon that primer pair will be highlighted:</p>
+<p><img src="images/onePrimerPair.png" width="626" height="376" /></p>
+<p>This can be a useful tool to decide the primer pair that gives the highest quality sequences.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 

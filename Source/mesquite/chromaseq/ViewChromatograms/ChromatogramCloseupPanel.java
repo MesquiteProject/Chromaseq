@@ -43,7 +43,6 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 		this.add("Center",chromCanvas);
 		setBackground(Color.white);
 		setThickTrace(true);
-
 	}
 	public void centerPanelAtOverallPosition(int i){
 		centerBase = i;
@@ -234,7 +233,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 	//	ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 
 		int cwidth = getBounds().width;
-		double vertScale = 4.0;
+		double vertScale = 8.0;
 		double horizScale = 2.0;
 		int widthPerPeak = 40;
 		int approximatePeaks = cwidth/widthPerPeak;
@@ -280,10 +279,15 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 			} 
 		}
 
+		int peakBottom = cheight - 70; //+lines;
 
 		int firstReadBase = centerReadBase - halfPeaks;
 		int lastReadBase = centerReadBase+ halfPeaks;
 		
+		//contigDisplay.getCenterBase();
+	//	contigDisplay.getApproximateNumberOfPeaksVisible();
+
+
 		int maxHeight = 0;
 		for (int i=0; i<A.length;i++) {
 			if (A[i]>maxHeight)
@@ -301,7 +305,12 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 			if (T[i]>maxHeight)
 				maxHeight = T[i];
 		}
-		maxHeight = (int)(maxHeight/vertScale);
+	//	Debugg.println("maxHeight: " + maxHeight);
+//		Debugg.println("   getHeight: " + getHeight());
+		
+		vertScale=(int)(maxHeight/peakBottom);
+	//	if (vertScale>0)
+	//		maxHeight = (int)(maxHeight/vertScale);
 	//	maxHeight = (int)(maxHeight/vertScale);
 
 		
@@ -317,7 +326,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		Debugg.println("    +++++ firstReadLocation: " + firstReadLocation + " lastReadLocation: " + lastReadLocation);
 
 	*/	
-		int peakBottom = cheight - 70; //+lines;
 
 		g.setColor(Color.lightGray);
 	    g2.setStroke(new BasicStroke(1));
