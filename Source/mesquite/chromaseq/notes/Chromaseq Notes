@@ -1,7 +1,6 @@
 
 Necessary pre-beta
 
-- showPrimers: doesn't always show it to you
 - Kojun's codon position issue
 
 
@@ -20,6 +19,7 @@ Optional:
 - on RC sequences primers shown in wrong place?
 - speed up primers
 - undo within chromatogram viewer
+- primer match calculated too many times
 
 -Remote copy of PhredPhrap versus local (e.g. remote, http & cgi-bin etc.; local: shell script)
 
@@ -40,10 +40,6 @@ Optional:
 
 ======================
 notes from Jeff Oliver
-
-3 - I'm not sure that Chromatograms > Arrows > Jump to next Read-Read Conflict is doing
-what it is supposed to do.  It wasn't doing anything despite conflicts being present between the 
-reads.  Other Arrow functions work fine.
 
 4 - The scroll bar does not appear when the chromatogram window opens.  Re-sizing the window forces re-
 drawing, and the scollbar appears then.  VM issue?
