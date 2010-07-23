@@ -24,6 +24,7 @@ import mesquite.categ.lib.*;
 
 public class ChromatogramCloseupPanel extends ChromatogramPanel{
 	CloseupChromatogramCanvas chromCanvas;
+	Color backgroundColor = Color.white;
 	int id;
 	boolean showA = true;
 	boolean showC = true;
@@ -38,10 +39,11 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 		open=true;
 		chromatograms = new Chromatogram[1];
 		setChromatogram(myChrom);
+		setBackground(getBackgroundColor());
+		backgroundColor = panel.getBackgroundColor();
 		chromCanvas = new CloseupChromatogramCanvas(this, id);
 		chromCanvas.setBounds(0, 0, getWidth(), getHeight());
 		this.add("Center",chromCanvas);
-		setBackground(Color.white);
 		setThickTrace(true);
 	}
 	public void centerPanelAtOverallPosition(int i){
@@ -125,6 +127,12 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 		this.readBaseNumber = readBaseNumber;
 		chromCanvas.setCenterReadBase(readBaseNumber);
 	}
+	public Color getBackgroundColor() {
+		return backgroundColor;
+	}
+	public void setBackgroundColor(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
 }
 
 class CloseupChromatogramCanvas extends ChromatogramCanvas {
@@ -142,6 +150,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 	public CloseupChromatogramCanvas(ChromatogramCloseupPanel parentV, int id) {
 		super(parentV,  id);
 		closeupPanel = parentV;
+		setBackgroundColor();
 
 	}
 	public void setCenterReadBase(int base) {
@@ -167,7 +176,10 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 	}
 	*/
 	public void setBackgroundColor() {
-		setBackground(Color.white);
+		if (closeupPanel!=null)
+			setBackground(closeupPanel.getBackgroundColor());
+		else
+			setBackground(Color.white);
 	}
 	
 	protected void drawBaseInfo(Graphics2D g, Color inverseBlackColor, long state, long complementState, String baseString, String complementString, int[] trace, int pos, int textLeft, int baseVert) {
