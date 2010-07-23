@@ -1,11 +1,9 @@
 
 Necessary pre-beta
 
--issue with PrimerInfoFromTextFile and when it does and doesn't ask you for the path to the file
+- showPrimers: doesn't always show it to you
+- Kojun's codon position issue
 
-- phone home
-
-- inversions and sequence direction
 
 
 Optional:

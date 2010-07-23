@@ -213,7 +213,8 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 	/*...........................................................................*/
 
 	public static final int SINGLEREAD = 0;
-	
+	static final int maximumPeakHeight = 600;
+
 	/*...........................................................................*/
 	public synchronized void paint(Graphics g) {	
 		if (MesquiteWindow.checkDoomed(this)) 
@@ -280,6 +281,9 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		}
 
 		int peakBottom = cheight - 70; //+lines;
+		int peakTop = 0;
+		if (peakBottom>maximumPeakHeight)
+			peakTop= peakBottom-maximumPeakHeight;
 
 		int firstReadBase = centerReadBase - halfPeaks;
 		int lastReadBase = centerReadBase+ halfPeaks;
@@ -308,7 +312,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 	//	Debugg.println("maxHeight: " + maxHeight);
 //		Debugg.println("   getHeight: " + getHeight());
 		
-		vertScale=(int)(maxHeight/peakBottom);
+		vertScale=(int)(maxHeight/(peakBottom-peakTop));
 	//	if (vertScale>0)
 	//		maxHeight = (int)(maxHeight/vertScale);
 	//	maxHeight = (int)(maxHeight/vertScale);
