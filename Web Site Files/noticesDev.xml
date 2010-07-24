@@ -8,7 +8,7 @@
 			<downloadURL>http://mesquiteproject.org/packages/chromaseq/manual/download.html</downloadURL>
 		</currentReleaseVersion>
 		<notice><!--Chromaseq install -->
-			<forBuildNumberEqualOrGreater>542</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<forBuildNumberEqualOrGreater>544</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<forPackageVersionEqualOrLess>980</forPackageVersionEqualOrLess>
 			<noticeNumber>1</noticeNumber>
 			<messageType>update</messageType>
