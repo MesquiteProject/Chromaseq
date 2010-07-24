@@ -295,7 +295,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		int peakBottom = cheight - 70; //+lines;
 		int peakTop = 0;
 		if (peakBottom>maximumPeakHeight)
-			peakTop= peakBottom-maximumPeakHeight;
+			peakBottom= maximumPeakHeight;
 
 		int firstReadBase = centerReadBase - halfPeaks;
 		int lastReadBase = centerReadBase+ halfPeaks;

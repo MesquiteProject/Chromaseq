@@ -487,7 +487,10 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		if (newRegistrationConflict>20.0)
 			if (registrationConflict<20.0){
 				String name = contigDisplay.getTaxon().getName();
-				MesquiteMessage.discreetNotifyUser("\nThe reads and sequences for " + name + " appear to be improperly registered. You may wish to choose Force Reregistration from the Chromatogram menu to resolve this. \n\n[New registration conflict score: " + newRegistrationConflict + ", Previous registration conflict score: " + registrationConflict+"]");
+				MesquiteMessage.discreetNotifyUser("\nChromaseq detects many conflicts between one or more reads and the sequence in the matrix for " + name + 
+						". If all of the reads are of reasonably high quality, then this may indicate a problem with Chromaseq's internal registration between "
+						+ " the reads, or between the reads and the sequence in the matrix.  "
+						+ "You may wish to choose Chromatograms>Registration>Force Reregistration to see if this will resolve the problem. \n\n[New registration conflict score: " + newRegistrationConflict + ", Previous registration conflict score: " + registrationConflict+"]");
 			}
 		registrationConflict = newRegistrationConflict;
 		
