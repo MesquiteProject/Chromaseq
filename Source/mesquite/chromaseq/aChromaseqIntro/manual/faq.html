@@ -59,7 +59,10 @@
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('overview.html')">Overview</a>
   </div>
-    <div id="NonCollapsiblePanel">
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('download.html')">Download</a>
+  </div>
+  <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('knownIssues.html')">Known Issues</a>
   </div>
 
@@ -95,6 +98,7 @@
   			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
   			<tr> <td><a href="javascript:pageLink('quality.html');">Quality Scores & Colors</a></td></tr>
   			<tr> <td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram Files</a></td></tr>
+  			<tr> <td><a href="javascript:pageLink('workflow.html');">Workflow Suggestions</a></td></tr>
 		</table>
   </div>
 </div>
@@ -108,7 +112,7 @@
   			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
   			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('extraSequence.html');">Multiple Contigs at Once</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a></td></tr>
   			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
 			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
@@ -170,6 +174,10 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
+  <p>Q: Phred/phrap/chromaseq failed to assemble the different reads of a sequence into a contig automatically.  Is there a way to assemble the contig by hand?  </p>
+  <p><br />
+    A: Yes, though it's still primitive.  See the page on <a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a>.</p>
+  <p>&nbsp;</p>
   <p>Q: I have used Chromaseq and Phred and Phrap to produce a  sequence. I've also made more base calls using Chromaseq's chromatogram viewer. However, one part of that sequence isn't the best, and I have resequenced part of the gene. Can I add these new chromatograms to the existing contig?</p>
 <p>A: Not yet. You will need to reprocess the original chromatograms again for that sequence, and remake any base calls. We will add the ability to add new reads in the future.</p>
   <p>&nbsp;</p>
@@ -202,7 +210,7 @@
 
     
     
-    </div>
+  </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>

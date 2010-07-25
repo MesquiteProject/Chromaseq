@@ -68,7 +68,10 @@
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('overview.html')">Overview</a>
   </div>
-    <div id="NonCollapsiblePanel">
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('download.html')">Download</a>
+  </div>
+  <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('knownIssues.html')">Known Issues</a>
   </div>
 
@@ -104,6 +107,7 @@
   			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
   			<tr> <td><a href="javascript:pageLink('quality.html');">Quality Scores & Colors</a></td></tr>
   			<tr> <td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram Files</a></td></tr>
+  			<tr> <td><a href="javascript:pageLink('workflow.html');">Workflow Suggestions</a></td></tr>
 		</table>
   </div>
 </div>
@@ -117,7 +121,7 @@
   			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
   			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('extraSequence.html');">Multiple Contigs at Once</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a></td></tr>
   			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
 			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
@@ -180,7 +184,7 @@
     
 <!-- InstanceBeginEditable name="content" -->
   <h2><font >Chromaseq: a package for processing chromatograms and sequence data in Mesquite</font></h2>
-  <table width="346" border="0" cellpadding="8">
+  <table border="0" cellpadding="8">
     <tr>
       <td width="326" bgcolor="#e8e3cf"><p><em>Lead developers</em><br />
           <strong>David R. Maddison</strong>, Oregon State University<br />
@@ -188,6 +192,9 @@
         <p><em>Code contributors</em><br />
           <strong>Danny Mandel</strong><br />
           <strong>Jeremy Parson</strong></p></td>
+      <td width="50">  <p>&nbsp;</p> </td>
+      <td width="326" bgcolor="#FFFF99"><p>This is a beta-test version of Chromaseq, and as such is missing some refinements, and may have a few bugs that will be fixed before the final version. See the <a href="javascript:pageLink('knownissues.html');">Known Issues</a> page for some things we hope to fix before release. Our labs have been using Chromaseq (with Phred and Phrap) from a couple of years to do our base-calling and contiging, so we trust it personally enough to use it for our own data.  We believe that this beta version is in good enough shape to allow others to use it successfully for their data. </p></td>
+
     </tr>
   </table>
   <p><font >The Chromaseq

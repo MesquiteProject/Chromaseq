@@ -39,7 +39,7 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Multiple Contigs at Once<!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Multiple Reads/Contigs at Once<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%">Test Version 0.981<br />
       25 July 2010<br /></td>
@@ -60,7 +60,10 @@
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('overview.html')">Overview</a>
   </div>
-    <div id="NonCollapsiblePanel">
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('download.html')">Download</a>
+  </div>
+  <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('knownIssues.html')">Known Issues</a>
   </div>
 
@@ -96,6 +99,7 @@
   			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
   			<tr> <td><a href="javascript:pageLink('quality.html');">Quality Scores & Colors</a></td></tr>
   			<tr> <td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram Files</a></td></tr>
+  			<tr> <td><a href="javascript:pageLink('workflow.html');">Workflow Suggestions</a></td></tr>
 		</table>
   </div>
 </div>
@@ -109,7 +113,7 @@
   			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
   			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
   			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('extraSequence.html');">Multiple Contigs at Once</a></td></tr>
+  			<tr>  <td><a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a></td></tr>
   			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
 			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
 		</table>
@@ -173,9 +177,18 @@
 <!-- InstanceBeginEditable name="content" -->
     
     
+<p>Show Extra Sequences can be used either to compare sequences from two different samples/taxa, or to assemble a contig by hand. </p>
+<h2>Assembling a contig by hand</h2>
+<p>Chromaseq is designed under the assumption that the different reads are automatically assembled by phrap into contigs, but occasionally the different reads may fail to be assembled and appear as two or more separate taxa in the matrix.  This can happen if the overlapping sections of the reads are of poor quality, and so phrap cannot align them with sufficient certainty.  Chromaseq does not have extensive features to permit you to reassemble these by hand, but Show Extra Sequences can help. </p>
+<p>To attempt to assemble a contig by hand, show first the chromatogram viewer for the read or set of reads from one row in the matrix.  Next, choose Chromatograms&gt;Extra Sequences&gt;Show Extra Sequence and select the taxon representing the other read or reads to be contig'd.  You will see the chromatogram viewing window divided in two, with the initial sequence at the bottom and the second (grayed) at the top.  You can slide them relative to one another using the scroll in the middle.</p>
+<p>As you slide them you'll see a colored sequence near the scroll bar that turns yellow of the two sequences are in close alignment, red or green if almost in close alignment (red too far in one direction, green in the other).  If you find a good alignment you can lock the scroll using Extra Sequences&gt;Lock Extra Sequences.  You can also request that Chromaseq attempt to align the two by touching on the alignment button at left (<img src="images/align.jpg" width="12" height="12" />); the sequences are aligned and the scroll locked.</p>
+<p>For the sequences to align successfully, you may need to change your view of one of the two sequences using the complement and/or reverse buttons.</p>
+<p>Once you have compared and aligned the two reads or sets of reads, you may want to request that Chromaseq accept your alignment, and turn your handmade contig into a single row of the matrix with all reads so aligned.  However, that is not yet possible.  Instead, you will have to edit the two sequences separately, and later use copying and pasting in the matrix to construct the single sequence contig.  Clever marking can facilitate this.  For instance, we usually use the pink coloring (the !eye tool) to mark boundaries of the two sequences, that is the points at which they meet, so that later in the matrix editor it is easy to know what portions to copy and paste.</p>
+<p>&nbsp;</p>
+<h2>Comparing sequences of two contigs</h2>
 <p>To see another contig, with its chromatograms, within the same chromatogram viewer, choose Chromatograms&gt;Extra Sequences&gt;Show Extra Sequence, and you will be asked to choose one of the additional contigs to show. The extra sequence chromatograms will be placed above the chromatograms for the primary sequence:</p>
 <p><img src="images/extraSequence.png" width="546" height="855" /></p>
-<p>Locking Extra Sequences</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
