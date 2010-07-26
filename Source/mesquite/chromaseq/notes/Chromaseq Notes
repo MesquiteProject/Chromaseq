@@ -4,6 +4,22 @@ Necessary pre-beta
 - Kojun's codon position issue
 - turn off bean by user
 
+----
+
+don't know if your structure permits this but:  if was set previously, could use prefs to have these 
+modules start up and hire according to prefs before dialog shows up. Then in composing dialog use 
+getParameters() of all these employees to report on current settings, and put report in a little 
+text area at top of dialog to indicate current settings, and a button that says "change".  
+Would require that getParameters of these modules return text with this in mind, 
+and that modules that hire other modules would have to put the latter's text embedded in own 
+getParameters text returned.
+
+hitting "change" button would have effect of re-hiring all or pieces and gauntlet would ensue.
+
+very minor, I prefer wizard, and current bypasses wizard, but that's probably a threading thing I would need to fix.
+
+---
+
 
 Optional:
 
