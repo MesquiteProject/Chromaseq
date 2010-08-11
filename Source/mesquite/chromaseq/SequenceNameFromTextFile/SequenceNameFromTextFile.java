@@ -25,10 +25,20 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		return queryOptions();
+		if (!optionsSpecified()){
+			if (MesquiteThread.isScripting() && StringUtil.blank(sampleCodeListPath))
+				return false;
+			if (!queryOptions())
+				return false;
+		}
+		return true;
 	}
 
-	
+	/*.................................................................................................................*/
+	public boolean optionsSpecified(){
+		return StringUtil.notEmpty(sampleCodeListPath);
+	}
+
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){
 		element.addAttribute("sampleCodeListPath", sampleCodeListPath);
@@ -49,8 +59,6 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	}
 	/*.................................................................................................................*/
 	public boolean queryOptions() {
-		if (MesquiteThread.isScripting())
-			return true;
 		MesquiteInteger buttonPressed = new MesquiteInteger(1);
 		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Location of File with Sequence Names",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 
@@ -69,7 +77,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
 			sampleCodeListPath = dnaCodesField.getText();
-			prepareFile();
+			initialize();
 		}
 		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
 		dialog.dispose();
@@ -80,7 +88,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	}
 
 	/*.................................................................................................................*/
-	private void prepareFile() {
+	public void initialize() {
 		if (!StringUtil.blank(sampleCodeListPath)) {
 			sampleCodeList = MesquiteFile.getFileContentsAsString(sampleCodeListPath);
 
@@ -213,7 +221,13 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		}
 		return null;
 	}
+	/*.................................................................................................................*/
 	
+	public String getParameters() {
+		if (StringUtil.blank(sampleCodeListPath))
+			return "Names and codes file unspecified.";
+		return "Names and codes file: " + sampleCodeListPath;
+	}
 	/*.................................................................................................................*/
 	public void echoParametersToFile(StringBuffer logBuffer) {
 		echoStringToFile("Using names and codes file: " +sampleCodeListPath+"\n", logBuffer);
@@ -222,6 +236,11 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	/*.................................................................................................................*/
 
 	public boolean hasAlternativeNames() {
+		return true;
+	}
+	/*.................................................................................................................*/
+
+	public boolean hasOptions() {
 		return true;
 	}
 	/*.................................................................................................................*/

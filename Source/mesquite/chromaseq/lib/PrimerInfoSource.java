@@ -15,8 +15,12 @@ package mesquite.chromaseq.lib;
 
 import org.dom4j.Element;
 
+import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteSubmenuSpec;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
+import mesquite.lib.XMLUtil;
 
 public abstract class PrimerInfoSource extends MesquiteModule {
 
@@ -68,6 +72,17 @@ public abstract class PrimerInfoSource extends MesquiteModule {
 	}
 	/*.................................................................................................................*/
 	public  void removeMenuItemsFromPrimerSubmenu(MesquiteSubmenuSpec primerSubmenu){
+	}
+
+	public boolean queryOptions(){
+		return true;
+	}
+
+	public boolean optionsSpecified(){
+		return false;
+	}
+	/*.................................................................................................................*/
+	public void initialize() {
 	}
 
 

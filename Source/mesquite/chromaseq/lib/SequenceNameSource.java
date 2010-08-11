@@ -15,7 +15,11 @@ package mesquite.chromaseq.lib;
 
 import org.dom4j.Element;
 
+import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteModule;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
+import mesquite.lib.XMLUtil;
 
 public abstract class SequenceNameSource extends MesquiteModule {
 
@@ -51,5 +55,20 @@ public abstract class SequenceNameSource extends MesquiteModule {
 	public  void addXMLAttributes(Element element){
 	}
 
+	public boolean queryOptions(){
+		return true;
+	}
+
+	public boolean hasOptions(){
+		return false;
+	}
+
+	public boolean optionsSpecified(){
+		return false;
+	}
+
+	/*.................................................................................................................*/
+	public void initialize() {
+	}
 
 }

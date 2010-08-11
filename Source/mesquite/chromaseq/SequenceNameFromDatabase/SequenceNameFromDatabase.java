@@ -20,6 +20,10 @@ public class SequenceNameFromDatabase extends SequenceNameSource  {
 			return false;
 		return true;
 		}
+	/*.................................................................................................................*/
+	public boolean optionsSpecified(){
+		return databaseURLSource!=null;
+	}
 
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){

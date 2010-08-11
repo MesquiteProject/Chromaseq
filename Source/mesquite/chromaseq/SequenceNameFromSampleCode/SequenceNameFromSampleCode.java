@@ -8,10 +8,14 @@ public class SequenceNameFromSampleCode extends SequenceNameSource  {
 
 	
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
-return true;
+		return true;
 	}
 
-	
+	/*.................................................................................................................*/
+	public boolean optionsSpecified(){
+		return true;
+	}
+
 	public boolean isReady() {
 		return true;
 	}

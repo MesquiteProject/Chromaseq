@@ -27,6 +27,7 @@ public class ChromFileNameDialog extends ExtensibleDialog {
 		this.nameParsingRulesName = defaultRuleName;
 		addNameParsingComponents();
 	}
+
 	
 	protected void addNameParsingComponents() {
 		addLabel(getTitle());

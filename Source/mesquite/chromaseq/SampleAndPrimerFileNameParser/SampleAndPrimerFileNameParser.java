@@ -32,7 +32,7 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 	public String prefDirectoryName = "ChromNameParsingRules";
 	ChooseNameParsingRuleDLOG chooseNameParsingRuleDialog;
 
-	private ChromFileNameParsing nameParsingRule;
+	private ChromFileNameParsing nameParsingRule=null;
 	private Choice nameRulesChoice;	
 	private String nameParsingRulesName="";	
 
@@ -44,7 +44,19 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 			ChromFileNameParsing defaultRule = new ChromFileNameParsing();
 			nameParsingRules.addElement(defaultRule, false);
 		}
+		int ruleNumber = nameParsingRules.indexOfByNameIgnoreCase(nameParsingRulesName);
+		if (ruleNumber>=0)
+			nameParsingRule = (ChromFileNameParsing)(nameParsingRules.elementAt(ruleNumber));
 		return true;
+	}
+	/*.................................................................................................................*/
+	
+	public boolean optionsSpecified(){
+		boolean db = StringUtil.notEmpty(nameParsingRulesName);
+		db = nameParsingRule!=null;
+		int ruleNumber = nameParsingRules.indexOfByNameIgnoreCase(nameParsingRulesName);
+		
+		return (StringUtil.notEmpty(nameParsingRulesName) && nameParsingRule!=null) ;
 	}
 
 	/*.................................................................................................................*/
@@ -62,7 +74,6 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 		if (success)  {
 			nameParsingRule = dialog.getNameParsingRule();
 			nameParsingRulesName = nameParsingRule.getName();
-
 		}
 		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
 		dialog.dispose();
@@ -74,6 +85,13 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 		StringUtil.appendXMLTag(buffer, 2, "nameParsingRulesName", nameParsingRulesName);  
 		return buffer.toString();
 	}
+	/*.................................................................................................................*/
+	public String getParameters () {
+		if (StringUtil.blank(nameParsingRulesName))
+			return "Chromatogram File Name Rule: not specified.";
+		return "Chromatogram File Name Rule: " + nameParsingRulesName;
+	}
+
 	/*.................................................................................................................*/
 	public void processSingleXMLPreference (String tag, String content) {
 		if ("nameParsingRulesName".equalsIgnoreCase(tag))
@@ -248,7 +266,7 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 	}
 	/*.................................................................................................................*/
 	public String getName() {
-		return "Chromatogram File Name Rules Manager";
+		return "Basic Chromatogram File Name Parser";
 	}
 
 }	

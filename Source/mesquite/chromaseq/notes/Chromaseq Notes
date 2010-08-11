@@ -1,8 +1,14 @@
 
 Necessary pre-beta
 
-- Kojun's codon position issue
 - turn off bean by user
+
+
+main Mesquite Project changes since 2.73:
+	- ExtensibleDialog
+	- MesquiteTextCanvas (new)
+	- TextCanvasWithButtons (new)
+
 
 ----
 

@@ -25,16 +25,32 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		boolean alwaysAsk = false;
+		/*
+		 		boolean alwaysAsk = false;
 		if (condition instanceof MesquiteString && condition !=null)
 			alwaysAsk = "alwaysAsk".equalsIgnoreCase(((MesquiteString)condition).getValue());
-		if (alwaysAsk || StringUtil.blank(primerListPath))
+		if (alwaysAsk || StringUtil.blank(primerListPath)){
+			if (MesquiteThread.isScripting() && StringUtil.blank(primerListPath))
+				return false;
 			if (!queryOptions())
 				return false;
+		}
+		*/
+		if (!optionsSpecified()){
+			if (MesquiteThread.isScripting() && StringUtil.blank(primerListPath))
+				return false;
+			if (!queryOptions())
+				return false;
+		}
 		if (StringUtil.notEmpty(primerListPath))
-			prepareFile();
+			initialize();
 		return true;
 	}
+	
+	public boolean optionsSpecified(){
+		return (StringUtil.notEmpty(primerListPath)) ;
+	}
+
 
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){
@@ -71,8 +87,6 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 	}
 	/*.................................................................................................................*/
 	public boolean queryOptions() {
-		if (MesquiteThread.isScripting())
-			return true;
 		MesquiteInteger buttonPressed = new MesquiteInteger(1);
 		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Location of File with Primer Information",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 
@@ -91,7 +105,7 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
 			primerListPath = primerFileField.getText();
-			prepareFile();
+			initialize();
 		}
 		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
 		dialog.dispose();
@@ -114,7 +128,7 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 	}
 
 	/*.................................................................................................................*/
-	private void prepareFile() {
+	public void initialize() {
 		if (!StringUtil.blank(primerListPath)) {
 			primerList = MesquiteFile.getFileContentsAsString(primerListPath);
 
@@ -207,8 +221,8 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 
 	public String getParameters() {
 		if (StringUtil.blank(primerListPath))
-			return "";
-		return primerListPath;
+			return "Primer information file unspecified.";
+		return "Primer information file: " + primerListPath;
 	}
 
 	/*.................................................................................................................*/

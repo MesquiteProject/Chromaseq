@@ -22,7 +22,6 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
 		
-		
 		if (databaseURLSource==null)
 			databaseURLSource= (DNADatabaseURLSource)hireEmployee(DNADatabaseURLSource.class, "Source of Database Connectivity");
 		if (databaseURLSource==null)
@@ -30,8 +29,10 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 		
 		 primers = new PrimerInformationDatabase(databaseURLSource);
 
-		
 		return true;
+	}
+	public boolean optionsSpecified(){
+		return (databaseURLSource!=null) ;
 	}
 
 	/*.................................................................................................................*
