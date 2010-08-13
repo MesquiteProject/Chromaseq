@@ -58,6 +58,10 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 		
 		return (StringUtil.notEmpty(nameParsingRulesName) && nameParsingRule!=null) ;
 	}
+	public boolean hasOptions(){
+		return true;
+	}
+
 
 	/*.................................................................................................................*/
 	public boolean queryOptions() {

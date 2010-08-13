@@ -34,6 +34,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		return true;
 	}
 
+
 	/*.................................................................................................................*/
 	public boolean optionsSpecified(){
 		return StringUtil.notEmpty(sampleCodeListPath);

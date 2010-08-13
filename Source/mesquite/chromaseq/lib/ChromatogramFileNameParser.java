@@ -36,6 +36,10 @@ public abstract class ChromatogramFileNameParser extends MesquiteInit {
 		return false;
 	}
 
+	public boolean hasOptions(){
+		return false;
+	}
+
 
 }
 

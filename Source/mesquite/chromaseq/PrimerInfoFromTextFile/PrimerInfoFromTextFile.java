@@ -51,6 +51,9 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 		return (StringUtil.notEmpty(primerListPath)) ;
 	}
 
+	public boolean hasOptions(){
+		return true;
+	}
 
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){

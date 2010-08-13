@@ -24,6 +24,9 @@ public class SequenceNameFromDatabase extends SequenceNameSource  {
 	public boolean optionsSpecified(){
 		return databaseURLSource!=null;
 	}
+	public boolean hasOptions(){
+		return true;
+	}
 
 	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){

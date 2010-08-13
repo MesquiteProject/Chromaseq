@@ -81,6 +81,11 @@ public abstract class PrimerInfoSource extends MesquiteModule {
 	public boolean optionsSpecified(){
 		return false;
 	}
+	
+	public boolean hasOptions(){
+		return false;
+	}
+
 	/*.................................................................................................................*/
 	public void initialize() {
 	}

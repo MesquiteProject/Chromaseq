@@ -15,6 +15,11 @@ public class SequenceNameFromSampleCode extends SequenceNameSource  {
 	public boolean optionsSpecified(){
 		return true;
 	}
+	
+	public boolean hasOptions(){
+		return false;
+	}
+
 
 	public boolean isReady() {
 		return true;
