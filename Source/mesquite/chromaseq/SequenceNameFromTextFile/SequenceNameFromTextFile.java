@@ -161,7 +161,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 			if (line.indexOf("\t")>=0){
 				subParser.setString(line);
 				subParser.setWhitespaceString("\t");
-				subParser.setPunctuationString("");
+				subParser.setPunctuationString(";");
 				String code = subParser.getFirstToken();
 				if (sampleCodeString.equalsIgnoreCase(code)) {
 					String seq = subParser.getNextToken();
@@ -191,7 +191,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		}
 		// got here and no match found -- log an error
 		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code names file.");
-		return new String[]{"", ""};
+		return new String[]{""+sampleCode, ""+sampleCode};
 	}
 	/*.................................................................................................................*/
 

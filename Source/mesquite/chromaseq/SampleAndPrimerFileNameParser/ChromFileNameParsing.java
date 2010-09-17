@@ -22,22 +22,22 @@ import org.dom4j.*;
 import mesquite.lib.*;
 
 public class ChromFileNameParsing implements Listable, Explainable {
-	
+
 	public String dnaCodeStartToken = "DNA";   
 	public String dnaCodeEndToken = "_";  
 	public String dnaCodeSuffixToken = ".";  
 	String dnaCodeRemovalToken= "-";
-	
+
 	public String primerStartToken="_";
 	public String primerEndToken = "_";
-	
+
 	public String path;
-	
+
 	boolean sampleCodeFirst = true;
-	
+
 	public String name = "default";
 	public String explanation;
-	
+
 	public ChromFileNameParsing() {
 	}
 
@@ -69,11 +69,11 @@ public class ChromFileNameParsing implements Listable, Explainable {
 	}
 	String getProcessedTokenForWrite(String s) {
 		if (" ".equals(s))
-		return "\\ ";
-	else if (StringUtil.blank(s))
-		return " ";
-	else
-		return s;
+			return "\\ ";
+		else if (StringUtil.blank(s))
+			return " ";
+		else
+			return s;
 	}
 	public String getXML(){
 		Element mesquiteElement = DocumentHelper.createElement("mesquite");
@@ -109,7 +109,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		Element root = XMLUtil.getRootXMLElementFromString("mesquite", contents);
 		if (root==null)
 			return false;
-		
+
 		Element chromFileNameParsingRules = root.element("chromFileNameParsingRules");
 		if (chromFileNameParsingRules != null) {
 			Element versionElement = chromFileNameParsingRules.element("version");
@@ -135,7 +135,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 			return false;
 		}
 		return true;
-	/*Parser parser = new Parser();
+		/*Parser parser = new Parser();
 		Parser subParser = new Parser();
 		parser.setString(contents);
 		boolean acceptableVersion = false;
@@ -192,7 +192,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 			return false;
 		return true;*/
 	}
-	
+
 	/*.................................................................................................................*/
 	public String processTokenAfterRead(String s) {
 		if ("\\ ".equals(s))
@@ -219,16 +219,16 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		dialog.addHorizontalLine(2);
 		SingleLineTextField primerStartField = dialog.addTextField("String before primer name:", primerStartToken, 8, true);
 		SingleLineTextField primerEndField = dialog.addTextField("String after primer name:", primerEndToken, 8, true);
-		
-		
-//		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
-		
-		
+
+
+		//		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
+
+
 		String s = "Mesquite searches within the name of each chromatogram file for both a code indicating the sample (e.g., a voucher number) and the primer name. ";
 		s+= "To allow this, you must indicate the string of characters that appears immediately before the sample code, and immediately after, as well as the strings before and after the primer name. ";
 		s+= "Those strings cannot also appear within the sample code and primer name.\n";
 		dialog.appendToHelpString(s);
-		
+
 		dialog.completeAndShowDialog(true);
 		if (buttonPressed.getValue()==0)  {
 			dnaCodeStartToken = dnaCodeStartField.getText();
@@ -238,23 +238,23 @@ public class ChromFileNameParsing implements Listable, Explainable {
 			primerStartToken = primerStartField.getText();
 			primerEndToken = primerEndField.getText();
 			sampleCodeFirst = sampleCodeFirstBox.getState();
-//			translateSampleCodes = translateCodesBox.getState();
+			//			translateSampleCodes = translateCodesBox.getState();
 		}
 		//storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
 		dialog.dispose();
 		return (buttonPressed.getValue()==0);
 	}
-	
+
+	/** Returns the piece of String s that is bounded by startToken and endToken.   */
 	/*.................................................................................................................*/
-	public String getStringPiece(MesquiteModule ownerModule, String s, String startToken, String endToken, MesquiteString remainder, StringBuffer logBuffer, String message, 
-			MesquiteString startTokenResult){
+	public String getStringPiece(MesquiteModule ownerModule, String s, String startToken, String endToken, MesquiteString remainder, StringBuffer logBuffer, String message, MesquiteString startTokenResult){
 		String piece="";
 		if (remainder!=null)
 			remainder.setValue(s);
-		
+
 		if (!StringUtil.blank(startToken)  || " ".equals(startToken)) {  
 			if (s.indexOf(startToken)>-1) {
-				piece = s.substring(s.indexOf(startToken)+startToken.length(), s.length());  // getting substring that starts with DNA number
+				piece = s.substring(s.indexOf(startToken)+startToken.length(), s.length());  // getting substring that starts with DNA number (does NOT include the startToken)
 				if (startTokenResult != null) {
 					startTokenResult.setValue(startToken);
 				}
@@ -286,19 +286,19 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		} 
 		else
 			piece = s;
-		remainder.setValue(piece);
-		int regexMatchIndex = -1;
-		try {
-			Pattern endTokenPattern = Pattern.compile(endToken);
-			Matcher endTokenMatcher = endTokenPattern.matcher(piece);
-			if (endTokenMatcher.find()) {
-				regexMatchIndex = endTokenMatcher.start();
-			}
-		} catch (Exception e) {}
+		remainder.setValue(piece);   // sets it to the remainder of the string from the start of the sample code onward
 		if (!StringUtil.blank(endToken) || " ".equals(endToken)) {
+			int regexMatchIndex = -1;
+			try {
+				Pattern endTokenPattern = Pattern.compile(endToken);
+				Matcher endTokenMatcher = endTokenPattern.matcher(piece);
+				if (endTokenMatcher.find()) {
+					regexMatchIndex = endTokenMatcher.start();
+				}
+			} catch (Exception e) {}
 			if (remainder!=null)
 				if (piece.indexOf(endToken)>=0) {
-					remainder.setValue(piece.substring(piece.indexOf(endToken), piece.length())); // now wiping out rest, but NOT endToken   +endToken.length()
+					remainder.setValue(piece.substring(piece.indexOf(endToken), piece.length())); // this sets the remainder to be everything in the string AFTER the sample code; the remainder will include the endToken
 				} else if (regexMatchIndex > 0) {
 					remainder.setValue(piece.substring(piece.indexOf(regexMatchIndex), piece.length()));
 				}
@@ -309,29 +309,26 @@ public class ChromFileNameParsing implements Listable, Explainable {
 			} else {
 				return piece;
 			}
-		} 
-		
-		return null;
+		}  else
+			return piece;
 	}
 	/*.................................................................................................................
 	 * 
 	 * DANNY -- added startTokenResult to store what actually is matched in the case of regexes
 	 * */
-	public boolean parseFileName(MesquiteModule ownerModule, String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, 
-			MesquiteString startTokenResult){
+	public boolean parseFileName(MesquiteModule ownerModule, String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, MesquiteString startTokenResult){
 		String primerNamePiece="";
 		String sampleCodePiece = "";
 		MesquiteString remainder = new MesquiteString();
+
 		
-		//	Finding and processing the sample code 
 		if (sampleCodeFirst) {
-			sampleCodePiece = getStringPiece(ownerModule, fileName, dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code", startTokenResult);
-		if (sampleCodePiece==null)
+			sampleCodePiece = getStringPiece(ownerModule, fileName, dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code", startTokenResult);   //find sample code
+			if (sampleCodePiece==null)  //sample code piece not found.
 				return false;
-			primerNamePiece = getStringPiece(ownerModule, remainder.getValue(), primerStartToken, primerEndToken, remainder, logBuffer, "primer name", null);
+			primerNamePiece = getStringPiece(ownerModule, remainder.getValue(), primerStartToken, primerEndToken, remainder, logBuffer, "primer name", null);  // find primer name
 		}		
-		else	if (sampleCodeFirst) {
-			// TODO: DRM FIX THIS
+		else {  // the primer name comes first
 			primerNamePiece = getStringPiece(ownerModule, fileName, primerStartToken, primerEndToken, remainder, logBuffer, "primer name", startTokenResult);
 			if (primerNamePiece==null)
 				return false;
@@ -351,9 +348,9 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		sampleCode.setValue(sampleCodePiece);
 		sampleCodeSuffix.setValue(suffix);
 		primerName.setValue(primerNamePiece);
-		
+
 		return true;
 	}
 
-	
+
 }
