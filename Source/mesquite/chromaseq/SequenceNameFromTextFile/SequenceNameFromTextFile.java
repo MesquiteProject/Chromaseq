@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -160,13 +159,15 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		String line = sampleCodeListParser.getRawNextDarkLine();
 		while (StringUtil.notEmpty(line)) {
 			if (line.indexOf("\t")>=0){
-				StringTokenizer tokenizer = new StringTokenizer(line, "\t", false);
-				String code = tokenizer.nextToken();
+				subParser.setString(line);
+				subParser.setWhitespaceString("\t");
+				subParser.setPunctuationString("");
+				String code = subParser.getFirstToken();
 				if (sampleCodeString.equalsIgnoreCase(code)) {
-					String seq = tokenizer.nextToken();
+					String seq = subParser.getNextToken();
 					if (seq.equals(";") || StringUtil.blank(seq))
 						seq="";
-					String fullseq = tokenizer.nextToken();
+					String fullseq = subParser.getNextToken();
 					if (StringUtil.blank(fullseq) || fullseq.equals(";"))
 						fullseq=seq;
 					return new String[]{seq, fullseq};
@@ -189,7 +190,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 
 		}
 		// got here and no match found -- log an error
-		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code xml file.");
+		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code names file.");
 		return new String[]{"", ""};
 	}
 	/*.................................................................................................................*/
