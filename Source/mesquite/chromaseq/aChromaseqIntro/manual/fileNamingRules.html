@@ -41,8 +41,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->File Naming Rules<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Test Version 0.982<br />
-      14 August 2010<br /></td>
+    <td width="14%">Test Version 0.983<br />
+      21 September 2010<br /></td>
   </tr>
 </table>
 
@@ -191,38 +191,6 @@
   <li>The file names contain only a single code (e.g.,&quot; B03&quot;), which is either the cell in a spreadsheet or spreadsheets or database that contains the sample code or primer name, more details about which can be looked up in additional files or database tables.</li>
 </ol>
 <p>If this style of file names, or other ones, are the way you link information about the sequence names and primer information to your chromatograms, and it would be important to you for Chromaseq to support these, then please contact <img src="images/email.jpg" alt="" width="189" height="17" align="absmiddle" />.</p>
-<h2>An example naming rule</h2>
-<p>In the following files, the sample code is the text that immediately follows the string of characters &quot;DNA&quot;, up until the first underscore (&quot;_&quot;) is encountered. The first two files are from sample 1120, the last four from 1250. </p>
-<p class="monospaced">A01_A01DNA1120_B1490_411940.ab1<br />
-A01_A01DNA1120_Bcoi2R_412036.ab1<br />
-C07_C07DNA1250_B1490_208508.ab1<br />
-C07_C07DNA1250_B2232_208604.ab1<br />
-C12_C12DNA1250_D3aR_572645.ab1<br />
-C12_C12DNA1250_NLF184_572549.ab1</p>
-<p>The primers follow the sample codes in these names, and are preceded by and followed by underscores. Thus, five primers are represented, B1490, Bcoi2R, B2232, D2aR, and NLF184. As it turns out, the first three of these primers are for a piece of the mitochondrial gene cytochrome oxidase I, and the last two for nuclear large unit ribosomal DNA (28S rDNA).</p>
-<p>Thus, the naming rule for files with these sorts of names are:</p>
-<ul>
-  <li>sample code precedes the primer name</li>
-  <li>sample code immediately follows &quot;DNA&quot;</li>
-  <li>sample code is immediately followed by &quot;_&quot;</li>
-  <li>primer code is preceded by a &quot;_&quot; that follows the sample coe</li>
-  <li>primer code is immediately followed by a &quot;_&quot;</li>
-  </ul>
-<h2>Another example naming rule</h2>
-<p>In the following file names, the sample code is at the very start of the file name, and is followed by a &quot;#&quot;: </p>
-<p class="monospaced">d124#050302-12261.ab1<br />
-  d096#041117-12261.ab1<br />
-  d124#050302-13398.ab1<br />
-  d096#041117-13398.ab1 </p>
-<p>The primer names in these are the &quot;12261&quot; and the &quot;13398&quot;; the primer name follows a &quot;-&quot; and precedes a &quot;.&quot;. Thus, the naming rule for files with these sorts of names are:</p>
-<ul>
-  <li>sample code precedes the primer name</li>
-  <li>sample code is at the very start of the file name</li>
-  <li>sample code is immediately followed by &quot;#&quot;</li>
-  <li>primer code is preceded by a &quot;-&quot; that follows the sample coe</li>
-  <li>primer code is immediately followed by a &quot;.&quot;</li>
-</ul>
-<p>&nbsp;</p>
 <h2><a name="defineNamingRule" id="defineNamingRule"></a>Defining naming rules</h2>
 <p>To select a rule that specifies how the file names are structured, you will use the following dialog box, which will appear when you choose one of the menu items to process chromatograms: </p>
 <p align="center"><img src="images/choosingNamingRule.png" alt="" width="349" height="138" /></p>
@@ -231,7 +199,13 @@ C12_C12DNA1250_NLF184_572549.ab1</p>
 <p>To create a new naming rule, touch on the &quot;New&quot; button. To edit, rename, duplicate, or delete a rule, select it first from the list, then touch on the appropriate button.</p>
 <p>If you make a new rule called &quot;myRule&quot;, this is the dialog box you will get to edit the naming rule:</p>
 <p align="center"><img src="images/editNamingRule.png" alt="" width="279" height="296" /></p>
-<p>The naming rule shown in the above dialog will work on the sequences mentioned above.</p>
+<p>The naming rule shown in the above dialog will work on the sequences mentioned above, whose names look like this:</p>
+<p class="monospaced">C11_C11DNA1780_D3aR_583152.ab1<br />
+  C11_C11DNA1780_NLF184_582960.ab1<br />
+  E09_E09DNA0252_D3aR_887908.ab1<br />
+  E09_E09DNA0252_NLF184_887812.ab1</p>
+<p>For example, in the first file, &quot;1780&quot;, the sample code, has as a string of character before it &quot;DNA&quot;, and has the string &quot;_&quot; immediately following it. The primer &quot;D3aR&quot; has an underscore before it, and after it.</p>
+<h3>Variants</h3>
 <p>If you wish some characters to be automatically removed from the sample code, then enter these characters in the &quot;Characters to be removed from sample code&quot; box. For example, in the sequencing facility that DRM uses, hyphens are occasionally (and apparently randomly) inserted in the file name as part of the sample code, and so those need to be automatically stripped out.</p>
 <p>In some cases, the sample code name consists of two parts, a main sample code, and a suffix. For example, the following files are chromatograms from four clones (p, q, t, and u) of sample 1794. </p>
 <p class="monospaced"> C03_C03CL1794.p_B1490_287986.ab1<br />
@@ -250,6 +224,24 @@ C12_C12DNA1250_NLF184_572549.ab1</p>
 <p>the sequence produced will be a COI sequence (primers Pat and B1490), named &quot;Bembidion integrum IL 1490 t&quot;, as &quot;Bembidion integrum IL 1490&quot; is the sample name listed in the sample names file. </p>
 <p>If the sample code is at the very start of the file name, set the string before sample code to be blank.</p>
 <p><em>Note: only one naming rule is currently allowed for all files processed at one time.</em></p>
+<p>&nbsp;</p>
+<h2>Another example naming rule</h2>
+<p>In the following file names, the sample code is at the very start of the file name, and is followed by a &quot;#&quot;: </p>
+<p class="monospaced">d124#050302-12261.ab1<br />
+  d096#041117-12261.ab1<br />
+  d124#050302-13398.ab1<br />
+  d096#041117-13398.ab1 </p>
+<p>The primer names in these are the &quot;12261&quot; and the &quot;13398&quot;; the primer name follows a &quot;-&quot; and precedes a &quot;.&quot;. Thus, the naming rule for files with these sorts of names are:</p>
+<ul>
+  <li>sample code precedes the primer name</li>
+  <li>String before sample code is &quot;&quot; (thus, it is at the very start of the file name). Make sure there is no space in the field; there should be absolutely nothing in there.</li>
+  <li>String after sample code is &quot;#&quot;</li>
+  <li>String before primer name is &quot;-&quot;.</li>
+  <li>String after primer name is &quot;.&quot;</li>
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p></p>
 <!-- InstanceEndEditable -->
 
