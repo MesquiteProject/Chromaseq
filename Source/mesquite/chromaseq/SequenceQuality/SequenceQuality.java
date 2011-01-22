@@ -16,7 +16,9 @@ package mesquite.chromaseq.SequenceQuality;
 import mesquite.categ.lib.MolecularState;
 import mesquite.chromaseq.lib.*;
 import mesquite.cont.lib.ContinuousData;
+import mesquite.lib.Debugg;
 import mesquite.lib.EmployeeNeed;
+import mesquite.lib.MesquiteDouble;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteNumber;
 import mesquite.lib.MesquiteString;
@@ -36,7 +38,7 @@ import mesquite.lib.duties.NumberForTaxon;
 		MatrixSourceCoord matrixSourceTask;
 		Taxa currentTaxa = null;
 		MCharactersDistribution observedStates =null;
-		ContinuousData linkedData;
+		ContinuousData qualityData;
 		CharacterData data;
 
 
@@ -73,22 +75,51 @@ import mesquite.lib.duties.NumberForTaxon;
 			observedStates = matrixSourceTask.getCurrentMatrix(taxa);
 			data = observedStates.getParentData();
 			
-			linkedData = ChromaseqUtil.getQualityData(data);
+			qualityData = ChromaseqUtil.getQualityData(data);
 
 		}
 		
 	   	int count = 0;
 	   	double summ = 0;
-	   	private double getQualityTaxon(int it){
+		/*.................................................................................................................*/
+		private double getQualityTaxon(int it){
+			if (data == null || qualityData == null)
+				return 0;
+			double sum = 0;
+			int num = 0;
+			int numChars = data.getNumChars(false);
+			for (int ic = 0; ic<numChars; ic++){
+				if (!data.isInapplicable(ic, it) && !data.isUnassigned(ic, it)) {
+					double d = ChromaseqUtil.getQualityScoreForEditedMatrixBase(data,ic, it);
+					if (MesquiteDouble.isCombinable(d) && d>=0 && d<=100){
+						sum += d;
+						num++;
+					}
+				}
+			}
+			if (num == 0)
+				return 0;
+			return sum*1.0/num;
+			/*
+	   		Object obj = data.getCellObject(qualityNameRef, ic, it);//IF USED use  ChromaseqUtil.getIntegerCellObject
+	   		if (obj instanceof MesquiteInteger)
+	   			return ((MesquiteInteger)obj).getValue();
+	   		return 0;
+			 */
+		}
+		/*.................................................................................................................*
+   	private double getQualityTaxon2(int it){
 	   		if (data == null)
 	   			return 0;
-	   		if (linkedData == null)
+	   		if (qualityData == null)
 	   			return 0;
 	    		double sum = 0;
-	   		for (int ic = 0; ic<linkedData.getNumChars(false); ic++){
-	   			if (!data.isUnassigned(ic, it) && !linkedData.isUnassigned(ic, it)) {
+	   		for (int ic = 0; ic<qualityData.getNumChars(false); ic++){
+	   			if (!data.isUnassigned(ic, it) && !qualityData.isInapplicable(ic, it)) {
 	   				double d = ChromaseqUtil.getQualityScoreForEditedMatrixBase(data,ic, it);
-	   				if (d>101)
+	   				if (ic==0)
+	   					Debugg.println("" + it + ": " + d);
+	   				if (d>101 || MesquiteDouble.isCombinable(d))
 	   					;
 	   				else if (d>=90.0)
 	   					sum += 1;
@@ -108,14 +139,9 @@ import mesquite.lib.duties.NumberForTaxon;
 	   			}
 	   		}
 	   		summ = sum;
-	   		return sum*50/linkedData.getNumChars(false);
-	   		/*
-	   		Object obj = data.getCellObject(qualityNameRef, ic, it);//IF USED use  ChromaseqUtil.getIntegerCellObject
-	   		if (obj instanceof MesquiteInteger)
-	   			return ((MesquiteInteger)obj).getValue();
-	   		return 0;
-	   		*/
+	   		return sum*50/qualityData.getNumChars(false);
 	   	}
+	/*.................................................................................................................*/
 
 
 		public void calculateNumber(Taxon taxon, MesquiteNumber result, MesquiteString resultString){
@@ -132,7 +158,7 @@ import mesquite.lib.duties.NumberForTaxon;
 			if (observedStates==null)
 				return;
 			data = observedStates.getParentData();
-			linkedData = ChromaseqUtil.getQualityData(data);
+			qualityData = ChromaseqUtil.getQualityData(data);
 
 			double qualityScore = getQualityTaxon(it);
 

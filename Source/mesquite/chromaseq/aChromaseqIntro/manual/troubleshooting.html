@@ -41,8 +41,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Troubleshooting<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Test Version 0.984<br />
-      3 October 2010<br /></td>
+    <td width="14%">Test Version 0.985<br />
+      21 January 2011<br /></td>
   </tr>
 </table>
 
@@ -179,6 +179,96 @@
 <!-- InstanceBeginEditable name="content" -->
     
     
+<h2>Processing chromatogram files</h2>
+<p>Processing by Chromaseq/Phred/Phrap should yield output in Mesquite's log window that looks like this:</p>
+<p class="monospacedSmall">Phred Phrap processing of chromatograms as scripted by Mesquite<br />
+  Processing directory: /ChromaseqExamples/Chromatograms</p>
+<p class="monospacedSmall">Using names and codes file: /ChromaseqExamples/SampleCodes.txt</p>
+<p class="monospacedSmall">Using primers file: /ChromaseqExamples/Primers.txt</p>
+<p class="monospacedSmall">Parameters: Phred Options:  -id . -pd . -d <br />
+  Phrap Options:  -new_ace -qual_show 20 -vector_bound 0 <br />
+  Chromaseq Options: <br />
+  Quality threshold for lower case: 49<br />
+  Convert multiple-peaks sites to ambiguity codes: true<br />
+  Minimum secondary peak fraction for ambiguity: 0.3<br />
+  Trim low quality regions from ends: true<br />
+  Quality threshold for trim: 20<br />
+  Trim window length: 10<br />
+  Trim window threshold: 5</p>
+<p class="monospacedSmall">---------------------------------------------------<br />
+  Section 1: Examining chromatogram files and preparing directories </p>
+<p class="monospacedSmall"> Preparing Bemb perspicuum AZ 1120  (COI)<br />
+  Preparing Bemb louisella NS 1250  (COI)<br />
+  Preparing Bemb louisella NS 1250  (28S)<br />
+  Preparing Bemb perspicuum CA 2320  (28S)<br />
+  Preparing Bemb paraenulum VA 1856  (COI)<br />
+  Preparing Bemb perspicuum AZ 1120  (28S)<br />
+  Preparing Bemb paraenulum VA 1856  (28S)</p>
+<p class="monospacedSmall">Number of files prepared: 7</p>
+<p class="monospacedSmall">---------------------------------------------------<br />
+  Section 2: Renaming chromatograms for Phred and Phrap</p>
+<p class="monospacedSmall"> A01_A01DNA1120_B1490_411940.ab1  renamed to  DNA1120.b.B1490.ab1<br />
+  A01_A01DNA1120_Bcoi2R_412036.ab1  renamed to  DNA1120.g.Bcoi2R.ab1<br />
+  C07_C07DNA1250_B1490_208508.ab1  renamed to  DNA1250.b.B1490.ab1<br />
+  C07_C07DNA1250_B2232_208604.ab1  renamed to  DNA1250.g.B2232.ab1<br />
+  C12_C12DNA1250_D3aR_572645.ab1  renamed to  DNA1250.g.D3aR.ab1<br />
+  C12_C12DNA1250_NLF184_572549.ab1  renamed to  DNA1250.b.NLF184.ab1<br />
+  F06_F06DNA2320_D3aR_552091.ab1  renamed to  DNA2320.g.D3aR.ab1<br />
+  F06_F06DNA2320_NLF184_551995.ab1  renamed to  DNA2320.b.NLF184.ab1<br />
+  H05_H05DNA1856_B1490_237723.ab1  renamed to  DNA1856.b.B1490.ab1<br />
+  H05_H05DNA1856_B2232_237819.ab1  renamed to  DNA1856.g.B2232.ab1<br />
+  H07_H07DNA1120_D1_394061.ab1  renamed to  DNA1120.b.D1.ab1<br />
+  H07_H07DNA1120_D3_394157.ab1  renamed to  DNA1120.g.D3.ab1<br />
+  H09_H09DNA1856_D1_237563.ab1  renamed to  DNA1856.b.D1.ab1<br />
+  H09_H09DNA1856_D3_237659.ab1  renamed to  DNA1856.g.D3.ab1</p>
+<p class="monospacedSmall">---------------------------------------------------<br />
+  Section 3: Execution of Phred-Phrap command file begun</p>
+<p class="monospacedSmall">.1. Bemb perspicuum AZ 1120 (Phred)<br />
+  2. Bemb louisella NS 1250 (Phrap)<br />
+  3. Bemb louisella NS 1250 (Phrap)<br />
+  4. Bemb perspicuum CA 2320 (Phrap)<br />
+  6. Bemb perspicuum AZ 1120 (Phred)</p>
+<p class="monospacedSmall">Phred &amp; Phrap analyses completed.</p>
+<p class="monospacedSmall">---------------------------------------------------<br />
+  Section 4: Mesquite processing of Phrap results<br />
+  <br />
+  Processing ACE file: Bemb louisella NS 1250.ace<br />
+  C12_C12DNA1250_D3aR_572645.ab1 (rev)<br />
+  C12_C12DNA1250_NLF184_572549.ab1</p>
+<p class="monospacedSmall">Processing ACE file: Bemb paraenulum VA 1856.ace<br />
+  H09_H09DNA1856_D3_237659.ab1 (rev)<br />
+  H09_H09DNA1856_D1_237563.ab1</p>
+<p class="monospacedSmall">Processing ACE file: Bemb perspicuum AZ 1120.ace<br />
+  H07_H07DNA1120_D3_394157.ab1 (rev)<br />
+  H07_H07DNA1120_D1_394061.ab1</p>
+<p class="monospacedSmall">Processing ACE file: Bemb perspicuum CA 2320.ace<br />
+  F06_F06DNA2320_D3aR_552091.ab1 (rev)<br />
+  F06_F06DNA2320_NLF184_551995.ab1</p>
+<p class="monospacedSmall">Processing ACE file: Bemb louisella NS 1250.ace<br />
+  C07_C07DNA1250_B2232_208604.ab1 (rev)<br />
+  C07_C07DNA1250_B1490_208508.ab1</p>
+<p class="monospacedSmall">Processing ACE file: Bemb paraenulum VA 1856.ace<br />
+  H05_H05DNA1856_B2232_237819.ab1 (rev)<br />
+  H05_H05DNA1856_B1490_237723.ab1</p>
+<p class="monospacedSmall">Processing ACE file: Bemb perspicuum AZ 1120.ace<br />
+  A01_A01DNA1120_Bcoi2R_412036.ab1 (rev)<br />
+  A01_A01DNA1120_B1490_411940.ab1</p>
+<p class="monospacedSmall">========================<br />
+  Section 5: Phred/Phrap processing report</p>
+<p class="monospacedSmall">Multi-read sequences obtained from the following genes and samples:<br />
+  (28S) -- Bemb louisella NS 1250<br />
+  (28S) -- Bemb paraenulum VA 1856<br />
+  (28S) -- Bemb perspicuum AZ 1120<br />
+  (28S) -- Bemb perspicuum CA 2320<br />
+  (COI) -- Bemb louisella NS 1250<br />
+  (COI) -- Bemb paraenulum VA 1856<br />
+  (COI) -- Bemb perspicuum AZ 1120</p>
+<p class="monospacedSmall">========================</p>
+<p class="monospacedSmall">Processing of chromatogram files completed.</p>
+<p>&nbsp;</p>
+<p>section 4: only a warning, Phrap or Phred may have failed. check in processed directories, check shell output</p>
+<p>section 5: only a warning, Phrap or Phred may have failed. check in processed directories, check shell output</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>- Recalculation mappers, Reregistration</p>
 <p>- new lines in phredpar.dat file</p>

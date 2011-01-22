@@ -11,13 +11,16 @@ This source code and its compiled class files are free and modifiable under the 
 GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 
-package mesquite.chromaseq.ExtractChromatograms; 
+package mesquite.chromaseq.SegregateChromatograms; 
 
 import java.awt.Button;
 import java.awt.Checkbox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
+import javax.swing.JLabel;
+
 import org.dom4j.Document;
 
 import mesquite.lib.*;
@@ -25,7 +28,7 @@ import mesquite.lib.duties.*;
 import mesquite.chromaseq.lib.*;
 
 /* ======================================================================== */
-public class ExtractChromatograms extends UtilitiesAssistant{ 
+public class SegregateChromatograms extends UtilitiesAssistant implements ActionListener{ 
 	//for importing sequences
 	MesquiteProject proj = null;
 	FileCoordinator coord = null;
@@ -79,6 +82,7 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		sequenceNameTask = (SequenceNameSource)hireEmployee(SequenceNameSource.class,  "Supplier of sequence names from sample codes");
 		if (sequenceNameTask==null) 
 			return false;
+		sequenceNameTask.initialize();
 		
 		primerInfoTask = (PrimerInfoSource)hireCompatibleEmployee(PrimerInfoSource.class,  new MesquiteString("alwaysAsk"), "Supplier of information about primers and gene fragments");
 		if (primerInfoTask==null) 
@@ -291,6 +295,7 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 				}
 			}
 
+			echoStringToFile("Number of files examined: " + files.length, logBuffer);
 			echoStringToFile("Number of files found and segregated: " + numPrepared, logBuffer);
 
 
@@ -338,12 +343,82 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		preferencesSet = true;
 		return buffer.toString();
 	}
+	
+	
+	JLabel nameParserLabel = null;
+	JLabel sequenceNameTaskLabel = null;
+	JLabel primerInfoTaskLabel = null;
+	
+	MesquiteTextCanvas nameParserTextCanvas = null;
+	MesquiteTextCanvas sequenceNameTaskTextCanvas = null;
+	MesquiteTextCanvas primerInfoTaskTextCanvas = null;
+	Button sequenceNameTaskButton = null;
+	Button nameParserButton = null;
+	Button primerInfoTaskButton = null;
+
+	
+	/*.................................................................................................................*/
+	private String getModuleText(MesquiteModule mod) {
+		return mod.getName() + "\n" + mod.getParameters();
+	}
 	/*.................................................................................................................*/
 	public boolean queryOptions() {
 		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);
 		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Segregate Chromatograms Options",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 
-		dialog.setDefaultButton("Segregate");
+		TextCanvasWithButtons textCanvasWithButtons;
+
+		//section for name parser
+				
+				dialog.addHorizontalLine(1);
+				dialog.addLabel("Chromatogram File Name Parser");
+				dialog.forceNewPanel();
+				String s = getModuleText(nameParserManager);
+				if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(ChromatogramFileNameParser.class)>1){
+					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s,"File Name Parser...", "nameParserReplace", "Options...", "nameParserButton",this);
+					nameParserButton = textCanvasWithButtons.getButton2();
+				}
+				else {
+					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s, "Options...", "nameParserButton",this);
+					nameParserButton = textCanvasWithButtons.getButton();
+				}
+				nameParserButton.setEnabled (nameParserManager.hasOptions());
+				nameParserTextCanvas = textCanvasWithButtons.getTextCanvas();
+				
+		//section for SequenceNameSource
+				dialog.addHorizontalLine(1);
+				dialog.addLabel("Source of Sequence Names");
+				dialog.forceNewPanel();
+				s = getModuleText(sequenceNameTask);
+
+				if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(SequenceNameSource.class)>1){
+					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s,"Sequence Name Source...", "sequenceNameTaskReplace", "Options...", "sequenceNameTaskButton",this);
+					sequenceNameTaskButton = textCanvasWithButtons.getButton2();
+				}
+				else {
+					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s, "Options...", "sequenceNameTaskButton",this);
+					sequenceNameTaskButton = textCanvasWithButtons.getButton();
+				}
+				sequenceNameTaskButton.setEnabled (sequenceNameTask.hasOptions());
+				sequenceNameTaskTextCanvas = textCanvasWithButtons.getTextCanvas();
+
+		//section for PrimerInfoSource
+				dialog.addHorizontalLine(1);
+				dialog.addLabel("Source of Primer Information");
+				dialog.forceNewPanel();
+				s = getModuleText(primerInfoTask);
+				if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(PrimerInfoSource.class)>1){
+					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s,"Primer Info Source...", "primerInfoTaskReplace", "Options...", "primerInfoTaskButton",this);
+					primerInfoTaskButton = textCanvasWithButtons.getButton2();
+				}
+				else {
+					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s, "Options...", "primerInfoTaskButton",this);
+					primerInfoTaskButton = textCanvasWithButtons.getButton();
+				}
+				nameParserButton.setEnabled (primerInfoTask.hasOptions());
+				primerInfoTaskTextCanvas = textCanvasWithButtons.getTextCanvas();
+
+				dialog.setDefaultButton("Segregate");
 
 		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
 		dialog.addHorizontalLine(2);
@@ -352,7 +427,7 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 		SingleLineTextField geneNameToMatchField = dialog.addTextField("Text to match in gene fragment name", geneNameToMatch,26);
 
 
-		String s = "This will move all chromatograms whose long sequence names and gene fragment names contain the specified text into their own folder.\n";
+		s = "This will move all chromatograms whose long sequence names and gene fragment names contain the specified text into their own folder.\n";
 		s+="Mesquite extracts from within the name of each chromatogram file for both a code indicating the sample (e.g., a voucher number) and the primer name. ";
 		s+= "To allow this, you must first define an rule that defines how the chromatogram file names are structured.\n\n";
 		s+= "If you so choose, Mesquite will search for the sample code within a sample names file you select, on each line of which is:\n";
@@ -388,6 +463,37 @@ public class ExtractChromatograms extends UtilitiesAssistant{
 			return  super.doCommand(commandName, arguments, checker);
 		return null;
 	}
+	
+	/*.................................................................................................................*/
+	public  void actionPerformed(ActionEvent e) {
+		 if (e.getActionCommand().equalsIgnoreCase("nameParserButton")) {
+			if (nameParserManager!=null) {
+				if (nameParserManager.queryOptions() && nameParserTextCanvas!=null)
+					nameParserTextCanvas.setText(getModuleText(nameParserManager));
+			}
+		}
+		else if (e.getActionCommand().equalsIgnoreCase("sequenceNameTaskButton")) {
+			if (sequenceNameTask!=null) {
+				if (sequenceNameTask.queryOptions() && sequenceNameTaskTextCanvas!=null)
+					sequenceNameTaskTextCanvas.setText(getModuleText(sequenceNameTask));
+			}
+		}
+		else if (e.getActionCommand().equalsIgnoreCase("primerInfoTaskButton")) {
+			if (primerInfoTask!=null) {
+				if (primerInfoTask.queryOptions() && primerInfoTaskTextCanvas!=null)
+					primerInfoTaskTextCanvas.setText(getModuleText(primerInfoTask));
+			}
+		}
+		else if (e.getActionCommand().equalsIgnoreCase("sequenceNameTaskReplace")) {
+			MesquiteCommand command = new MesquiteCommand("setSequenceNameSource", this);
+			command.doItMainThread(null, null, false, false);
+		}
+		else if (e.getActionCommand().equalsIgnoreCase("primerInfoTaskReplace")) {
+			MesquiteCommand command = new MesquiteCommand("setPrimerInfoSource", this);
+			command.doItMainThread(null, null, false, false);
+		}
+	}
+
 
 	/*.................................................................................................................*/
 	public String getName() {
