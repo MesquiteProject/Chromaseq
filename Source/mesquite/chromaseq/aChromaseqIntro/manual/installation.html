@@ -191,6 +191,7 @@
 <p>You can either acquire Phred and Phrap as source code (see <a href="http://www.phrap.org/consed/consed.html#howToGet">How to Get Phred/Phrap/Consed</a>), which most people at academic institutions can obtain free, or you can purchase precompiled versions from <a href="http://www.codoncode.com">CodonCode Corporation</a>. Note that Chromaseq does not require Consed, and so you will not need to obtain Consed for use with Chromaseq. </p>
 <h2>Compiling Phred, Phd2Fasta, and Phrap </h2>
 <p>If you are not familiar with compiling source code into executable programs, you may wish to ask for help from a local expert. <em>(Not us.)</em> Basically, you are taking the source code, present as text written in the computer language C, and asking a compiler to convert that text into machine code that your computer can understand. To do this, you will need access to a compiler. Here are some basic instructions, but they cannot be guaranteed to work on all computers. </p>
+<p>Note: there is a bug in the current release version of Phrap (version 0.990329) when compiled for 64-bit machines that will cause it to fail when used within the Chromaseq context. Please see the <a href="troubleshooting.html">Troubleshooting</a> page if you have problems.</p>
 <h3>Preparing the source code</h3>
 <p>You will receive the source code as  archives, in three pieces, which might have names like this:</p>
 <ul>
@@ -280,7 +281,7 @@
 
     
     
-    </div>
+  </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
