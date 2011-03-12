@@ -45,7 +45,7 @@ public class SampleCodeProvider {
 		}
 		// got here and no match found -- log an error
 		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code xml file.");
-		return new String[]{"", ""};
+		return new String[]{sampleCode.getValue(), sampleCode.getValue()};
 	}
 	
 	public static String[] getSeqNamesFromTabDelimitedFile(MesquiteString sampleCode, Parser sampleCodeListParser) {
@@ -56,12 +56,24 @@ public class SampleCodeProvider {
 		while (StringUtil.notEmpty(line)) {
 			if (line.indexOf("\t")>=0){
 				StringTokenizer tokenizer = new StringTokenizer(line, "\t", false);
-				String code = tokenizer.nextToken();
+				String code =null;
+				try {
+					code = tokenizer.nextToken();
+				}catch (Exception e){
+				}
 				if (sampleCodeString.equalsIgnoreCase(code)) {
-					String seq = tokenizer.nextToken();
+					String seq = null;
+					try {
+						seq = tokenizer.nextToken();
+					}catch (Exception e){
+					}
 					if (seq.equals(";") || StringUtil.blank(seq))
 						seq="";
-					String fullseq = tokenizer.nextToken();
+					String fullseq = null;
+					try {
+						fullseq = tokenizer.nextToken();
+					}catch (Exception e){
+					}
 					if (StringUtil.blank(fullseq) || fullseq.equals(";"))
 						fullseq=seq;
 					return new String[]{seq, fullseq};
@@ -84,8 +96,8 @@ public class SampleCodeProvider {
 
 		}
 		// got here and no match found -- log an error
-		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code xml file.");
-		return new String[]{"", ""};
+		MesquiteMessage.warnUser("No sample code named '" + sampleCode + "' found in sample code file.");
+		return new String[]{sampleCode.getValue(), sampleCode.getValue()};
 	}
 
 /*
