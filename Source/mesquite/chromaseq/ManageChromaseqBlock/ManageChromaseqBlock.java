@@ -574,7 +574,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 				parser.getNextToken(); //=
 				ttoken  = parser.getNextToken(); //TAXA block (optional)
 				if (!StringUtil.blank(ttoken)){
-					Taxa t = getProject().getTaxaLastFirst(ttoken);
+					Taxa t = getProject().findTaxa(file, ttoken); /*getTaxaLastFirst(ttoken);
 
 					if (t==null){
 						int wt = MesquiteInteger.fromString(ttoken);
@@ -584,6 +584,8 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 					if (t == null && getProject().getNumberTaxas(file)==1){
 						t = getProject().getTaxa(file, 0);
 					}
+					if (t == null && getProject().getNumberTaxas()==1)
+						t = getProject().getTaxa(0); */
 					if (t!=null) {
 						nBlock.setDefaultTaxa(t);
 					}
