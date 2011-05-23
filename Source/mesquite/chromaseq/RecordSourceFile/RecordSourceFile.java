@@ -51,20 +51,26 @@ public class RecordSourceFile extends FileAssistantT {
 	}
 	/*.................................................................................................................*/
 	private void recordSourceProject(){
-		
-			int numMatrices = getProject().getNumberCharMatrices();
-			NameReference sourceRef = NameReference.getNameReference("SourceFile");
-			for (int im = 0; im<numMatrices; im++){
-				CharacterData data = getProject().getCharacterMatrix(im);
-				Taxa taxa = data.getTaxa();
-				Associable tInfo = data.getTaxaInfo(true);
-				for (int it = 0; it< taxa.getNumTaxa(); it++){
-					if (data.hasDataForTaxon(it))
-						tInfo.setAssociatedObject(sourceRef, it, getProject().getHomeFileName());
-				}
-			}
+		MesquiteString s = new MesquiteString();
+		s.setValue(getProject().getHomeFileName());
+		if (!QueryDialogs.queryString(containerOfModule(), "Name to Stamp", "Indicate source file name to stamp on matrix rows", s))
+			return;
 
-		
+		int numMatrices = getProject().getNumberCharMatrices();
+		NameReference sourceRef = NameReference.getNameReference("SourceFile");
+
+		for (int im = 0; im<numMatrices; im++){
+			CharacterData data = getProject().getCharacterMatrix(im);
+			Taxa taxa = data.getTaxa();
+			Associable tInfo = data.getTaxaInfo(true);
+			boolean anySelected = taxa.anySelected();
+			for (int it = 0; it< taxa.getNumTaxa(); it++){
+				if (data.hasDataForTaxon(it) && (!anySelected || taxa.getSelected(it)))
+					tInfo.setAssociatedObject(sourceRef, it, s.getValue());
+			}
+		}
+
+
 	}
 	/*.................................................................................................................*/
 	public String getName() {
