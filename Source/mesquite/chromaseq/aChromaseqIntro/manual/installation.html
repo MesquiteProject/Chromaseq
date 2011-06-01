@@ -48,8 +48,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Installation<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Test Version 0.985<br />
-      21 January 2011<br /></td>
+    <td width="14%">Test Version 0.986<br />
+      1 June 2011<br /></td>
   </tr>
 </table>
 
@@ -188,7 +188,17 @@
 <h2>Installing Chromaseq</h2>
 <p>To install Chromaseq,  go to the <a href="javascript:pageLink('download.html');">download page</a> and follow the instructions.</p>
 <h2>Acquiring Phred and Phrap</h2>
-<p>You can either acquire Phred and Phrap as source code (see <a href="http://www.phrap.org/consed/consed.html#howToGet">How to Get Phred/Phrap/Consed</a>), which most people at academic institutions can obtain free, or you can purchase precompiled versions from <a href="http://www.codoncode.com">CodonCode Corporation</a>. Note that Chromaseq does not require Consed, and so you will not need to obtain Consed for use with Chromaseq. </p>
+<p>You can either acquire Phred and Phrap as source code (see <a href="http://www.phrap.org/consed/consed.html#howToGet">How to Get Phred/Phrap/Consed</a>), which most people at academic institutions can obtain free, or you can purchase precompiled versions from <a href="http://www.codoncode.com">CodonCode Corporation</a>. Note that Chromaseq does not require Consed, and so you will not need to obtain Consed for use with Chromaseq.</p>
+<p><strong><em>Please note</em></strong> that for some of the newer operating systems (ones that are 64-bit operating systems, e.g., MacOS X 10.6 on a newer Mac) the default version of Phrap will fail to run properly. To use Phrap (and thus Chromaseq) on these newer operating systems, you need to get the newest, beta version of Phrap. Here are the details to acquire this, as specified by the author of Phrap: </p>
+<table width="800" border="0" cellspacing="0" cellpadding="4" align="center" bgcolor="#EEEEEE">
+  <tr>
+    <td><p> A beta test version of the package, with many new features and capabilities (including some support for next-generation sequencing data), is now also available. It is not yet the default distribution version because it is still being tested, so you must request it separately, as follows: send an email to <img src="images/php.gif" alt="" width="135" height="16" />, with a Subject: line that says &quot;phrap new version request&quot;, and an email body that consists of the following two lines (it should be in exactly this format, to be computer readable):</p>
+      <p>Request: phrap ver 1.080721 or later<br />
+        Registered phrap email address: [insert your email address here]</p>
+      <p>Your email address should be the same one you supplied in your previous phrap request. Keep the square brackets ('[' and ']') around your email address.</p></td>
+  </tr>
+</table>
+<p></p>
 <h2>Compiling Phred, Phd2Fasta, and Phrap </h2>
 <p>If you are not familiar with compiling source code into executable programs, you may wish to ask for help from a local expert. <em>(Not us.)</em> Basically, you are taking the source code, present as text written in the computer language C, and asking a compiler to convert that text into machine code that your computer can understand. To do this, you will need access to a compiler. Here are some basic instructions, but they cannot be guaranteed to work on all computers. </p>
 <p>Note: there is a bug in the current release version of Phrap (version 0.990329) when compiled for 64-bit machines that will cause it to fail when used within the Chromaseq context. Please see the <a href="troubleshooting.html">Troubleshooting</a> page if you have problems.</p>
@@ -214,7 +224,7 @@
 <h4>MacOS X, Linux</h4>
 <ul>
   
-    <li>If you are on Mac OSX, you will first need to install Xcode, which you can download (after a free registration) at <a href="http://developer.apple.com/technologies/tools/xcode.html">http://developer.apple.com/technologies/tools/xcode.html</a>. Install Xcode.</li>
+    <li>If you are on Mac OSX, you will first need to install Xcode, which you can download at <a href="http://developer.apple.com/technologies/tools/xcode.html">http://developer.apple.com/technologies/tools/xcode.html</a>. Install Xcode.</li>
     <li>Start up a UNIX shell. On Mac OSX, you can start the application called Terminal in the Utilities folder in the Applications folder. </li>
   <li>Change the directory to be the phrap source directory (e.g., &quot;cd /phredPhrap Source/distrib/&quot;)</li>
   <li>Type &quot;make&quot;; this will cause your C compiler to compile phrap as well as some other programs. Various text will be written to the shell or terminal, and once it stops, there should be a file named named &quot;phrap&quot; in the directory. If you have problems, you might look into the phrap.doc file in the phrap directory for more information about installation.</li>
@@ -281,10 +291,10 @@
 
     
     
-  </div>
+    </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
-    <p> ©2010 David R. Maddison &amp; Wayne P. Maddison</p>
+    <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
 
