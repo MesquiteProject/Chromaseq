@@ -175,7 +175,7 @@ public class AceDirectoryProcessor {
 								String baseName = files[i].substring(0,files[i].length()-4);  //this is the name of the sequence
 								processedAceFilePath = aceFileDirectoryPath + MesquiteFile.fileSeparator + baseName+ChromaseqUtil.processedACESuffix+".ace";
 
-								ace = new AceFile(filePath,processedAceFilePath, dataFilePath, ownerModule, processPolymorphisms, polyThreshold, false);
+								ace = new AceFile(filePath,processedAceFilePath, dataFilePath, dataFilePath, ownerModule, processPolymorphisms, polyThreshold, false);
 								if (ace==null)
 									return;
 								
