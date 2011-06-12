@@ -32,6 +32,10 @@ public abstract class PrimerInfoSource extends MesquiteModule {
  		return "Primer Information Source";
    	 }
 
+   	public String[] getDefaultModule() {
+   		return new String[] { "#PrimerInfoFromTextFile"};
+   	}
+
  // returns whether primer is in forward direction
  	public abstract boolean isForward(String ID);
 

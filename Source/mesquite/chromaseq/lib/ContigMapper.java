@@ -151,14 +151,14 @@ public class ContigMapper {
 
 		count=0;
 		for (int ic = numTrimmedFromStart; ic>=0; ic--){
-			if (!deleted[ic] && ic<numTrimmedFromStart)
+			if (ic < deleted.length && !deleted[ic] && ic<numTrimmedFromStart)
 				count++;
 		}
 		setNumResurrectedAtStart(count);
 
 		count=0;
 		for (int ic = numBases-numTrimmedFromEnd; ic<deleted.length; ic++){
-			if (!deleted[ic] && ic>numBases-numTrimmedFromEnd-1)
+			if (ic < deleted.length && !deleted[ic] && ic>numBases-numTrimmedFromEnd-1)
 				count++;
 		}
 		setNumResurrectedAtEnd(count);

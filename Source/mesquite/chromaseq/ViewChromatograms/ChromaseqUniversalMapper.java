@@ -287,7 +287,9 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		sequence = originalTrimmedSequencePanel.getSequence();
 		if (sequenceCanvas!=null && sequence!=null){
 			int sequenceLength = sequence.getLength();
-			int startingUniversalBase = universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart];
+			if (numTrimmedFromStart>=universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE].length)
+				numTrimmedFromStart= universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE].length-1;
+			int startingUniversalBase=universalBaseFromOtherBase[ORIGINALUNTRIMMEDSEQUENCE][numTrimmedFromStart];
 
 			 // as we know the trimmed bases are ONLY a subset of the contig, then we can go through the contig and find them all
 			for (contigBase=numTrimmedFromStart; contigBase<contigLength; contigBase++){  
