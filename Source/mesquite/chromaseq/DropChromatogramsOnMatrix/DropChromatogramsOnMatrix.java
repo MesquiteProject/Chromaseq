@@ -45,7 +45,7 @@ public class DropChromatogramsOnMatrix extends DataWindowAssistantI implements M
 			String name = file.getName();
 			name = name.toLowerCase();
 			if (name.endsWith(".ab1")) {
-Debugg.println("Chromatogram " + name + " dropped on matrix.");
+//Debugg.println("Chromatogram " + name + " dropped on matrix.");
 				return true;
 			}
 		}

@@ -746,7 +746,7 @@ public class ChromatogramCanvas extends MousePanel {
 			ic = findUniversalBaseNumber(SETREAD, x); 
 			readBaseNumber = ic;
 		}
-		Debugg.println("ChromatogramCanvas  closeupPanel: " + closeupPanel);
+//		Debugg.println("ChromatogramCanvas  closeupPanel: " + closeupPanel);
 		if (closeupPanel!=null)
 			closeupPanel.setReadBaseNumber(readBaseNumber);
 
