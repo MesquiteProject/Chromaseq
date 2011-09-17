@@ -105,10 +105,10 @@ public class PrimerInformationFile {
 			return;
 		}
 		String onePrimer="";
-		numPrimers = 0;
+		numPrimers = 1;
 		String tempList = primerList;
 
-		while (!StringUtil.blank(tempList) && tempList.length() > 10 && tempList.indexOf(";")>=0) {
+		while (!StringUtil.blank(tempList) && tempList.length() > 10  && tempList.indexOf(";")>=0) {
 			onePrimer = tempList.substring(0,tempList.indexOf(";"));
 			numPrimers ++;
 			tempList = tempList.substring(tempList.indexOf(";")+1, tempList.length());
@@ -122,7 +122,7 @@ public class PrimerInformationFile {
 		initializeArrays(numPrimers);
 
 		int count = -1;
-		while (!StringUtil.blank(primerList) && primerList.length() > 10 && count < numPrimers) {
+		while (!StringUtil.blank(primerList) && primerList.length() > 10 && count < numPrimers && primerList.indexOf(";")>=0) {
 			if (primerList.indexOf(";")>=0)
 				onePrimer = primerList.substring(0,primerList.indexOf(";"));
 
@@ -141,14 +141,16 @@ public class PrimerInformationFile {
 					isForward = token.equalsIgnoreCase("F") || token.equalsIgnoreCase("Forward");
 			String sequence =  parser.getNextToken(); 
 			count ++;
-			primerNames[count] = primerName;
-			fragmentNames[count] = fragmentName;
-			forward[count] = isForward;
-			if (StringUtil.notEmpty(sequence))
-				sequences[count] = sequence;
-			else
-				sequences[count] = "";
-
+			
+			if (count<primerNames.length) {
+				primerNames[count] = primerName;
+				fragmentNames[count] = fragmentName;
+				forward[count] = isForward;
+				if (StringUtil.notEmpty(sequence))
+					sequences[count] = sequence;
+				else
+					sequences[count] = "";
+			}
 			
 			primerList = primerList.substring(primerList.indexOf(";")+1, primerList.length());
 			primerList.trim();
