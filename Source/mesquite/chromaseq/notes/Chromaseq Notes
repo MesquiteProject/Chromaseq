@@ -1,9 +1,6 @@
 Next Beta
 
 
-- turn off bean by user
-- turn off "memory available"
-
 
 ----
 
@@ -46,10 +43,6 @@ notes from Jeff Oliver
 
 4 - The scroll bar does not appear when the chromatogram window opens.  Re-sizing the window forces re-
 drawing, and the scollbar appears then.  VM issue?
-
-6 - Should Chromatogram > Show Fades actually be a checkMenuItem?  It was once so (commented out), and 
-because it toggles whether the sequence is faded or not, a checkMenuItem (as opposed to a menuItem, which
-it is currently) might be more appropriate...line 113 in VChromWindow
 
 7 - Maybe a bigger issue than Chromaseq: When using Phred/phrap from within Mesquite 
 (File > Open other... or Utilities), the dialog asking the user to Choose directory containing ABI
