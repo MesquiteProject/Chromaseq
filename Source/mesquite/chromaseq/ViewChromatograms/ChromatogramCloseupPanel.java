@@ -31,6 +31,8 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 	boolean showG = true;
 	boolean showT = true;
 	int readBaseNumber;
+	Chromatogram currentChromatogram = null;
+	boolean showCenterBase = false;
 
 	public ChromatogramCloseupPanel(ClosablePanelContainer container, Chromatogram myChrom, ContigDisplay panel, int id, int contigID) {
 		this.id = id;  // this is the read number
@@ -38,7 +40,8 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 		this.contigDisplay = panel;
 		open=true;
 		chromatograms = new Chromatogram[1];
-		setChromatogram(myChrom);
+		//	setChromatogram(myChrom);
+		setChromatogram(null);
 		setBackground(getBackgroundColor());
 		backgroundColor = panel.getBackgroundColor();
 		chromCanvas = new CloseupChromatogramCanvas(this, id);
@@ -55,18 +58,37 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 	/*.................................................................................................................*/
 	public void setChromatogram(Chromatogram myChrom) {
 		if (myChrom==null){
+			backgroundColor = contigDisplay.getBackgroundColor();
 			chromatograms[0] = null;
 			if (chromCanvas!=null){
 				chromCanvas.setChromatograms(chromatograms);
 			}
 		}
 		else {
+			if (showCenterBase)
+				backgroundColor = ChromaseqUtil.veryVeryLightBlue;
+			else
+				backgroundColor = contigDisplay.getBackgroundColor();
 			chromatograms[0] = myChrom;
 			chromatograms[0].setWindow(contigDisplay);
 			if (chromCanvas!=null){
 				chromCanvas.setChromatograms(chromatograms);
 			}
 		}
+		setBackground(getBackgroundColor());
+		currentChromatogram = chromatograms[0];
+	}
+	/*.................................................................................................................*/
+	public boolean isCurrentChromatogram(Chromatogram chromatogram) {
+		return (chromatogram.equals(chromatograms[0]));
+	}
+
+	/*.................................................................................................................*/
+	public boolean getShowCenterBase() {
+		return showCenterBase;
+	}
+	public void setShowCenterBase(boolean showCenterBase) {
+		this.showCenterBase = showCenterBase;
 	}
 
 	/*.................................................................................................................*/
@@ -135,6 +157,7 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 	}
 }
 
+/*-----------------------------*/
 class CloseupChromatogramCanvas extends ChromatogramCanvas {
 
 	boolean darkBackground=false;
@@ -174,14 +197,14 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		int pixels = (int)((pos-firstReadLocation)*horizScale);//+ offsetForInserted);  //returns scaled horizontal pixels
 		drawLine(g, width, pixels,getX(trace,peakBottom,pos,vertScale),pixels+2,getX(trace,peakBottom,pos+2,vertScale));
 	}
-	*/
+	 */
 	public void setBackgroundColor() {
 		if (closeupPanel!=null)
 			setBackground(closeupPanel.getBackgroundColor());
 		else
 			setBackground(Color.white);
 	}
-	
+
 	protected void drawBaseInfo(Graphics2D g, Color inverseBlackColor, long state, long complementState, String baseString, String complementString, int[] trace, int pos, int textLeft, int baseVert) {
 		Color baseColor;
 		if (isShownComplemented())
@@ -231,19 +254,35 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 	public synchronized void paint(Graphics g) {	
 		if (MesquiteWindow.checkDoomed(this)) 
 			return;
-		if (!(g instanceof Graphics2D) || chromatograms==null || chromatograms.length==0 || chromatograms[SETREAD]==null)
+		if (!(g instanceof Graphics2D) || chromatograms==null || chromatograms.length==0 || chromatograms[SETREAD]==null){
+			setBackground(contigDisplay.getBackgroundColor());
 			return;
+		}
+
 		int v = 0;//-verticalPosition;
 		Graphics2D g2 = (Graphics2D)g;
-	    
+
 
 		if (chromatograms==null || chromatograms.length==0 || chromatograms[SETREAD]==null)
 			return;
 		Read read = chromatograms[SETREAD].getRead();
+
+		if (read.getComplemented())
+			g.setColor(Color.red);
+		else 
+			g.setColor(Color.black);
+
+
+		String readName = chromatograms[SETREAD].getTitle();
+
+		if (StringUtil.notEmpty(readName))
+			g.drawString(readName, 10,20);
+
+
 		int cheight = getBounds().height;
-//		int shadowHeight = 5;
-	//	int labelHeight = 18;
-	//	ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
+		//		int shadowHeight = 5;
+		//	int labelHeight = 18;
+		//	ChromaseqUniversalMapper universalMapper = contigDisplay.getUniversalMapper();
 
 		int cwidth = getBounds().width;
 		double vertScale = 8.0;
@@ -252,6 +291,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		int approximatePeaks = cwidth/widthPerPeak;
 		int halfPeaks = approximatePeaks/2;
 		if (halfPeaks<1) halfPeaks=1;
+		//		closeupPanel.drawCloseupBox(halfPeaks);
 
 		centerBase=contigDisplay.getCenterBase();
 		if  (!MesquiteInteger.isCombinable(centerReadBase)) {
@@ -299,12 +339,14 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 
 		int firstReadBase = centerReadBase - halfPeaks;
 		int lastReadBase = centerReadBase+ halfPeaks;
-		
+
 		//contigDisplay.getCenterBase();
-	//	contigDisplay.getApproximateNumberOfPeaksVisible();
+		//	contigDisplay.getApproximateNumberOfPeaksVisible();
 
 
 		int maxHeight = 0;
+		if (A==null || C==null || G==null || T == null)
+			return;
 		for (int i=0; i<A.length;i++) {
 			if (A[i]>maxHeight)
 				maxHeight = A[i];
@@ -321,33 +363,33 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 			if (T[i]>maxHeight)
 				maxHeight = T[i];
 		}
-	//	Debugg.println("maxHeight: " + maxHeight);
-//		Debugg.println("   getHeight: " + getHeight());
-		
-		vertScale=(int)(maxHeight/(peakBottom-peakTop));
-	//	if (vertScale>0)
-	//		maxHeight = (int)(maxHeight/vertScale);
-	//	maxHeight = (int)(maxHeight/vertScale);
+		//	Debugg.println("maxHeight: " + maxHeight);
+		//		Debugg.println("   getHeight: " + getHeight());
 
-		
+		vertScale=(int)(maxHeight/(peakBottom-peakTop));
+		//	if (vertScale>0)
+		//		maxHeight = (int)(maxHeight/vertScale);
+		//	maxHeight = (int)(maxHeight/vertScale);
+
+
 		int firstReadLocation = getPhdLocation(read, cwidth, firstReadBase,contigDisplay,true);
 		int lastReadLocation = getPhdLocation(read, cwidth, lastReadBase,contigDisplay,true);
 		if (lastReadLocation!=firstReadLocation)
 			horizScale = (1.0*cwidth)/(lastReadLocation-firstReadLocation);
-//		int firstReadLocation = getPhdLocation(read, cwidth, centerReadBase,contigDisplay,true) - cwidth/2;
+		//		int firstReadLocation = getPhdLocation(read, cwidth, centerReadBase,contigDisplay,true) - cwidth/2;
 
-/*		Debugg.println("    +++++ centerReadBase: " + centerReadBase);
+		/*		Debugg.println("    +++++ centerReadBase: " + centerReadBase);
 		Debugg.println("    +++++ horizScale: " + horizScale);
 		Debugg.println("    +++++ A.length: " + A.length);
 		Debugg.println("    +++++ firstReadLocation: " + firstReadLocation + " lastReadLocation: " + lastReadLocation);
 
-	*/	
+		 */	
 
 		g.setColor(Color.lightGray);
-	    g2.setStroke(new BasicStroke(1));
+		g2.setStroke(new BasicStroke(1));
 		g2.drawLine(cwidth/2,0,cwidth/2, peakBottom);
 		g2.drawLine(0,peakBottom,cwidth, peakBottom);
-	    g2.setStroke(new BasicStroke(2));
+		g2.setStroke(new BasicStroke(2));
 
 
 
@@ -361,7 +403,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		int nextPosInChromatogram = firstReadLocation;
 		Color baseColor;
 
-	//	int half = firstReadLocation + (lastReadLocation-firstReadLocation)/2;
+		//	int half = firstReadLocation + (lastReadLocation-firstReadLocation)/2;
 
 		for (int posInChromatogram=firstReadLocation;posInChromatogram <= lastReadLocation;posInChromatogram++) {   //this goes through the pixels that are to be displayed, and sees if any from this read are in here
 
@@ -375,7 +417,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 				//				if (!(readPos>=0&&readPos+2<A.length )) Debugg.println("! ic " + ic + "  " + readPos + "  " + A.length + " firstReadLocation " + firstReadLocation);
 
 
-				if (MesquiteInteger.isCombinable(posInChromatogram) && (posInChromatogram>=0&&posInChromatogram+2<A.length )) {  //is it within bounds of read?
+				if (MesquiteInteger.isCombinable(previousPosInChromatogram) && previousPosInChromatogram>=0 && MesquiteInteger.isCombinable(posInChromatogram) && (posInChromatogram>=0&&posInChromatogram+2<A.length )) {  //is it within bounds of read?
 					int minPeakHeightToDraw = 3;
 					if (A[posInChromatogram]>minPeakHeightToDraw || C[posInChromatogram]>minPeakHeightToDraw || G[posInChromatogram]>minPeakHeightToDraw || T[posInChromatogram]>minPeakHeightToDraw){
 
@@ -393,7 +435,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
 							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,A,peakBottom, vertScale, horizScale, firstReadLocation);
-						//	Debugg.println("A: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
+							//	Debugg.println("A: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowC()) {
 							if (isShownComplemented())
@@ -404,7 +446,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
 							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,C,peakBottom, vertScale,  horizScale, firstReadLocation);
-						//	Debugg.println("C: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
+							//	Debugg.println("C: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowG()) {
 							if (isShownComplemented())
@@ -415,7 +457,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
 							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,G,peakBottom, vertScale, horizScale, firstReadLocation);
-						//	Debugg.println("G: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
+							//	Debugg.println("G: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowT()) {
 							if (isShownComplemented())
@@ -426,7 +468,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
 							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,T,peakBottom, vertScale,  horizScale, firstReadLocation);
-						//	Debugg.println("T: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
+							//Debugg.println("T: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 					}
 				}
@@ -484,21 +526,21 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 							traceHeights[i]=-1;
 						}
 					}
-					
+
 					for (int i=3; i>=0;i--){
 						if (originalTraceHeights[orderInt[i]]>0) {
 							drawBaseInfo(g2,  inverseBlackColor, order[i], posInChromatogram,  textLeft,  baseVert);
 							baseVert+=inc;
 						}
 					}
-					
+
 					long firstPair = DNAState.union(order[3], order[2]);
 					long firstTriplet = DNAState.union(order[3], order[2]);
 					firstTriplet = DNAState.union(firstTriplet,order[1]);
 					int ambShift=55;
 					if (originalTraceHeights[orderInt[2]]>originalTraceHeights[orderInt[3]]/10){
 						g2.setColor(Color.gray);
-					    g2.setStroke(new BasicStroke(1));
+						g2.setStroke(new BasicStroke(1));
 						g.drawLine(textLeft+ambShift, ambiguityVert-inc-inc/2, textLeft+ambShift, ambiguityVert+inc/2);
 						drawAmbiguityInfo(g2,  firstPair,  textLeft+ambShift+4,  ambiguityVert);
 						ambiguityVert+=inc/2;
@@ -506,7 +548,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 							g.drawLine(textLeft+ambShift+20, ambiguityVert-inc*2, textLeft+ambShift+20, ambiguityVert+inc);
 							drawAmbiguityInfo(g2,  firstTriplet,  textLeft+ambShift+25,  ambiguityVert);
 						}
-				}
+					}
 
 
 				}
@@ -514,10 +556,10 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		}
 
 
-		
-		
-		
-		
+
+
+
+
 
 
 		MesquiteWindow.uncheckDoomed(this);

@@ -37,6 +37,8 @@ public class ChromaseqUtil{
 	public static final int ChromaseqRegistrationBuild = 25;
 	public static final int LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION = 25;
 
+	public static Color veryVeryLightBlue = new Color((float)0.92, (float)0.92, (float)0.99);  
+
 	/*  
 	registration builds:
 	23: first build of new (November 2009), apparently file-format-complete ChromaseqUniversalMapper and ContigMapper scheme
@@ -742,7 +744,7 @@ public class ChromaseqUtil{
 	public static double getQualityScoreForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
 		ContinuousData qualityData = getQualityData(data);
 		MeristicData registryData = getRegistryData(data);
-		if (registryData==null)
+		if (registryData==null || qualityData==null)
 			return 0.0;
 		int mapping = registryData.getState(ic, it);
 		return qualityData.getState(mapping, it, 0);

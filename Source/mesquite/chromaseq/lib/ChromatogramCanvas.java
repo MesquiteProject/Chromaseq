@@ -68,7 +68,8 @@ public class ChromatogramCanvas extends MousePanel {
 //		setBackground(Color.white);
 		reads =new Read[numChromatograms];
 		for (int i = 0; i<numChromatograms; i++)
-			reads[i] = chromatograms[i].getRead();
+			if (chromatograms[i]!=null)
+				reads[i] = chromatograms[i].getRead();
 		setBackgroundColor();
 		int i;
 		maxValue = 0;
@@ -136,6 +137,8 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 	/*..........................*/
 	public void initTraces(int chrom) {
+		if (chromatograms[chrom]==null) return;
+		
 		A = chromatograms[chrom].getATrace();
 		C = chromatograms[chrom].getCTrace();
 		G = chromatograms[chrom].getGTrace();
@@ -616,9 +619,11 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 
 	public static int SETREAD = 0;
+	public static int CLOSEUPREAD = 0;
 	/*...............................................................................................................*/
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
+		Debugg.println("MOUSEDOWN ChromatogramCanvas");
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		int ic = findUniversalBaseNumber(SETREAD, x); 
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);

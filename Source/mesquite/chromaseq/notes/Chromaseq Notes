@@ -1,6 +1,13 @@
 Next Beta
 
 
+- undo within chromatogram viewer
+
+- on RC sequences primers shown in wrong place?
+
+- speed up primers
+- primer match calculated too many times
+
 
 ----
 
@@ -11,17 +18,16 @@ To Do:
 - SequenceNameSource and PrimerInfoSource for 96-well/Excel style systems
 - XML support in SequenceNameFromTextFile and PrimerInfoFromTextFile
 
-- get Phred and Phrap to report back their version numbers
 - clean up  "./info.xml: file read error: unknown file type" by hiding it in a subdirectory?
 - have pre-flight option to check plumbing is in place and names and primer sources all OK
-- closeup panel remember the last panel on which you touched, and that becomes the default if the cursor is out of the zone?
-- on purging of Chromaseq data, have it switch off ColorByQuality
-- on RC sequences primers shown in wrong place?
-- speed up primers
-- undo within chromatogram viewer
-- primer match calculated too many times
 
+
+
+Luxury:
+
+- on purging of Chromaseq data, have it switch off ColorByQuality
 -Remote copy of PhredPhrap versus local (e.g. remote, http & cgi-bin etc.; local: shell script)
+
 
 =====
 
