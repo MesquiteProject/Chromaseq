@@ -303,12 +303,12 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 				some  |= here;
 				here = writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
 				some  |= here;
-				here = writeLongs(sb, data,ChromaseqUtil.trimmableNameRef);
+				here = writeLongs(sb, data,ChromaseqUtil.chromaseqCellFlagsNameRef);
 				some  |= here;
 				Associable tInfo = data.getTaxaInfo(false);
 				if (tInfo != null) {
 					sb.append("\n\tTAXAINFO" + " ;" + StringUtil.lineEnding());
-					here = writeLongs(sb, tInfo, ChromaseqUtil.trimmableNameRef);
+					here = writeLongs(sb, tInfo, ChromaseqUtil.chromaseqCellFlagsNameRef);
 					some  |= here;
 					here = writeLongs(sb, tInfo, ChromaseqUtil.numChromatogramsRef);
 					some  |= here;
@@ -368,12 +368,12 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 				some  |= here;
 				here = writeAttached(sb,  data, ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
 				some  |= here;
-				here = writeLongs(sb, data,ChromaseqUtil.trimmableNameRef);
+				here = writeLongs(sb, data,ChromaseqUtil.chromaseqCellFlagsNameRef);
 				some  |= here;
 				Associable tInfo = data.getTaxaInfo(false);
 				if (tInfo != null) {
 					sb.append("\n\tTAXAINFO" + " ;" + StringUtil.lineEnding());
-					here = writeLongs(sb, tInfo, ChromaseqUtil.trimmableNameRef);
+					here = writeLongs(sb, tInfo, ChromaseqUtil.chromaseqCellFlagsNameRef);
 					some  |= here;
 					here = writeLongs(sb, tInfo, ChromaseqUtil.numChromatogramsRef);
 					some  |= here;

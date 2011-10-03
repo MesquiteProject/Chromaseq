@@ -36,6 +36,8 @@ public class ChromaseqUtil{
 	public static final int ChromaseqBuild = 25;
 	public static final int ChromaseqRegistrationBuild = 25;
 	public static final int LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION = 25;
+	
+
 
 	public static Color veryVeryLightBlue = new Color((float)0.92, (float)0.92, (float)0.99);  
 
@@ -45,6 +47,11 @@ public class ChromaseqUtil{
 	24: first build with single-read code in, 25 November 2009
 	25: build of 27 November 2009, after fixing padding issue
 	 * */
+
+	public static final int NORMAL = 0;
+	public static final int MANUALLYCHANGED = 2;
+	public static final int CHECK = 3;
+	public static final int CHECK2 = 4;
 
 	public static final int TRIMMABLE=1;
 	public static final int BASECALLED=2;
@@ -91,16 +98,13 @@ public class ChromaseqUtil{
 //	public static final NameReference singleReadRef = NameReference.getNameReference("singleRead");//long: tinfo
 	public static final NameReference startTrimRef = NameReference.getNameReference("startTrim");//long: tInfo
 	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
-	public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //long: tInfo, data(ch); MesquiteInteger: data(cells)
+	public static final NameReference chromaseqCellFlagsNameRef = NameReference.getNameReference("trimmable"); //long: tInfo, data(ch); MesquiteInteger: data(cells)
 
 	public static final NameReference contigMapperRef = NameReference.getNameReference("contigMapper");
 
 	public static final NameReference qualityNameRef = NameReference.getNameReference("phredPhrapQuality"); //double: tinfo
 
-	//public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //long: data(ch); MesquiteInteger: data(cells)
-
 	public static final NameReference paddingRef = NameReference.getNameReference("paddingBefore"); //MesquiteInteger: data(cells)
-	//public static final NameReference trimmableNameRef = NameReference.getNameReference("trimmable"); //MesquiteInteger: data(cells)
 
 
 	/*.................................................................................................................*/
@@ -206,7 +210,7 @@ public class ChromaseqUtil{
 		if (data == null)
 			return false;
 		if (ic>=0 && it>=0){ 
-			int trim =  ChromaseqUtil.getIntegerCellObject(data, trimmableNameRef, ic, it);
+			int trim =  ChromaseqUtil.getIntegerCellObject(data, chromaseqCellFlagsNameRef, ic, it);
 			return trim==ChromaseqUtil.TRIMMABLE;
 		}
 		return false;
@@ -215,7 +219,7 @@ public class ChromaseqUtil{
 		if (data == null)
 			return false;
 		if (ic>=0 && it>=0){ 
-			int trim =  ChromaseqUtil.getIntegerCellObject(data, trimmableNameRef, ic, it);
+			int trim =  ChromaseqUtil.getIntegerCellObject(data, chromaseqCellFlagsNameRef, ic, it);
 			return trim==ChromaseqUtil.BASECALLED;
 		}
 		return false;
@@ -756,7 +760,13 @@ public class ChromaseqUtil{
 		if (registryData==null)
 			return 0;
 		int mapping = registryData.getState(ic, it);
-		return originalData.getStateRaw(mapping, it);
+		return originalData.getState(mapping, it);
+	}
+	/*.................................................................................................................*/
+	public static boolean editedMatrixBaseSameAsOriginal(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
+		long originalState = ChromaseqUtil.getOriginalStateForEditedMatrixBase(data, ic, it);
+		long currentState = ((DNAData)data).getState(ic,it);
+		return originalState==currentState;
 	}
 	/*.................................................................................................................*/
 	public static boolean originalIsInapplicableForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
@@ -837,13 +847,13 @@ public class ChromaseqUtil{
 			 tInfo.removeAssociatedLongs(numChromatogramsRef);
 			 tInfo.removeAssociatedLongs(whichContigRef);
 			 tInfo.removeAssociatedLongs(startTrimRef);
-			 tInfo.removeAssociatedLongs(trimmableNameRef);
+			 tInfo.removeAssociatedLongs(chromaseqCellFlagsNameRef);
 			 tInfo.removeAssociatedDoubles(qualityNameRef);
 		 }
 		removeAssociatedObjects(editedData, paddingRef);
 	//	removeAssociatedObjects(editedData, qualityNameRef);
 		removeAssociatedObjects(editedData, contigMapperRef);
-		removeAssociatedObjects(editedData, trimmableNameRef);
+		removeAssociatedObjects(editedData, chromaseqCellFlagsNameRef);
 	//	removeAssociatedObjects(editedData, whichContigRef);
 		removeAssociatedObjects(editedData, startTrimRef);
 		removeAssociatedObjects(editedData, sampleCodeRef);

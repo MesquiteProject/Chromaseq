@@ -14,6 +14,8 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.ViewChromatograms; 
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.QuadCurve2D;
 
@@ -33,6 +35,10 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 	int readBaseNumber;
 	Chromatogram currentChromatogram = null;
 	boolean showCenterBase = false;
+	boolean showSourceBase = true;
+	boolean showTouchedBase = false;
+	int touchedBase = 0;
+
 
 	public ChromatogramCloseupPanel(ClosablePanelContainer container, Chromatogram myChrom, ContigDisplay panel, int id, int contigID) {
 		this.id = id;  // this is the read number
@@ -83,12 +89,59 @@ public class ChromatogramCloseupPanel extends ChromatogramPanel{
 		return (chromatogram.equals(chromatograms[0]));
 	}
 
+	/*_________________________________________________*/
+	public void setCloseupPanel(boolean showCenterBase, Chromatogram newChromatogram, boolean centerPanel) {
+		
+		if (!getShowCenterBase() && getChromatogram()!=null)
+			setChromatogram(null);
+
+		setShowCenterBase(showCenterBase);
+
+		Chromatogram chromatogram = getChromatogram();
+
+		if (!newChromatogram.equals(chromatogram)) {
+			BasicChromatogramPanel oldChromatogramPanel = contigDisplay.getChromatogramPanel(chromatogram);
+
+			//repaint previous one
+			setChromatogram(newChromatogram);
+			if (oldChromatogramPanel!=null)
+				oldChromatogramPanel.repaint();
+			if (centerPanel)
+				centerPanelAtOverallPosition(centerBase);
+
+			BasicChromatogramPanel newChromatogramPanel = contigDisplay.getChromatogramPanel(newChromatogram);
+			newChromatogramPanel.repaint();
+		}
+
+	}
 	/*.................................................................................................................*/
 	public boolean getShowCenterBase() {
 		return showCenterBase;
 	}
 	public void setShowCenterBase(boolean showCenterBase) {
 		this.showCenterBase = showCenterBase;
+	}
+	/*.................................................................................................................*/
+	public boolean getShowTouchedBase() {
+		return showTouchedBase;
+	}
+	public void setShowTouchedBase(boolean showTouchedBase) {
+		this.showTouchedBase = showTouchedBase;
+	}
+	/*.................................................................................................................*/
+	public boolean getShowSourceBase() {
+		return showSourceBase;
+	}
+	public void setShowSourceBase(boolean showSourceBase) {
+		this.showSourceBase = showSourceBase;
+	}
+
+	/*.................................................................................................................*/
+	public int getTouchedBase() {
+		return touchedBase;
+	}
+	public void setTouchedBase(int touchedBase) {
+		this.touchedBase = touchedBase;
 	}
 
 	/*.................................................................................................................*/
@@ -262,7 +315,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		int v = 0;//-verticalPosition;
 		Graphics2D g2 = (Graphics2D)g;
 
-
 		if (chromatograms==null || chromatograms.length==0 || chromatograms[SETREAD]==null)
 			return;
 		Read read = chromatograms[SETREAD].getRead();
@@ -294,6 +346,7 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		//		closeupPanel.drawCloseupBox(halfPeaks);
 
 		centerBase=contigDisplay.getCenterBase();
+				
 		if  (!MesquiteInteger.isCombinable(centerReadBase)) {
 			if (contigDisplay.contigExists()) {		
 				centerReadBase = getReadBaseFromUniversalBase(SINGLEREAD,centerBase);
@@ -579,6 +632,5 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 	}
 	public void mouseEntered(int modifiers, int x, int y, MesquiteTool tool) {
 	}
-	/*...............................................................................................................*/
 
 }
