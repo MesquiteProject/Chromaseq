@@ -1,19 +1,21 @@
 Next Beta
 
-add orange tool to chromaseq window
 
-- undo within chromatogram viewer
+Manual:
+	- undo
+	- closeup panel
 
-- on RC sequences primers shown in wrong place?
 
-- speed up primers
-- primer match calculated too many times
+To release:
+UndoInstructions
+MesquiteModule
 
 
 ----
 
 
 To Do:
+- on RC sequences primers shown in wrong place?
 
 - SequenceNameSource and PrimerInfoSource for BP-style systems
 - SequenceNameSource and PrimerInfoSource for 96-well/Excel style systems

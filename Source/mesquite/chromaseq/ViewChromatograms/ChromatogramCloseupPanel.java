@@ -354,13 +354,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 				int universalBaseOfChromatogramEnd = getUniversalBaseFromReadBase(SINGLEREAD,read.getBasesLength()-1);
 
 
-				/*		
-			Debugg.println("\n\n" + read.getName() );
-			Debugg.println("    +++++ centerBase: " + centerBase);
-			Debugg.println("    +++++ universalBaseOfChromatogramStart: " + universalBaseOfChromatogramStart);
-			Debugg.println("    +++++ universalBaseOfChromatogramEnd: " + universalBaseOfChromatogramEnd);
-				 */
-
 				if (MesquiteInteger.isCombinable(centerBase) && centerBase>=0 && (!MesquiteInteger.isCombinable(centerReadBase) || centerReadBase<0)) {  // find the nearest one that works
 					if (centerBase>=universalBaseOfChromatogramStart && centerBase<universalBaseOfChromatogramEnd) {
 						for (int i=centerBase-1; i>=0; i--) {
@@ -416,8 +409,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 			if (T[i]>maxHeight)
 				maxHeight = T[i];
 		}
-		//	Debugg.println("maxHeight: " + maxHeight);
-		//		Debugg.println("   getHeight: " + getHeight());
 
 		vertScale=(int)(maxHeight/(peakBottom-peakTop));
 		//	if (vertScale>0)
@@ -431,12 +422,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 			horizScale = (1.0*cwidth)/(lastReadLocation-firstReadLocation);
 		//		int firstReadLocation = getPhdLocation(read, cwidth, centerReadBase,contigDisplay,true) - cwidth/2;
 
-		/*		Debugg.println("    +++++ centerReadBase: " + centerReadBase);
-		Debugg.println("    +++++ horizScale: " + horizScale);
-		Debugg.println("    +++++ A.length: " + A.length);
-		Debugg.println("    +++++ firstReadLocation: " + firstReadLocation + " lastReadLocation: " + lastReadLocation);
-
-		 */	
 
 		g.setColor(Color.lightGray);
 		g2.setStroke(new BasicStroke(1));
@@ -461,13 +446,11 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 		for (int posInChromatogram=firstReadLocation;posInChromatogram <= lastReadLocation;posInChromatogram++) {   //this goes through the pixels that are to be displayed, and sees if any from this read are in here
 
 			int ic = findConsensusBaseNumber(SINGLEREAD,posInChromatogram, firstReadBase, lastReadBase, firstReadLocation);
-			//			if (!MesquiteInteger.isCombinable(ic)) Debugg.println("! ic " + ic);
 			if (MesquiteInteger.isCombinable(ic)&&MesquiteInteger.isCombinable(firstReadLocation)){
 				if (MesquiteInteger.isCombinable(lastReadPos))
 					lostSpaceByInsert += posInChromatogram - lastReadPos -2;
 				lastReadPos = posInChromatogram;
 				//posInChromatogram -= lostSpaceByInsert;
-				//				if (!(readPos>=0&&readPos+2<A.length )) Debugg.println("! ic " + ic + "  " + readPos + "  " + A.length + " firstReadLocation " + firstReadLocation);
 
 
 				if (MesquiteInteger.isCombinable(previousPosInChromatogram) && previousPosInChromatogram>=0 && MesquiteInteger.isCombinable(posInChromatogram) && (posInChromatogram>=0&&posInChromatogram+2<A.length )) {  //is it within bounds of read?
@@ -488,7 +471,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
 							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,A,peakBottom, vertScale, horizScale, firstReadLocation);
-							//	Debugg.println("A: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowC()) {
 							if (isShownComplemented())
@@ -499,7 +481,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
 							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,C,peakBottom, vertScale,  horizScale, firstReadLocation);
-							//	Debugg.println("C: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowG()) {
 							if (isShownComplemented())
@@ -510,7 +491,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
 							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,G,peakBottom, vertScale, horizScale, firstReadLocation);
-							//	Debugg.println("G: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 						if (closeupPanel.getShowT()) {
 							if (isShownComplemented())
@@ -521,7 +501,6 @@ class CloseupChromatogramCanvas extends ChromatogramCanvas {
 								baseColor = inverseBlackColor;
 							g.setColor(baseColor);
 							drawCurve(g2, cwidth, previousPosInChromatogram, posInChromatogram,nextPosInChromatogram,T,peakBottom, vertScale,  horizScale, firstReadLocation);
-							//Debugg.println("T: " + previousPosInChromatogram + " " + posInChromatogram + " " + nextPosInChromatogram);
 						}
 					}
 				}

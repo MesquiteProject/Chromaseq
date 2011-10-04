@@ -229,7 +229,6 @@ public class ChromatogramCanvas extends MousePanel {
 				cmid = getFontMetrics(f).charWidth(chromatogram.getBase(i)) / 2;
 			if (xPixel < chromatogram.getReadBaseLocation(i) - firstReadLocation - cmid + offsetForInserted) {
 				int cons = getConsensusBaseFromReadBase(i-1);
-//Debugg.println("findConsensusPosition i  " + i  + chromatogram.getBase(i) + "  " + cons);
 				return cons;
 			}
 		}
@@ -499,7 +498,7 @@ public class ChromatogramCanvas extends MousePanel {
 	 * Note that it does NOT translate to the base number within the read, as selection can now happen even if 
 	 * there is no read there */
 	public boolean setSelectedInChrom(int overallBase, boolean sel, boolean repaint){
-//		why is this called an absurd number of times  Debugg.println("1");
+//		why is this called an absurd number of times 
 		if (selected != null && overallBase >= 0 && overallBase<selected.length) {
 			if (selected[overallBase] == sel)
 				return false;
@@ -509,7 +508,6 @@ public class ChromatogramCanvas extends MousePanel {
 			return true;
 		}
 		return false;
-//		Debugg.println("2");
 	}
 	/*--------------------------------------*/
 	/** Given the overall base numbering, as given in overallBase, this method selects that base within this contig*/
@@ -518,7 +516,6 @@ public class ChromatogramCanvas extends MousePanel {
 //		int readBase = getReadBaseFromConsensusBase(consensusBase);
 //		if (j <0 || j>= chromatogram.getTraceLength())
 //		return;
-//		Debugg.println("|||||||||||| selectOverallBase,  overallBase: " + overallBase + " consensusBase " + consensusBase);
 		if (overallBase <0 || overallBase> selected.length)
 			return;
 		selected[overallBase] = true;
@@ -588,7 +585,7 @@ public class ChromatogramCanvas extends MousePanel {
 	}
 	/*...........................................................................*/
 	protected int getY (int[] trace, int peakBottom, int posInChromatogram, double vertScale) {
-		if (posInChromatogram<0)
+		if (posInChromatogram<0 || posInChromatogram>=trace.length)
 			return 0;
 		if (shadowOffset != 0 && (posInChromatogram-shadowOffset>=0&&posInChromatogram-shadowOffset<A.length ))
 			return peakBottom-(int)((trace[posInChromatogram] - shadowReduction*trace[posInChromatogram-shadowOffset]) / vertScale);
@@ -623,7 +620,6 @@ public class ChromatogramCanvas extends MousePanel {
 	/*...............................................................................................................*/
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
-		Debugg.println("MOUSEDOWN ChromatogramCanvas");
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		int ic = findUniversalBaseNumber(SETREAD, x); 
 		boolean onRequiredSelection = chromTool.getWorksOnlyOnSelection() && !getSelected(ic);
@@ -751,7 +747,6 @@ public class ChromatogramCanvas extends MousePanel {
 			ic = findUniversalBaseNumber(SETREAD, x); 
 			readBaseNumber = ic;
 		}
-//		Debugg.println("ChromatogramCanvas  closeupPanel: " + closeupPanel);
 		if (closeupPanel!=null)
 			closeupPanel.setReadBaseNumber(readBaseNumber);
 

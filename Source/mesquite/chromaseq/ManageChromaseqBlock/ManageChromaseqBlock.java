@@ -122,39 +122,39 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	/*.................................................................................................................*
 	void reportAttached(Associable a, String nr){
 		if (a.getAttachment(nr) != null)
-			Debugg.println("YES attached [" + nr + " = " + a.getAttachment(nr) + "] " +   a.getName());
+			logln("YES attached [" + nr + " = " + a.getAttachment(nr) + "] " +   a.getName());
 		else
-			Debugg.println("NO attached [" + nr + "] " + a.getName());
+			logln("NO attached [" + nr + "] " + a.getName());
 	}
 	void reportObject(Associable a, NameReference nr){
 		if (a.anyAssociatedObject(nr))
-			Debugg.println("YES object [" + nr.getValue() + " ; 0 = " + a.getAssociatedObject(nr, 0)+ "] " + a.getName());
+			logln("YES object [" + nr.getValue() + " ; 0 = " + a.getAssociatedObject(nr, 0)+ "] " + a.getName());
 		else
-			Debugg.println("NO object [" + nr.getValue() + "] " + a.getName());
+			logln("NO object [" + nr.getValue() + "] " + a.getName());
 	}
 	void reportLong(Associable a, NameReference nr){
 		if (a.getWhichAssociatedLong(nr) == null)
-			Debugg.println("NO long [" + nr.getValue() + " ; 0 = " + MesquiteLong.toString(a.getAssociatedLong(nr, 0))+ "] " + a.getName());
+			logln("NO long [" + nr.getValue() + " ; 0 = " + MesquiteLong.toString(a.getAssociatedLong(nr, 0))+ "] " + a.getName());
 		else
-			Debugg.println("YES long [" + nr.getValue() + "] " + a.getName());
+			logln("YES long [" + nr.getValue() + "] " + a.getName());
 	}
 	void reportDouble(Associable a, NameReference nr){
 		if (a.getWhichAssociatedDouble(nr) == null)
-			Debugg.println("NO double [" + nr.getValue() + " ; 0 = " + MesquiteDouble.toString(a.getAssociatedDouble(nr, 0))+ "] " + a.getName());
+			logln("NO double [" + nr.getValue() + " ; 0 = " + MesquiteDouble.toString(a.getAssociatedDouble(nr, 0))+ "] " + a.getName());
 		else
-			Debugg.println("YES double [" + nr.getValue() + "] " + a.getName());
+			logln("YES double [" + nr.getValue() + "] " + a.getName());
 	}
 	void reportCellObjects(mesquite.lib.characters.CharacterData data, NameReference nr){
 		if (data.getWhichCellObjects(nr) == null)
-			Debugg.println("NO cell objects [" + nr.getValue() + " ; 0,0 = " + data.getCellObject(nr, 0,0)+ "] " + data.getName());
+			logln("NO cell objects [" + nr.getValue() + " ; 0,0 = " + data.getCellObject(nr, 0,0)+ "] " + data.getName());
 		else
-			Debugg.println("YES cell objects [" + nr.getValue() + "] " + data.getName());
+			logln("YES cell objects [" + nr.getValue() + "] " + data.getName());
 	}
 	void convertOldToNew(){
 		MesquiteProject proj = getProject();
 		int numT = proj.getNumberTaxas();
 		for (int i = 0; i<numT; i++){
-			Debugg.println("=====TAXA=======");
+			logln("=====TAXA=======");
 			Taxa taxa = proj.getTaxa(i);
 			reportObject(taxa, ChromaseqUtil.voucherCodeRef);
 			reportObject(taxa, ChromaseqUtil.voucherDBRef);
@@ -163,7 +163,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		int numM = proj.getNumberCharMatrices();
 		for (int i = 0; i<numM; i++){
 			mesquite.lib.characters.CharacterData data = proj.getCharacterMatrix(i);
-			Debugg.println("=========MATRIX=======" + data.getName());
+			logln("=========MATRIX=======" + data.getName());
 			reportAttached(data, ChromaseqUtil.PHPHIMPORTIDREF);
 			reportAttached(data, ChromaseqUtil.GENENAMEREF);
 			reportAttached(data, ChromaseqUtil.PHPHMQVERSIONREF);
@@ -171,7 +171,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 			reportLong(data,ChromaseqUtil.trimmableNameRef);
 			Associable tInfo = data.getTaxaInfo(false);
 			if (tInfo == null)
-				Debugg.println("NO TINFO  " + data.getName());
+				logln("NO TINFO  " + data.getName());
 			else {
 				reportLong(tInfo, ChromaseqUtil.trimmableNameRef);
 				reportLong(tInfo, ChromaseqUtil.chromatogramsExistRef);
@@ -270,9 +270,9 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	}
 	void writeCellObjects(StringBuffer sb, mesquite.lib.characters.CharacterData data, NameReference nr){
 		if (data.getWhichCellObjects(nr) == null)
-			Debugg.println("NO cell objects [" + nr.getValue() + " ; 0,0 = " + data.getCellObject(nr, 0,0)+ "] " + data.getName());
+			logln("NO cell objects [" + nr.getValue() + " ; 0,0 = " + data.getCellObject(nr, 0,0)+ "] " + data.getName());
 		else
-			Debugg.println("YES cell objects [" + nr.getValue() + "] " + data.getName());
+			logln("YES cell objects [" + nr.getValue() + "] " + data.getName());
 	}
 	/*----------------------------------------*/
 	String getBlockContentsOld(){

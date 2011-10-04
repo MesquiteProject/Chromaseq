@@ -177,7 +177,6 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 		firstBase=pos;
 
 		contigOverviewCanvas.setPosition(firstBase);
-//		Debugg.println("firstBase: " + firstBase);
 		contigOverviewCanvas.repaint();
 	}
 
@@ -366,7 +365,6 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 
 		Color baseColor;
 		
-//		Debugg.println(" |||||||||||||||||| " + read.getName());
 
 //		=====================  COLOR THE BASES OF THE READ ==============================
 		int firstLocation = -1;
@@ -455,17 +453,7 @@ class ContigOverviewCanvas extends ChromatogramCanvas {
 			int centerOfBox = (box.x+box.width/2);
 			offsetInBox = x-centerOfBox;
 			int universalBase = getUniversalBaseFromLocation(x-offsetInBox,getGraphics()); 
-	/*		Debugg.println("...........");
-			Debugg.println("x: " + x);
-			Debugg.println("centerOfBox: " + centerOfBox);
-			Debugg.println("offsetInBox: " + offsetInBox);
-			Debugg.println("x-offsetInBox (location): " + (x-offsetInBox));
-			Debugg.println("firstBase: " + firstBase);
-			Debugg.println("getLeftBoundaryOfOverview(g) (left): " + getLeftBoundaryOfOverview(getGraphics()));
-			Debugg.println("contigDisplay.getTotalNumUniversalBases(): " + contigDisplay.getTotalNumUniversalBases());
-			
-			Debugg.println("touch universalBase in box: " + universalBase);
-	*/	} else {
+		} else {
 			int numBases = contigDisplay.getUniversalMapper().getNumUniversalBases();
 			int universalBase = getUniversalBaseFromLocation(x-offsetInBox,getGraphics()); 
 			if (MesquiteInteger.isCombinable(universalBase) && universalBase>=0 && universalBase<numBases){

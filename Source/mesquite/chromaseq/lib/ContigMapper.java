@@ -258,9 +258,6 @@ public class ContigMapper {
 	}
 	/*.................................................................................................................*/
 	public void inferFromExistingRegistry(MolecularData editedData, int it, int numTrimmedFromStart, MesquiteModule ownerModule) {
-//		Debugg.println("\n======================  START OF INFER CONTIG MAPPER =============");
-//		Debugg.println(toString());
-//		Debugg.println("\n======================  ABOUT TO BEGIN CONTIG MAPPER =============");
 
 		checkContig(editedData,it, ownerModule);
 		
@@ -409,8 +406,6 @@ public class ContigMapper {
 		
 		
 		hasBeenSetUp = true;
-//		Debugg.println(toString());
-//		Debugg.println("\n======================  END OF INFER CONTIG MAPPER =============");
 	}
 	/*.................................................................................................................*/
 	public void setUp(MolecularData editedData, int it, int numTrimmedFromStart) {

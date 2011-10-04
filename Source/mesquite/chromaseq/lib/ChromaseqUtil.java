@@ -264,7 +264,6 @@ public class ChromaseqUtil{
 		mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock init = (mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock)ownerModule.findNearestColleagueWithDuty(mesquite.chromaseq.ManageChromaseqBlock.ManageChromaseqBlock.class);
 		if (init !=null) {
 			int build =  init.getChromaseqBuildOfFile();
-//			Debugg.println("build: " + build);
 			return build;
 		}
 		return 0;
@@ -556,8 +555,6 @@ public class ChromaseqUtil{
 		ContigMapper contigMapper = contigDisplay.getContigMapper();
 		
 		if (contigBase>=0){  //it matches a contig base; let's resurrect it
-//			if (!contigMapper.getDeletedBase(contigBase))
-//				Debugg.println("base not deleted! " + contigBase);
 			contigMapper.setDeletedBase(contigBase, false);
 			if (contigMapper.getIsPadding(contigBase)) {
 				//contigMapper.setPadding(contigBase,false);
@@ -763,6 +760,13 @@ public class ChromaseqUtil{
 		return originalData.getState(mapping, it);
 	}
 	/*.................................................................................................................*/
+	public static int getOriginalBaseNumberOfMatrixPosition(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
+		MeristicData registryData = getRegistryData(data);
+		if (registryData==null)
+			return 0;
+		return registryData.getState(ic, it);
+	}
+	/*.................................................................................................................*/
 	public static boolean editedMatrixBaseSameAsOriginal(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
 		long originalState = ChromaseqUtil.getOriginalStateForEditedMatrixBase(data, ic, it);
 		long currentState = ((DNAData)data).getState(ic,it);
@@ -937,7 +941,6 @@ public class ChromaseqUtil{
 		 contigMapper.markAsDeletedBasesTrimmedAtEnd(numTrimmedFromEnd);
 		 contigMapper.setStoredInFile(true);
 		 
-//		 Debugg.println("contigMapper inference, it: " + it + ", numTrimmedFromStart: " + numTrimmedFromStart);
 		 //======= now figure out bases internally added or deleted using alignment between originalTrimmed and editedData
 
 		 long[] editedBases = getEditedSequence(editedData,it);

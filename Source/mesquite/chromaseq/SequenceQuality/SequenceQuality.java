@@ -117,8 +117,6 @@ import mesquite.lib.duties.NumberForTaxon;
 	   		for (int ic = 0; ic<qualityData.getNumChars(false); ic++){
 	   			if (!data.isUnassigned(ic, it) && !qualityData.isInapplicable(ic, it)) {
 	   				double d = ChromaseqUtil.getQualityScoreForEditedMatrixBase(data,ic, it);
-	   				if (ic==0)
-	   					Debugg.println("" + it + ": " + d);
 	   				if (d>101 || MesquiteDouble.isCombinable(d))
 	   					;
 	   				else if (d>=90.0)

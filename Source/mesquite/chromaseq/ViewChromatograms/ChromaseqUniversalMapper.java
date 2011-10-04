@@ -97,7 +97,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 		if (obj instanceof CharacterData) {
 			CharacterData data = (CharacterData)obj;
 			
-//Debugg.println("---- ChromaseqUniversalMapper.changed()");
 			if (ChromaseqUtil.validChromaseqMatrix(data)) {
 				if (!(data.singleCellSubstitution(notification) && ChromaseqUtil.isChromaseqEditedMatrix(data))){
 					reset(true);
@@ -176,9 +175,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	/*.................................................................................................................*/
 	/* this method recalculates all mappings */
 	public synchronized void reset(boolean forceFullContigMapSetup) {
-//	Debugg.println("\n======= Resetting Universal Base Registry ======= " + (resetCount++));
-
-//	Debugg.println(toString());
 		it = contigDisplay.getTaxon().getNumber();
 		contigDisplay.setUniversalMapper(this);
 		reversedInEditData = contigDisplay.isReversedInEditedData();
@@ -503,8 +499,6 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	
 		hasBeenSet = true;
 
-	
-//		Debugg.println("\n======= End Resetting Universal Base Registry ======= " + resetCount);
 }
 	
 	/*.................................................................................................................*/

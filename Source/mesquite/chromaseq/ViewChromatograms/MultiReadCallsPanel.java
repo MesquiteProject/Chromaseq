@@ -358,7 +358,6 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 	/*--------------------------------------*/
 	/* to be used by subclasses to tell that panel touched */
 	public void mouseDown (int modifiers, int clickCount, long when, int x, int y, MesquiteTool tool) {
-		Debugg.println("MOUSEDOWN MultiReadCallsPanel");
 		ChromatogramTool chromTool = (ChromatogramTool)tool;
 		int whichRead = findRead(y);
 		if (whichRead<0) return;
