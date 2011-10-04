@@ -205,9 +205,14 @@
   <p>The names of the reads are the same as the original chromatogram file names. If they are colored in red, then they are the 5' end of the read is on the right, and the read goes from right to left; if in black, then the orientation is from left to right:</p>
   <p align="center"><img src="images/chromatogramPanelsArrows.png" width="438" height="232" /></p>
   <p>&nbsp;</p>
-  <h2>Closeup Panel</h2>
+  <h2>Close-up Panel</h2>
   <p>The closeup panel shows a magnified view of the peaks in one read; it shows the peaks where the mouse is positioned.</p>
   <p align="center"><img src="images/closeupPanel.png" width="199" height="347" /></p>
+  <p>The region of the read being shown in the close-up panel is indicated by a pale blue box behind that region of the read, as shown below.</p>
+  <p align="center"><img src="images/closeupLocation.png" width="190" height="236" /></p>
+  <p>By default, the close-up panel shows a close-up view of source read for the base on the center line of the window, that is, the primary read that Phrap used to make the base calls for the center base. If you wish to see other peaks, potentially in other reads, then touch on their peaks in the main chromatogram panel, and they will appear in the close-up panel. Or, you can hold down the Option key and hover over a peak, and it will appear in the close-up panel.</p>
+  <p>To keep the close-up panel focused on one particular read, turn off Chromatograms&gt;Show&gt;Close-Up Panel Shows Source Read. Then, touch the peaks of that read, and the close-up panel will show the center base of that read, and will continue to show that read as you navigate. If, however, you deselect the reads as the focus of the close-up panel, then hover over any read, the closeup panel will show that region over which you are hovering. To deselect the reads, touch on the small gray horizontal region immediately above the horizontal scroll bar, indicated by the arrow in the figure below.</p>
+  <p align="center"><img src="images/deselect.png" width="239" height="187" /></p>
   <p>&nbsp;</p>
   <h2>Overview Panel</h2>
   <p>The overview panel shows a bird's eye view of all of the reads in the contig. The little box shows the current view in the chromatogram panel. You can navigate by grabbing the box and dragging it around.</p>
@@ -218,7 +223,7 @@
 
     
     
-    </div>
+</div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>

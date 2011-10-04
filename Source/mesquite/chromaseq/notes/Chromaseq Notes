@@ -15,6 +15,8 @@ MesquiteModule
 
 
 To Do:
+- closeup panel box in main read when NOT showing source read and with no read selected
+
 - on RC sequences primers shown in wrong place?
 
 - SequenceNameSource and PrimerInfoSource for BP-style systems
