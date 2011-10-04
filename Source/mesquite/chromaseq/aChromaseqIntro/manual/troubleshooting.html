@@ -42,7 +42,7 @@
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Troubleshooting<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%">Beta Version 0.99<br />
-      30 October 2011<br /></td>
+      4 October 2011<br /></td>
   </tr>
 </table>
 
@@ -266,29 +266,26 @@
   (COI) -- Bemb perspicuum AZ 1120</p>
 <p class="monospacedSmall">========================</p>
 <p class="monospacedSmall">Processing of chromatogram files completed.</p>
+<p class="monospacedSmall">&nbsp;</p>
 <p>If your output does not look like this, you may have a problem.</p>
 <table width="800" border="0" cellpadding="8">
   <tr>
-    <td><strong>Symptom</strong></td>
-    <td><strong>Diagnosis</strong></td>
+    <td bgcolor="#EEEEEE"><strong>Symptom</strong></td>
+    <td bgcolor="#EEEEEE"><strong>Diagnosis and Solution</strong></td>
     </tr>
   <tr>
-    <td>Sections 1 through 3 look fine, but Sections 4 and 5 contain only a WARNING.</td>
-    <td>Phred or Phrap may have failed. Please check the output of the Terminal or Shell program that ran Phred and Phrap. If the line &quot;Aligning reads to contigs ...Segmentation fault&quot; appears in your output, then it is likely you have encountered the 64-bit bug in Phrap. Please contact Phil Green, the author of Phrap, explain the situation, and ask him for a copy of new beta version of Phrap. See the <a href="installation.html">Installation</a> page for more details about exactly what you should ask for. </td>
+    <td bgcolor="#EEEEEE">Sections 1 through 3 look fine, but Sections 4 and 5 contain only a WARNING.</td>
+    <td bgcolor="#EEEEEE"><p>1. Phred or Phrap may have failed. Please check the output of the Terminal or Shell program that ran Phred and Phrap. If the line &quot;Aligning reads to contigs ...Segmentation fault&quot; appears in your output, then it is likely you have encountered the 64-bit bug in Phrap. Please contact Phil Green, the author of Phrap, explain the situation, and ask him for a copy of new beta version of Phrap. See the <a href="installation.html">Installation</a> page for more details about exactly what you should ask for. </p>
+      <p>2. You may need to modify the phredpar.dat file to accommodate the particular nature of the machine used to produce your chromatograms. See <a href="installation.html#phredpar">Preparing the Phred Parameter File</a>.</p></td>
     </tr>
   <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
+    <td bgcolor="#EEEEEE">In viewing a contig, you get a message that begins &quot;Chromaseq detects many conflicts...&quot;</td>
+    <td bgcolor="#EEEEEE">For some reason, the registration system used by Chromaseq to link the based in your matrix to those in your contigs and reads was damaged. You might be able to repair it by choosing one of the items from the Chromatograms&gt;Registration submenu. The first item (Recalculate Mappers (Less Complete)) is the least thorough, but the simplest; the third item (Force Reregistration) completely reinfers the registration using alignment tools, and thus is a bit more drastic; the second item is inbetween. We recommend that you choose the first, then second, then third, in that order, until your problem is solved.</td>
     </tr>
 </table>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>- Recalculation mappers, Reregistration</p>
-<p>- new lines in phredpar.dat file</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
