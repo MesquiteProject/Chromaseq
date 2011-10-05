@@ -9,16 +9,14 @@
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
 			<updateVersion>005</updateVersion>
-			<packageName>Chromaseq (••••Beta Version)</packageName>
+			<packageName>Chromaseq version 0.99</packageName>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
-			••••Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
+			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
 			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap.  
 			For more information about the features of Chromaseq, see the 
 			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>.  This is a 
-			beta release of Chromaseq, for testing purposes.  You may only use this version of Chromaseq if you are on the email list;
-			if you are not, and wish to use it, please send an email
-			to david.maddison@science.oregonstate.edu and ask to be put on the email list.  
+			beta release of Chromaseq.  
 			]]>
 			</explanation>
 				<install>

@@ -36,10 +36,7 @@
 			<beforeMessage>This update may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
-			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
-			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap.  
-			For more information about the features of Chromaseq, see the 
-			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>.
+			Version 0.99 of Chromaseq is available.  We strongly advise Chromaseq users to update to this version. 
 			]]>
 			</explanation>
 				<install>
