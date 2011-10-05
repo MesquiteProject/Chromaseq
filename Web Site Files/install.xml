@@ -19,7 +19,7 @@
 		</notice>
 		<notice><!--Chromaseq install -->
 			<forBuildNumberEqualOrGreater>564</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>5</noticeNumber>
+			<noticeNumber>6</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
 			<updateVersion>005</updateVersion>
