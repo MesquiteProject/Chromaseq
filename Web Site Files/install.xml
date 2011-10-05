@@ -24,6 +24,7 @@
 			<identity>Chromaseq</identity>
 			<updateVersion>005</updateVersion>
 			<packageName>Chromaseq version 0.99</packageName>
+			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
 			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
