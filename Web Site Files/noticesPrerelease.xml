@@ -8,7 +8,7 @@
 			<downloadURL>http://mesquiteproject.org/packages/chromaseq/manual/download.html</downloadURL>
 		</currentReleaseVersion>
 		<notice><!--Chromaseq notice of update -->
-			<forBuildNumberEqualOrGreater>550</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<forBuildNumberEqualOrLess>563</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<forPackageVersionEqualOrLess>989</forPackageVersionEqualOrLess>
 			<noticeNumber>5</noticeNumber>
 			<messageType>alert</messageType>
@@ -28,7 +28,7 @@
 		<notice><!--Chromaseq install -->
 			<forBuildNumberEqualOrGreater>564</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<forPackageVersionEqualOrLess>989</forPackageVersionEqualOrLess>
-			<noticeNumber>4</noticeNumber>
+			<noticeNumber>6</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
 			<updateVersion>990</updateVersion>
