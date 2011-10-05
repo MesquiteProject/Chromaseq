@@ -4,6 +4,20 @@
 		<version>1</version>
 
 		<notice><!--Chromaseq install -->
+		<notice><!--Chromaseq notice of update -->
+			<forBuildNumberEqualOrLess>563</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<noticeNumber>5</noticeNumber>
+			<messageType>alert</messageType>
+			<identity>Chromaseq</identity>
+			<updateVersion>005</updateVersion>
+			<packageName>Chromaseq beta version 0.99</packageName>
+			<explanation>
+			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
+			In order to install Chromaseq 0.99, you need to first update to Mesquite version 2.75.  
+			You can get Mesquite 2.75 at <a href = "http://mesquiteproject.org">http://mesquiteproject.org</a>
+			]]>
+			</explanation>
+		</notice>
 			<forBuildNumberEqualOrGreater>564</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<noticeNumber>5</noticeNumber>
 			<messageType>update</messageType>
