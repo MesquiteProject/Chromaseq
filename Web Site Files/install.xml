@@ -3,7 +3,6 @@
 	<MessagesFromHome>
 		<version>1</version>
 
-		<notice><!--Chromaseq install -->
 		<notice><!--Chromaseq notice of update -->
 			<forBuildNumberEqualOrLess>563</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<noticeNumber>5</noticeNumber>
@@ -18,6 +17,7 @@
 			]]>
 			</explanation>
 		</notice>
+		<notice><!--Chromaseq install -->
 			<forBuildNumberEqualOrGreater>564</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<noticeNumber>5</noticeNumber>
 			<messageType>update</messageType>
