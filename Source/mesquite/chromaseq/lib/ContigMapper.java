@@ -681,16 +681,22 @@ public class ContigMapper {
 	/*.................................................................................................................*/
 	public String getNEXUSCommand() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(" NUMBASES = " + deleted.length);
+		if (deleted!=null)
+			sb.append(" NUMBASES = " + deleted.length);
 		sb.append(" TRIMSTART = " + numTrimmedFromStart);
-		sb.append(" DELETED = ");
+		if (deleted!=null)
+		{sb.append(" DELETED = ");
 		for (int i=0; i<deleted.length; i++)
 			if (deleted[i])
 				sb.append("1") ;
 			else sb.append("0") ;
-		sb.append("   ADDEDBEFORE = '");
-		for (int i=0; i<addedBefore.length; i++)
-			sb.append(" "+addedBefore[i]) ;
+		} 		
+		if (addedBefore!=null){
+
+			sb.append("   ADDEDBEFORE = '");
+			for (int i=0; i<addedBefore.length; i++)
+				sb.append(" "+addedBefore[i]) ;
+		}
 		sb.append("'");
 		return sb.toString();
 	}
