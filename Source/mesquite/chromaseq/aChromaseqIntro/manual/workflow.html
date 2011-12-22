@@ -41,8 +41,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Workflow Suggestions<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Beta Version 0.99<br />
-      4 October 2011<br /></td>
+    <td width="14%">Version 1.0<br />
+      23 December 2011<br /></td>
   </tr>
 </table>
 
@@ -127,7 +127,6 @@
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
   			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
@@ -144,6 +143,7 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
@@ -178,9 +178,13 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-<p>Workflow Suggestions [to be completed] [include links to videos]</p>
+<p>&nbsp;</p>
 <h3>Workflow 1: David's workflow</h3>
-<p>[sample code files with multiple versions; database; process files in directory; if preliminary, move FASTA files into matrix by drag and drop; if fina base callsl, using align using Opal or Shift Other to Match; change colors and not birds eye; up and down arrows; Corvallis style, then set defaults; make base calls, talk about navigation tools; export; appending sequences; genbank submission; ]</p>
+<p>I have a FileMaker Pro database of all of my sample voucher numbers and sample information. Each record in the database includes the voucher number (which is automatically embedded in the chromatogram file name by the sequencing facility), the species name, authority, who identified the specimen, latitude longitude of the specimen, and other information. The database contains a script that outputs the voucher number and species name into a text file that follows the <a href="sampleCode.html">Sample Codes and Sequence Names File</a> format. I output this file, and put it into a standard place on my computer. Once that is set up, and the <a href="primers.html">Primer File</a> is set up, I can then do my processing.</p>
+<p>I normally do initial processing when I get sequences from a plate or two. I put all of the chromatograms in one directory, save a backup of them, and then choose File&gt;Open Other&gt;Process Chromatogram Files in Directory, chosing that directory. Once it is all done, if I wish to do some quick analyses to see how the sequences turned out, I normally want to incorporate the preliminary sequences into a large, existing matrix. I do this by <a href="helpfulMesquite.html#importFASTA">dropping the FASTA files onto the matrix</a>. I then do a quick alignment using  <a href="helpfulMesquite.html#alignmentTools">Shift Other to Match</a>, which allows me to check to see any of the sequences are reverse complements (and, if they are, I select them and use Matrix&gt;Alter/Transform&gt;Reverse Complement, and then try Shift Other To Match again). If that is not sufficient, I may use the Pairwise alignment tool, or use a full matrix aligner, like Opal. I can then save the matrix and use other phylgoenetics programs to quickly infer the phylogeny and see how things look.</p>
+<p>If I want to do final base calls, I first align the sequences within the Chromaseq-produced Mesquite matrix. I generally use Shift Other to Match first, and make sure none of the sequences are reversed complemented (or I use Matrix&gt;Alter/Transform&gt;Reverse Complement to correct those that are). Having the sequences aligned allows me to better judge how a particular sequence's length compares to the typical one, and, if shorter, decide if it is worth making harder base calls to lengthen it. It also allows me to spot sequences whose primer sequences I have neglected to remove, and the occasional base missed by Phred/Phrap/Chromaseq. </p>
+<p>Once final base calls are made, I can then export the sequences using the File&gt;Export options, usually to FASTA format, if I want to incorporate the results into another matrix.</p>
+<p>And, then, finally, I use my database of sample information to produce the voucher information file that is used to produce FASTA files suitable for quicker <a href="genbank.html">GenBank submission</a>.</p>
 <h3>Workflow 2: Wayne's workflow</h3>
 <p>[save a series of intermediate data files:  immediately after import; after first proofreading and marking but without deletion; after deletion of sketchy bits.]</p>
 <p>&nbsp;</p>

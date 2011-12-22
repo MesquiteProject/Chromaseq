@@ -1,3 +1,11 @@
+- don't output Memory Available
+- push up svnaccess file
+
+manual:
+	- Workflow page
+	- make sure date is correct
+
+aChromaseqIntro dates and version correction, isPrerelease, correct notices file
 
 
 To release:

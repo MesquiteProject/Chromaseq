@@ -41,8 +41,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- TemplateBeginEditable name="subtitle" -->subtitle<!-- TemplateEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Beta Version 0.99<br />
-      4 October 2011<br /></td>
+    <td width="14%">Version 1.0<br />
+      23 December 2011<br /></td>
   </tr>
 </table>
 
@@ -127,7 +127,6 @@
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
   			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
@@ -144,6 +143,7 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>

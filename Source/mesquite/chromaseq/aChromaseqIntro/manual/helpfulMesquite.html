@@ -41,8 +41,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Helpful Mesquite features<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Beta Version 0.99<br />
-      4 October 2011<br /></td>
+    <td width="14%">Version 1.0<br />
+      23 December 2011<br /></td>
   </tr>
 </table>
 
@@ -127,7 +127,6 @@
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
   			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
@@ -144,6 +143,7 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
@@ -181,25 +181,27 @@
     
     
 <p>Many features of the basic Mesquite packages are useful in the context of Chromaseq. We here give a few examples that we have found useful.</p>
-<h2>Alignment tools</h2>
-<p>&nbsp;</p>
-<p>- manual alignment tools</p>
-<p>- Opal</p>
-<p>- Matrix&gt;Alter/Transform&gt;Shift Other to Match...</p>
-<p>&nbsp;</p>
+<h2><a name="importFASTA" id="importFASTA"></a>Importing initial sequences into another matrix</h2>
+<p>If you wish to quickly add sequences produced by Phred/Phrap/Chromaseq system to a existing, preliminary matrix, you can find the initial sequences in FASTA format in the processed subdirectory. The FASTA files will be in the processedFasta directory within each  fragment's directory. For example, in the Chromatograms example used in the <a href="tutorial.html">Tutorial</a>, the processedFasta directory within 28S contains four FASTA sequences of 28S ribosomal DNA. </p>
+<p align="center"><img src="images/fasta.png" width="305" height="271" /></p>
+<p>To move these into a Mesquite matrix, have that matrix open and visible within Mesquite. Then, select the FASTA files, and drag and drop them onto the matrix. Mesquite will ask you for the file format (chose FASTA), and Mesquite will then add each of the sequences to the  matrix. </p>
+<p>Note that these sequences are the initial, unedited sequences produces by Phred/Phrap/Chromaseq. If you have made base calls, trimmed the sequences, or done any other editing, these revised versions will not be in these FASTA files, but will instead be in the main Mesquite file that was produced by Chromaseq.</p>
+<h2><a name="alignmentTools" id="alignmentTools"></a>Alignment tools</h2>
+<p>Alignment tools can aid in interpreting the sequences, and in making base calls. Among the relevant alignment tools are:</p>
+<ul>
+  <li>manual alignment tools,including the Pairwise aligner tool in the matrix, and the Matrix&gt;Alter/Transform&gt;Shift Other to Match command, as outlined in the Align package manual. To see the Align package manual, choose Help&gt;Align Package from within Mesquite. </li>
+  <li>automated alignment tools, including Opal. See the <a href="http://mesquiteproject.org/packages/opalescent/">Opalescent web page</a> for details about acquiring Opal for Mesquite.</li>
+</ul>
 <h2>Reverse-complementing sequences</h2>
-<p>- Matrix&gt;Alter/Transform&gt;Reverse Complement</p>
-<p>&nbsp;</p>
-<h2>Importing FASTA files</h2>
-<p>- drop FASTA files onto DNA matrix</p>
+<p>If a sequence is reverse-complemented relative to the majority of sequences in the file, it can be difficult to compare it to other sequences. If you wish, you can select the sequence in the main matrix, and choose Matrix&gt;Alter/Transform&gt;Reverse Complement.  If you do this, the Chromatogram Viewer window will change to have orange-colored panels, indicating that this sequence is has been reverse complemented.</p>
 <h2>Charts</h2>
 <p>The charting tools in Mesquite can be useful with Chromaseq. For example, after doing some Chromaseq processing, imagine you wished to plot the variation in average quality score of your sequences. You can do this by choosing Analysis&gt;New Bar &amp; Line Chart For&gt;Taxa, and in the dialog box that comes up which asks you to choose the Value to Calculate for Taxa, choose &quot;Quality Score&quot;. Here's an example chart of this sort:</p>
-<p><img src="images/allSequences.png" width="626" height="376" /></p>
+<p align="center"><img src="images/allSequences.png" width="626" height="376" /></p>
 <p>As you can see, for these data, most sequences have an average per-base quality score between 21 and 29. </p>
 <p>Let's imagine, though, that you wanted to see which of your primer pairs yielded the highest quality sequences. If you go to the List of Taxa, and choose Columns&gt;Primers In Reads, you will get a new column in the List of Taxa that shows the primers that are present in the chromatogram names. If you then use the magic wand tool and touch on one particular combination of primers, for example the primer pair 1089a, 791F2, then all sequences with that primer pair will be selected:</p>
-<p><img src="images/selectingPrimerPair.png" width="156" height="457" /></p>
+<p align="center"><img src="images/selectingPrimerPair.png" width="156" height="457" /></p>
 <p>If you then look back at your chart, you will see that the sequences based upon that primer pair will be highlighted:</p>
-<p><img src="images/onePrimerPair.png" width="626" height="376" /></p>
+<p align="center"><img src="images/onePrimerPair.png" width="626" height="376" /></p>
 <p>This can be a useful tool to decide the primer pair that gives the highest quality sequences.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -209,7 +211,7 @@
 
     
     
-    </div>
+</div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
     <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>

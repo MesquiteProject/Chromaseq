@@ -47,8 +47,8 @@
     <p>Tutorial</p>
     <!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Beta Version 0.99<br />
-      4 October 2011<br /></td>
+    <td width="14%">Version 1.0<br />
+      23 December 2011<br /></td>
   </tr>
 </table>
 
@@ -133,7 +133,6 @@
   			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
   			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('informationStrips.html');">Matrix Information Strips</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
@@ -150,6 +149,7 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
@@ -365,15 +365,49 @@ Execution of Phred-Phrap command file begun.</pre>
     touch the view chromatograms tool (<img src="images/chromTool.jpg" width="30" height="29" align="absmiddle" />)
     on &quot;Bembidion louisella NS 1250&quot;. A new window will open, showing you the chromatograms
     and the contig:</p>
-  <p align="center"><img src="images/tutorialProcessedViewer.png" width="651" height="374" /></p>
+  <p align="center"><img src="images/tutorialProcessedViewer.png" width="624" height="393" /></p>
   <p>You may see a different part of the sequence than is shown in the above
     image; Chromaseq centers the view on the base upon which you clicked in the
     matrix.</p>
   <p align="center"><img src="images/tutorialFirstChromView.gif" width="657" height="278" /></p>
+  <h3>Magnifying peaks</h3>
+  <p>To the right of the reads is a close-up window, which shows a magnified view of a few peaks in one of the reads; the section that is being magnified is indicated in the reads by a blue-shaded box:  </p>
+  <p align="center"><img src="images/tutorialProcessedViewer.png" width="624" height="393" /></p>
+  <p>By default, the bases that are magnified are those in the center of the chromatogram window, and the read that is shown is the <em>source</em> read. The source read is the primary read that Phrap uses in making the base call. Source read for any particular site is that read with a short, brown bar under the peak. As you scroll through the contig, the close-up window will continue to track the source read at the center site.</p>
+  <p>To see a different region magnified, you can hold down the Option key, and move the mouse over the region you would like magnified.</p>
   <h3>Navigating through a contig</h3>
-  <p>[to be added]</p>
+  <p>There are several mechanisms to navigate through a contig. The simplest is to use the scroll bar at the bottom of the window. You can also scroll through the overview window, and then touch on the point of the overview you wish to see in the main part of the chromatogram viewer. </p>
+  <p>There are also several keyboard commands that can move you quickly through the chromatogram. If you touch the left or right arrow keys, by default Chromaseq will jump to the previous or next &quot;problematic&quot; base. (Note: you may need to touch the mouse on one of the chromatograms before this will work; this is a bug that we hope to fix soon.) Problematic bases include, by default, very low quality bases, sites with a conflict between the source read and a higher-quality read, and so on. You can adjust the sorts of problems you wish to jump between using the Chromatograms&gt;Arrow Keys submenu.</p>
+  <p>If you touch the up arrow key, you will jump to the start of the contig; touching the down arrow key will jump to the end of the contig.</p>
   <h3>Making base calls</h3>
-  <p>[to be added]</p>
+  <p>Now touch on the 'Character Matrix &quot;28S (from Phred/Phrap)&quot;' tab at the start of the Mesquite window. You will then see the matrix of 4 processed sequences of 28S ribosomal DNA. Using the chromatogram tool, touch on the start of the sequence for Bembidion perspicuum 2320. You should see, near the start of the contig, the following section:</p>
+  <p align="center"><img src="images/tutorialBaseCall1.png" width="137" height="292" /></p>
+  <p>Note that the base call by Phred/Phrap/Mesquite is gcgaMaggg, but it looks as if the &quot;M&quot; really should be two separate bases, AC. Thus, the base calls should probably be gcgaacaggg. To change the M to AC, you can do the following.</p>
+  <p>First, you will need to create a new base here. Use the Insert Base tool (<img src="images/insertBaseTool.png" width="30" height="31" />), and touch it between the M and the a on the bottom row:</p>
+  <p align="center"><img src="images/tutorialBaseCall2.png" width="137" height="192" /></p>
+  <p>This will open up a new base (left, below), which you can then change by typing the letter for the base you wish to set it to, for example, &quot;c&quot; (right, below)</p>
+  <p align="center"><img src="images/tutorialBaseCall3.png" width="137" height="192" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/tutorialBaseCall4.png" width="137" height="192" /></p>
+  <p>You can then touch on the M to select it, and then type an &quot;a&quot; to change it to an A (left, below). If you click somewhere else in the window to select the base you were editing, you will more clearly see that this has revised the sequence to gcgaacaggg (right, below). Bases you have manually edited are highlighted in yellow.</p>
+  <p align="center"><img src="images/tutorialBaseCall5.png" width="137" height="192" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/tutorialBaseCall6.png" width="137" height="192" /></p>
+  <p>If you look in the data matrix itself, and turn off Bird's Eye View (by unchecking it under Matrix&gt;Display&gt;Bird's Eye View), you will see the new base calls highlighted in yellow:</p>
+  <p align="center"><img src="images/tutorialBaseCall7.png" width="434" height="22" /></p>
+  <h3>Visualizing and removing primer sites</h3>
+  <p>To see where primer sites are in your sequence, you will need to ask Chromaseq to search for and show them. To do this, choose Chromatograms&gt;Primers&gt;Show Primer Matches. You will be asked for the location of the primer text file (for details, see the <a href="primers.html">Primer &amp; Gene Information</a> page), and either browse for the file or type in its path.</p>
+  <p align="center"><img src="images/tutorialPrimerFile.png" width="497" height="145" /></p>
+  <p>If you do this for the Bemb perspicuum AZ 1120 sequence in the COI matrix, and look at the start of the contig, you will see the B1490 primer drawn in gray letters over the peaks near the start of the sequence; you can see the match between the primer sequence and the bases in that read.</p>
+  <p align="center"><img src="images/tutorialShowPrimer2.png" width="384" height="107" /></p>
+  <p>(Note: if you want Chromaseq to show the primers for the next chromatogram window you open and subsequent windows, you will need to choose Chromatogram&gt;Save Current Settings as Defaults after you choose Chromatograms&gt;Primers&gt;Show Primer Matches.)</p>
+  <p>To remove this region from the sequence in the matrix, first select the primer region in the chromatogram viewer. Do this by touching on the start of the primer, then, while holding down the Shift key, touch on the last base of the primer:  </p>
+  <p>&nbsp;</p>
+  <p align="center"><img src="images/tutorialToGaps1.png" width="388" height="319" /></p>
+  <p>&nbsp;</p>
+  <p>With those bases selected, if you choose Chromatograms&gt;Convert Selected to Gaps, those sites will be converted to gaps in both the chromatogram viewer and in the data matrix:  </p>
+  <p>&nbsp;</p>
+  <p align="center"><img src="images/tutorialToGaps2.png" width="388" height="319" /></p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
   <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 
