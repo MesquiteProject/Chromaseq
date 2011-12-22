@@ -61,7 +61,7 @@ public class ContigMapper {
 		int contigBase = contig.getContigBaseFromTrimmedBase(trimmedBase);
 		return contigBase;  //-startingAddedBeforeOriginalTrim
 	}
-	
+
 	/*.................................................................................................................*/
 	public int getMatrixBaseFromContigBase(int contigBase, int it) {
 		if (editedData==null || contig==null)
@@ -125,41 +125,50 @@ public class ContigMapper {
 	/*.................................................................................................................*/
 	public void recalcPart (){
 		int count = 0;
-		for (int ic = 0; ic<addedBefore.length; ic++){
-			count += addedBefore[ic] ;
-			totalAddedDeletedBefore[ic] = count;
-			totalAddedBefore[ic] = count;
+		if (addedBefore!=null) {
+			for (int ic = 0; ic<addedBefore.length; ic++){
+				count += addedBefore[ic] ;
+				totalAddedDeletedBefore[ic] = count;
+				totalAddedBefore[ic] = count;
+			}
 		}
 		count=0;
-		for (int ic = 0; ic<deleted.length; ic++){
-			totalAddedDeletedBefore[ic] -= count;
-			if (deleted[ic])
-				count++;
+		if (deleted!=null) {
+			for (int ic = 0; ic<deleted.length; ic++){
+				totalAddedDeletedBefore[ic] -= count;
+				if (deleted[ic])
+					count++;
+			}
 		}
 		count = 0;
-		for (int ic = addedBefore.length-1; ic>=0; ic--){
-			count += addedBefore[ic] ;
-			totalAddedDeletedAfter[ic] = count;
+		if (addedBefore!=null) {
+			for (int ic = addedBefore.length-1; ic>=0; ic--){
+				count += addedBefore[ic] ;
+				totalAddedDeletedAfter[ic] = count;
+			}
 		}
 		count=0;
-		for (int ic = deleted.length-1; ic>=0; ic--){
-			totalAddedDeletedAfter[ic] -= count;
-			if (deleted[ic])
-				count++;
-		}
-		totalAddedDeletedAfter[deleted.length-1] -= numDeletedFromEnd;
+		if (deleted!=null) {
+			for (int ic = deleted.length-1; ic>=0; ic--){
+				totalAddedDeletedAfter[ic] -= count;
+				if (deleted[ic])
+					count++;
+			}
 
-		count=0;
-		for (int ic = numTrimmedFromStart; ic>=0; ic--){
-			if (ic < deleted.length && !deleted[ic] && ic<numTrimmedFromStart)
-				count++;
-		}
-		setNumResurrectedAtStart(count);
+			totalAddedDeletedAfter[deleted.length-1] -= numDeletedFromEnd;
 
-		count=0;
-		for (int ic = numBases-numTrimmedFromEnd; ic<deleted.length; ic++){
-			if (ic < deleted.length && !deleted[ic] && ic>numBases-numTrimmedFromEnd-1)
-				count++;
+			count=0;
+			for (int ic = numTrimmedFromStart; ic>=0; ic--){
+				if (ic < deleted.length && !deleted[ic] && ic<numTrimmedFromStart)
+					count++;
+			}
+			setNumResurrectedAtStart(count);
+
+			count=0;
+			for (int ic = numBases-numTrimmedFromEnd; ic<deleted.length; ic++){
+				if (ic < deleted.length && !deleted[ic] && ic>numBases-numTrimmedFromEnd-1)
+					count++;
+			}
 		}
 		setNumResurrectedAtEnd(count);
 
@@ -238,11 +247,11 @@ public class ContigMapper {
 
 		setNumAddedToEnd(addedToEnd);
 		recalcPart();
-		
+
 		hasBeenSetUp = true;
 
 	}
-	
+
 	/*.................................................................................................................*/
 	public void checkContig(MolecularData editedData, int it, MesquiteModule ownerModule) {
 		if (getContig()==null && ownerModule!=null) {
@@ -260,7 +269,7 @@ public class ContigMapper {
 	public void inferFromExistingRegistry(MolecularData editedData, int it, int numTrimmedFromStart, MesquiteModule ownerModule) {
 
 		checkContig(editedData,it, ownerModule);
-		
+
 		this.editedData = editedData;
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
 		MeristicData reverseRegistryData = ChromaseqUtil.getReverseRegistryData(editedData);
@@ -278,7 +287,7 @@ public class ContigMapper {
 		int numContigBases = numBases;
 		if (deleted==null || deleted.length!=numBases)
 			init(numBases);
-		
+
 		if (registryData == null)
 			return;
 		// =========== cleanup RegistryData from earlier versions ===========
@@ -325,17 +334,17 @@ public class ContigMapper {
 					numResurrectedAtStart++;
 				}
 			}
-		
+
 		for (int ic = 0; ic< numTrimmedFromStart-numResurrectedAtStart; ic++){  
 			setDeletedBase(ic, true);
 		}
-		
+
 		int numAddedBeforeFirstContigBase = numResurrectedAtStart-numTrimmedFromStart;
 		if (numAddedBeforeFirstContigBase>0)
 			setAddedBases(0, numAddedBeforeFirstContigBase);
 		else
 			setAddedBases(0, 0);
-		
+
 
 		// =========== Now process the bases within the original trimmed region ===========
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
@@ -361,7 +370,7 @@ public class ContigMapper {
 		for (int ic = 0; ic< numFromEnd; ic++){  
 			setDeletedBase(numContigBases-1-ic, true);
 		}
-		
+
 
 		int addedBase=0;
 		int addedToEnd=0;
@@ -377,7 +386,7 @@ public class ContigMapper {
 					else { // it is in original; now record added bases
 						contigBase = getContigBaseFromOriginalMatrixBase(positionInOriginal, it);
 						setAddedBases(contigBase, addedBase);
-						
+
 						addedBase=0;
 					}
 				}
@@ -392,10 +401,10 @@ public class ContigMapper {
 							addedToEnd++;
 					}
 					else { // it is in original; now record added bases
-					//	if (addedBase>0) {
-							contigBase = getContigBaseFromOriginalMatrixBase(positionInOriginal, it);
-							setAddedBases(contigBase, addedBase);
-					//	}
+						//	if (addedBase>0) {
+						contigBase = getContigBaseFromOriginalMatrixBase(positionInOriginal, it);
+						setAddedBases(contigBase, addedBase);
+						//	}
 						addedBase=0;
 					}
 				}
@@ -403,8 +412,8 @@ public class ContigMapper {
 		}
 
 		recalc(it);
-		
-		
+
+
 		hasBeenSetUp = true;
 	}
 	/*.................................................................................................................*/
@@ -434,7 +443,7 @@ public class ContigMapper {
 					numBeforeFirstOriginalInEditor++;
 			}
 		}
-		
+
 		contigBase = numTrimmedFromStart-1;
 		// =========== Now process the bases within the original trimmed region ===========
 		for (int ic = 0; ic< originalData.getNumChars(); ic++){  
@@ -477,10 +486,10 @@ public class ContigMapper {
 		}
 
 		recalc(it);
-		
 
 
-		
+
+
 		hasBeenSetUp = true;
 	}
 	/*.................................................................................................................*/
@@ -622,7 +631,7 @@ public class ContigMapper {
 		for (int contigBase=contigStart; contigBase<=contigEnd; contigBase++)
 			if (contigBase>=0 && contigBase<deleted.length) {
 				deleted[contigBase] = b;
-		}
+			}
 	}
 	/*.................................................................................................................*/
 	public  void addToAddedBases (int contigBase, int numAdded){
@@ -786,14 +795,14 @@ public class ContigMapper {
 		this.numTrimmedFromStart = numTrimmedFromStart;
 		if (contig!=null)
 			contig.setNumTrimmedFromStart(numTrimmedFromStart);
-	/*	if (editedData==null)
+		/*	if (editedData==null)
 			return;
 		Associable tInfo = editedData.getTaxaInfo(true);
 		if (tInfo != null) {
 		//	tInfo.removeAssociatedLongs(ChromaseqUtil.startTrimRef);
 			ChromaseqUtil.setLongAssociated(tInfo,ChromaseqUtil.startTrimRef, it, numTrimmedFromStart);
 		}
-*/
+		 */
 	}
 	/*...........................................................................*/
 

@@ -1,4 +1,3 @@
-- don't output Memory Available
 - push up svnaccess file
 
 manual:
@@ -13,281 +12,21 @@ To release:
 	MesquiteModule
 
 
-----
-
-
-To Do:
-- closeup panel box in main read when NOT showing source read and with no read selected
-
-- on RC sequences primers shown in wrong place?
-
-- SequenceNameSource and PrimerInfoSource for BP-style systems
-- SequenceNameSource and PrimerInfoSource for 96-well/Excel style systems
-- XML support in SequenceNameFromTextFile and PrimerInfoFromTextFile
-
-- clean up  "./info.xml: file read error: unknown file type" by hiding it in a subdirectory?
-- have pre-flight option to check plumbing is in place and names and primer sources all OK
-
-
-
-Luxury:
-
-- on purging of Chromaseq data, have it switch off ColorByQuality
--Remote copy of PhredPhrap versus local (e.g. remote, http & cgi-bin etc.; local: shell script)
-
-
-=====
-
-
-1. PhPhRunner generalize into ChromatogramProcessor, and FileInits etc. that call this  [DONE]
-
-2. make SequenceNameSource and PrimerInfoSource and hire these by ChromatogramProcessor  [DONE]
-
-3. Make a ChromatogramSource duty class and hire by ChromatogramProcessor 
-
-4. move hiring of previous three sources into FileInit successor, and have them hire a ChromatogramProcessor that gets fed SequenceNameSource, PrimerInfoSource, ChromatogramSource
-
-5. work on design of sinks for this info (both processed and not).   E.g. SequenceUploader should be a module  
-
-
 
 ======================
-notes from Jeff Oliver
 
-4 - The scroll bar does not appear when the chromatogram window opens.  Re-sizing the window forces re-
-drawing, and the scollbar appears then.  VM issue?
-
-7 - Maybe a bigger issue than Chromaseq: When using Phred/phrap from within Mesquite 
-(File > Open other... or Utilities), the dialog asking the user to Choose directory containing ABI
-files is a bit confusing.  Clicking the 'Open' button will tell Mesquite to process files in the 
-selected directory.  Double-clicking on that directory will open ('go into') that directory.  Perhaps the 
-'Open' button should be a 'Choose' button.  Otherwise, users may try to navigate through the directory
-structure using it (which won't work, because Phred/Phrap starts upon the first click of 'Open').  That, 
-or add another, separate 'Choose' button to perform the function the 'Open' button currently performs. 
-
-==========
-
-necessary pre-beta
-
-
-- saveas for forced reprocessing?
-- bad checksum registration matrices
-- test out opening BTOL and looking to see if registration is good
-
-1. trivial: when display is graphically reversed, the little birds eye box in upper overview loses its moorings
-
-- add taxainfo for parameters for AceDirectoryProcess and NEXUS read/ write
-- add controls for parameters for AceDirectoryProcess
-
-- move from sequence panel to matrix not functioning
-- remove startTrimRef
-
-
-Luxuries
-
-- pcrnumber/sample number system
-- revert
-
-=========
-
-
-======================
----------
-
-- double peak count
-- untrim ends
-
-- why ignore called bases reset between each chromatogram
-
-	fix problem with deleting bases and then moving bases over top of those.
-
-- have move to matrix tool deal with double peaks
-
-- still problems with focus after use move to matrix tool
-
-- option to maintain tool as go to new chromatogram
-- quickKeys like tool for making calls;
-- have keyboard toggle for one base at a time versus jump to next problem
-
-- reopen file with chromato showing but file has been moved into other directory
-¥¥¥¥ chromaseq: memory leak with extensive editing???
-¥¥¥¥ FEATURE: chromaseq: revert to original
-
-- save as into different directory problems.
-
-
-------------------------------------------
- not sure, but phred/phrap processing might not be possible if filenames or taxon names have ! in them.  
- Maybe other characters as well.  Will try to find case, but you might write it down.
+possible issues:
+	- not sure, but phred/phrap processing might not be possible if filenames or taxon names have ! in them.  
+	 Maybe other characters as well.  Will try to find case, but you might write it down.
  
-1.4 chromaseq crash
-1.4 bug grow window size in chromaseq 
- 
-=====
-
-
-
-NumberOfReads deal with better
-
-
-====
-notes from talking to Alex W
-- have phred (not phrap) process a single chromatogram, including via drag and drop
-- insert gaps on individual Read
-====
-notes from talking to Bets:
-
-- make base peaks wider
-- default to have no conversion to lower case based upon quality score?  or at least have a check box
-
-- Sequencher:  edited in matrix locked with each read's calls, but not with chromatograms.
-when touch on base, chromatograms immediately center.
-
-====
-
-
-I got it to work. I don't know how to "use it" yet, but that will come. The major hold up was a  problem with the "environmental variable" as described below. I had to add this path by right-clicking "My Computer" and going to the advanced tab, were there is a button for "environmental variables" then add it like below. I then could run phred in the cygwin shell and but had to fix the Phredpar.dat file to match the sequencer used here (the information is associated with the chromatogram file) and then I went back and reset the paths to the programs by browsing via the Mesquite dialogs.
-
-from the Phred.doc
-
-Copy the phred parameter file, called 'phredpar.dat', to a
-    directory that is accessible by phred users and set the environment
-    variable 'PHRED_PARAMETER_FILE' to the full path name of the file.
-    For example, if you copy 'phredpar.dat' to '/usr/local/etc/PhredPar'
-    and you are using the C shell then issue the command
-
-      % setenv PHRED_PARAMETER_FILE /usr/local/etc/PhredPar/phredpar.dat
-
-    It is most convenient to set the environment variable in the system-
-    wide shell startup (cshrc or equivalent) file.
-
-    You can rename the phred parameter file but the PHRED_PARAMETER_FILE
-    environment variable must reflect the new name.
-
-    With Windows NT you give the command
-
-      % set PHRED_PARAMETER_FILE=\usr\local\etc\PhredPar\phredpar.dat
-
-    in the DOS command window in which you will run phred.
-
-
--- 
-Kipling W. Will
-
-
-
-
-
-
-
-
-
-
-
 	
-	- data corruption if things at front moved to matrix?
-	
-=== WPM
-
-	- WPM don't lose focus on main panel 
-	
-	
-=== DRM
-
-	- DRM move to XML for all support files structure
-	
-	- DRM move to matrix in which there is a pad in the consensus
-		- at start, doesn't move bases down
-		- in middle, adds a !
-		
-	
-======
-COMPLETED
-
-	- moving front end of a read to matrix if longer than original sequence causes graphic wrap around
-	- moving to matrix at end of matrix - can't edit bases in these region
-	- moving to matrix at front of read
-		- causes problems editing end of sequence
-
-	Ã moving to matrix at front of matrix - can't edit bases in these region
-
-	Ã store sample code info  (now done as sampleCodeForTaxon)
-	Ã add sequence title on right if extra sequences shown
-	Ã DRM have it so have matrix colors in chromatogram window
-
 =============
 
+FUTRE WORK to consider
+
+
 PhredPhrap
-	- change PrimerList file structure
-	- explore flipping sequence but not chromatogram
-	
-	- URGENT: if users add matrices, the chrom viewing might not realize which matrix is the original and which is edited.  NEED to have these matrices indelibly marked
-	- URGENT: crash when using PhredPhrap: is this just FileDialog flakiness?
-	
-	- what if user chooses the wrong directory?
-	- menu rearrangment
-  
-	- test on Windows
-	- add note about polymorphisms to help string
-	- should place parameters in file comment
-	- should put original chromatogram file names in footnote for each taxon.
-	
-	- append sequences: will the file remember the directory these new chromatograms etc. are in?
-	- make sure it works under other shells on the Mac
-	- don't rely on matrix names to find quality matrix etc.; attach some information 
-	
-	Ã URGENT: lack of saving of link to chromatograms if one relies upon autosave
-	Ã use Open Other menu to do PhPh, and then hit cancel; new empty project should be removed.
-
-Chromatogram Viewer
-	- tool to remove selected bases from matrix
-	* reverse complement
-	* change the internal numbering system so that it uses a deeper, universal numbering that is independent of any existing numbering
-	- double-clicking on matrix line at times zeros horizontal scroll bar
-	
-	- move to matrix if all gaps in matrix (Wayne)
-	- move to matrix set to lower case, or at least pay attention to case in import
-	- move to matrix does not work if there is a base in that read that is not present in the Phred.Phrap.Mesquite sequence
-	- on Move To Matrix mark cells as Touched
-	
-	- Test for alignment issues if sequences have been aligned
-	- use i-beam for editing
-	- arrange for auto coloring yellow (touched) when bases inserted AND when editing in matrix???
-	- drawing SLOWER NOW (Wayne)
-	- sequence moved down from read can't be selected; might not be editable
-	- new ChromInit module: reads primer sequences from file, then does match against reads and highlights where primers on in reads
-	- highlighting of regions where good forward and backward reads
-	- conservative mode that marks To Check all cells for which there is conflict among reads
-	- adjust trace heights individually, or have non-proportional mode in which they are individually autoscaled
-	- Restore from Original, fills selected region with states from original matrix.  If beyond original, don't touch
-	- shift highlight colors to darker
-	
-	Ã selection offset away from center
-	Ã can't select or manipulate inserted bases; they act as if they belong to prior base
-	Ã URGENT: if multiple contigs, touching on taxon should ONLY BRING UP window for that contig, and it should be named correctly
-	Ã- shift select region of matrix; currently selects only one site in chrom viewer window
-	Ã permit thumbs up/down/etc cursors chromat. window
-
-	old bug list
-¥¥¥ one of the reads is off on selection by 1/2 site; seems that findConsensusPosition in ChromatogramPanel is broken
-Ã  findConsensusBaseNumber in ChromatogramPanel is off by up to three or more positions if you click off of the midline.  E.g., if the panel is centred on 40, and you click on 30, you'll get 26; if you click on 50 you'll get 55
-¥¥¥ gaps are considered but just at face value; editing by hand something to be a gap will screw things up (need to associate flag with cells that were called as non-gaps originally)
-
-	
-	
-	
-QualityData, originalData
-	- shift other to match selected in align has to move qualityData too!
-	- ?? set special identifier keys in originalData, etc. not only for cross linking but also for later fusion (i.e. "28S")
-	
-=====
-Seems to be fixed
-	- Notiophilus biguttatus 589 28S offset
-
-=====
-AFTER VERSION 1	
-PhredPhrap
-	- regular expression parsing of file names (Danny)
+	- regular expression parsing of file names 
 	- option to do as polymorphism OR uncertainty OR both
 	- polymorphism vs uncertainty:  peak height, height of neighboring peaks, quality of read on either side, if neighboring peaks share a base
 	- uses XML files for primerList, sample code translation file
@@ -296,8 +35,45 @@ PhredPhrap
 	- drag on drop for adding new files to contig
 	- can excise file from contig
 	
+	- have pre-flight option to check plumbing is in place and names and primer sources all OK
+	
+	- Remote copy of PhredPhrap versus local (e.g. remote, http & cgi-bin etc.; local: shell script)
+	- should place parameters in file comment
+	
+	
 Chromatogram Viewer
-	- Reverse Complement
 	- bird's eye view showing read patterns
 	- key entry tool in chromatogram window the same as the key tool in the data matrix editor
+	- untrim ends
+	- move to matrix if all gaps in matrix (Wayne)
+	- move to matrix set to lower case, or at least pay attention to case in import
+	- new ChromInit module: reads primer sequences from file, then does match against reads and highlights where primers on in reads
+	- highlighting of regions where good forward and backward reads
+	- conservative mode that marks To Check all cells for which there is conflict among reads
+	- adjust trace heights individually, or have non-proportional mode in which they are individually autoscaled
+	- Restore from Original, fills selected region with states from original matrix.  If beyond original, don't touch
+	- shift highlight colors to darker
+	
+	
+Other future features:
+	- double peak count
+	
+	
+
+	- SequenceNameSource and PrimerInfoSource for BP-style systems
+	- SequenceNameSource and PrimerInfoSource for 96-well/Excel style systems
+
+	- on purging of Chromaseq data, have it switch off ColorByQuality
+	- revert to original
+	
+	
+	
+	- Make a ChromatogramSource duty class and hire by ChromatogramProcessor 
+	- move hiring of previous three sources into FileInit successor, and have them hire a ChromatogramProcessor that gets fed SequenceNameSource, PrimerInfoSource, ChromatogramSource
+	- work on design of sinks for this info (both processed and not).   E.g. SequenceUploader should be a module  
+	- quickKeys like tool for making calls;
+	- have keyboard toggle for one base at a time versus jump to next problem
+
+	- option to have no conversion to lower case based upon quality score?  or at least have a check box
+
 	
