@@ -770,6 +770,9 @@ public class ChromaseqUtil{
 	public static boolean editedMatrixBaseSameAsOriginal(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
 		long originalState = ChromaseqUtil.getOriginalStateForEditedMatrixBase(data, ic, it);
 		long currentState = ((DNAData)data).getState(ic,it);
+		if (((DNAData)data).isReversed(it)) 
+			return originalState==DNAState.complement(currentState);
+		
 		return originalState==currentState;
 	}
 	/*.................................................................................................................*/
