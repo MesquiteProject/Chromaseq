@@ -30,7 +30,7 @@
 			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
 			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap.  
 			For more information about the features of Chromaseq, see the 
-			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>.  
+			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>. (1)  
 			]]>
 			</explanation>
 				<install>
@@ -69,7 +69,7 @@
 			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
 			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap.  
 			For more information about the features of Chromaseq, see the 
-			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>.
+			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>. (2)
 			]]>
 			</explanation>
 				<install>
@@ -108,7 +108,7 @@
 			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
 			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap.  
 			For more information about the features of Chromaseq, see the 
-			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>. 
+			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>. (3)
 			]]>
 			</explanation>
 				<install>
