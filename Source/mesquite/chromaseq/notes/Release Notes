@@ -1,7 +1,14 @@
 
 To release new version:
 
+- change aChromaseqIntro information
+- update notices.xml and install.xml
+- turn on Debug mode in Mesquite, restart, and then zip the chromaseq directory using File>Zip Folder for Installer
+- move chromaseq.zip to http://mesquiteproject.org/packages/chromaseq/
+
+- move latest notices.xml and install.xml to http://mesquiteproject.org/packages/chromaseq/
 - upload new version of manual to /packages/chromaseq/
+- send email to chromaseq list
 
 =============
 
