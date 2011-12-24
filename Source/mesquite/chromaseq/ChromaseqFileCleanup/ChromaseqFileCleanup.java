@@ -103,12 +103,29 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 		if (f.getProject()==null)
 			return;
 		
+		NameReference trimmable = NameReference.getNameReference("trimmable");
+		
 		ListableVector matrices = f.getProject().getCharacterMatrices();
 		boolean registryMessageGiven = false;
 		count++;
 		for (int i=0; i<matrices.size(); i++) {
 			CharacterData data = (CharacterData)matrices.elementAt(i);
+
 			if (ChromaseqUtil.isChromaseqEditedMatrix(data)) {
+
+				//these lines are here to convert old "trimmable" references to the more general "chromaseqStatus" references; read only; written as "chromaseqStatus"
+				Object2DArray array = data.getWhichCellObjects(trimmable);
+				if (array != null)
+					array.setNameReference(ChromaseqUtil.chromaseqCellFlagsNameRef);
+				array = null;
+				Associable assoc = data.getTaxaInfo(false);
+				if (assoc != null){
+					LongArray Larray = assoc.getWhichAssociatedLong(trimmable);
+					if (Larray != null)
+						Larray.setNameReference(ChromaseqUtil.chromaseqCellFlagsNameRef);
+				}
+				//--------------
+				
 				MeristicData registryData = ChromaseqUtil.getRegistryData(data);
 				 if (registryData==null) {
 					if (!registryMessageGiven)

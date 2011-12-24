@@ -99,7 +99,7 @@ public class ChromaseqUtil{
 //	public static final NameReference singleReadRef = NameReference.getNameReference("singleRead");//long: tinfo
 	public static final NameReference startTrimRef = NameReference.getNameReference("startTrim");//long: tInfo
 	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
-	public static final NameReference chromaseqCellFlagsNameRef = NameReference.getNameReference("trimmable"); 
+	public static final NameReference chromaseqCellFlagsNameRef = NameReference.getNameReference("chromaseqStatus");  //long, tinfo and cells
 							//NOTE: this should not be called "trimmable", as it is a general name 
 							//long: tInfo, data(ch); MesquiteInteger: data(cells)
 
@@ -822,6 +822,8 @@ public class ChromaseqUtil{
 	/*.................................................................................................................*/
 	public static void purgeChromaseqData(CharacterData data) {
 		DNAData editedData = getEditedData(data);
+		if (editedData == null)
+			return;
 		CategoricalData addedBaseData = getAddedBaseData(data);
 		if (addedBaseData!=null){
 			addedBaseData.deleteMe(false);  
@@ -842,7 +844,6 @@ public class ChromaseqUtil{
 		if (qualityData!=null){
 			qualityData.deleteMe(false);  
 		}
-
 		editedData.detachAllObjectsOfName(ChromaseqUtil.PHPHMQVERSIONREF);
 		editedData.detachAllObjectsOfName(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF);
 		editedData.detachAllObjectsOfName(ChromaseqUtil.PHPHIMPORTIDREF);
