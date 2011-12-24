@@ -49,12 +49,13 @@ public class ChromaseqUtil{
 	 * */
 
 	public static final int NORMAL = 0;
+	public static final int TRIMMABLE=1;
+	public static final int BASECALLED=2;
 	public static final int MANUALLYCHANGED = 2;
 	public static final int CHECK = 3;
 	public static final int CHECK2 = 4;
 
-	public static final int TRIMMABLE=1;
-	public static final int BASECALLED=2;
+	
 	public static final String PHPHMQVERSION ="2";
 
 	public static final String infoFileName = "info.xml";
@@ -98,7 +99,9 @@ public class ChromaseqUtil{
 //	public static final NameReference singleReadRef = NameReference.getNameReference("singleRead");//long: tinfo
 	public static final NameReference startTrimRef = NameReference.getNameReference("startTrim");//long: tInfo
 	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
-	public static final NameReference chromaseqCellFlagsNameRef = NameReference.getNameReference("trimmable"); //long: tInfo, data(ch); MesquiteInteger: data(cells)
+	public static final NameReference chromaseqCellFlagsNameRef = NameReference.getNameReference("trimmable"); 
+							//NOTE: this should not be called "trimmable", as it is a general name 
+							//long: tInfo, data(ch); MesquiteInteger: data(cells)
 
 	public static final NameReference contigMapperRef = NameReference.getNameReference("contigMapper");
 
@@ -770,6 +773,8 @@ public class ChromaseqUtil{
 	public static boolean editedMatrixBaseSameAsOriginal(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
 		long originalState = ChromaseqUtil.getOriginalStateForEditedMatrixBase(data, ic, it);
 		long currentState = ((DNAData)data).getState(ic,it);
+		if (currentState==CategoricalState.inapplicable && originalState==CategoricalState.impossible || currentState==CategoricalState.impossible && originalState==CategoricalState.inapplicable)
+			return true;
 		if (((DNAData)data).isReversed(it)) 
 			return originalState==DNAState.complement(currentState);
 		
