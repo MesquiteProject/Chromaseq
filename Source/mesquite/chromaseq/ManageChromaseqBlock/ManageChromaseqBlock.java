@@ -16,6 +16,8 @@ package mesquite.chromaseq.ManageChromaseqBlock;
 
 import java.util.Vector;
 
+import com.apple.mrj.macos.carbon.Timer;
+
 import mesquite.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.categ.lib.*;
@@ -58,6 +60,29 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		this.chromaseqBuildOfFile = chromaseqBuildOfFile;
 	}
 	/*.................................................................................................................*/
+	private void setFlag(CharacterData data, int ic, int it, int c){
+		if (data == null || ic<0 || it<0)
+			return;
+		if (!MesquiteInteger.isCombinable(c) || c<0 || c == ChromaseqUtil.NORMAL){
+			ChromaseqUtil.setIntegerCellObject(data,ChromaseqUtil.chromaseqCellFlagsNameRef, ic, it, null);
+		}
+		else {
+			MesquiteInteger ms = new MesquiteInteger(c);
+			ChromaseqUtil.setIntegerCellObject(data,ChromaseqUtil.chromaseqCellFlagsNameRef, ic, it, ms);
+		}
+	}
+	/*.................................................................................................................*/
+	private void checkFlags(CharacterData data, int itStart, int itEnd, int icStart, int icEnd) {
+		for (int it=itStart; it<=itEnd; it++)
+			for (int ic=icStart; ic<=icEnd; ic++) {
+				if (!ChromaseqUtil.editedMatrixBaseSameAsOriginal(data, ic, it)){  // check to see if it is really changed; if yes, then add flag
+					setFlag(data,ic,it,ChromaseqUtil.MANUALLYCHANGED);
+				} else
+					setFlag(data,ic,it,ChromaseqUtil.NORMAL);
+
+			}
+	}
+	/*.................................................................................................................*/
 	/** passes which object changed, along with optional Notification object with details (e.g., code number (type of change) and integers (e.g. which character))*/
 	public void changed(Object caller, Object obj, Notification notification){
 		int code = Notification.getCode(notification);
@@ -72,14 +97,32 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 					 boolean recalcMappers = true;
 					 int itStart = 0;
 					 int itEnd = editedData.getNumTaxa();
-					 if (editedData.singleCellSubstitution(notification) || editedData.onlyAllCellsShifted(notification))
+					 int icStart = 0;
+					 int icEnd = editedData.getNumChars();
+					 if (editedData.singleCellSubstitution(notification)) {
+						 if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
+							 itStart=parameters[1];
+						 }
+						 if (parameters!=null && parameters.length>=1) {  //get second parameter, which is taxon changed
+							 icStart=parameters[0];
+						 }
+						 checkFlags(editedData,itStart,itStart,icStart,icStart);
 						 recalcMappers = false;
+					 } 
+					 else if (editedData.onlyAllCellsShifted(notification)){
+						 recalcMappers = false;
+					 }
 					 else if (editedData.singleCellChange(notification)){
 						 recalcMappers = true;
 						 if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
 							 itStart=parameters[1];
 							 itEnd=parameters[1];
 						 }
+						 if (parameters!=null && parameters.length>=1) {  //get second parameter, which is taxon changed
+							 icStart=parameters[0];
+							 icEnd=parameters[0];
+						 }
+						 checkFlags(editedData,itStart,itStart,icStart,icStart);
 					 } 
 					 else if (editedData.singleTaxonChange(notification)){
 						 recalcMappers = true;
@@ -87,7 +130,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 							 itStart=parameters[0];
 							 itEnd=parameters[0];
 						 }
-					 } 
+					 } 						 
 
 					 if (recalcMappers){
 						 if (editedData!=null) {
@@ -106,6 +149,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 							 if (itStart!=itEnd && timer!=null) 
 								 logln("Contig mapper re-inference complete, time: " + timer.timeSinceLastInSeconds() + " seconds");
 						 }
+						 checkFlags(editedData,itStart,itEnd,icStart,icEnd);
 					 }
 
 				 }
