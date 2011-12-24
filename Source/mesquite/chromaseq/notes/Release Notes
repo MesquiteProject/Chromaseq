@@ -1,0 +1,13 @@
+
+To release new version:
+
+- upload new version of manual to /packages/chromaseq/
+
+=============
+
+
+Chromaseq version 1.0 requires Mesquite 2.75 plus the following:
+
+To release:
+	UndoInstructions
+	MesquiteModule
