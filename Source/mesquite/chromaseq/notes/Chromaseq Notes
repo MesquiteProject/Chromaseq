@@ -1,16 +1,12 @@
+
+
+
 - push up svnaccess file
-
-manual:
-	- make sure date is correct
-
-aChromaseqIntro dates and version correction, isPrerelease, correct notices file
 
 
 To release:
 	UndoInstructions
 	MesquiteModule
-
-
 
 ======================
 
