@@ -318,7 +318,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 	}
 	/*.................................................................................................................*/
 	public boolean isPrerelease(){
-		return true;
+		return false;
 	}
 	/*.................................................................................................................*/
 	public boolean isSubstantive(){

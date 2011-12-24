@@ -63,7 +63,7 @@ public class NumMatricesWithDataForTaxon extends NumberForTaxon {
 
 	/*.................................................................................................................*/
 	public boolean isPrerelease() {
-		return true;
+		return false;
 	}
 	/*.................................................................................................................*/
 	public boolean isSubstantive() {

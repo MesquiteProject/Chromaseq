@@ -45,7 +45,7 @@ public class RemoveTrimmable extends DataAlterer {
    	 }
 	/*.................................................................................................................*/
    	 public boolean isPrerelease(){
-   	 	return true;
+   	 	return false;
    	 }
 	/*.................................................................................................................*/
 	/** returns whether this module is requesting to appear as a primary choice */

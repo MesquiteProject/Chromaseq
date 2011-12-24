@@ -44,7 +44,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		return true;
 	}
 	public boolean isPrerelease(){
-		return true;
+		return false;
 	}
 	/*.................................................................................................................*/
 	public int getChromaseqVersionOfFile() {

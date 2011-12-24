@@ -264,7 +264,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	/*.................................................................................................................*/
 
 	public boolean isPrerelease() {
-		return true;
+		return false;
 	}
 
 	/*.................................................................................................................*/

@@ -182,7 +182,7 @@ public class ProcessChromatogramsTaxonRedo extends CategDataEditorInit {
 	}
 	/*.................................................................................................................*/
 	public boolean isPrerelease(){
-		return true;
+		return false;
 	}
 
 }

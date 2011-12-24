@@ -36,6 +36,10 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	public String getExplanation() {
 		return "Used only to clean up legacy files.";
 	}
+	/*.................................................................................................................*/
+	public boolean isPrerelease(){
+		return false;  
+	}
 
 	/*.................................................................................................................*/
 	public void storeReverseRegistry(MeristicData reverseRegistryData) {
@@ -316,6 +320,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				data.detachObjectOfName(ChromaseqUtil.READBUILDREF);
 		}
 	}
+	
 	/*.................................................................................................................*/
 	public void fileReadIn(MesquiteFile f) {
 		if (f==null)

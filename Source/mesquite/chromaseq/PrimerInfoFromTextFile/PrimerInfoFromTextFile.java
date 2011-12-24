@@ -218,7 +218,7 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 	/*.................................................................................................................*/
 
 	public boolean isPrerelease() {
-		return true;
+		return false;
 	}
 	/*.................................................................................................................*/
 
