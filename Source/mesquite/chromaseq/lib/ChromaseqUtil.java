@@ -100,8 +100,6 @@ public class ChromaseqUtil{
 	public static final NameReference startTrimRef = NameReference.getNameReference("startTrim");//long: tInfo
 	public static final NameReference whichContigRef = NameReference.getNameReference("whichContig");	//long, tinfo
 	public static final NameReference chromaseqCellFlagsNameRef = NameReference.getNameReference("chromaseqStatus");  //long, tinfo and cells
-							//NOTE: this should not be called "trimmable", as it is a general name 
-							//long: tInfo, data(ch); MesquiteInteger: data(cells)
 
 	public static final NameReference contigMapperRef = NameReference.getNameReference("contigMapper");
 
