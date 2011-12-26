@@ -138,16 +138,20 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 						 timer.start();
 						 if (editedData!=null) {
 							 if (itStart!=itEnd) {
-								 logln("Re-inferring all contig mappers.");
+								 logln("Re-inferring all contig mappers.\n");
 							 }
+							 int count=0;
 							 for (int it=itStart; it<itEnd; it++) {
 								 ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
 								 if (contigMapper!=null) {
 									 contigMapper.inferFromExistingRegistry(editedData, it, this);
+									 count++;
+									 if (count % 10 == 0)
+										 log(".");
 								 }
 							 }
 							 if (itStart!=itEnd && timer!=null) 
-								 logln("Contig mapper re-inference complete, time: " + timer.timeSinceLastInSeconds() + " seconds");
+								 logln("\nContig mapper re-inference complete, time: " + timer.timeSinceLastInSeconds() + " seconds");
 						 }
 						 checkFlags(editedData,itStart,itEnd,icStart,icEnd);
 						if (MesquiteTrunk.debugMode || getPackageIntroModule().isPrerelease())

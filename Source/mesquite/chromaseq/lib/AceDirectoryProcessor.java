@@ -250,6 +250,7 @@ public class AceDirectoryProcessor {
 			return true;
 		for (int it=0; it<editedData.getNumTaxa(); it++)  
 			if (AceFile.hasAceFilePath(editedData, it) && !AceFile.hasAceFile(ownerModule, editedData,it)) {
+//				boolean db = AceFile.hasAceFile(ownerModule, editedData,it);
 				return true;
 			}
 		return false;
