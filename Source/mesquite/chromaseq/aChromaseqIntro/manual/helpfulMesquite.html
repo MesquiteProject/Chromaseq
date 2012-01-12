@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ZephyrTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -26,7 +26,7 @@
 
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
-<script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
+<script type="text/javascript" src="javascript/mesquiteZephyr.js"></script>
 
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -38,11 +38,11 @@
   <div id="header">
     <table width="100%" border="0" cellpadding="4">
   <tr>
-    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="51%"><img src="images/zephyrBannerNarrow.jpg" width="628" height="110" /></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Helpful Mesquite features<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.0<br />
-      23 December 2011<br /></td>
+    <td width="14%">Version 0.92<br />
+      10 January 2012<br /></td>
   </tr>
 </table>
 
@@ -78,56 +78,29 @@
 		</table>
     </div>
   </div>
-  <div id="PreparingDataPanel" class="CollapsiblePanel">
-    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
-    <div class="CollapsiblePanelContent" style="display: block">
-  		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('fileNamingRules.html');">File Naming Rules</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples & Sequence Names</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primers.html');">Primer & Gene Information</a></td></tr>
-		</table>
-    </div>
-  </div>
-  
-<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+<div id="RAxMLPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">RAxML</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr> <td><a href="javascript:pageLink('preparation.html');">Preparation & Processing</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('phredPhrap.html');">Phred & Phrap Locations & Options</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('quality.html');">Quality Scores & Colors</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram Files</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('appendingSequences.html');">Processing Additional Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('RAxMLOverview.html');">RAxML Overview</a></td></tr>
 		</table>
   </div>
 </div>
 
-
-<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+<div id="GARLIPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">GARLI</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr> <td><a href="javascript:pageLink('GARLIOverview.html');">GARLI Overview</a></td></tr>
 		</table>
   </div>
 </div>
+
 
 <div id="OtherFeaturesPanel" class="CollapsiblePanel">
   <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
   </div>
@@ -143,9 +116,8 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('zephyrList.html');">Zephyr E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
 	</table>
   </div>
@@ -180,29 +152,7 @@
 <!-- InstanceBeginEditable name="content" -->
     
     
-<p>Many features of the basic Mesquite packages are useful in the context of Chromaseq. We here give a few examples that we have found useful.</p>
-<h2><a name="importFASTA" id="importFASTA"></a>Importing initial sequences into another matrix</h2>
-<p>If you wish to quickly add sequences produced by Phred/Phrap/Chromaseq system to a existing, preliminary matrix, you can find the initial sequences in FASTA format in the processed subdirectory. The FASTA files will be in the processedFasta directory within each  fragment's directory. For example, in the Chromatograms example used in the <a href="tutorial.html">Tutorial</a>, the processedFasta directory within 28S contains four FASTA sequences of 28S ribosomal DNA. </p>
-<p align="center"><img src="images/fasta.png" width="305" height="271" /></p>
-<p>To move these into a Mesquite matrix, have that matrix open and visible within Mesquite. Then, select the FASTA files, and drag and drop them onto the matrix. Mesquite will ask you for the file format (chose FASTA), and Mesquite will then add each of the sequences to the  matrix. </p>
-<p>Note that these sequences are the initial, unedited sequences produces by Phred/Phrap/Chromaseq. If you have made base calls, trimmed the sequences, or done any other editing, these revised versions will not be in these FASTA files, but will instead be in the main Mesquite file that was produced by Chromaseq.</p>
-<h2><a name="alignmentTools" id="alignmentTools"></a>Alignment tools</h2>
-<p>Alignment tools can aid in interpreting the sequences, and in making base calls. Among the relevant alignment tools are:</p>
-<ul>
-  <li>manual alignment tools,including the Pairwise aligner tool in the matrix, and the Matrix&gt;Alter/Transform&gt;Shift Other to Match command, as outlined in the Align package manual. To see the Align package manual, choose Help&gt;Align Package from within Mesquite. </li>
-  <li>automated alignment tools, including Opal. See the <a href="http://mesquiteproject.org/packages/opalescent/">Opalescent web page</a> for details about acquiring Opal for Mesquite.</li>
-</ul>
-<h2>Reverse-complementing sequences</h2>
-<p>If a sequence is reverse-complemented relative to the majority of sequences in the file, it can be difficult to compare it to other sequences. If you wish, you can select the sequence in the main matrix, and choose Matrix&gt;Alter/Transform&gt;Reverse Complement.  If you do this, the Chromatogram Viewer window will change to have orange-colored panels, indicating that this sequence is has been reverse complemented.</p>
-<h2>Charts</h2>
-<p>The charting tools in Mesquite can be useful with Chromaseq. For example, after doing some Chromaseq processing, imagine you wished to plot the variation in average quality score of your sequences. You can do this by choosing Analysis&gt;New Bar &amp; Line Chart For&gt;Taxa, and in the dialog box that comes up which asks you to choose the Value to Calculate for Taxa, choose &quot;Quality Score&quot;. Here's an example chart of this sort:</p>
-<p align="center"><img src="images/allSequences.png" width="626" height="376" /></p>
-<p>As you can see, for these data, most sequences have an average per-base quality score between 21 and 29. </p>
-<p>Let's imagine, though, that you wanted to see which of your primer pairs yielded the highest quality sequences. If you go to the List of Taxa, and choose Columns&gt;Primers In Reads, you will get a new column in the List of Taxa that shows the primers that are present in the chromatogram names. If you then use the magic wand tool and touch on one particular combination of primers, for example the primer pair 1089a, 791F2, then all sequences with that primer pair will be selected:</p>
-<p align="center"><img src="images/selectingPrimerPair.png" width="156" height="457" /></p>
-<p>If you then look back at your chart, you will see that the sequences based upon that primer pair will be highlighted:</p>
-<p align="center"><img src="images/onePrimerPair.png" width="626" height="376" /></p>
-<p>This can be a useful tool to decide the primer pair that gives the highest quality sequences.</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -211,10 +161,10 @@
 
     
     
-</div>
+    </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
-    <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>
+    <p> ©2012 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
 
@@ -223,33 +173,27 @@
 
 
 var GettingStartedPanel = null;
-var ChromatogramViewerPanel = null;
-var ProcessingChromatoPanel = null;
-var PreparingDataPanel = null;
+var RAxMLPanel = null;
+var GARLIPanel = null;
 var CreditPanel = null;
 var HelpPanel = null;
 var OtherFeaturesPanel = null;
 var TechnicalPanel = null;
 
-if (qsParm['ProcessingChromatoPanel']=='open')
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+if (qsParm['GARLIPanel']=='open')
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: true});
 else
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: false});
 	
 if (qsParm['GettingStartedPanel']=='open')
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
 else
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
 	
-if (qsParm['ChromatogramViewerPanel']=='open')
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+if (qsParm['RAxMLPanel']=='open')
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: true});
 else
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
-
-if (qsParm['PreparingDataPanel']=='open')
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
-else
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: false});
 
 if (qsParm['CreditPanel']=='open')
  	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});

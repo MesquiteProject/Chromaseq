@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ZephyrTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -26,7 +26,7 @@
 
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
-<script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
+<script type="text/javascript" src="javascript/mesquiteZephyr.js"></script>
 
 <!-- InstanceBeginEditable name="head" -->
 <style type="text/css">
@@ -42,11 +42,11 @@
   <div id="header">
     <table width="100%" border="0" cellpadding="4">
   <tr>
-    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="51%"><img src="images/zephyrBannerNarrow.jpg" width="628" height="110" /></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Source Code<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.0<br />
-      23 December 2011<br /></td>
+    <td width="14%">Version 0.92<br />
+      10 January 2012<br /></td>
   </tr>
 </table>
 
@@ -82,56 +82,29 @@
 		</table>
     </div>
   </div>
-  <div id="PreparingDataPanel" class="CollapsiblePanel">
-    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
-    <div class="CollapsiblePanelContent" style="display: block">
-  		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('fileNamingRules.html');">File Naming Rules</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples & Sequence Names</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primers.html');">Primer & Gene Information</a></td></tr>
-		</table>
-    </div>
-  </div>
-  
-<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+<div id="RAxMLPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">RAxML</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr> <td><a href="javascript:pageLink('preparation.html');">Preparation & Processing</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('phredPhrap.html');">Phred & Phrap Locations & Options</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('quality.html');">Quality Scores & Colors</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram Files</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('appendingSequences.html');">Processing Additional Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('RAxMLOverview.html');">RAxML Overview</a></td></tr>
 		</table>
   </div>
 </div>
 
-
-<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+<div id="GARLIPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">GARLI</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr> <td><a href="javascript:pageLink('GARLIOverview.html');">GARLI Overview</a></td></tr>
 		</table>
   </div>
 </div>
+
 
 <div id="OtherFeaturesPanel" class="CollapsiblePanel">
   <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
   </div>
@@ -147,9 +120,8 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('zephyrList.html');">Zephyr E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
 	</table>
   </div>
@@ -185,55 +157,53 @@
   <p>&nbsp;</p>
   <p>&nbsp;</p>
   <p><b>DISCLAIMER</b>:
-              There are no doubt inefficiencies and goofs in the Chromaseq source
+              There are no doubt inefficiencies and goofs in the Zephyr source
               code. The commenting leaves much to be desired. Please approach this source
-              code with the spirit of helping out. With your help Chromaseq can be
+              code with the spirit of helping out. With your help Zephyr can be
               improved.
     </p>
-  <p>This source code is Copyright &copy;2011 D.R.
+  <p>This source code is Copyright &copy;2012 D.R.
         Maddison and W.P. Maddison unless otherwise stated in a source code file
-        itself. <strong>Chromaseq</strong> is
+        itself. <strong>Zephyr</strong> is
         distributed under the terms of the <a href="#lgpl">GNU
         Lesser General Public Licence</a>. The example data files ARE NOT distributed
-        under the GNU LGPL.</p>
-  <p>Some portions of the code Chromaseq uses to read
-      chromatogram files is derived from source code written by Jeremy Parsons. </p>
+        under the GNU LGPL.  </p>
   <p>This open source project is provided by David
         Maddison, Oregon State University, and Wayne Maddison, University of British
         Columbia and is intended for non-commercial use only.  </p>
     <h2>
       <hr noshade="noshade" size="2" />
     </h2>
-<h2>Check out source from the Chromaseq SVN repository</h2>
-    <p><font face="Trebuchet MS">You can also check out the active Chromaseq source code and Eclipse project from the Mesquite SVN repository.
+<h2>Check out source from the Mesquite SVN repository</h2>
+    <p><font face="Trebuchet MS">You can also check out the active Zephyr source code and Eclipse project from the Mesquite SVN repository.
     </font></p>
-    <p><font face="Trebuchet MS">To</font><font face="Trebuchet MS"> checkout the Chromaseq source from within Eclipse, switch to
+    <p><font face="Trebuchet MS">To</font><font face="Trebuchet MS"> checkout the Zephyr source from within Eclipse, switch to
       the &quot;SVN
       Repository Browsing&quot; perspective, touch on the SVN+
       button (<img src="images/svnPlus.gif" alt="" width="25" height="21" />),
       and in the dialog box that will appear,  enter
       the following in the URL box:</font></p>
-    <p align="center"><font face="Trebuchet MS"><strong>http://svn.mesquiteproject.org:8080/repository/chromaseq/trunk/</strong></font></p>
+    <p align="center"><font face="Trebuchet MS"><strong>http://svn.mesquiteproject.org:8080/repository/Zephyr/trunk/</strong></font></p>
     <p><font face="Trebuchet MS">and press Finish. You will not need to enter a username and
-      password to get the active Chromaseq source. </font></p>
+      password to get the active Zephyr source. </font></p>
     <p><font face="Trebuchet MS">You
       should
       now
       see the
-      Chromaseq repository URL on the left in
+      Zephyr repository URL on the left in
       your
       SVN Repository
       view. </font></p>
     <p><font face="Trebuchet MS">Expand the URL (using the triangle) to reveal a single item,
-      Chromaseq. Right-click (Ctrl-click on a Mac with one mouse
+      Zephyr. Right-click (Ctrl-click on a Mac with one mouse
       button)
-      the Chromaseq
+      the Zephyr
       folder and select &quot;Checkout As Project.&quot; 
-      This will begin the process of checking out the Chromaseq
+      This will begin the process of checking out the Zephyr
       source code to your computer. </font>    </p>
-    <p><font face="Trebuchet MS">The Chromaseq Project</font><font face="Trebuchet MS"> will be placed in your Eclipse workspace,
+    <p><font face="Trebuchet MS">The Zephyr Project will be placed in your Eclipse workspace,
       but in a different folder than the main Mesquite Project. Because
-      if this, you will need configure Mesquite to find them (unless you move out the chromaseq directory containing the class files (in Mesquite_Folder/mesquite/ in the Chromaseq Project's directory and put it into the main Mesquite Folder/mesquite/ directory containing the core Mesquite class files). If you do wish to use Chromaseq from within your Eclipse Mesquite project, then you will need to </font><font face="Trebuchet MS"> create a &quot;classpaths.xml&quot; file
+      if this, you will need configure Mesquite to find them (unless you move out the zephyr directory containing the class files (in Mesquite_Folder/mesquite/ in the Zephyr Project's directory and put it into the main Mesquite Folder/mesquite/ directory containing the core Mesquite class files). If you do wish to use Zephyr from within your Eclipse Mesquite project, then you will need to  create a &quot;classpaths.xml&quot; file
                 that contains the locations of the other classes, and placing
                 the file in the Mesquite_Folder in
                    Mesquite  Project in your Eclipse workspace. The format of
@@ -242,7 +212,7 @@
 <pre>
  <font face="Trebuchet MS">&lt;?xml version=&quot;1.0&quot;?&gt;
 	&lt;mesquite&gt;
-		&lt;classpath&gt;../../Chromasew/Mesquite_Folder&lt;/classpath&gt;
+		&lt;classpath&gt;../../Zephyr/Mesquite_Folder&lt;/classpath&gt;
 	&lt;/mesquite&gt;	
 </font></pre>
     <h3>
@@ -764,10 +734,10 @@
 
     
     
-</div>
+    </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
-    <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>
+    <p> ©2012 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
 
@@ -776,33 +746,27 @@
 
 
 var GettingStartedPanel = null;
-var ChromatogramViewerPanel = null;
-var ProcessingChromatoPanel = null;
-var PreparingDataPanel = null;
+var RAxMLPanel = null;
+var GARLIPanel = null;
 var CreditPanel = null;
 var HelpPanel = null;
 var OtherFeaturesPanel = null;
 var TechnicalPanel = null;
 
-if (qsParm['ProcessingChromatoPanel']=='open')
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+if (qsParm['GARLIPanel']=='open')
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: true});
 else
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: false});
 	
 if (qsParm['GettingStartedPanel']=='open')
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
 else
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
 	
-if (qsParm['ChromatogramViewerPanel']=='open')
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+if (qsParm['RAxMLPanel']=='open')
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: true});
 else
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
-
-if (qsParm['PreparingDataPanel']=='open')
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
-else
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: false});
 
 if (qsParm['CreditPanel']=='open')
  	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ZephyrTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -26,7 +26,7 @@
 
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
-<script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
+<script type="text/javascript" src="javascript/mesquiteZephyr.js"></script>
 
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -38,11 +38,11 @@
   <div id="header">
     <table width="100%" border="0" cellpadding="4">
   <tr>
-    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="51%"><img src="images/zephyrBannerNarrow.jpg" width="628" height="110" /></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Technical FAQ<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.0<br />
-      23 December 2011<br /></td>
+    <td width="14%">Version 0.92<br />
+      10 January 2012<br /></td>
   </tr>
 </table>
 
@@ -78,56 +78,29 @@
 		</table>
     </div>
   </div>
-  <div id="PreparingDataPanel" class="CollapsiblePanel">
-    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
-    <div class="CollapsiblePanelContent" style="display: block">
-  		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('fileNamingRules.html');">File Naming Rules</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples & Sequence Names</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primers.html');">Primer & Gene Information</a></td></tr>
-		</table>
-    </div>
-  </div>
-  
-<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+<div id="RAxMLPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">RAxML</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr> <td><a href="javascript:pageLink('preparation.html');">Preparation & Processing</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('phredPhrap.html');">Phred & Phrap Locations & Options</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('quality.html');">Quality Scores & Colors</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram Files</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('appendingSequences.html');">Processing Additional Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('RAxMLOverview.html');">RAxML Overview</a></td></tr>
 		</table>
   </div>
 </div>
 
-
-<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+<div id="GARLIPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">GARLI</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr> <td><a href="javascript:pageLink('GARLIOverview.html');">GARLI Overview</a></td></tr>
 		</table>
   </div>
 </div>
+
 
 <div id="OtherFeaturesPanel" class="CollapsiblePanel">
   <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
   </div>
@@ -143,9 +116,8 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('zephyrList.html');">Zephyr E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
 	</table>
   </div>
@@ -178,11 +150,7 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-<p>Q: When I use a text editor to look into the NEXUS file produced after processing of chromatograms by Chromaseq, I see additional matrices.  </p>
-<p>A: When Chromaseq processes chromatograms, and brings the results into matrices within a Mesquite project, it creates a number of hidden matrices that are used by Mesquite to store various relevant piece of information. In particular, it stores a full matrix of quality scores, a matrix of unedited sequences as originally imported, and then a registration matrix which is for bookkeeping purposes.</p>
 <p>&nbsp;</p>
-<p>Q: Once chromaseq is done its processing, I notice that the chromatogram files are now buried within a processed directory, and within that in subdirectories by gene and then by sample. Within those directories for each sequence, the file names of the chromatograms have changed (except for any backups that were made). For example, one of my original chromatogram file names was called &quot;A08_A08DNA1566_B1490_204386.ab1&quot; and there is no file of that name any more. There is a file named &quot;DNA1566.b.B1490.ab1&quot;, which might or might not be the same one. How can I see old files names that correspond to these new file names? </p>
-<p>A: Within that subdirectory for that sequence, you will notice that there is an &quot;info.xml&quot; file. Look in that and you will see, among other things, the correspondence between the old file names and the new file names.</p>
 <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
 
@@ -191,7 +159,7 @@
     </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
-    <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>
+    <p> ©2012 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
 
@@ -200,33 +168,27 @@
 
 
 var GettingStartedPanel = null;
-var ChromatogramViewerPanel = null;
-var ProcessingChromatoPanel = null;
-var PreparingDataPanel = null;
+var RAxMLPanel = null;
+var GARLIPanel = null;
 var CreditPanel = null;
 var HelpPanel = null;
 var OtherFeaturesPanel = null;
 var TechnicalPanel = null;
 
-if (qsParm['ProcessingChromatoPanel']=='open')
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+if (qsParm['GARLIPanel']=='open')
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: true});
 else
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: false});
 	
 if (qsParm['GettingStartedPanel']=='open')
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
 else
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
 	
-if (qsParm['ChromatogramViewerPanel']=='open')
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+if (qsParm['RAxMLPanel']=='open')
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: true});
 else
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
-
-if (qsParm['PreparingDataPanel']=='open')
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
-else
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: false});
 
 if (qsParm['CreditPanel']=='open')
  	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ZephyrTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -26,7 +26,7 @@
 
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
-<script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
+<script type="text/javascript" src="javascript/mesquiteZephyr.js"></script>
 
 <!-- InstanceBeginEditable name="head" -->
 <style type="text/css">
@@ -45,11 +45,11 @@
   <div id="header">
     <table width="100%" border="0" cellpadding="4">
   <tr>
-    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="51%"><img src="images/zephyrBannerNarrow.jpg" width="628" height="110" /></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Installation<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.0<br />
-      23 December 2011<br /></td>
+    <td width="14%">Version 0.92<br />
+      10 January 2012<br /></td>
   </tr>
 </table>
 
@@ -85,56 +85,29 @@
 		</table>
     </div>
   </div>
-  <div id="PreparingDataPanel" class="CollapsiblePanel">
-    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
-    <div class="CollapsiblePanelContent" style="display: block">
-  		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('fileNamingRules.html');">File Naming Rules</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples & Sequence Names</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primers.html');">Primer & Gene Information</a></td></tr>
-		</table>
-    </div>
-  </div>
-  
-<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+<div id="RAxMLPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">RAxML</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr> <td><a href="javascript:pageLink('preparation.html');">Preparation & Processing</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('phredPhrap.html');">Phred & Phrap Locations & Options</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('quality.html');">Quality Scores & Colors</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram Files</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('appendingSequences.html');">Processing Additional Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('RAxMLOverview.html');">RAxML Overview</a></td></tr>
 		</table>
   </div>
 </div>
 
-
-<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+<div id="GARLIPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">GARLI</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr> <td><a href="javascript:pageLink('GARLIOverview.html');">GARLI Overview</a></td></tr>
 		</table>
   </div>
 </div>
+
 
 <div id="OtherFeaturesPanel" class="CollapsiblePanel">
   <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
   </div>
@@ -150,9 +123,8 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('zephyrList.html');">Zephyr E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
 	</table>
   </div>
@@ -185,109 +157,7 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-<p>You will need to install both Chromaseq, as well as Phred, Phrap, and Phd2Fasta.</p>
-<h2>Installing Chromaseq</h2>
-<p>To install Chromaseq,  go to the <a href="javascript:pageLink('download.html');">download page</a> and follow the instructions.</p>
-<h2>Acquiring Phred and Phrap</h2>
-<p>You can either acquire Phred and Phrap as source code (see <a href="http://www.phrap.org/consed/consed.html#howToGet">How to Get Phred/Phrap/Consed</a>), which most people at academic institutions can obtain free, or you can purchase precompiled versions from <a href="http://www.codoncode.com">CodonCode Corporation</a>. Note that Chromaseq does not require Consed, and so you will not need to obtain Consed for use with Chromaseq.</p>
-<p><strong><em>Please note</em></strong> that for some of the newer operating systems (ones that are 64-bit operating systems, e.g., MacOS X 10.6 on a newer Mac) the default version of Phrap will fail to run properly. To use Phrap (and thus Chromaseq) on these newer operating systems, you need to get the newest, beta version of Phrap. Here are the details to acquire this, as specified by the author of Phrap: </p>
-<table width="800" border="0" cellspacing="0" cellpadding="4" align="center" bgcolor="#EEEEEE">
-  <tr>
-    <td><p> A beta test version of the package, with many new features and capabilities (including some support for next-generation sequencing data), is now also available. It is not yet the default distribution version because it is still being tested, so you must request it separately, as follows: send an email to <img src="images/php.gif" alt="" width="135" height="16" />, with a Subject: line that says &quot;phrap new version request&quot;, and an email body that consists of the following two lines (it should be in exactly this format, to be computer readable):</p>
-      <p>Request: phrap ver 1.080721 or later<br />
-        Registered phrap email address: [insert your email address here]</p>
-      <p>Your email address should be the same one you supplied in your previous phrap request. Keep the square brackets ('[' and ']') around your email address.</p></td>
-  </tr>
-</table>
-<p></p>
-<h2>Compiling Phred, Phd2Fasta, and Phrap </h2>
-<p>If you are not familiar with compiling source code into executable programs, you may wish to ask for help from a local expert. <em>(Not us.)</em> Basically, you are taking the source code, present as text written in the computer language C, and asking a compiler to convert that text into machine code that your computer can understand. To do this, you will need access to a compiler. Here are some basic instructions, but they cannot be guaranteed to work on all computers. </p>
-<p>Note: there is a bug in the current release version of Phrap (version 0.990329) when compiled for 64-bit machines that will cause it to fail when used within the Chromaseq context. Please see the <a href="troubleshooting.html">Troubleshooting</a> page if you have problems.</p>
-<h3>Preparing the source code</h3>
-<p>You will receive the source code as  archives, in three pieces, which might have names like this:</p>
-<ul>
-  <li>phred-dist-020425.c-acd.tar.Z</li>
-  <li>phd2fasta-acd-dist.tar.Z</li>
-  <li>distrib.tar.Z (this contains Phrap) </li>
-</ul>
-<p>Unzip/untar these archives, so that you now have three directories on disk, which might have names like this:</p>
-<ul>
-  <li>phred-dist-020425.c</li>
-  <li>phd2fasta-acd-dist</li>
-  <li>distrib</li>
-</ul>
-<p>Each of these directories contain the source code for different programs, and you will need to compile each one. </p>
-<h3>Creating the program directory</h3>
-<p> You will also need to create a directory to house the finished programs. We will imagine that you have created it and that it is called &quot;phredphrap&quot;. </p>
-<h3><strong>Compiling the programs</strong></h3>
-<p><em><strong>Sorry, but we cannot provide help to you in your attempt to compile these programs</strong>. </em>For help you will need to be in touch with your local computer guru. If you find any error in the instructions below, please send us an email (<img src="images/email.jpg" alt="" width="189" height="17" />), and we can update this page. </p>
-<p>To compile the programs, following these instructions: </p>
-<h4>MacOS X, Linux</h4>
-<ul>
-  
-    <li>If you are on Mac OSX, you will first need to install Xcode, which you can download at <a href="http://developer.apple.com/technologies/tools/xcode.html">http://developer.apple.com/technologies/tools/xcode.html</a>. Install Xcode.</li>
-    <li>Start up a UNIX shell. On Mac OSX, you can start the application called Terminal in the Utilities folder in the Applications folder. </li>
-  <li>Change the directory to be the phrap source directory (e.g., &quot;cd /phredPhrap Source/distrib/&quot;)</li>
-  <li>Type &quot;make&quot;; this will cause your C compiler to compile phrap as well as some other programs. Various text will be written to the shell or terminal, and once it stops, there should be a file named named &quot;phrap&quot; in the directory. If you have problems, you might look into the phrap.doc file in the phrap directory for more information about installation.</li>
-  <li>Copy phrap to the previously created program directory.</li>
-  <li>cd to the phred directory (&quot;cd /phredPhrap Source/phred-dist-020425.c-acd&quot;).</li>
-  <li>Type &quot;make&quot;; this will cause your C compiler to compile phred. If you have problems, you might look into the INSTALL file in the phred directory for more information. </li>
-  <li>Copy phred to the previously created program directory.</li>
-  <li>cd to the phd2fasta directory  (&quot;cd /phredPhrap Source/phd2fasta-acd-dist).</li>
-  <li>Type &quot;make&quot;; this will cause your C compiler to compile phd2fasta. If you have problems, you might look into the INSTALL file in the phd2fasta directory for more information.</li>
-  <li>Copy phd2fasta to the previously created program directory.</li>
-  <li>You should now have three programs in your program directory: phrap, phred, and phd2fasta. </li>
-</ul>
-<h4>Windows</h4>
-<ul>
-  <li>Install the cygwin toolkit available for free at <a href="http://www.cygwin.com">http://www.cygwin.com</a> -- make sure you have both the C compiler selected (<strong>gcc</strong>), as well as <strong>make</strong> (makefile support).</li>
-  <li>Start the cygwin shell. </li>
-  <li>In the cygwin shell, change the directory to be the phrap source directory (e.g., &quot;cd /cygdrive/c/phredPhrap Source/distrib/&quot;).</li>
-  <li>Type &quot;make&quot;; this will cause your C compiler to compile phrap, and  create a file named &quot;phrap.exe&quot;.  If you have problems, you might look into the phrap.doc file in the phrap directory for more information about installation.</li>
-  <li>Copy phrap.exe to the previously created program directory (e.g., &quot;cp phrap.exe /cygdrive/c/phredphrap/&quot;).</li>
-  <li>cd to the phred directory using the cygwin shell (&quot;cd /cygdrive/c/phredPhrap Source/phred-dist-020425.c-acd&quot;).</li>
-  <li>Type &quot;make&quot;; this will cause your C compiler to compile phred,  and create a file named &quot;phred.exe&quot;. </li>
-  <li>Copy phred.exe to the previously created program directory (e.g., &quot;cp phred.exe /cygdrive/c/phredphrap/&quot;).</li>
-  <li>cd to the phd2fasta directory using the cygwin shell (&quot;cd /cygdrive/c/phredPhrap Source/phd2fasta-acd-dist).</li>
-  <li>Type &quot;make&quot;; this will cause your C compiler to compile phd2fasta, and  create a file named &quot;phd2fasta.exe&quot;.</li>
-  <li>Copy phd2fasta.exe to the previously created program directory (e.g., &quot;cp phd2fasta.exe /cygdrive/c/phredphrap/&quot;).</li>
-  <li>You should now have three programs in your program directory: phrap.exe, phred.exe, and phd2fasta.exe. </li>
-  </ul>
-<h3>Making sure you have the approriate shell</h3>
-<h4>Ubuntu</h4>
-<p>On some versions of Ubuntu, there will be no c-shell installed by default. As Chromaseq will need to invoke a c-shell for giving commands to phred and phrap, it must be installed.  To see if you have a c-shell installed in the necessary directory, open a Terminal window and type:</p>
-<p class="monospaced">    locate bin/csh</p>
-<p>The terminal should return, at least:</p>
-<p class="monospaced">   /bin/csh</p>
-<p>if the shell is installed.  If it is not installed (/bin/csh wasn't listed after the locate command), you can install it by entering, in the Terminal:</p>
-<p class="monospaced">   sudo apt-get update<br />
-     sudo apt get install csh</p>
-<p>This will install Ubuntu's c-shell; you can confirm proper installation by using the locate command as above.</p>
-<h4>Other Linux variants</h4>
-<p>For other Linux variants, you should also make sure you have a c-shell installed. Follow the instructions for Ubuntu, above, but apparently (please give us feedback if this is not the case) the command to install the shell is not the two &quot;sudo apt-get&quot; commands mentioned above but instead</p>
-<p class="monospaced">    sudo yum install tcsh</p>
 <p>&nbsp;</p>
-<h2><a name="phredpar" id="phredpar"></a>Preparing the Phred Parameter File</h2>
-<p>In order for Phred to function properly, you will also need to edit the Phred parameter file. An initial version of the file should be present with the original distribution of Phred, and is called <strong>phredpar.dat</strong>. You will quite probably need to edit this file; you should probably make a copy of it and put it in an accessible spot, perhaps in the phredPhrap program directory. This file needs to contain, among other things, information about the dye chemistry and so on used by your particular automated DNA sequencer. </p>
-<p>If you don't modify this file, the Mesquite/Phred/Phrap system may not function correctly, and it make not give obvious warning messages. If you look into the text written to your shell or Terminal program as Phred is running, you will see warnings of the following sort:</p>
-<p class="monospaced"> ./DNA0446.b.wg578F.ab1: unable to match primer ID string: skipping chromatogram<br />
-  unknown chemistry (DT3730POP7{BDv3}.mob) in chromat ./DNA0446.b.wg578F.ab1<br />
-  add a line of the form<br />
-  &nbsp;&nbsp;&nbsp;&quot;DT3730POP7{BDv3}.mob&quot;    &lt;chemistry&gt;      &lt;dye type&gt;      &lt;machine type&gt;<br />
-  to the file /phredPhrap/phredpar.dat</p>
-<p>If you see these warnings, it means that the appropriate entry for your sequencing machine or chemistry is not included in the default phredpar.dat file, and you will need to enter it. If you open up phredpar.dat file in a simple text editor, you will see lines of the following sort:</p>
-<p class="monospaced">&quot;DT3100POP6{BDv3}v1.mob&quot;        terminator      big-dye                 ABI_3100</p>
-<p>and you will need to add addition lines to the file of this form that contains the information relevant to your sequenching machine. For example, over time we've had to add the following lines:</p>
-<p class="monospaced">&quot;DT3730POP7{BDv3}.mob&quot;    terminator      big-dye      ABI_373_377<br />
-  &quot;DT3700POP5{BDv3}v1.mob&quot;          terminator      big-dye 		ABI_3700<br />
-  &quot;DT377{BDv3}v2.mob&quot;		terminator	big-dye			ABI_373_377<br />
-  &quot;DT377{BDv3}v1.mob&quot;		terminator	big-dye			ABI_373_377<br />
-  &quot;KB_3100_POP4_BDTv3.mob&quot; terminator	big-dye	ABI_3100<br />
-  &quot;KB_3730_POP7_BDTv3.mob&quot;	terminator	big-dye	ABI_373_377<br />
-  &quot;DT3700POP6{BDv3}v1.mob&quot;           terminator      big-dye                 ABI_3700<br />
-  &quot;DT3730POP7{BDv3}.mob&quot;    terminator      big-dye      ABI_373_377</p>
-<p>Note that the warning from Phred states what the first part of the line should contain. The phred.doc file contains more details. </p>
-<p>Once you have your programs in a directory, and your phredpar.dat file modified, you should be able to use Chromaseq. </p>
 <!-- InstanceEndEditable -->
 
     
@@ -295,7 +165,7 @@
     </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
-    <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>
+    <p> ©2012 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
 
@@ -304,33 +174,27 @@
 
 
 var GettingStartedPanel = null;
-var ChromatogramViewerPanel = null;
-var ProcessingChromatoPanel = null;
-var PreparingDataPanel = null;
+var RAxMLPanel = null;
+var GARLIPanel = null;
 var CreditPanel = null;
 var HelpPanel = null;
 var OtherFeaturesPanel = null;
 var TechnicalPanel = null;
 
-if (qsParm['ProcessingChromatoPanel']=='open')
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+if (qsParm['GARLIPanel']=='open')
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: true});
 else
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: false});
 	
 if (qsParm['GettingStartedPanel']=='open')
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
 else
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
 	
-if (qsParm['ChromatogramViewerPanel']=='open')
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+if (qsParm['RAxMLPanel']=='open')
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: true});
 else
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
-
-if (qsParm['PreparingDataPanel']=='open')
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
-else
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: false});
 
 if (qsParm['CreditPanel']=='open')
  	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});

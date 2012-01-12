@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ChromaseqTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/ZephyrTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -26,7 +26,7 @@
 
 <script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
-<script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
+<script type="text/javascript" src="javascript/mesquiteZephyr.js"></script>
 
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -38,11 +38,11 @@
   <div id="header">
     <table width="100%" border="0" cellpadding="4">
   <tr>
-    <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
+    <td width="51%"><img src="images/zephyrBannerNarrow.jpg" width="628" height="110" /></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Troubleshooting<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.0<br />
-      23 December 2011<br /></td>
+    <td width="14%">Version 0.92<br />
+      10 January 2012<br /></td>
   </tr>
 </table>
 
@@ -78,56 +78,29 @@
 		</table>
     </div>
   </div>
-  <div id="PreparingDataPanel" class="CollapsiblePanel">
-    <div class="CollapsiblePanelTab" tabindex="0">Preparing Data</div>
-    <div class="CollapsiblePanelContent" style="display: block">
-  		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('chromatograms.html');">Chromatograms</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('fileNamingRules.html');">File Naming Rules</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('sampleCode.html');">Samples & Sequence Names</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('primers.html');">Primer & Gene Information</a></td></tr>
-		</table>
-    </div>
-  </div>
-  
-<div id="ProcessingChromatoPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Processing Chromatograms</div>
+<div id="RAxMLPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">RAxML</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr> <td><a href="javascript:pageLink('preparation.html');">Preparation & Processing</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('phredPhrap.html');">Phred & Phrap Locations & Options</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('postPhrap.html');">Post-Phrap Options</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('quality.html');">Quality Scores & Colors</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('segregatingChromatograms.html');">Segregating Chromatogram Files</a></td></tr>
-  			<tr> <td><a href="javascript:pageLink('appendingSequences.html');">Processing Additional Chromatograms</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('RAxMLOverview.html');">RAxML Overview</a></td></tr>
 		</table>
   </div>
 </div>
 
-
-<div id="ChromatogramViewerPanel" class="CollapsiblePanel">
-  <div class="CollapsiblePanelTab" tabindex="0">Chromatogram Viewer</div>
+<div id="GARLIPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">GARLI</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('viewer.html');">Viewing Chromatograms</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('callingBases.html');">Altering Base Calls</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('conflicts.html');">Detecting Conflicts</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('primerSites.html');">Displaying Primer Sites</a></td></tr>
-  			<tr>  <td><a href="javascript:pageLink('extraSequences.html');">Multiple Reads/Contigs at Once</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('display.html');">Other Display Options</a></td></tr>
-			<tr><td><a href="javascript:pageLink('navigation.html');">Navigation</a></td></tr>
+  			<tr> <td><a href="javascript:pageLink('GARLIOverview.html');">GARLI Overview</a></td></tr>
 		</table>
   </div>
 </div>
+
 
 <div id="OtherFeaturesPanel" class="CollapsiblePanel">
   <div class="CollapsiblePanelTab" tabindex="0">Other Features</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
   			<tr><td><a href="javascript:pageLink('helpfulMesquite.html');">Helpful Mesquite Features</a></td></tr>
 		</table>
   </div>
@@ -143,9 +116,8 @@
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('zephyrList.html');">Zephyr E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
   			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
 	</table>
   </div>
@@ -178,113 +150,6 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-    
-    
-<h2>Troubleshooting the processing chromatogram files</h2>
-<p>Processing by Chromaseq/Phred/Phrap should yield output in Mesquite's log window that looks like this:</p>
-<p class="monospacedSmall">Phred Phrap processing of chromatograms as scripted by Mesquite<br />
-  Processing directory: /ChromaseqExamples/Chromatograms</p>
-<p class="monospacedSmall">Using names and codes file: /ChromaseqExamples/SampleCodes.txt</p>
-<p class="monospacedSmall">Using primers file: /ChromaseqExamples/Primers.txt</p>
-<p class="monospacedSmall">Parameters: Phred Options:  -id . -pd . -d <br />
-  Phrap Options:  -new_ace -qual_show 20 -vector_bound 0 <br />
-  Chromaseq Options: <br />
-  Quality threshold for lower case: 49<br />
-  Convert multiple-peaks sites to ambiguity codes: true<br />
-  Minimum secondary peak fraction for ambiguity: 0.3<br />
-  Trim low quality regions from ends: true<br />
-  Quality threshold for trim: 20<br />
-  Trim window length: 10<br />
-  Trim window threshold: 5</p>
-<p class="monospacedSmall">---------------------------------------------------<br />
-  Section 1: Examining chromatogram files and preparing directories </p>
-<p class="monospacedSmall"> Preparing Bemb perspicuum AZ 1120  (COI)<br />
-  Preparing Bemb louisella NS 1250  (COI)<br />
-  Preparing Bemb louisella NS 1250  (28S)<br />
-  Preparing Bemb perspicuum CA 2320  (28S)<br />
-  Preparing Bemb paraenulum VA 1856  (COI)<br />
-  Preparing Bemb perspicuum AZ 1120  (28S)<br />
-  Preparing Bemb paraenulum VA 1856  (28S)</p>
-<p class="monospacedSmall">Number of files prepared: 7</p>
-<p class="monospacedSmall">---------------------------------------------------<br />
-  Section 2: Renaming chromatograms for Phred and Phrap</p>
-<p class="monospacedSmall"> A01_A01DNA1120_B1490_411940.ab1  renamed to  DNA1120.b.B1490.ab1<br />
-  A01_A01DNA1120_Bcoi2R_412036.ab1  renamed to  DNA1120.g.Bcoi2R.ab1<br />
-  C07_C07DNA1250_B1490_208508.ab1  renamed to  DNA1250.b.B1490.ab1<br />
-  C07_C07DNA1250_B2232_208604.ab1  renamed to  DNA1250.g.B2232.ab1<br />
-  C12_C12DNA1250_D3aR_572645.ab1  renamed to  DNA1250.g.D3aR.ab1<br />
-  C12_C12DNA1250_NLF184_572549.ab1  renamed to  DNA1250.b.NLF184.ab1<br />
-  F06_F06DNA2320_D3aR_552091.ab1  renamed to  DNA2320.g.D3aR.ab1<br />
-  F06_F06DNA2320_NLF184_551995.ab1  renamed to  DNA2320.b.NLF184.ab1<br />
-  H05_H05DNA1856_B1490_237723.ab1  renamed to  DNA1856.b.B1490.ab1<br />
-  H05_H05DNA1856_B2232_237819.ab1  renamed to  DNA1856.g.B2232.ab1<br />
-  H07_H07DNA1120_D1_394061.ab1  renamed to  DNA1120.b.D1.ab1<br />
-  H07_H07DNA1120_D3_394157.ab1  renamed to  DNA1120.g.D3.ab1<br />
-  H09_H09DNA1856_D1_237563.ab1  renamed to  DNA1856.b.D1.ab1<br />
-  H09_H09DNA1856_D3_237659.ab1  renamed to  DNA1856.g.D3.ab1</p>
-<p class="monospacedSmall">---------------------------------------------------<br />
-  Section 3: Execution of Phred-Phrap command file begun</p>
-<p class="monospacedSmall">.1. Bemb perspicuum AZ 1120 (Phred)<br />
-  2. Bemb louisella NS 1250 (Phrap)<br />
-  3. Bemb louisella NS 1250 (Phrap)<br />
-  4. Bemb perspicuum CA 2320 (Phrap)<br />
-  6. Bemb perspicuum AZ 1120 (Phred)</p>
-<p class="monospacedSmall">Phred &amp; Phrap analyses completed.</p>
-<p class="monospacedSmall">---------------------------------------------------<br />
-  Section 4: Mesquite processing of Phrap results<br />
-  <br />
-  Processing ACE file: Bemb louisella NS 1250.ace<br />
-  C12_C12DNA1250_D3aR_572645.ab1 (rev)<br />
-  C12_C12DNA1250_NLF184_572549.ab1</p>
-<p class="monospacedSmall">Processing ACE file: Bemb paraenulum VA 1856.ace<br />
-  H09_H09DNA1856_D3_237659.ab1 (rev)<br />
-  H09_H09DNA1856_D1_237563.ab1</p>
-<p class="monospacedSmall">Processing ACE file: Bemb perspicuum AZ 1120.ace<br />
-  H07_H07DNA1120_D3_394157.ab1 (rev)<br />
-  H07_H07DNA1120_D1_394061.ab1</p>
-<p class="monospacedSmall">Processing ACE file: Bemb perspicuum CA 2320.ace<br />
-  F06_F06DNA2320_D3aR_552091.ab1 (rev)<br />
-  F06_F06DNA2320_NLF184_551995.ab1</p>
-<p class="monospacedSmall">Processing ACE file: Bemb louisella NS 1250.ace<br />
-  C07_C07DNA1250_B2232_208604.ab1 (rev)<br />
-  C07_C07DNA1250_B1490_208508.ab1</p>
-<p class="monospacedSmall">Processing ACE file: Bemb paraenulum VA 1856.ace<br />
-  H05_H05DNA1856_B2232_237819.ab1 (rev)<br />
-  H05_H05DNA1856_B1490_237723.ab1</p>
-<p class="monospacedSmall">Processing ACE file: Bemb perspicuum AZ 1120.ace<br />
-  A01_A01DNA1120_Bcoi2R_412036.ab1 (rev)<br />
-  A01_A01DNA1120_B1490_411940.ab1</p>
-<p class="monospacedSmall">========================<br />
-  Section 5: Phred/Phrap processing report</p>
-<p class="monospacedSmall">Multi-read sequences obtained from the following genes and samples:<br />
-  (28S) -- Bemb louisella NS 1250<br />
-  (28S) -- Bemb paraenulum VA 1856<br />
-  (28S) -- Bemb perspicuum AZ 1120<br />
-  (28S) -- Bemb perspicuum CA 2320<br />
-  (COI) -- Bemb louisella NS 1250<br />
-  (COI) -- Bemb paraenulum VA 1856<br />
-  (COI) -- Bemb perspicuum AZ 1120</p>
-<p class="monospacedSmall">========================</p>
-<p class="monospacedSmall">Processing of chromatogram files completed.</p>
-<p>&nbsp;</p>
-<p>And then you should see, once Chromaseq is done with the processing, matrices containing your sequences, shown in Bird's Eye view, and colored green and blue to indicate quality scores, like this:</p>
-<p class="monospacedSmall"><img src="images/viewerMatrix.png" width="680" height="334" /></p>
-<p>If your output does not look like this, you may have a problem.</p>
-<table width="800" border="0" cellpadding="8">
-  <tr>
-    <td bgcolor="#EEEEEE"><strong>Symptom</strong></td>
-    <td bgcolor="#EEEEEE"><strong>Diagnosis and Solution</strong></td>
-    </tr>
-  <tr>
-    <td bgcolor="#EEEEEE">Sections 1 through 3 look fine, but Sections 4 and 5 contain only a WARNING.</td>
-    <td bgcolor="#EEEEEE"><p>1. Phred or Phrap may have failed. Please check the output of the Terminal or Shell program that ran Phred and Phrap. If the line &quot;Aligning reads to contigs ...Segmentation fault&quot; appears in your output, then it is likely you have encountered the 64-bit bug in Phrap. Please contact Phil Green, the author of Phrap, explain the situation, and ask him for a copy of new beta version of Phrap. See the <a href="installation.html">Installation</a> page for more details about exactly what you should ask for. </p>
-      <p>2. You may need to modify the phredpar.dat file to accommodate the particular nature of the machine used to produce your chromatograms. See <a href="installation.html#phredpar">Preparing the Phred Parameter File</a>.</p></td>
-    </tr>
-  <tr>
-    <td bgcolor="#EEEEEE">In viewing a contig, you get a message that begins &quot;Chromaseq detects many conflicts...&quot;</td>
-    <td bgcolor="#EEEEEE">For some reason, the registration system used by Chromaseq to link the based in your matrix to those in your contigs and reads was damaged. You might be able to repair it by choosing one of the items from the Chromatograms&gt;Registration submenu. The first item (Recalculate Mappers (Less Complete)) is the least thorough, but the simplest; the third item (Force Reregistration) completely reinfers the registration using alignment tools, and thus is a bit more drastic; the second item is inbetween. We recommend that you choose the first, then second, then third, in that order, until your problem is solved.</td>
-    </tr>
-</table>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -297,7 +162,7 @@
     </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
-    <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>
+    <p> ©2012 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
 
@@ -306,33 +171,27 @@
 
 
 var GettingStartedPanel = null;
-var ChromatogramViewerPanel = null;
-var ProcessingChromatoPanel = null;
-var PreparingDataPanel = null;
+var RAxMLPanel = null;
+var GARLIPanel = null;
 var CreditPanel = null;
 var HelpPanel = null;
 var OtherFeaturesPanel = null;
 var TechnicalPanel = null;
 
-if (qsParm['ProcessingChromatoPanel']=='open')
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: true});
+if (qsParm['GARLIPanel']=='open')
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: true});
 else
- 	ProcessingChromatoPanel = new Spry.Widget.CollapsiblePanel("ProcessingChromatoPanel", {contentIsOpen: false});
+ 	GARLIPanel = new Spry.Widget.CollapsiblePanel("GARLIPanel", {contentIsOpen: false});
 	
 if (qsParm['GettingStartedPanel']=='open')
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: true});
 else
  	GettingStartedPanel = new Spry.Widget.CollapsiblePanel("GettingStartedPanel", {contentIsOpen: false});
 	
-if (qsParm['ChromatogramViewerPanel']=='open')
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: true});
+if (qsParm['RAxMLPanel']=='open')
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: true});
 else
- 	ChromatogramViewerPanel = new Spry.Widget.CollapsiblePanel("ChromatogramViewerPanel", {contentIsOpen: false});
-
-if (qsParm['PreparingDataPanel']=='open')
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: true});
-else
- 	PreparingDataPanel = new Spry.Widget.CollapsiblePanel("PreparingDataPanel", {contentIsOpen: false});
+ 	RAxMLPanel = new Spry.Widget.CollapsiblePanel("RAxMLPanel", {contentIsOpen: false});
 
 if (qsParm['CreditPanel']=='open')
  	CreditPanel = new Spry.Widget.CollapsiblePanel("CreditPanel", {contentIsOpen: true});
