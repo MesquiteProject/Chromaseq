@@ -54,7 +54,7 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 
 	/*.................................................................................................................*/
 	public void echoParametersToFile(StringBuffer logBuffer) {
-		echoStringToFile("Using primers database\n", logBuffer);
+		loglnEchoToStringBuffer("Using primers database\n", logBuffer);
 	}
 
 	/*.................................................................................................................*/

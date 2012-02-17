@@ -127,7 +127,7 @@ public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionLi
 	}
 	/*.................................................................................................................*/
 	public void echoParametersToFile(StringBuffer logBuffer) {
-		echoStringToFile("Using primers file: " + primerListPath+"\n", logBuffer);
+		loglnEchoToStringBuffer("Using primers file: " + primerListPath+"\n", logBuffer);
 	}
 
 	/*.................................................................................................................*/

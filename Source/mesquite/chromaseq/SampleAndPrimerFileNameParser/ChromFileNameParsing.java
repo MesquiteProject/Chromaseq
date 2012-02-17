@@ -279,7 +279,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 				// didn't find it via regex so return
 				if (StringUtil.blank(piece)) {
 					if (ownerModule!=null)
-						ownerModule.echoStringToFile(" ** Can't extract " + message + " from file name: " + s, logBuffer);					
+						ownerModule.loglnEchoToStringBuffer(" ** Can't extract " + message + " from file name: " + s, logBuffer);					
 					return null;
 				}
 			}

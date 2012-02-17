@@ -232,7 +232,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	}
 	/*.................................................................................................................*/
 	public void echoParametersToFile(StringBuffer logBuffer) {
-		echoStringToFile("Using names and codes file: " +sampleCodeListPath+"\n", logBuffer);
+		loglnEchoToStringBuffer("Using names and codes file: " +sampleCodeListPath+"\n", logBuffer);
 	}
 
 	/*.................................................................................................................*/

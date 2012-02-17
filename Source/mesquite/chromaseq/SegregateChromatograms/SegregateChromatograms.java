@@ -158,9 +158,9 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 			else
 				return false;
 
-			echoStringToFile(" Searching for chromatograms that match the specified criteria. ", logBuffer);
-			echoStringToFile(" Processing directory: ", logBuffer);
-			echoStringToFile("  "+directoryPath+"\n", logBuffer);
+			loglnEchoToStringBuffer(" Searching for chromatograms that match the specified criteria. ", logBuffer);
+			loglnEchoToStringBuffer(" Processing directory: ", logBuffer);
+			loglnEchoToStringBuffer("  "+directoryPath+"\n", logBuffer);
 			if (sequenceNameTask!=null)
 				sequenceNameTask.echoParametersToFile(logBuffer);
 			if (primerInfoTask!=null)
@@ -207,7 +207,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 
 						String chromFileName = cFile.getName();
 						if (StringUtil.blank(chromFileName)) {
-							echoStringToFile("Bad file name; it is blank.", logBuffer);
+							loglnEchoToStringBuffer("Bad file name; it is blank.", logBuffer);
 							// remove "running"
 							if (progIndicator!=null) progIndicator.goAway();
 							return false;
@@ -224,7 +224,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 								continue;
 						}
 						else {
-							echoStringToFile("Naming parsing rule is absent.", logBuffer);
+							loglnEchoToStringBuffer("Naming parsing rule is absent.", logBuffer);
 							return false;
 						}
 						if (startTokenResult.getValue() == null)
@@ -265,7 +265,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 							match = matchesSampleName || matchesFragmentName;  //otherwise just have to match one of them.
 						if (match) {
 							if (verbose)
-								echoStringToFile(chromFileName + " ["+fullSeqName + "   " + fragName+"]", logBuffer);
+								loglnEchoToStringBuffer(chromFileName + " ["+fullSeqName + "   " + fragName+"]", logBuffer);
 							numPrepared++;
 							if (!makeDirectoriesForMatch(processedDirPath)){   //make directories for this in case it doesn't already exist
 								if (progIndicator!=null) progIndicator.goAway();
@@ -295,8 +295,8 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 				}
 			}
 
-			echoStringToFile("Number of files examined: " + files.length, logBuffer);
-			echoStringToFile("Number of files found and segregated: " + numPrepared, logBuffer);
+			loglnEchoToStringBuffer("Number of files examined: " + files.length, logBuffer);
+			loglnEchoToStringBuffer("Number of files found and segregated: " + numPrepared, logBuffer);
 
 
 

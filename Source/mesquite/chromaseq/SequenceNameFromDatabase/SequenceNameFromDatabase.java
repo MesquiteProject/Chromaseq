@@ -48,7 +48,7 @@ public class SequenceNameFromDatabase extends SequenceNameSource  {
 	}
 	/*.................................................................................................................*/
 	public void echoParametersToFile(StringBuffer logBuffer) {
-		echoStringToFile("Using names from database\n", logBuffer);
+		loglnEchoToStringBuffer("Using names from database\n", logBuffer);
 	}
 
 	/*.................................................................................................................*/
