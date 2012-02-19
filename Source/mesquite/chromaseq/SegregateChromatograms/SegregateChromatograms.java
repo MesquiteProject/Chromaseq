@@ -21,7 +21,6 @@ import java.io.File;
 
 import javax.swing.JLabel;
 
-import org.dom4j.Document;
 
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
