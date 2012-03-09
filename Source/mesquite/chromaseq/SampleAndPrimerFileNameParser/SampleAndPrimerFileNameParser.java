@@ -121,11 +121,10 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 
 	/*.................................................................................................................*/
 
-	public boolean parseFileName(String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, 
-			MesquiteString startTokenResult){
+	public boolean parseFileName(String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, MesquiteString startTokenResult, MesquiteInteger sampleCodeEndIndex){
 		if (nameParsingRule==null)
 			return false;
-		return nameParsingRule.parseFileName(this, fileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult);
+		return nameParsingRule.parseFileName(this, fileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult, sampleCodeEndIndex);
 	}
 
 	public void setChoice (Choice choice) {

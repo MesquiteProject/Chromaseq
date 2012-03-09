@@ -25,7 +25,8 @@ public abstract class ChromatogramFileNameParser extends MesquiteInit {
 		return ChromatogramFileNameParser.class;
 	}
 
-	public abstract boolean parseFileName(String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, MesquiteString startTokenResult);
+	public abstract boolean parseFileName(String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, MesquiteString startTokenResult, MesquiteInteger sampleCodeEndIndex);
+
 
 
 	public boolean queryOptions(){

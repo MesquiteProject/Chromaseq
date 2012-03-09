@@ -110,7 +110,7 @@ public class AbiUploaderImpl extends AbiUploader {
 						//here's where the names parser processes the name
 						if (nameParserManager!=null && nextAbi != null && !nextAbi.isDirectory()
 								&& nextAbi.exists()) {
-							if (!nameParserManager.parseFileName(nextAbi.getName(), sampleCode, sampleCodeSuffix, primerName, logBuffer, dnaCodeResult)) {
+							if (!nameParserManager.parseFileName(nextAbi.getName(), sampleCode, sampleCodeSuffix, primerName, logBuffer, dnaCodeResult, null)) {
 								MesquiteMessage.warnUser("Can't upload file: " + nextAbi + " to database because it doesn't match the naming rule.");
 							} else {
 								MesquiteMessage.warnUser("Going to upload file: " + nextAbi + " to server.");

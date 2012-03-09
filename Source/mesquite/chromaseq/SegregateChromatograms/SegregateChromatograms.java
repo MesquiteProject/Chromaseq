@@ -219,7 +219,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 						//here's where the names parser processes the name
 
 						if (nameParserManager!=null) {
-							if (!nameParserManager.parseFileName(chromFileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult))
+							if (!nameParserManager.parseFileName(chromFileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult, null))
 								continue;
 						}
 						else {

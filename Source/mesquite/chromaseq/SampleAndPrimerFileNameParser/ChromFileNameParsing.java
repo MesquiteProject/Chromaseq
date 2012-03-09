@@ -247,14 +247,18 @@ public class ChromFileNameParsing implements Listable, Explainable {
 
 	/** Returns the piece of String s that is bounded by startToken and endToken.   */
 	/*.................................................................................................................*/
-	public String getStringPiece(MesquiteModule ownerModule, String s, String startToken, String endToken, MesquiteString remainder, StringBuffer logBuffer, String message, MesquiteString startTokenResult){
+	public String getStringPiece(MesquiteModule ownerModule, String s, String startToken, String endToken, MesquiteString remainder, StringBuffer logBuffer, String message, MesquiteString startTokenResult, MesquiteInteger endTokenIndex){
 		String piece="";
+		if (endTokenIndex!=null)
+			endTokenIndex.setValue(-1);
 		if (remainder!=null)
 			remainder.setValue(s);
 
-		if (!StringUtil.blank(startToken)  || " ".equals(startToken)) {  
+		if (!StringUtil.blank(startToken)  || " ".equals(startToken)) {
 			if (s.indexOf(startToken)>-1) {
 				piece = s.substring(s.indexOf(startToken)+startToken.length(), s.length());  // getting substring that starts with DNA number (does NOT include the startToken)
+				if (endTokenIndex!=null)
+					endTokenIndex.setValue(s.indexOf(startToken)+startToken.length());
 				if (startTokenResult != null) {
 					startTokenResult.setValue(startToken);
 				}
@@ -272,6 +276,8 @@ public class ChromFileNameParsing implements Listable, Explainable {
 						if (startTokenResult != null) {
 							startTokenResult.setValue(group);
 						}
+						if (endTokenIndex!=null)
+							endTokenIndex.setValue(s.indexOf(startToken)+startToken.length());
 					}
 				} catch (Exception e) {
 					// don't do anything, fall through to error 
@@ -296,15 +302,24 @@ public class ChromFileNameParsing implements Listable, Explainable {
 					regexMatchIndex = endTokenMatcher.start();
 				}
 			} catch (Exception e) {}
-			if (remainder!=null)
+			if (remainder!=null){
 				if (piece.indexOf(endToken)>=0) {
 					remainder.setValue(piece.substring(piece.indexOf(endToken), piece.length())); // this sets the remainder to be everything in the string AFTER the sample code; the remainder will include the endToken
+				//	if (endTokenIndex!=null)
+				//		endTokenIndex.add(piece.indexOf(endToken));
 				} else if (regexMatchIndex > 0) {
 					remainder.setValue(piece.substring(piece.indexOf(regexMatchIndex), piece.length()));
+				//	if (endTokenIndex!=null)
+				//		endTokenIndex.add(piece.indexOf(regexMatchIndex));
 				}
+			}
 			if (piece.indexOf(endToken)>=0) {
+				if (endTokenIndex!=null)
+					endTokenIndex.add(piece.indexOf(endToken));
 				return piece.substring(0,piece.indexOf(endToken));
 			} else if (regexMatchIndex > 0) {
+				if (endTokenIndex!=null)
+					endTokenIndex.add(piece.indexOf(regexMatchIndex));
 				return piece.substring(0, regexMatchIndex);
 			} else {
 				return piece;
@@ -316,23 +331,23 @@ public class ChromFileNameParsing implements Listable, Explainable {
 	 * 
 	 * DANNY -- added startTokenResult to store what actually is matched in the case of regexes
 	 * */
-	public boolean parseFileName(MesquiteModule ownerModule, String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, MesquiteString startTokenResult){
+	public boolean parseFileName(MesquiteModule ownerModule, String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, MesquiteString startTokenResult, MesquiteInteger sampleCodeEndIndex){
 		String primerNamePiece="";
 		String sampleCodePiece = "";
 		MesquiteString remainder = new MesquiteString();
 
 		
 		if (sampleCodeFirst) {
-			sampleCodePiece = getStringPiece(ownerModule, fileName, dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code", startTokenResult);   //find sample code
+			sampleCodePiece = getStringPiece(ownerModule, fileName, dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code", startTokenResult, sampleCodeEndIndex);   //find sample code
 			if (sampleCodePiece==null)  //sample code piece not found.
 				return false;
-			primerNamePiece = getStringPiece(ownerModule, remainder.getValue(), primerStartToken, primerEndToken, remainder, logBuffer, "primer name", null);  // find primer name
+			primerNamePiece = getStringPiece(ownerModule, remainder.getValue(), primerStartToken, primerEndToken, remainder, logBuffer, "primer name", null, null);  // find primer name
 		}		
 		else {  // the primer name comes first
-			primerNamePiece = getStringPiece(ownerModule, fileName, primerStartToken, primerEndToken, remainder, logBuffer, "primer name", startTokenResult);
+			primerNamePiece = getStringPiece(ownerModule, fileName, primerStartToken, primerEndToken, remainder, logBuffer, "primer name", startTokenResult, null);
 			if (primerNamePiece==null)
 				return false;
-			sampleCodePiece = getStringPiece(ownerModule, remainder.getValue(), dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code", startTokenResult);
+			sampleCodePiece = getStringPiece(ownerModule, remainder.getValue(), dnaCodeStartToken, dnaCodeEndToken, remainder, logBuffer, "sample code", startTokenResult, sampleCodeEndIndex);
 		}		
 		if (sampleCodePiece==null || primerNamePiece==null)
 			return false;
