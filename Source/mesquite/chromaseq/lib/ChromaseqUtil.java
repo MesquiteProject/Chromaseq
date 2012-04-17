@@ -755,7 +755,7 @@ public class ChromaseqUtil{
 	public static long getOriginalStateForEditedMatrixBase(CharacterData data, int ic, int it){  // ic is the position in the edited matrix
 		DNAData originalData = getOriginalData(data);
 		MeristicData registryData = getRegistryData(data);
-		if (registryData==null)
+		if (originalData==null || registryData==null)
 			return 0;
 		int mapping = registryData.getState(ic, it);
 		return originalData.getState(mapping, it);

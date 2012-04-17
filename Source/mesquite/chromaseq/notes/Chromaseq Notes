@@ -7,7 +7,7 @@ possible issues:
 	- not sure, but phred/phrap processing might not be possible if filenames or taxon names have ! in them.  
 	 Maybe other characters as well.  Will try to find case, but you might write it down.
  
-	
+	-- purge chromaseq data fails to remove associated data, e.g. integer "chromaseqStatus", which can amount to many megabytes in file -- it inflated a 2MB file to 80 MB
 =============
 
 FUTRE WORK to consider
