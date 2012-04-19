@@ -14,10 +14,6 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.ManageChromaseqBlock;
 
 
-import java.util.Vector;
-
-import com.apple.mrj.macos.carbon.Timer;
-
 import mesquite.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.categ.lib.*;
