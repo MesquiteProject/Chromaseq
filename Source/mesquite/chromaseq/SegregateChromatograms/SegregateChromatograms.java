@@ -112,6 +112,13 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		if (StringUtil.blank(sampleNameToMatch)&& StringUtil.blank(geneNameToMatch))
 			return false;
 
+		if (StringUtil.blank(sampleNameToMatch))
+			loglnEchoToStringBuffer("Segregating chromatograms with the following text in the sample name: " + sampleNameToMatch, logBuffer);
+
+		if (StringUtil.blank(geneNameToMatch))
+			loglnEchoToStringBuffer("Segregating chromatograms with the following text in the gene name: " + geneNameToMatch, logBuffer);
+
+
 		MesquiteBoolean pleaseStorePrefs = new MesquiteBoolean(false);
 
 		if (pleaseStorePrefs.getValue())
