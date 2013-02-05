@@ -54,6 +54,7 @@ public class ChromaseqUtil{
 	public static final int MANUALLYCHANGED = 2;
 	public static final int CHECK = 3;
 	public static final int CHECK2 = 4;
+	public static final int CHECK3 = 5;
 
 	
 	public static final String PHPHMQVERSION ="2";
