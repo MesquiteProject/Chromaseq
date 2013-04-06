@@ -71,10 +71,13 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	private void checkFlags(CharacterData data, int itStart, int itEnd, int icStart, int icEnd) {
 		for (int it=itStart; it<=itEnd; it++)
 			for (int ic=icStart; ic<=icEnd; ic++) {
-				if (!ChromaseqUtil.editedMatrixBaseSameAsOriginal(data, ic, it)){  // check to see if it is really changed; if yes, then add flag
-					setFlag(data,ic,it,ChromaseqUtil.MANUALLYCHANGED);
-				} else
-					setFlag(data,ic,it,ChromaseqUtil.NORMAL);
+				int flag = ChromaseqUtil.getIntegerCellObject(data,ChromaseqUtil.chromaseqCellFlagsNameRef, ic, it);
+				if (flag == ChromaseqUtil.NORMAL || flag == ChromaseqUtil.MANUALLYCHANGED){
+					if (!ChromaseqUtil.editedMatrixBaseSameAsOriginal(data, ic, it)){  // check to see if it is really changed; if yes, then add flag
+						setFlag(data,ic,it,ChromaseqUtil.MANUALLYCHANGED);
+					} else
+						setFlag(data,ic,it,ChromaseqUtil.NORMAL); 
+				}
 
 			}
 	}
@@ -84,78 +87,78 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		int code = Notification.getCode(notification);
 		int[] parameters = Notification.getParameters(notification);
 		if (obj instanceof CharacterData) {
-			 if (code==MesquiteListener.NAMES_CHANGED || code==MesquiteListener.SELECTION_CHANGED) {
+			if (code==MesquiteListener.NAMES_CHANGED || code==MesquiteListener.SELECTION_CHANGED) {
 				//	contigDisplay.repaintPanels();
 			}
-			 else if (!Notification.appearsCosmetic(notification) && ChromaseqUtil.isChromaseqEditedMatrix((CharacterData)obj)){
-				 if (!((code==MesquiteListener.PARTS_CHANGED || code==MesquiteListener.PARTS_MOVED) && notification.subcodesContains(MesquiteListener.TAXA_CHANGED))) {
-					 DNAData editedData= (DNAData)((CharacterData)obj);
-					 boolean recalcMappers = true;
-					 int itStart = 0;
-					 int itEnd = editedData.getNumTaxa();
-					 int icStart = 0;
-					 int icEnd = editedData.getNumChars();
-					 if (editedData.singleCellSubstitution(notification)) {
-						 if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
-							 itStart=parameters[1];
-						 }
-						 if (parameters!=null && parameters.length>=1) {  //get second parameter, which is taxon changed
-							 icStart=parameters[0];
-						 }
-						 checkFlags(editedData,itStart,itStart,icStart,icStart);
-						 recalcMappers = false;
-					 } 
-					 else if (editedData.onlyAllCellsShifted(notification)){
-						 recalcMappers = false;
-					 }
-					 else if (editedData.singleCellChange(notification)){
-						 recalcMappers = true;
-						 if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
-							 itStart=parameters[1];
-							 itEnd=parameters[1];
-						 }
-						 if (parameters!=null && parameters.length>=1) {  //get second parameter, which is taxon changed
-							 icStart=parameters[0];
-							 icEnd=parameters[0];
-						 }
-						 checkFlags(editedData,itStart,itStart,icStart,icStart);
-					 } 
-					 else if (editedData.singleTaxonChange(notification)){
-						 recalcMappers = true;
-						 if (parameters!=null && parameters.length>=1) {  //get first parameter, which is taxon changed
-							 itStart=parameters[0];
-							 itEnd=parameters[0];
-						 }
-					 } 						 
+			else if (!Notification.appearsCosmetic(notification) && ChromaseqUtil.isChromaseqEditedMatrix((CharacterData)obj)){
+				if (!((code==MesquiteListener.PARTS_CHANGED || code==MesquiteListener.PARTS_MOVED) && notification.subcodesContains(MesquiteListener.TAXA_CHANGED))) {
+					DNAData editedData= (DNAData)((CharacterData)obj);
+					boolean recalcMappers = true;
+					int itStart = 0;
+					int itEnd = editedData.getNumTaxa();
+					int icStart = 0;
+					int icEnd = editedData.getNumChars();
+					if (editedData.singleCellSubstitution(notification)) {
+						if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
+							itStart=parameters[1];
+						}
+						if (parameters!=null && parameters.length>=1) {  //get second parameter, which is taxon changed
+							icStart=parameters[0];
+						}
+						checkFlags(editedData,itStart,itStart,icStart,icStart);
+						recalcMappers = false;
+					} 
+					else if (editedData.onlyAllCellsShifted(notification)){
+						recalcMappers = false;
+					}
+					else if (editedData.singleCellChange(notification)){
+						recalcMappers = true;
+						if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
+							itStart=parameters[1];
+							itEnd=parameters[1];
+						}
+						if (parameters!=null && parameters.length>=1) {  //get second parameter, which is taxon changed
+							icStart=parameters[0];
+							icEnd=parameters[0];
+						}
+						checkFlags(editedData,itStart,itStart,icStart,icStart);
+					} 
+					else if (editedData.singleTaxonChange(notification)){
+						recalcMappers = true;
+						if (parameters!=null && parameters.length>=1) {  //get first parameter, which is taxon changed
+							itStart=parameters[0];
+							itEnd=parameters[0];
+						}
+					} 						 
 
-					 if (recalcMappers){
-						 MesquiteTimer timer = null;
-						 timer = new MesquiteTimer();
-						 timer.start();
-						 if (editedData!=null) {
-							 if (itStart!=itEnd) {
-								 logln("Re-inferring all contig mappers.\n");
-							 }
-							 int count=0;
-							 for (int it=itStart; it<itEnd; it++) {
-								 ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
-								 if (contigMapper!=null) {
-									 contigMapper.inferFromExistingRegistry(editedData, it, this);
-									 count++;
-									 if (count % 10 == 0)
-										 log(".");
-								 }
-							 }
-							 if (itStart!=itEnd && timer!=null) 
-								 logln("\nContig mapper re-inference complete, time: " + timer.timeSinceLastInSeconds() + " seconds");
-						 }
-						 checkFlags(editedData,itStart,itEnd,icStart,icEnd);
+					if (recalcMappers){
+						MesquiteTimer timer = null;
+						timer = new MesquiteTimer();
+						timer.start();
+						if (editedData!=null) {
+							if (itStart!=itEnd) {
+								logln("Re-inferring all contig mappers.\n");
+							}
+							int count=0;
+							for (int it=itStart; it<itEnd; it++) {
+								ContigMapper contigMapper = ChromaseqUtil.getContigMapperAssociated(editedData, it);
+								if (contigMapper!=null) {
+									contigMapper.inferFromExistingRegistry(editedData, it, this);
+									count++;
+									if (count % 10 == 0)
+										log(".");
+								}
+							}
+							if (itStart!=itEnd && timer!=null) 
+								logln("\nContig mapper re-inference complete, time: " + timer.timeSinceLastInSeconds() + " seconds");
+						}
+						checkFlags(editedData,itStart,itEnd,icStart,icEnd);
 						if (MesquiteTrunk.debugMode || getPackageIntroModule().isPrerelease())
 							logln("Checking flags: " + timer.timeSinceLastInSeconds() + " seconds");
-					 }
+					}
 
-				 }
-			 }
+				}
+			}
 		} 
 	}
 
@@ -570,7 +573,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 						if ("DELETED".equalsIgnoreCase(subC)) {
 							String token = subcommands[1][i];
 							Parser parser = new Parser(token);
-						/*	if (numBases<=0){
+							/*	if (numBases<=0){
 								numBases = parser.getNumberOfDarkChars();
 								parser.setPosition(0);
 							}
