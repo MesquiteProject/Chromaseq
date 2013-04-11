@@ -1218,6 +1218,8 @@ public class ChromaseqUtil{
 				count++;
 			}
 		MesquiteTrunk.mesquiteTrunk.logln("");
+		MesquiteTrunk.mesquiteTrunk.logln("Completed.");
+
 		//	fillAddedBaseData(editedData);
 	}
 
