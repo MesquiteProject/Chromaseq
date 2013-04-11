@@ -77,27 +77,30 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 
 	/*.................................................................................................................*/
 	public void changed(Object caller, Object obj, Notification notification){
-		 if (obj instanceof DNAData) {
+		if (obj instanceof DNAData) {
 			if (Notification.appearsCosmetic(notification))
 				return;
-			if (notification.getCode() == MesquiteListener.DATA_CHANGED && notification.getParameters() != null){
-					Object p = notification.getParameters();
-					if (p instanceof int[] && ((int[])p).length == 2){  //change at cell ic, it
-						int[] sub = notification.getSubcodes();
-						if (sub != null && sub.length == 2){  //before and after state
-							long stateBefore = CategoricalState.expandFromInt(sub[0]);
-							long stateAfter = CategoricalState.expandFromInt(sub[1]);
-							if (!CategoricalState.isInapplicable(stateBefore) && !CategoricalState.isInapplicable(stateAfter))
-								return;
-						}
-					}
+			int code = Notification.getCode(notification);
+			int[] parameters = Notification.getParameters(notification);
+			if (code==MesquiteListener.NAMES_CHANGED || code==MesquiteListener.SELECTION_CHANGED) {
+				return;
 			}
-			MeristicData reverseRegistryData = findReverseRegistry((DNAData)obj);
-			if (reverseRegistryData!=null) {
-				ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
+			else if (!Notification.appearsCosmetic(notification) && ChromaseqUtil.isChromaseqEditedMatrix((CharacterData)obj)){
+				if (!((code==MesquiteListener.PARTS_CHANGED || code==MesquiteListener.PARTS_MOVED) && notification.subcodesContains(MesquiteListener.TAXA_CHANGED))) {
+					DNAData editedData= (DNAData)((CharacterData)obj);
+					if (editedData.singleCellSubstitution(notification)) 
+									return;
+				}
+				MeristicData reverseRegistryData = findReverseRegistry((DNAData)obj);
+				if (reverseRegistryData!=null) {
+					ChromaseqUtil.fillReverseRegistryData(reverseRegistryData);
+				}
 			}
 		}
 	}
+
+	
+	
 	/** For MesquiteListener interface*/
 	public void disposing(Object obj){
 		if (!(obj instanceof MeristicData))
