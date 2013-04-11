@@ -618,7 +618,6 @@ public class ChromaseqUtil{
 	/*.................................................................................................................*/
 	// reverseRegistryData is same size as originalData and contains the positions in the editedData of that original data cell
 	public static void fillReverseRegistryData(MeristicData reverseRegistryData) {
-		Debugg.println("FILL REVERSE REGISTRY DATA");
 		MeristicData registryData = getRegistryData(reverseRegistryData);
 		DNAData editedData = getEditedData(reverseRegistryData);
 		if (registryData==null)
