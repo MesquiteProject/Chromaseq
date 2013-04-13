@@ -516,7 +516,7 @@ public class ChromatogramCanvas extends MousePanel {
 //		int readBase = getReadBaseFromConsensusBase(consensusBase);
 //		if (j <0 || j>= chromatogram.getTraceLength())
 //		return;
-		if (overallBase <0 || overallBase> selected.length)
+		if (overallBase <0 || overallBase>=selected.length)
 			return;
 		selected[overallBase] = true;
 		chromatogramPanel.exportSelectUniversalBase(overallBase);

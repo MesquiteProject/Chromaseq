@@ -340,6 +340,32 @@ public class ChromaseqUtil{
 	}
 
 	/*.................................................................................................................*/
+	public static void setFlag(CharacterData data, int ic, int it, int c){
+		if (data == null || ic<0 || it<0)
+			return;
+		if (!MesquiteInteger.isCombinable(c) || c<0 || c == ChromaseqUtil.NORMAL){
+			ChromaseqUtil.setIntegerCellObject(data,ChromaseqUtil.chromaseqCellFlagsNameRef, ic, it, null);
+		}
+		else {
+			MesquiteInteger ms = new MesquiteInteger(c);
+			ChromaseqUtil.setIntegerCellObject(data,ChromaseqUtil.chromaseqCellFlagsNameRef, ic, it, ms);
+		}
+	}
+	/*.................................................................................................................*/
+	public static void checkFlags(CharacterData data, int itStart, int itEnd, int icStart, int icEnd) {
+		for (int it=itStart; it<=itEnd; it++)
+			for (int ic=icStart; ic<=icEnd; ic++) {
+				int flag = ChromaseqUtil.getIntegerCellObject(data,ChromaseqUtil.chromaseqCellFlagsNameRef, ic, it);
+				if (flag == ChromaseqUtil.NORMAL || flag == ChromaseqUtil.MANUALLYCHANGED){
+					if (!ChromaseqUtil.editedMatrixBaseSameAsOriginal(data, ic, it)){  // check to see if it is really changed; if yes, then add flag
+						setFlag(data,ic,it,ChromaseqUtil.MANUALLYCHANGED);
+					} else
+						setFlag(data,ic,it,ChromaseqUtil.NORMAL); 
+				}
+
+			}
+	}
+	/*.................................................................................................................*/
 	public static String getAceFileDirectory(String directoryName, MesquiteModule ownerModule, DNAData data, int it) {
 		if (data==null)
 			return null;

@@ -88,8 +88,23 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 			else if (!Notification.appearsCosmetic(notification) && ChromaseqUtil.isChromaseqEditedMatrix((CharacterData)obj)){
 				if (!((code==MesquiteListener.PARTS_CHANGED || code==MesquiteListener.PARTS_MOVED) && notification.subcodesContains(MesquiteListener.TAXA_CHANGED))) {
 					DNAData editedData= (DNAData)((CharacterData)obj);
-					if (editedData.singleCellSubstitution(notification)) 
-									return;
+					int itStart = 0;
+					int itEnd = editedData.getNumTaxa();
+					int icStart = 0;
+					int icEnd = editedData.getNumChars();
+					if (editedData.singleCellSubstitution(notification)) {
+						if (parameters!=null && parameters.length>=2) {  //get second parameter, which is taxon changed
+							itStart=parameters[1];
+						}
+						if (parameters!=null && parameters.length>=1) {  //get second parameter, which is taxon changed
+							icStart=parameters[0];
+						}
+						ChromaseqUtil.checkFlags(editedData,itStart,itStart,icStart,icStart);
+						return;
+					}
+					else {
+						ChromaseqUtil.checkFlags(editedData,itStart,itEnd,icStart,icEnd);
+					}
 				}
 				MeristicData reverseRegistryData = findReverseRegistry((DNAData)obj);
 				if (reverseRegistryData!=null) {
