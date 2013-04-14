@@ -48,6 +48,7 @@ public class ChromaseqUtil{
 	25: build of 27 November 2009, after fixing padding issue
 	 * */
 
+	public static final int UNASSIGNED = MesquiteInteger.unassigned;
 	public static final int NORMAL = 0;
 	public static final int TRIMMABLE=1;
 	public static final int BASECALLED=2;
@@ -356,7 +357,7 @@ public class ChromaseqUtil{
 		for (int it=itStart; it<=itEnd; it++)
 			for (int ic=icStart; ic<=icEnd; ic++) {
 				int flag = ChromaseqUtil.getIntegerCellObject(data,ChromaseqUtil.chromaseqCellFlagsNameRef, ic, it);
-				if (flag == ChromaseqUtil.NORMAL || flag == ChromaseqUtil.MANUALLYCHANGED){
+				if (flag == ChromaseqUtil.NORMAL || flag == ChromaseqUtil.MANUALLYCHANGED || flag == ChromaseqUtil.UNASSIGNED){
 					if (!ChromaseqUtil.editedMatrixBaseSameAsOriginal(data, ic, it)){  // check to see if it is really changed; if yes, then add flag
 						setFlag(data,ic,it,ChromaseqUtil.MANUALLYCHANGED);
 					} else
