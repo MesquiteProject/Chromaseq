@@ -105,6 +105,189 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 	
 	
 	/*.................................................................................................................*/
+	public boolean extractChromatograms(String directoryPath, File directory, String sampleNameToMatch, String geneNameToMatch){
+
+		logBuffer.setLength(0);
+		String[] files = directory.list();
+		progIndicator = new ProgressIndicator(getProject(),"Segregating Chromatograms", files.length);
+		progIndicator.setStopButtonName("Stop");
+		progIndicator.start();
+		boolean abort = false;
+		String cPath;
+		String seqName;
+		String fullSeqName;
+		String fragName = "";
+		sequenceCount = 0;
+
+
+		int loc = 0;
+
+		
+		String processedDirPath = directoryPath + MesquiteFile.fileSeparator;
+		if (StringUtil.notEmpty(sampleNameToMatch) && StringUtil.notEmpty(geneNameToMatch))  // if both not empty have to match both
+			processedDirPath += sampleNameToMatch+" "+geneNameToMatch;
+		else if (StringUtil.notEmpty(sampleNameToMatch))
+			processedDirPath += sampleNameToMatch;
+		else if (StringUtil.notEmpty(geneNameToMatch))
+			processedDirPath += geneNameToMatch;
+		else
+			return false;
+
+		loglnEchoToStringBuffer(" Searching for chromatograms that match the specified criteria. ", logBuffer);
+		loglnEchoToStringBuffer(" Processing directory: ", logBuffer);
+		loglnEchoToStringBuffer("  "+directoryPath+"\n", logBuffer);
+		if (sequenceNameTask!=null)
+			sequenceNameTask.echoParametersToFile(logBuffer);
+		if (primerInfoTask!=null)
+			primerInfoTask.echoParametersToFile(logBuffer);
+
+		File newDir;
+		int numPrepared = 0;
+
+		newDir = new File(processedDirPath);
+
+		try { 
+			newDir.mkdir();
+		}
+		catch (SecurityException e) {
+			logln("Couldn't make directory.");
+			if (progIndicator!=null) progIndicator.goAway();
+			return false;
+		}
+
+
+		String lowerCaseSampleNameToMatch=null;
+		if (StringUtil.notEmpty(sampleNameToMatch))
+			lowerCaseSampleNameToMatch= sampleNameToMatch.toLowerCase();
+		String lowerCaseFragmentNameToMatch=null;
+		if (StringUtil.notEmpty(geneNameToMatch))
+			lowerCaseFragmentNameToMatch= geneNameToMatch.toLowerCase();
+
+		for (int i=0; i<files.length; i++) {
+			if (progIndicator!=null){
+				progIndicator.setCurrentValue(i);
+				progIndicator.setText("Number of files segregated: " + numPrepared);
+				if (progIndicator.isAborted())
+					abort = true;
+			}
+			if (abort)
+				break;
+			fragName = "";
+			if (files[i]==null )
+				;
+			else {
+				cPath = directoryPath + MesquiteFile.fileSeparator + files[i];
+				File cFile = new File(cPath);
+				if (cFile.exists() && !cFile.isDirectory() && (!files[i].startsWith(".")) && (!requiresExtension || (files[i].endsWith("ab1") ||  files[i].endsWith(".abi")  || files[i].endsWith(".ab")  ||  files[i].endsWith(".CRO") || files[i].endsWith(".scf")))) {
+
+					String chromFileName = cFile.getName();
+					if (StringUtil.blank(chromFileName)) {
+						loglnEchoToStringBuffer("Bad file name; it is blank.", logBuffer);
+						// remove "running"
+						if (progIndicator!=null) progIndicator.goAway();
+						return false;
+					}
+
+					MesquiteString sampleCodeSuffix = new MesquiteString();
+					MesquiteString sampleCode = new MesquiteString();
+					MesquiteString primerName = new MesquiteString();
+					MesquiteString startTokenResult = new MesquiteString();
+					//here's where the names parser processes the name
+
+					if (nameParserManager!=null) {
+						if (!nameParserManager.parseFileName(chromFileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult, null))
+							continue;
+					}
+					else {
+						loglnEchoToStringBuffer("Naming parsing rule is absent.", logBuffer);
+						return false;
+					}
+					if (startTokenResult.getValue() == null)
+						startTokenResult.setValue("");
+
+					if (primerInfoTask != null){
+						fragName = primerInfoTask.getGeneFragmentName(primerName.getValue());
+					}
+					if (!StringUtil.blank(sampleCode.getValue())) {
+						/* Translate code number to sample name if requested  */
+						 if (sequenceNameTask!=null && sequenceNameTask.isReady()) {
+							seqName = sequenceNameTask.getAlternativeName(startTokenResult.getValue(), sampleCode.getValue());
+							fullSeqName = sequenceNameTask.getSequenceName(startTokenResult.getValue(), sampleCode.getValue());
+							}
+						else {
+							seqName = sampleCode.getValue();
+							fullSeqName = sampleCode.getValue();
+						}
+					}
+					else {
+						seqName = chromFileName.substring(1, 10); // change!
+						fullSeqName = seqName;
+					}
+
+					seqName = StringUtil.cleanseStringOfFancyChars(seqName + sampleCodeSuffix.getValue());  // tack on suffix
+					fullSeqName = StringUtil.cleanseStringOfFancyChars(fullSeqName + sampleCodeSuffix.getValue());
+
+
+					//progIndicator.spin();
+					
+					boolean matchesSampleName = (StringUtil.notEmpty(lowerCaseSampleNameToMatch) && (seqName.toLowerCase().indexOf(lowerCaseSampleNameToMatch)>=0 || fullSeqName.toLowerCase().indexOf(lowerCaseSampleNameToMatch)>=0));
+					boolean matchesFragmentName = (StringUtil.notEmpty(lowerCaseFragmentNameToMatch) && (fragName.toLowerCase().indexOf(lowerCaseFragmentNameToMatch)>=0));
+
+					boolean match = false;
+					if (StringUtil.notEmpty(lowerCaseSampleNameToMatch) && StringUtil.notEmpty(lowerCaseFragmentNameToMatch))  // if both not empty have to match both
+						match = matchesSampleName && matchesFragmentName;
+					else
+						match = matchesSampleName || matchesFragmentName;  //otherwise just have to match one of them.
+					if (match) {
+						if (verbose)
+							loglnEchoToStringBuffer(chromFileName + " ["+fullSeqName + "   " + fragName+"]", logBuffer);
+						numPrepared++;
+						if (!makeDirectoriesForMatch(processedDirPath)){   //make directories for this in case it doesn't already exist
+							if (progIndicator!=null) progIndicator.goAway();
+							return false;
+						}
+						try {
+							String newFileName = chromFileName;
+							String newFilePath = processedDirPath + MesquiteFile.fileSeparator + chromFileName;					
+							File newFile = new File(newFilePath); //
+							int count=1;
+							while (newFile.exists()) {
+								newFileName = ""+count + "." + chromFileName;
+								newFilePath = processedDirPath + MesquiteFile.fileSeparator + newFileName;
+								newFile = new File(newFilePath);
+								count++;
+							}
+							cFile.renameTo(newFile); 
+						}
+						catch (SecurityException e) {
+							logln( "Can't rename: " + seqName);
+						}
+						
+					} 
+				
+						
+				}
+			}
+		}
+
+		loglnEchoToStringBuffer("Number of files examined: " + files.length, logBuffer);
+		loglnEchoToStringBuffer("Number of files found and segregated: " + numPrepared, logBuffer);
+
+
+
+		if (!abort) {
+
+			progIndicator.spin();
+		}
+
+
+		if (progIndicator!=null)
+			progIndicator.goAway();
+	
+		return true;
+	
+	}
+	/*.................................................................................................................*/
 	public boolean extractChromatograms(String directoryPath){
 		if ( logBuffer==null)
 			logBuffer = new StringBuffer();
@@ -138,182 +321,20 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		previousDirectory = directory.getParent();
 		storePreferences();
 		if (directory.exists() && directory.isDirectory()) {
-			logBuffer.setLength(0);
-			String[] files = directory.list();
-			progIndicator = new ProgressIndicator(getProject(),"Segregating Chromatograms", files.length);
-			progIndicator.setStopButtonName("Stop");
-			progIndicator.start();
-			boolean abort = false;
-			String cPath;
-			String seqName;
-			String fullSeqName;
-			String fragName = "";
-			sequenceCount = 0;
-
-
-			int loc = 0;
-
-			
-			String processedDirPath = directoryPath + MesquiteFile.fileSeparator;
-			if (StringUtil.notEmpty(sampleNameToMatch) && StringUtil.notEmpty(geneNameToMatch))  // if both not empty have to match both
-				processedDirPath += sampleNameToMatch+" "+geneNameToMatch;
-			else if (StringUtil.notEmpty(sampleNameToMatch))
-				processedDirPath += sampleNameToMatch;
-			else if (StringUtil.notEmpty(geneNameToMatch))
-				processedDirPath += geneNameToMatch;
+			if (geneNameToMatch.equals("ALLSTANDARDDRMLAB")){
+				boolean anyFound = false;
+				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "28S") || anyFound;
+				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "18S") || anyFound;
+				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "Arginine Kinase") || anyFound;
+				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "wg") || anyFound;
+				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "CAD") || anyFound;
+				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "COI") || anyFound;
+				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "Topo") || anyFound;
+				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "MSP") || anyFound;
+				return anyFound;
+			}
 			else
-				return false;
-
-			loglnEchoToStringBuffer(" Searching for chromatograms that match the specified criteria. ", logBuffer);
-			loglnEchoToStringBuffer(" Processing directory: ", logBuffer);
-			loglnEchoToStringBuffer("  "+directoryPath+"\n", logBuffer);
-			if (sequenceNameTask!=null)
-				sequenceNameTask.echoParametersToFile(logBuffer);
-			if (primerInfoTask!=null)
-				primerInfoTask.echoParametersToFile(logBuffer);
-
-			File newDir;
-			int numPrepared = 0;
-
-			newDir = new File(processedDirPath);
-
-			try { 
-				newDir.mkdir();
-			}
-			catch (SecurityException e) {
-				logln("Couldn't make directory.");
-				if (progIndicator!=null) progIndicator.goAway();
-				return false;
-			}
-
-
-			String lowerCaseSampleNameToMatch=null;
-			if (StringUtil.notEmpty(sampleNameToMatch))
-				lowerCaseSampleNameToMatch= sampleNameToMatch.toLowerCase();
-			String lowerCaseFragmentNameToMatch=null;
-			if (StringUtil.notEmpty(geneNameToMatch))
-				lowerCaseFragmentNameToMatch= geneNameToMatch.toLowerCase();
-
-			for (int i=0; i<files.length; i++) {
-				if (progIndicator!=null){
-					progIndicator.setCurrentValue(i);
-					progIndicator.setText("Number of files segregated: " + numPrepared);
-					if (progIndicator.isAborted())
-						abort = true;
-				}
-				if (abort)
-					break;
-				fragName = "";
-				if (files[i]==null )
-					;
-				else {
-					cPath = directoryPath + MesquiteFile.fileSeparator + files[i];
-					File cFile = new File(cPath);
-					if (cFile.exists() && !cFile.isDirectory() && (!files[i].startsWith(".")) && (!requiresExtension || (files[i].endsWith("ab1") ||  files[i].endsWith(".abi")  || files[i].endsWith(".ab")  ||  files[i].endsWith(".CRO") || files[i].endsWith(".scf")))) {
-
-						String chromFileName = cFile.getName();
-						if (StringUtil.blank(chromFileName)) {
-							loglnEchoToStringBuffer("Bad file name; it is blank.", logBuffer);
-							// remove "running"
-							if (progIndicator!=null) progIndicator.goAway();
-							return false;
-						}
-
-						MesquiteString sampleCodeSuffix = new MesquiteString();
-						MesquiteString sampleCode = new MesquiteString();
-						MesquiteString primerName = new MesquiteString();
-						MesquiteString startTokenResult = new MesquiteString();
-						//here's where the names parser processes the name
-
-						if (nameParserManager!=null) {
-							if (!nameParserManager.parseFileName(chromFileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult, null))
-								continue;
-						}
-						else {
-							loglnEchoToStringBuffer("Naming parsing rule is absent.", logBuffer);
-							return false;
-						}
-						if (startTokenResult.getValue() == null)
-							startTokenResult.setValue("");
-
-						if (primerInfoTask != null){
-							fragName = primerInfoTask.getGeneFragmentName(primerName.getValue());
-						}
-						if (!StringUtil.blank(sampleCode.getValue())) {
-							/* Translate code number to sample name if requested  */
-							 if (sequenceNameTask!=null && sequenceNameTask.isReady()) {
-								seqName = sequenceNameTask.getAlternativeName(startTokenResult.getValue(), sampleCode.getValue());
-								fullSeqName = sequenceNameTask.getSequenceName(startTokenResult.getValue(), sampleCode.getValue());
-								}
-							else {
-								seqName = sampleCode.getValue();
-								fullSeqName = sampleCode.getValue();
-							}
-						}
-						else {
-							seqName = chromFileName.substring(1, 10); // change!
-							fullSeqName = seqName;
-						}
-
-						seqName = StringUtil.cleanseStringOfFancyChars(seqName + sampleCodeSuffix.getValue());  // tack on suffix
-						fullSeqName = StringUtil.cleanseStringOfFancyChars(fullSeqName + sampleCodeSuffix.getValue());
-
-
-						//progIndicator.spin();
-						
-						boolean matchesSampleName = (StringUtil.notEmpty(lowerCaseSampleNameToMatch) && (seqName.toLowerCase().indexOf(lowerCaseSampleNameToMatch)>=0 || fullSeqName.toLowerCase().indexOf(lowerCaseSampleNameToMatch)>=0));
-						boolean matchesFragmentName = (StringUtil.notEmpty(lowerCaseFragmentNameToMatch) && (fragName.toLowerCase().indexOf(lowerCaseFragmentNameToMatch)>=0));
-
-						boolean match = false;
-						if (StringUtil.notEmpty(lowerCaseSampleNameToMatch) && StringUtil.notEmpty(lowerCaseFragmentNameToMatch))  // if both not empty have to match both
-							match = matchesSampleName && matchesFragmentName;
-						else
-							match = matchesSampleName || matchesFragmentName;  //otherwise just have to match one of them.
-						if (match) {
-							if (verbose)
-								loglnEchoToStringBuffer(chromFileName + " ["+fullSeqName + "   " + fragName+"]", logBuffer);
-							numPrepared++;
-							if (!makeDirectoriesForMatch(processedDirPath)){   //make directories for this in case it doesn't already exist
-								if (progIndicator!=null) progIndicator.goAway();
-								return false;
-							}
-							try {
-								String newFileName = chromFileName;
-								String newFilePath = processedDirPath + MesquiteFile.fileSeparator + chromFileName;					
-								File newFile = new File(newFilePath); //
-								int count=1;
-								while (newFile.exists()) {
-									newFileName = ""+count + "." + chromFileName;
-									newFilePath = processedDirPath + MesquiteFile.fileSeparator + newFileName;
-									newFile = new File(newFilePath);
-									count++;
-								}
-								cFile.renameTo(newFile); 
-							}
-							catch (SecurityException e) {
-								logln( "Can't rename: " + seqName);
-							}
-							
-						} 
-					
-							
-					}
-				}
-			}
-
-			loglnEchoToStringBuffer("Number of files examined: " + files.length, logBuffer);
-			loglnEchoToStringBuffer("Number of files found and segregated: " + numPrepared, logBuffer);
-
-
-
-			if (!abort) {
-
-				progIndicator.spin();
-			}
-
-
-			if (progIndicator!=null)
-				progIndicator.goAway();
+				return extractChromatograms(directoryPath, directory, sampleNameToMatch, geneNameToMatch);
 		}
 		return true;
 	}
