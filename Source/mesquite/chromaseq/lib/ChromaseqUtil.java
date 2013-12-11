@@ -37,6 +37,7 @@ public class ChromaseqUtil{
 	public static final int ChromaseqRegistrationBuild = 25;
 	public static final int LOWESTBUILDNOTREQUIRINGFORCEDREGISTRATION = 25;
 	
+	public static final NameReference FragmentNameRef = NameReference.getNameReference("FragmentName");
 
 
 	public static Color veryVeryLightBlue = new Color((float)0.92, (float)0.92, (float)0.99);  
@@ -177,6 +178,19 @@ public class ChromaseqUtil{
 		data.setCellObject(nr, ic, it, c);
 	}
 	
+	public static String getFragmentName(CharacterData data, int index){
+		try {
+			if (data==null)
+				return "";
+			Object n = data.getAssociatedObject(ChromaseqUtil.FragmentNameRef, index);
+			if (n !=null)
+				return ((String)n);
+			return null;
+		}
+		catch (NullPointerException e){
+			return "";
+		}
+	}
 
 	public static boolean validChromaseqMatrix(CharacterData data) {
 		DNAData originalData = getOriginalData(data);
