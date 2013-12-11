@@ -144,4 +144,5 @@ betaMssage {
 .thrColFixHdr #container #mainContent p strong {
 	font-weight: bold;
 	font-size: 12px;
+	color: #000;
 }

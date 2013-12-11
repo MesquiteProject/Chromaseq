@@ -41,8 +41,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Known Issues<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.0<br />
-      23 December 2011<br /></td>
+    <td width="14%">Version 1.01<br />
+      10 December 2013<br /></td>
   </tr>
 </table>
 
@@ -65,6 +65,9 @@
   </div>
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('knownIssues.html')">Known Issues</a>
+  </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('versions.html')">Versions</a>
   </div>
 
   <div id="GettingStartedPanel" class="CollapsiblePanel">
@@ -180,11 +183,16 @@
 <!-- InstanceBeginEditable name="content" -->
     
     
-<p>Known issues with this version of Chromaseq:</p>
+<h3>Known issues with the current version Chromaseq:</h3>
 <ol>
   <li>The little box visible in the Overview Panel may not function properly if the sequence is reverse complemented in the matrix</li>
   <li>The little box visible in the Overview Panel may not function properly if Extra Sequence is being shown</li>
   <li>If you choose Matrix&gt;Utilities&gt;Purge Chromaseq Data, coloring states by Quality Score should be turned off, but it's not.</li>
+  </ol>
+<h3>Known issues with the previous versions of Chromaseq</h3>
+<h3>Version 1.0:</h3>
+<ol>
+  <li><strong>Critical bug</strong>: If one uses Append Sequences from Chromatograms feature,  the matrix that is already present in the file can be truncated (and data lost). This will happen if the incoming sequences are <em><strong>all</strong></em> relatively shorter.  For example, imagine that you have a matrix with 500 characters.  You then use the Append Sequences from Chromatograms feature to process some chromatograms, and the longest incoming sequence is 440 characters.  The original matrix will then be truncated to 440 characters, deleting the last 60 characters of the original matrix.</li>
 </ol>
 <!-- InstanceEndEditable -->
 

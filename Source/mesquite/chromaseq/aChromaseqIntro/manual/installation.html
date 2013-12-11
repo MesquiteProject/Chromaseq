@@ -34,6 +34,25 @@
 .style1 {	font-family: "Courier New", Courier, monospace;
 	font-size: 12px;
 }
+boldfacedRed {
+	color: #F00;
+}
+boldfaced red {
+	color: #F00;
+}
+.thrColFixHdr #container #mainContent p strong red {
+	color: #F00;
+}
+red {
+	color: #FC0006;
+}
+red {
+	color: #F00;
+}
+.redboldfaced {
+	font-weight: bold;
+	color: #F00;
+}
 -->
 </style>
 <!-- InstanceEndEditable -->
@@ -48,8 +67,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Installation<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.0<br />
-      23 December 2011<br /></td>
+    <td width="14%">Version 1.01<br />
+      10 December 2013<br /></td>
   </tr>
 </table>
 
@@ -72,6 +91,9 @@
   </div>
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('knownIssues.html')">Known Issues</a>
+  </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('versions.html')">Versions</a>
   </div>
 
   <div id="GettingStartedPanel" class="CollapsiblePanel">
@@ -190,7 +212,7 @@
 <p>To install Chromaseq,  go to the <a href="javascript:pageLink('download.html');">download page</a> and follow the instructions.</p>
 <h2>Acquiring Phred and Phrap</h2>
 <p>You can either acquire Phred and Phrap as source code (see <a href="http://www.phrap.org/consed/consed.html#howToGet">How to Get Phred/Phrap/Consed</a>), which most people at academic institutions can obtain free, or you can purchase precompiled versions from <a href="http://www.codoncode.com">CodonCode Corporation</a>. Note that Chromaseq does not require Consed, and so you will not need to obtain Consed for use with Chromaseq.</p>
-<p><strong><em>Please note</em></strong> that for some of the newer operating systems (ones that are 64-bit operating systems, e.g., MacOS X 10.6 on a newer Mac) the default version of Phrap will fail to run properly. To use Phrap (and thus Chromaseq) on these newer operating systems, you need to get the newest, beta version of Phrap. Here are the details to acquire this, as specified by the author of Phrap: </p>
+<p><strong><em>Please note</em></strong> that for most newer operating systems (ones that are 64-bit operating systems, e.g., MacOS X 10.6 or later on a Mac purchased in the last few years) <strong class="redboldfaced">the default version of Phrap will fail to run properly</strong>. To use Phrap (and thus Chromaseq) on these newer operating systems, you need to get the newest, beta version of Phrap. Here are the details to acquire this, as specified by the author of Phrap: </p>
 <table width="800" border="0" cellspacing="0" cellpadding="4" align="center" bgcolor="#EEEEEE">
   <tr>
     <td><p> A beta test version of the package, with many new features and capabilities (including some support for next-generation sequencing data), is now also available. It is not yet the default distribution version because it is still being tested, so you must request it separately, as follows: send an email to <img src="images/php.gif" alt="" width="135" height="16" />, with a Subject: line that says &quot;phrap new version request&quot;, and an email body that consists of the following two lines (it should be in exactly this format, to be computer readable):</p>
