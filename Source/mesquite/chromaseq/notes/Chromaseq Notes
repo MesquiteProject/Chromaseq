@@ -1,4 +1,5 @@
-- Append Sequences From Chromatograms cuts off ends of existing sequences
+- Append Sequences From Chromatograms cuts off ends of existing sequences: fixed
+- Export Separate Sequences as Fasta files
 
 
 
