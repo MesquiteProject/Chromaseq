@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<mesquite>
+	<MessagesFromHome>
+		<version>1</version>
+		<currentReleaseVersion>
+			<versionString>1.00</versionString>
+			<version>1000</version>
+			<downloadURL>http://mesquiteproject.org/packages/chromaseq/manual/download.html</downloadURL>
+		</currentReleaseVersion>
+	</MessagesFromHome>
+</mesquite>

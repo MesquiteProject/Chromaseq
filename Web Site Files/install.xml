@@ -9,10 +9,10 @@
 			<messageType>alert</messageType>
 			<identity>Chromaseq</identity>
 			<updateVersion>007</updateVersion>
-			<packageName>Chromaseq version 1.0</packageName>
+			<packageName>Chromaseq version 1.01</packageName>
 			<message>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
-			In order to install Chromaseq 1.0, you need to first update to Mesquite version 2.75.  
+			In order to install Chromaseq 1.01, you need to first update to Mesquite version 2.75.  
 			You can get Mesquite 2.75 at <a href = "http://mesquiteproject.org">http://mesquiteproject.org</a>
 			]]>
 			</message>
@@ -23,7 +23,7 @@
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
 			<updateVersion>010</updateVersion>
-			<packageName>Chromaseq version 1.0</packageName>
+			<packageName>Chromaseq version 1.01</packageName>
 			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
@@ -47,7 +47,7 @@
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
 			<updateVersion>009</updateVersion>
-			<packageName>Chromaseq version 1.0</packageName>
+			<packageName>Chromaseq version 1.01</packageName>
 			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
@@ -86,7 +86,7 @@
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
 			<updateVersion>008</updateVersion>
-			<packageName>Chromaseq version 1.0</packageName>
+			<packageName>Chromaseq version 1.01</packageName>
 			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
