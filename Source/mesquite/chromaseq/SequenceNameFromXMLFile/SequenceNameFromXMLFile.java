@@ -1,22 +1,30 @@
-package mesquite.chromaseq.SequenceNameFromTextFile;
+package mesquite.chromaseq.SequenceNameFromXMLFile;
 
 import java.awt.Button;
+import java.awt.Choice;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.TextEvent;
+import java.awt.event.TextListener;
+import java.util.Iterator;
+import java.util.List;
 
-import mesquite.chromaseq.lib.SequenceNameSource;
+import org.dom4j.Document;
+import org.dom4j.Element;
+
+import mesquite.chromaseq.ViewChromatograms.VChromWindow;
+import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
 
-public class SequenceNameFromTextFile extends SequenceNameSource implements ActionListener {
-	String sampleCodeListPath = null;
-	String sampleCodeList = "";
-	Parser sampleCodeListParser = null;
-//	Document namesDoc = null;
-//	boolean namesInXml = false;
+public class SequenceNameFromXMLFile extends SequenceNameSource implements ActionListener, TextListener {
+	ChromaseqSampleToNamesXMLProcessor xmlProcessor;
+	String sampleCodeListPath = null; 
 	boolean preferencesSet = false;
-	SingleLineTextField dnaCodesField = null;
+	SingleLineTextField sampleCodeFilePathField = null;
+	String chosenNameCategoryTag;
 
-	
+
+
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
 		if (!optionsSpecified()){
@@ -24,50 +32,100 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 				return false;
 			if (!queryOptions())
 				return false;
-		}
-		return true;
+		} 
+		return StringUtil.notEmpty(chosenNameCategoryTag);
+
 	}
 
+	/*.................................................................................................................*/
+	public void initialize (String sampleCodeListPath) {
+		xmlProcessor = new ChromaseqSampleToNamesXMLProcessor(this, sampleCodeListPath);
+		if (StringUtil.notEmpty(chosenNameCategoryTag)	)
+			xmlProcessor.setChosenTag(chosenNameCategoryTag);
+	}
+	/*.................................................................................................................*/
+	public void initialize() {
+		if (StringUtil.notEmpty(sampleCodeListPath) && (xmlProcessor == null || !xmlProcessor.isValid())) {
+			initialize(sampleCodeListPath);
+		}			
+	}
+	/*.................................................................................................................*/
+	public boolean queryForOptionsAsNeeded() {
+		if (StringUtil.blank(sampleCodeListPath)){
+			return queryOptions();
+		}			
+		else if (xmlProcessor == null || !xmlProcessor.isValid()) {
+			initialize(sampleCodeListPath);
+		} else {
+			chosenNameCategoryTag = xmlProcessor.getChosenTag();
+		}
+		
+		return true;
+	}
 
 	/*.................................................................................................................*/
 	public boolean optionsSpecified(){
 		return StringUtil.notEmpty(sampleCodeListPath);
 	}
 
+	/*.................................................................................................................*/
+	public  void addXMLAttributes(Element element){
+		element.addAttribute("sampleCodeListPathXML", sampleCodeListPath);
+	}
 
 	/*.................................................................................................................*/
 	public void processSingleXMLPreference (String tag, String content) {
-		 if ("sampleCodeListPath".equalsIgnoreCase(tag))
+		if ("sampleCodeListPathXML".equalsIgnoreCase(tag))
 			sampleCodeListPath = StringUtil.cleanXMLEscapeCharacters(content);
+		if ("chosenNameCategoryTag".equalsIgnoreCase(tag)){
+			chosenNameCategoryTag = StringUtil.cleanXMLEscapeCharacters(content);
+		}
 		preferencesSet = true;
 	}
 	/*.................................................................................................................*/
 	public String preparePreferencesForXML () {
 		StringBuffer buffer = new StringBuffer(200);
-		StringUtil.appendXMLTag(buffer, 2, "sampleCodeListPath", sampleCodeListPath);  
+		StringUtil.appendXMLTag(buffer, 2, "sampleCodeListPathXML", sampleCodeListPath);  
+		StringUtil.appendXMLTag(buffer, 2, "chosenNameCategoryTag", chosenNameCategoryTag);  
 		preferencesSet = true;
 		return buffer.toString();
 	}
 	/*.................................................................................................................*/
+	Choice categoryChoice;
+	/*.................................................................................................................*/
 	public boolean queryOptions() {
 		MesquiteInteger buttonPressed = new MesquiteInteger(1);
-		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Location of File with Sequence Names",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
+		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Location of XML File with Sequence Names",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 
-		dnaCodesField = dialog.addTextField("Sequence names file:", sampleCodeListPath,26);
+		sampleCodeFilePathField = dialog.addTextField("Sequence names XML file:", sampleCodeListPath,26);
+		sampleCodeFilePathField.addTextListener(this);
 		final Button dnaCodesBrowseButton = dialog.addAListenedButton("Browse...",null, this);
 		dnaCodesBrowseButton.setActionCommand("DNANumbersBrowse");
 
-		String s = "This file should contain,  in a tab delimited format, the names to be used for the sequences, and the sample codes to which each corresponds.\n\n";
-		s+= "<BR>Each line should look like this:<br><br>\n";
-		s+= "   &lt;code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br><br>\n";
-		s+= "where the code, short sample name, and long sample name are all single tokens (do NOT surround the name with quotes). ";
-		s+= "The short sample name is for the file names, and must be <27 characters; the long sample name is the name you wish to have within the FASTA file.\n\n";
+		int tagNumber = 0;
+		String[] categories = null;
+		if (xmlProcessor!=null){
+			tagNumber=xmlProcessor.getChosenTagNumber();
+			categories=xmlProcessor.getNameCategoryDescriptions();
+		} else{
+			categories=new String[1];
+			categories[0]="Sample Code                  ";
+		}
+		
+		categoryChoice = dialog.addPopUpMenu("Names to use:", categories, tagNumber);
+
+		String s = "This file should contain, in XML format, the names to be used for the sequences, and the sample codes to which each corresponds. See the Chromaseq manual for an example.\n\n";
 		dialog.appendToHelpString(s);
 
 		dialog.completeAndShowDialog(true);
 		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
-			sampleCodeListPath = dnaCodesField.getText();
+			sampleCodeListPath = sampleCodeFilePathField.getText();
+			int chosen = categoryChoice.getSelectedIndex();
+			if (xmlProcessor!=null){
+				xmlProcessor.setChosenTag(chosen);
+				chosenNameCategoryTag = xmlProcessor.getChosenTag();
+			}
 			initialize();
 		}
 		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
@@ -79,17 +137,6 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	}
 
 	/*.................................................................................................................*/
-	public void initialize() {
-		if (!StringUtil.blank(sampleCodeListPath)) {
-			sampleCodeList = MesquiteFile.getFileContentsAsString(sampleCodeListPath);
-
-			if (!StringUtil.blank(sampleCodeList)) {
-				sampleCodeListParser = new Parser(sampleCodeList);
-			}
-		}			
-		
-	}
-	/*.................................................................................................................*/
 
 	public String getExtractionCode(String prefix, String ID) {
 		return ID;
@@ -99,6 +146,13 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		return ID;
 	}
 	/*.................................................................................................................*/
+
+	public  String[] getSeqNamesFromXml(MesquiteString sampleCode) {
+		queryForOptionsAsNeeded();
+		String fileAndFolderNameElement = "fileAndFolderName";
+		return xmlProcessor.getSeqNamesFromXml(sampleCode, fileAndFolderNameElement, chosenNameCategoryTag);
+	}
+	/*.................................................................................................................*
 
 	public  String[] getSeqNamesFromTabDelimitedFile(MesquiteString sampleCode) {
 		if (sampleCodeListParser==null)
@@ -147,8 +201,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 
 	public String getAlternativeName(String prefix, String ID) {  // short name
 		String[] results = null;
-		results = getSeqNamesFromTabDelimitedFile(new MesquiteString(ID));
-		
+		results = getSeqNamesFromXml(new MesquiteString(ID));
 		if (results==null || results.length<1)
 			return null;
 		return results[0];
@@ -157,8 +210,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 
 	public String getSequenceName(String prefix, String ID) {  // long name
 		String[] results = null;
-			results = getSeqNamesFromTabDelimitedFile(new MesquiteString(ID));
-		
+		results = getSeqNamesFromXml(new MesquiteString(ID));
 		if (results!=null) {
 			if(results.length>=2)
 				return results[1];
@@ -168,15 +220,18 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		return null;
 	}
 	/*.................................................................................................................*/
-	
+
 	public String getParameters() {
 		if (StringUtil.blank(sampleCodeListPath))
-			return "Names and codes file unspecified.";
-		return "Names and codes file: " + sampleCodeListPath;
+			return "Names and codes XML file unspecified.";
+		String s = xmlProcessor.getParameters();
+		if (StringUtil.notEmpty(s))
+			s="\n"+s;
+		return "Names and codes XML file: " + sampleCodeListPath + s;
 	}
 	/*.................................................................................................................*/
 	public void echoParametersToFile(StringBuffer logBuffer) {
-		loglnEchoToStringBuffer("Using names and codes file: " +sampleCodeListPath+"\n", logBuffer);
+		loglnEchoToStringBuffer("Using names and codes XML file: " +sampleCodeListPath+"\n", logBuffer);
 	}
 
 	/*.................................................................................................................*/
@@ -192,7 +247,7 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	/*.................................................................................................................*/
 
 	public String getName() {
-		return "Sequence Names from Text File (version 1.0 style)";
+		return "Sequence Names from XML File";
 	}
 	/*.................................................................................................................*/
 
@@ -202,26 +257,48 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	/*.................................................................................................................*/
 
 	public String getExplanation() {
-		return "Provides sequence names from a text file.";
+		return "Provides sequence names from an XML file.";
 	}
 
 	/*.................................................................................................................*/
 
 	public boolean isPrerelease() {
-		return false;
+		return true;
 	}
 
 	/*.................................................................................................................*/
 	public  void actionPerformed(ActionEvent e) {
-		 if (e.getActionCommand().equalsIgnoreCase("DNANumbersBrowse")) {
+		if (e.getActionCommand().equalsIgnoreCase("DNANumbersBrowse")) {
 			MesquiteString dnaNumberListDir = new MesquiteString();
 			MesquiteString dnaNumberListFile = new MesquiteString();
 			String s = MesquiteFile.openFileDialog("Choose file containing sample codes and names", dnaNumberListDir, dnaNumberListFile);
 			if (!StringUtil.blank(s)) {
 				sampleCodeListPath = s;
-				if (dnaCodesField!=null) 
-					dnaCodesField.setText(sampleCodeListPath);
+				if (sampleCodeFilePathField!=null) 
+					sampleCodeFilePathField.setText(sampleCodeListPath);
 			}
+		}
+	}
+
+	public void textValueChanged(TextEvent e) {
+		if (e.getSource().equals(sampleCodeFilePathField)) {
+			sampleCodeListPath = sampleCodeFilePathField.getText();
+			if (StringUtil.notEmpty(sampleCodeListPath)) {
+				initialize(sampleCodeListPath);
+			}	
+			categoryChoice.removeAll();
+			if (xmlProcessor.isValid()) {			
+				String[] choices = xmlProcessor.getNameCategoryDescriptions();
+				Debugg.println(sampleCodeListPath);
+				Debugg.println(choices[3]);
+				for (int i=0; i<choices.length; i++) 
+					if (!StringUtil.blank(choices[i])) {
+						categoryChoice.add(choices[i]);
+					}
+			}
+			categoryChoice.repaint();
+			//				categoryChoice = dialog.addPopUpMenu("Names to use:", xmlProcessor.getNameCategoryDescriptions(), tagNumber);
+
 		}
 	}
 
