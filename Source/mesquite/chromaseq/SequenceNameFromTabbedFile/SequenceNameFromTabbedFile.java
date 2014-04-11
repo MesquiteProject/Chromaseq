@@ -145,8 +145,11 @@ public class SequenceNameFromTabbedFile extends SequenceNameSource implements Ac
 		String[] categories=null;
 		
 		if (nameCategories==null) {
-			categories = new String[1];
-			categories[0]="Sample Code                  ";
+			if (!scanTabbedDocument()) {
+				categories = new String[1];
+				categories[0]="Sample Code                  ";
+			} else
+				categories = nameCategories;
 		} else
 			categories = nameCategories;
 
