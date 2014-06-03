@@ -30,7 +30,8 @@ public class SequenceNameFromTabbedFile extends SequenceNameSource implements Ac
 				return false;
 			if (!scanTabbedDocument())
 				return false;
-		} 
+		}  else
+			scanTabbedDocument();
 		return true;
 	}
 
