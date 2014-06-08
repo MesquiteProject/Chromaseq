@@ -307,10 +307,6 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		return true;  
 	}
 	/*.................................................................................................................*/
-	public boolean isPrerelease(){
-		return false;
-	}
-	/*.................................................................................................................*/
 	public boolean isSubstantive(){
 		return false;
 	}
@@ -436,12 +432,22 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	public boolean showCitation() {
 		return false;
 	}
-
 	/*.................................................................................................................*/
 	public String getExplanation() {
 		return "Segregates into a new folder all chromatograms whose sample codes are listed in a specified file.";
 	}
 	/*.................................................................................................................*/
+	/*.................................................................................................................*/
+	public boolean isPrerelease(){
+		return true;
+	}
+	/*.................................................................................................................*/
+	/** returns the version number at which this module was first released.  If 0, then no version number is claimed.  If a POSITIVE integer
+	 * then the number refers to the Mesquite version.  This should be used only by modules part of the core release of Mesquite.
+	 * If a NEGATIVE integer, then the number refers to the local version of the package, e.g. a third party package*/
+	public int getVersionOfFirstRelease(){
+		return NEXTRELEASE;  
+	}
 
 }
 
