@@ -11,7 +11,14 @@ This source code and its compiled class files are free and modifiable under the 
 GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 
-package mesquite.chromaseq.SegregateChromatograms; 
+/* initiated 
+ * 8.vi.14 DRM based upon SegregateChromatograms
+ */
+
+/** this module is simple; it segregates files contained in a directory that have a sample code that matches those listed in a 
+ * chosen file of sample codes.  It uses a ChromatogramFileNameParser to find the sample code within each file's name*/
+
+package mesquite.chromaseq.SegregateListedChromatograms; 
 
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -21,13 +28,12 @@ import java.io.File;
 
 import javax.swing.JLabel;
 
-
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
 import mesquite.chromaseq.lib.*;
 
 /* ======================================================================== */
-public class SegregateChromatograms extends UtilitiesAssistant implements ActionListener{ 
+public class SegregateListedChromatograms extends UtilitiesAssistant implements ActionListener{ 
 	//for importing sequences
 	MesquiteProject proj = null;
 	FileCoordinator coord = null;
@@ -35,7 +41,6 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 	ChromatogramFileNameParser nameParserManager;
 
 	boolean requiresExtension=true;
-	boolean translateSampleCodes = true;
 	
 	static String previousDirectory = null;
 	ProgressIndicator progIndicator = null;
@@ -46,18 +51,18 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 	final String sequencesFolder = "sequences";
 	final String processedFastaFolder = "processedFasta";
 	String processedFastaDirectory = null;
-	String sampleNameToMatch = null;
-	String geneNameToMatch = null;
+	
+	String sampleCodeListPath = null;
+	String sampleCodeListFile = null;
+	String sampleCodeList = "";
+	Parser sampleCodeListParser = null;
+
 
 	boolean preferencesSet = false;
-	boolean verbose=false;
-	SequenceNameSource sequenceNameTask = null;
-	PrimerInfoSource primerInfoTask = null;
+	boolean verbose=true;
 
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		EmployeeNeed e1 = registerEmployeeNeed(SequenceNameSource.class, "Chromatogram processing requires a source of sequence names; choose the one that appropriately determines the sequence names from the sample codes.", "This is activated automatically.");
-		EmployeeNeed e2 = registerEmployeeNeed(PrimerInfoSource.class, "Chromatogram processing requires a source of information about primers, including their names, direction, and sequence, as well as the gene fragments to which they correspond.", "This is activated automatically.");
-		EmployeeNeed e3 = registerEmployeeNeed(ChromatogramFileNameParser.class, "Chromatogram processing requires a means to determine the sample code and primer name.", "This is activated automatically.");
+		EmployeeNeed e1 = registerEmployeeNeed(ChromatogramFileNameParser.class, "Chromatogram processing requires a means to determine the sample code and primer name.", "This is activated automatically.");
 	}
 
 	/*.................................................................................................................*/
@@ -65,7 +70,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		loadPreferences();
 		
 
-		addMenuItem(null, "Segregate Matching Chromatograms...", makeCommand("extract", this));
+		addMenuItem(null, "Segregate Chromatograms of Listed Codes...", makeCommand("extract", this));
 		return true;
 	}
 	/*.................................................................................................................*/
@@ -77,20 +82,6 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 			return false;
 		} else if (!nameParserManager.queryOptions())
 				return false;
-
-		sequenceNameTask = (SequenceNameSource)hireEmployee(SequenceNameSource.class,  "Supplier of sequence names from sample codes");
-		if (sequenceNameTask==null) 
-			return false;
-		 else {
-				if (!sequenceNameTask.optionsSpecified())
-					if (!sequenceNameTask.queryOptions())
-						return false;
-			}
-		
-		primerInfoTask = (PrimerInfoSource)hireCompatibleEmployee(PrimerInfoSource.class,  new MesquiteString("alwaysAsk"), "Supplier of information about primers and gene fragments");
-		if (primerInfoTask==null) 
-			return false;
-
 
 		return true;
 	}
@@ -106,10 +97,45 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		}
 		return true;
 	}
-	
+	/*.................................................................................................................*/
+	public boolean processCodesFile() {
+		if (!StringUtil.blank(sampleCodeListPath)) {
+			sampleCodeList = MesquiteFile.getFileContentsAsString(sampleCodeListPath);
+
+			if (!StringUtil.blank(sampleCodeList)) {
+				sampleCodeListParser = new Parser(sampleCodeList);
+				return true;
+			}
+		}	
+		return false;
+		
+	}
+	/*.................................................................................................................*/
+
+	public boolean sampleCodeIsInCodesFile(MesquiteString sampleCode) {
+		if (sampleCodeListParser==null)
+			return false;
+		if (sampleCode==null || sampleCode.isBlank())
+			return false;
+		String sampleCodeString  = sampleCode.getValue();
+		sampleCodeListParser.setPosition(0);
+		Parser subParser = new Parser();
+		String line = sampleCodeListParser.getRawNextDarkLine();
+		while (StringUtil.notEmpty(line)) {
+				subParser.setString(line);
+				subParser.setWhitespaceString("\t");
+				subParser.setPunctuationString("");
+				String code = subParser.getFirstToken();
+				if (sampleCodeString.equalsIgnoreCase(code)) {
+					return true;
+				}
+			line = sampleCodeListParser.getRawNextDarkLine();
+		}
+		return false;
+	}
 	
 	/*.................................................................................................................*/
-	public boolean extractChromatograms(String directoryPath, File directory, String sampleNameToMatch, String geneNameToMatch){
+	public boolean extractChromatograms(String directoryPath, File directory){
 
 		logBuffer.setLength(0);
 		String[] files = directory.list();
@@ -127,23 +153,11 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		int loc = 0;
 
 		
-		String processedDirPath = directoryPath + MesquiteFile.fileSeparator;
-		if (StringUtil.notEmpty(sampleNameToMatch) && StringUtil.notEmpty(geneNameToMatch))  // if both not empty have to match both
-			processedDirPath += sampleNameToMatch+" "+geneNameToMatch;
-		else if (StringUtil.notEmpty(sampleNameToMatch))
-			processedDirPath += sampleNameToMatch;
-		else if (StringUtil.notEmpty(geneNameToMatch))
-			processedDirPath += geneNameToMatch;
-		else
-			return false;
+		String processedDirPath = directoryPath + MesquiteFile.fileSeparator + "SampleCodeInList";
 
 		loglnEchoToStringBuffer(" Searching for chromatograms that match the specified criteria. ", logBuffer);
 		loglnEchoToStringBuffer(" Processing directory: ", logBuffer);
 		loglnEchoToStringBuffer("  "+directoryPath+"\n", logBuffer);
-		if (sequenceNameTask!=null)
-			sequenceNameTask.echoParametersToFile(logBuffer);
-		if (primerInfoTask!=null)
-			primerInfoTask.echoParametersToFile(logBuffer);
 
 		File newDir;
 		int numPrepared = 0;
@@ -160,12 +174,6 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		}
 
 
-		String lowerCaseSampleNameToMatch=null;
-		if (StringUtil.notEmpty(sampleNameToMatch))
-			lowerCaseSampleNameToMatch= sampleNameToMatch.toLowerCase();
-		String lowerCaseFragmentNameToMatch=null;
-		if (StringUtil.notEmpty(geneNameToMatch))
-			lowerCaseFragmentNameToMatch= geneNameToMatch.toLowerCase();
 
 		for (int i=0; i<files.length; i++) {
 			if (progIndicator!=null){
@@ -209,42 +217,13 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 					if (startTokenResult.getValue() == null)
 						startTokenResult.setValue("");
 
-					if (primerInfoTask != null){
-						fragName = primerInfoTask.getGeneFragmentName(primerName.getValue());
-					}
-					if (!StringUtil.blank(sampleCode.getValue())) {
-						/* Translate code number to sample name if requested  */
-						 if (sequenceNameTask!=null && sequenceNameTask.isReady()) {
-							seqName = sequenceNameTask.getAlternativeName(startTokenResult.getValue(), sampleCode.getValue());
-							fullSeqName = sequenceNameTask.getSequenceName(startTokenResult.getValue(), sampleCode.getValue());
-							}
-						else {
-							seqName = sampleCode.getValue();
-							fullSeqName = sampleCode.getValue();
-						}
-					}
-					else {
-						seqName = chromFileName.substring(1, 10); // change!
-						fullSeqName = seqName;
-					}
-
-					seqName = StringUtil.cleanseStringOfFancyChars(seqName + sampleCodeSuffix.getValue());  // tack on suffix
-					fullSeqName = StringUtil.cleanseStringOfFancyChars(fullSeqName + sampleCodeSuffix.getValue());
-
-
-					//progIndicator.spin();
+					boolean match = sampleCodeIsInCodesFile(sampleCode);
 					
-					boolean matchesSampleName = (StringUtil.notEmpty(lowerCaseSampleNameToMatch) && (seqName.toLowerCase().indexOf(lowerCaseSampleNameToMatch)>=0 || fullSeqName.toLowerCase().indexOf(lowerCaseSampleNameToMatch)>=0));
-					boolean matchesFragmentName = (StringUtil.notEmpty(lowerCaseFragmentNameToMatch) && (fragName.toLowerCase().indexOf(lowerCaseFragmentNameToMatch)>=0));
 
-					boolean match = false;
-					if (StringUtil.notEmpty(lowerCaseSampleNameToMatch) && StringUtil.notEmpty(lowerCaseFragmentNameToMatch))  // if both not empty have to match both
-						match = matchesSampleName && matchesFragmentName;
-					else
-						match = matchesSampleName || matchesFragmentName;  //otherwise just have to match one of them.
+
 					if (match) {
 						if (verbose)
-							loglnEchoToStringBuffer(chromFileName + " ["+fullSeqName + "   " + fragName+"]", logBuffer);
+							loglnEchoToStringBuffer(chromFileName, logBuffer);
 						numPrepared++;
 						if (!makeDirectoriesForMatch(processedDirPath)){   //make directories for this in case it doesn't already exist
 							if (progIndicator!=null) progIndicator.goAway();
@@ -264,7 +243,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 							cFile.renameTo(newFile); 
 						}
 						catch (SecurityException e) {
-							logln( "Can't rename: " + seqName);
+							logln( "Can't rename: " + chromFileName);
 						}
 						
 					} 
@@ -296,14 +275,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		if ( logBuffer==null)
 			logBuffer = new StringBuffer();
 		
-		if (StringUtil.blank(sampleNameToMatch)&& StringUtil.blank(geneNameToMatch))
-			return false;
-
-		if (StringUtil.blank(sampleNameToMatch))
-			loglnEchoToStringBuffer("Segregating chromatograms with the following text in the sample name: " + sampleNameToMatch, logBuffer);
-
-		if (StringUtil.blank(geneNameToMatch))
-			loglnEchoToStringBuffer("Segregating chromatograms with the following text in the gene name: " + geneNameToMatch, logBuffer);
+			loglnEchoToStringBuffer("Segregating chromatograms with codes present in text file: " + sampleCodeListFile, logBuffer);
 
 
 		MesquiteBoolean pleaseStorePrefs = new MesquiteBoolean(false);
@@ -325,20 +297,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		previousDirectory = directory.getParent();
 		storePreferences();
 		if (directory.exists() && directory.isDirectory()) {
-			if (geneNameToMatch.equals("ALLSTANDARDDRMLAB")){
-				boolean anyFound = false;
-				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "28S") || anyFound;
-				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "18S") || anyFound;
-				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "Arginine Kinase") || anyFound;
-				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "wg") || anyFound;
-				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "CAD") || anyFound;
-				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "COI") || anyFound;
-				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "Topo") || anyFound;
-				anyFound = extractChromatograms(directoryPath, directory, sampleNameToMatch, "MSP") || anyFound;
-				return anyFound;
-			}
-			else
-				return extractChromatograms(directoryPath, directory, sampleNameToMatch, geneNameToMatch);
+			return extractChromatograms(directoryPath, directory);
 		}
 		return true;
 	}
@@ -361,15 +320,12 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 			requiresExtension = MesquiteBoolean.fromTrueFalseString(content);
 		else if ("previousDirectory".equalsIgnoreCase(tag))
 			previousDirectory = StringUtil.cleanXMLEscapeCharacters(content);
-		else if ("translateSampleCodes".equalsIgnoreCase(tag))
-			translateSampleCodes = MesquiteBoolean.fromTrueFalseString(content);
 		preferencesSet = true;
 	}
 	/*.................................................................................................................*/
 	public String preparePreferencesForXML () {
 		StringBuffer buffer = new StringBuffer(200);
 		StringUtil.appendXMLTag(buffer, 2, "requiresExtension", requiresExtension);  
-		StringUtil.appendXMLTag(buffer, 2, "translateSampleCodes", translateSampleCodes);  
 		StringUtil.appendXMLTag(buffer, 2, "previousDirectory", previousDirectory);  
 		preferencesSet = true;
 		return buffer.toString();
@@ -377,15 +333,9 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 	
 	
 	JLabel nameParserLabel = null;
-	JLabel sequenceNameTaskLabel = null;
-	JLabel primerInfoTaskLabel = null;
 	
 	MesquiteTextCanvas nameParserTextCanvas = null;
-	MesquiteTextCanvas sequenceNameTaskTextCanvas = null;
-	MesquiteTextCanvas primerInfoTaskTextCanvas = null;
-	Button sequenceNameTaskButton = null;
 	Button nameParserButton = null;
-	Button primerInfoTaskButton = null;
 
 	
 	/*.................................................................................................................*/
@@ -416,46 +366,11 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 				nameParserButton.setEnabled (nameParserManager.hasOptions());
 				nameParserTextCanvas = textCanvasWithButtons.getTextCanvas();
 				
-		//section for SequenceNameSource
-				dialog.addHorizontalLine(1);
-				dialog.addLabel("Source of Sequence Names");
-				dialog.forceNewPanel();
-				s = getModuleText(sequenceNameTask);
-
-				if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(SequenceNameSource.class)>1){
-					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s,"Sequence Name Source...", "sequenceNameTaskReplace", "Options...", "sequenceNameTaskButton",this);
-					sequenceNameTaskButton = textCanvasWithButtons.getButton2();
-				}
-				else {
-					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s, "Options...", "sequenceNameTaskButton",this);
-					sequenceNameTaskButton = textCanvasWithButtons.getButton();
-				}
-				sequenceNameTaskButton.setEnabled (sequenceNameTask.hasOptions());
-				sequenceNameTaskTextCanvas = textCanvasWithButtons.getTextCanvas();
-
-		//section for PrimerInfoSource
-				dialog.addHorizontalLine(1);
-				dialog.addLabel("Source of Primer Information");
-				dialog.forceNewPanel();
-				s = getModuleText(primerInfoTask);
-				if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(PrimerInfoSource.class)>1){
-					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s,"Primer Info Source...", "primerInfoTaskReplace", "Options...", "primerInfoTaskButton",this);
-					primerInfoTaskButton = textCanvasWithButtons.getButton2();
-				}
-				else {
-					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s, "Options...", "primerInfoTaskButton",this);
-					primerInfoTaskButton = textCanvasWithButtons.getButton();
-				}
-				nameParserButton.setEnabled (primerInfoTask.hasOptions());
-				primerInfoTaskTextCanvas = textCanvasWithButtons.getTextCanvas();
 
 				dialog.setDefaultButton("Segregate");
 
 		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
 		dialog.addHorizontalLine(2);
-
-		SingleLineTextField sampleNameToMatchField = dialog.addTextField("Text to match in long sequence name", sampleNameToMatch,26);
-		SingleLineTextField geneNameToMatchField = dialog.addTextField("Text to match in gene fragment name", geneNameToMatch,26);
 
 
 		s = "This will move all chromatograms whose long sequence names and gene fragment names contain the specified text into their own folder.\n";
@@ -471,8 +386,6 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
 			requiresExtension = requiresExtensionBox.getState();
-			sampleNameToMatch = sampleNameToMatchField.getText();
-			geneNameToMatch = geneNameToMatchField.getText();
 		}
 		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
 		dialog.dispose();
@@ -487,7 +400,16 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 				return null;
 			
 			if (queryOptions()) {
-				extractChromatograms(null);
+				MesquiteString dnaNumberListDir = new MesquiteString();
+				MesquiteString dnaNumberListFile = new MesquiteString();
+				String s = MesquiteFile.openFileDialog("Choose file containing sample codes and names", dnaNumberListDir, dnaNumberListFile);
+				if (!StringUtil.blank(s)) {
+					sampleCodeListPath = s;
+					sampleCodeListFile = dnaNumberListFile.getValue();
+					processCodesFile();
+					extractChromatograms(null);
+
+				}
 			}
 		}
 		else
@@ -503,32 +425,12 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 					nameParserTextCanvas.setText(getModuleText(nameParserManager));
 			}
 		}
-		else if (e.getActionCommand().equalsIgnoreCase("sequenceNameTaskButton")) {
-			if (sequenceNameTask!=null) {
-				if (sequenceNameTask.queryOptions() && sequenceNameTaskTextCanvas!=null)
-					sequenceNameTaskTextCanvas.setText(getModuleText(sequenceNameTask));
-			}
-		}
-		else if (e.getActionCommand().equalsIgnoreCase("primerInfoTaskButton")) {
-			if (primerInfoTask!=null) {
-				if (primerInfoTask.queryOptions() && primerInfoTaskTextCanvas!=null)
-					primerInfoTaskTextCanvas.setText(getModuleText(primerInfoTask));
-			}
-		}
-		else if (e.getActionCommand().equalsIgnoreCase("sequenceNameTaskReplace")) {
-			MesquiteCommand command = new MesquiteCommand("setSequenceNameSource", this);
-			command.doItMainThread(null, null, false, false);
-		}
-		else if (e.getActionCommand().equalsIgnoreCase("primerInfoTaskReplace")) {
-			MesquiteCommand command = new MesquiteCommand("setPrimerInfoSource", this);
-			command.doItMainThread(null, null, false, false);
-		}
 	}
 
 
 	/*.................................................................................................................*/
 	public String getName() {
-		return "Segregate Chromatograms";
+		return "Segregate Chromatograms in Listed Codes";
 	}
 	/*.................................................................................................................*/
 	public boolean showCitation() {
@@ -537,7 +439,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 
 	/*.................................................................................................................*/
 	public String getExplanation() {
-		return "Segregates into a new folder all chromatograms whose sequence names and gene fragment names contain a particular string.";
+		return "Segregates into a new folder all chromatograms whose sample codes are listed in a specified file.";
 	}
 	/*.................................................................................................................*/
 
