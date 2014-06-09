@@ -369,13 +369,10 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		dialog.addHorizontalLine(2);
 
 
-		s = "This will move all chromatograms whose long sequence names and gene fragment names contain the specified text into their own folder.\n";
-		s+="Mesquite extracts from within the name of each chromatogram file for both a code indicating the sample (e.g., a voucher number) and the primer name. ";
-		s+= "To allow this, you must first define an rule that defines how the chromatogram file names are structured.\n\n";
-		s+= "If you so choose, Mesquite will search for the sample code within a sample names file you select, on each line of which is:\n";
-		s+= "   <code><tab><short sequence name><tab><long sequence name>;\n";
-		s+= "where the code, short sequence name, and long sequence name are all single tokens (you can force a multi-word name to be a single token by surrounding the name with single quotes). ";
-		s+= "For Segregating Chromosomes, only the long sequence name is used.   If you wish, it can contain many taxa names, e.g. \"Insecta Coleoptera Carabidae Trechinae Bembidiini Bembidion (Pseudoperyphus) louisella\".\n\n";
+		s = "This will move all chromatograms whose sample codes are listed in a chosen file into their own folder.\n";
+		s+="Mesquite extracts from within the name of each chromatogram file a code indicating the sample (e.g., a voucher number). ";
+		s+= "It then looks at the first entry on each line of a tab-delimited text file, and sees if it can find in that sample codes file ";
+		s+= "the sample code in the chromatogram's file name.  If so, it will move the file into a folder; if not, it will ignore the chromatogram file.";
 		dialog.appendToHelpString(s);
 
 		dialog.completeAndShowDialog(true);
