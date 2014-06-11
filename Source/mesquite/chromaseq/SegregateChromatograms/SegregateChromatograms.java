@@ -85,6 +85,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 				if (!sequenceNameTask.optionsSpecified())
 					if (!sequenceNameTask.queryOptions())
 						return false;
+				sequenceNameTask.initialize();
 			}
 		
 		primerInfoTask = (PrimerInfoSource)hireCompatibleEmployee(PrimerInfoSource.class,  new MesquiteString("alwaysAsk"), "Supplier of information about primers and gene fragments");

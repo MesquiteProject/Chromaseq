@@ -395,7 +395,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 			if (queryOptions()) {
 				MesquiteString dnaNumberListDir = new MesquiteString();
 				MesquiteString dnaNumberListFile = new MesquiteString();
-				String s = MesquiteFile.openFileDialog("Choose file containing sample codes and names", dnaNumberListDir, dnaNumberListFile);
+				String s = MesquiteFile.openFileDialog("Choose file containing sample codes", dnaNumberListDir, dnaNumberListFile);
 				if (!StringUtil.blank(s)) {
 					sampleCodeListPath = s;
 					sampleCodeListFile = dnaNumberListFile.getValue();
