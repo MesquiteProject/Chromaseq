@@ -83,6 +83,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	boolean permitMixed = false;
 	boolean generateMBBlock = true;
 	boolean simplifyNames = false;
+	boolean addPrefixPlusVoucherID = false;
 	String voucherPrefix = "DNA";
 
 	boolean removeExcluded = false;
@@ -94,6 +95,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		exportDialog.setDefaultButton(null);
 		exportDialog.addLabel("Saving each sequence in a separate FASTA file");
 		
+		Checkbox addPrefixPlusVoucherIDBox= exportDialog.addCheckBox("Use prefix plus voucher ID as file name.", addPrefixPlusVoucherID);
 		SingleLineTextField voucherPrefixField= exportDialog.addTextField("Prefix in front of voucher ID", voucherPrefix, 8);
 
 		exportDialog.completeAndShowDialog(dataSelected, taxaSelected);
@@ -101,7 +103,10 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		boolean ok = (exportDialog.query(dataSelected, taxaSelected)==0);
 
 		//		convertAmbiguities = convertToMissing.getState();
-		voucherPrefix = voucherPrefixField.getText();
+		if (ok) {
+			voucherPrefix = voucherPrefixField.getText();
+			addPrefixPlusVoucherID = addPrefixPlusVoucherIDBox.getState();
+		}
 
 		exportDialog.dispose();
 		return ok;
@@ -113,7 +118,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		String filePath = directory;
 
 		String voucherID = ChromaseqUtil.getStringAssociated(taxa, ChromaseqUtil.voucherCodeRef, it);
-		if (StringUtil.notEmpty(voucherID))
+		if (addPrefixPlusVoucherID && StringUtil.notEmpty(voucherID))
 			filePath+=StringUtil.cleanseStringOfFancyChars(voucherPrefix+voucherID,false,true);
 		else 
 			filePath+=StringUtil.cleanseStringOfFancyChars(taxa.getName(it),false,true);
@@ -181,6 +186,10 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	/** returns an explanation of what the module does.*/
 	public String getExplanation() {
 		return "Exports each sequence as a separate FASTA file." ;
+	}
+	/*.................................................................................................................*/
+	public boolean isPrerelease() {
+		return true;
 	}
 
 
