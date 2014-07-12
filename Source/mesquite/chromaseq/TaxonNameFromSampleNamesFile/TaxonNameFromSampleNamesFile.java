@@ -262,7 +262,7 @@ public class TaxonNameFromSampleNamesFile extends TaxonNameAlterer implements Ac
 	public String getVoucherCode(Taxa taxa, int ic){
 
 		if (taxa!=null) {
-			Object n = ChromaseqUtil.getStringAssociated(taxa, ChromaseqUtil.voucherCodeRef, ic);
+			Object n = ChromaseqUtil.getStringAssociated(taxa, VoucherInfo.voucherCodeRef, ic);
 			if (n !=null)
 				return ((String)n);
 

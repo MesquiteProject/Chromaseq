@@ -25,8 +25,6 @@ import mesquite.assoc.lib.TaxaAssociation;
 import mesquite.basic.ManageTaxaPartitions.ManageTaxaPartitions;
 import mesquite.categ.lib.*;
 import mesquite.chromaseq.lib.ChromaseqUtil;
-import mesquite.chromaseq.lib.VoucherInfo;
-import mesquite.chromaseq.lib.VoucherInfoCoord;
 import mesquite.cont.lib.ContinuousData;
 import mesquite.io.lib.*;
 
@@ -117,7 +115,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 
 		String filePath = directory;
 
-		String voucherID = ChromaseqUtil.getStringAssociated(taxa, ChromaseqUtil.voucherCodeRef, it);
+		String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfo.voucherCodeRef, it);
 		if (addPrefixPlusVoucherID && StringUtil.notEmpty(voucherID))
 			filePath+=StringUtil.cleanseStringOfFancyChars(voucherPrefix+voucherID,false,true);
 		else 

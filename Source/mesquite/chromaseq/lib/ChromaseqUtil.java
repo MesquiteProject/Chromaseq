@@ -83,8 +83,6 @@ public class ChromaseqUtil{
 	public static final String PHPHIMPORTMATRIXTYPEREF ="phphImportMatrixType";//MesquiteString: data
 
 	//===========================ASSOCIABLE handling==============================
-	public static final NameReference voucherCodeRef = NameReference.getNameReference("VoucherCode"); //String: taxa
-	public static final NameReference voucherDBRef = NameReference.getNameReference("VoucherDB");//String: taxa
 	public static final NameReference origTaxonNameRef= NameReference.getNameReference("origName");//String: taxa
 
 	public static final NameReference aceRef = NameReference.getNameReference("aceFile"); //String: tInfo
