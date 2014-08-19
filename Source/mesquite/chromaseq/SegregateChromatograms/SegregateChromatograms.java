@@ -65,7 +65,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		loadPreferences();
 		
 
-		addMenuItem(null, "Segregate Chromatograms...", makeCommand("extract", this));
+		addMenuItem(null, "Segregate Matching Chromatograms...", makeCommand("extract", this));
 		return true;
 	}
 	/*.................................................................................................................*/
@@ -81,7 +81,12 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		sequenceNameTask = (SequenceNameSource)hireEmployee(SequenceNameSource.class,  "Supplier of sequence names from sample codes");
 		if (sequenceNameTask==null) 
 			return false;
-		sequenceNameTask.initialize();
+		 else {
+				if (!sequenceNameTask.optionsSpecified())
+					if (!sequenceNameTask.queryOptions())
+						return false;
+				sequenceNameTask.initialize();
+			}
 		
 		primerInfoTask = (PrimerInfoSource)hireCompatibleEmployee(PrimerInfoSource.class,  new MesquiteString("alwaysAsk"), "Supplier of information about primers and gene fragments");
 		if (primerInfoTask==null) 

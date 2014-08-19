@@ -11,9 +11,9 @@
 			<forPackageVersionEqualOrLess>1000</forPackageVersionEqualOrLess>
 			<messageType>update</messageType>
 			<identity>chromaseq</identity>
-			<packageName>Chromaseq 1.01</packageName>
+			<packageName>Chromaseq 1.1</packageName>
 			<explanation><![CDATA[This is a critical update for Chromaseq, a Mesquite package for processing chromatogram data and 
-				DNA sequences. This fixes a bug in Append Sequences from Chromatograms that could cause data loss. ]]>
+				DNA sequences. This version is compatable with Version 3.0 of Mesquite, whereas earlier versions are not. ]]>
 			</explanation>
 			<noticeNumber>011</noticeNumber>
 			<updateVersion>011</updateVersion>
@@ -22,7 +22,7 @@
 				<file>chromaseq</file>
 				<url>http://mesquiteproject.org/packages/chromaseq/chromaseq.zip</url>
 				<treatment>unzip</treatment>
-				<updateVersion>001</updateVersion>
+				<updateVersion>002</updateVersion>
 			</install>
 		</notice>
 		

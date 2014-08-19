@@ -306,9 +306,9 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		for (int i = 0; i<numT; i++){
 			Taxa taxa = proj.getTaxa(i);
 			sb.append("\n\tTAXA = " + ParseUtil.tokenize(taxa.getName()) + " ;" + StringUtil.lineEnding());
-			boolean here = writeStrings(sb, taxa, ChromaseqUtil.voucherCodeRef);
+			boolean here = writeStrings(sb, taxa, VoucherInfo.voucherCodeRef);
 			some  |= here;
-			here = writeStrings(sb,taxa, ChromaseqUtil.voucherDBRef);
+			here = writeStrings(sb,taxa, VoucherInfo.voucherDBRef);
 			some  |= here;
 			here = writeStrings(sb,taxa, ChromaseqUtil.origTaxonNameRef);
 			some  |= here;
@@ -371,9 +371,9 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		for (int i = 0; i<numT; i++){
 			Taxa taxa = proj.getTaxa(i);
 			sb.append("\n\tTAXA = " + ParseUtil.tokenize(taxa.getName()) + " ;" + StringUtil.lineEnding());
-			boolean here = writeStrings(sb, taxa, ChromaseqUtil.voucherCodeRef);
+			boolean here = writeStrings(sb, taxa, VoucherInfo.voucherCodeRef);
 			some  |= here;
-			here = writeStrings(sb,taxa, ChromaseqUtil.voucherDBRef);
+			here = writeStrings(sb,taxa, VoucherInfo.voucherDBRef);
 			some  |= here;
 			here = writeStrings(sb,taxa, ChromaseqUtil.origTaxonNameRef);
 			some  |= here;
@@ -726,7 +726,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	 * then the number refers to the Mesquite version.  This should be used only by modules part of the core release of Mesquite.
 	 * If a NEGATIVE integer, then the number refers to the local version of the package, e.g. a third party package*/
 	public int getVersionOfFirstRelease(){
-		return NEXTRELEASE;  
+		return -1000;  
 	}
 }
 

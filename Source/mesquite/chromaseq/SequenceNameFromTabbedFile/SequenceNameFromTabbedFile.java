@@ -30,7 +30,8 @@ public class SequenceNameFromTabbedFile extends SequenceNameSource implements Ac
 				return false;
 			if (!scanTabbedDocument())
 				return false;
-		} 
+		}  else
+			scanTabbedDocument();
 		return true;
 	}
 
@@ -291,9 +292,15 @@ public class SequenceNameFromTabbedFile extends SequenceNameSource implements Ac
 	}
 
 	/*.................................................................................................................*/
-
-	public boolean isPrerelease() {
-		return false;
+	/** returns the version number at which this module was first released.  If 0, then no version number is claimed.  If a POSITIVE integer
+	 * then the number refers to the Mesquite version.  This should be used only by modules part of the core release of Mesquite.
+	 * If a NEGATIVE integer, then the number refers to the local version of the package, e.g. a third party package*/
+	public int getVersionOfFirstRelease(){
+		return -1100;  
+	}
+	/*.................................................................................................................*/
+	public boolean isPrerelease(){
+		return true;
 	}
 
 	/*.................................................................................................................*/

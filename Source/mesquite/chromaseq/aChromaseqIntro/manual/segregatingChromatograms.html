@@ -41,8 +41,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Segregating Chromatograms<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.01<br />
-      10 December 2013<br /></td>
+    <td width="14%">Version 1.1<br />
+      19 August 2014<br /></td>
   </tr>
 </table>
 
@@ -184,7 +184,20 @@
     
     
 <h2>Segregating Chromatograms</h2>
-<p>Segregate Chromatograms, available in the Utilities menu when the Mesquite Log window is frontmost, allows one move all of the chromatogram files whose sequence names or gene fragment name contain a particular piece of text.</p>
+<p>There are two features for segregating chromatograms. The first, and simplest, is <strong>Segregate Chromatograms of Listed Codes</strong>, available in the Utilities menu when the Mesquite Log window is frontmost. This will segregate into a separate directory all chromatograms whose sample code is included in a text file listing sample codes. </p>
+<p>For example, for the following directory:</p>
+<p align="center"><img src="images/dirBeforeSegregate.png" width="281" height="305" /></p>
+<p>And imagine you supplied a text file that contained only:</p>
+<blockquote>
+  <blockquote>
+    <p><span class="monospacedSmall">1250<br />
+    2320</span></p>
+  </blockquote>
+</blockquote>
+<p>Choosing Segregate Chromatograms of Listed Codes will then cause Mesquite to ask you to choose a <a href="fileNamingRules.html">File Naming Rule:</a></p>
+<p align="center"><img src="images/fileNamingRule.jpg" width="456" height="150" /></p>
+<p> If your file naming rule specifies that the sample codes are the text after &quot;DNA&quot; and before the next &quot;_&quot;, then Segregate Chromatograms of Listed Codes would segregate those six files that contain either &quot;DNA1250_&quot; or &quot;DNA2320_&quot; in their file names.</p>
+<p>The more complex, slower version is <strong>Segregate Matching Chromatograms</strong>. This will  move all of the chromatogram files whose sequence names or gene fragment name (as determined using the same <a href="sampleCode.html">translation file</a> used elsewhere by Chromaseq) contain a particular piece of text.</p>
 <p>For example, for the following directory:</p>
 <p align="center"><img src="images/dirBeforeSegregate.png" width="281" height="305" /></p>
 <p>If the Segregate Chromatogram feature was used specifying that the sequence name should contain &quot;louisella&quot;:</p>
@@ -222,7 +235,7 @@
     </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
-    <p> ©2011 David R. Maddison &amp; Wayne P. Maddison</p>
+    <p> ©2014 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
 
