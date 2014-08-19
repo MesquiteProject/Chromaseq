@@ -3,24 +3,24 @@
 	<MessagesFromHome>
 		<version>1</version>
 		<currentReleaseVersion>
-			<versionString>1.00</versionString>
-			<version>1000</version>
+			<versionString>1.1</versionString>
+			<version>1100</version>
 			<downloadURL>http://mesquiteproject.org/packages/chromaseq/manual/download.html</downloadURL>
 		</currentReleaseVersion>
 		<notice>
-			<forPackageVersionEqualOrLess>1000</forPackageVersionEqualOrLess>
+			<forPackageVersionEqualOrLess>1010</forPackageVersionEqualOrLess>
 			<messageType>update</messageType>
 			<identity>chromaseq</identity>
 			<packageName>Chromaseq 1.1</packageName>
 			<explanation><![CDATA[This is a critical update for Chromaseq, a Mesquite package for processing chromatogram data and 
 				DNA sequences. This version is compatable with Version 3.0 of Mesquite, whereas earlier versions are not. ]]>
 			</explanation>
-			<noticeNumber>011</noticeNumber>
-			<updateVersion>011</updateVersion>
+			<noticeNumber>012</noticeNumber>
+			<updateVersion>012</updateVersion>
 			<install>
 				<location>mesquite</location>
 				<file>chromaseq</file>
-				<url>http://mesquiteproject.org/packages/chromaseq/chromaseq.zip</url>
+				<url>https://github.com/MesquiteProject/Chromaseq/releases/download/1.1/Chromaseq1.1.zip</url>
 				<treatment>unzip</treatment>
 				<updateVersion>002</updateVersion>
 			</install>
