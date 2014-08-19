@@ -193,8 +193,29 @@
 <!-- InstanceBeginEditable name="content" -->
   <p>Chromaseq needs to know what to name sequences that are produced when chromatograms are processed. To do this, you will need to specify how to name sequences. Currently, there are only two options: either they will simply be given the sample code as a name, or they will be given the names that are stored in a text file that provides a translation between a sample code and a sequence name.</p>
   <h2>Sample Codes and Sequence Names File</h2>
-<p>If you wish to have the sample codes that are contained in the chromatogram file names translated into other names (for example, the full names of the species or samples), you will need to provide a sample codes &amp; names file. There are two formats that can be used for this file, the &quot;classic&quot; version</p>
-  <p>The format of  the sample codes &amp; names file is:</p>
+If you wish to have the sample codes that are contained in the chromatogram file names translated into other names (for example, the full names of the species or samples), you will need to provide a sample codes &amp; names file. There are two formats that can be used for this file, the newer, tab-delimited version, and the &quot;classic&quot; version.
+  <h3>Tab-delimited format</h3>
+  <p>The recommended tab-delimited format for this file is as follows:  </p>
+  <p class="monospaced">code&lt;tab&gt;name for file names&lt;tab&gt;title for name#1&lt;tab&gt;title for name#2&lt;tab&gt;title for name#3&lt;tab&gt;title for name#4<br />
+    &lt;sample code&gt;&lt;tab&gt;&lt;name for file names&gt;&lt;tab&gt;&lt;your name#1&gt;&lt;tab&gt;&lt;your name#2&gt;&lt;tab&gt;&lt;your name#3&gt;&lt;tab&gt;&lt;your name#4&gt;<br />
+    <span class="monospaced">&lt;sample code&gt;&lt;tab&gt;&lt;name for file names&gt;&lt;tab&gt;&lt;your name#1&gt;&lt;tab&gt;&lt;your name#2&gt;&lt;tab&gt;&lt;your name#3&gt;&lt;tab&gt;&lt;your name#4&gt;</span><span class="monospaced"><br />
+    &lt;sample code&gt;&lt;tab&gt;&lt;name for file names&gt;&lt;tab&gt;&lt;your name#1&gt;&lt;tab&gt;&lt;your name#2&gt;&lt;tab&gt;&lt;your name#3&gt;&lt;tab&gt;&lt;your name#4&gt;</span><span class="monospaced"><br />
+    &lt;sample code&gt;&lt;tab&gt;&lt;name for file names&gt;&lt;tab&gt;&lt;your name#1&gt;&lt;tab&gt;&lt;your name#2&gt;&lt;tab&gt;&lt;your name#3&gt;&lt;tab&gt;&lt;your name#4&gt;</span>  </p>
+  <p>The first line must contain the titles for the columns. The first column must contain the sample code. The second column must contain the names you wish for any file names to be called for those sequences. These file names should be short, and not contain any odd characters (such as &quot;/&quot;) that might confuse the operating system of your computer. Third and later columns contain the names that the sequences are to be called. You will get a choice as to which column will be used to name the sequences.</p>
+  <p>Here is part of an example file:</p>
+  <p class="monospaced">code	file name	long name	long name with locality<br />
+  1120	Bemb perspicuum AZ 1120	Bembidion perspicuum AZ 1120	Bembidion perspicuum AZ: Charleston Bridge 1120<br />
+  1173	Bemb antiquum ON 1173	Bembidion antiquum ON 1173	Bembidion antiquum ON: Zimmerman 1173<br />
+  1250	Bemb louisella NS 1250	Bembidion louisella NS 1250		Bembidion louisella NS: Cape North 1250<br />
+  1514	Bemb antiquum NC 1514	Bembidion antiquum NC 1514	Bembidion antiquum NC: Huntdale 1514<br />
+  1598	Bemb rufotinctum NC 1598	Bembidion rufotinctum NC 1598	Bembidion rufotinctum NC: Linville River 1598<br />
+  1626	Bemb antiquum IA 1626	Bembidion antiquum IA 1626		Bembidion antiquum IA: Decorah 1626<br />
+  1856	Bemb paraenulum VA 1856	Bembidion paraenulum VA 1856	Bembidion paraenulum VA: Big Otter River 1856<br />
+  1960	Bemb rothfelsi MO 1960	Bembidion rothfelsi MO 1960	Bembidion rothfelsi MO: Big River 1960<br />
+  2320	Bemb perspicuum CA 2320	Bembidion perspicuum CA 2320	Bembidion perspicuum CA: Pine Creek 2320</p>
+<p class="monospaced">&nbsp;</p>
+<h3>Version 1.0 (&quot;classic&quot;) format</h3>
+<p>The format of  the sample codes &amp; names file is:</p>
   <p class="monospaced">&lt;sample code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br />
     &lt;sample code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br />
     &lt;sample code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br />
@@ -211,7 +232,7 @@
     1960<span class="monospaced">&lt;tab&gt;</span>Bemb rothfelsi MO 1960<span class="monospaced">&lt;tab&gt;</span>Bembidion rothfelsi MO 1960	;<br />
     2320<span class="monospaced">&lt;tab&gt;</span>Bemb perspicuum CA 2320<span class="monospaced">&lt;tab&gt;</span>Bembidion perspicuum CA 2320	;</p>
   <p class="thrColFixHdr">Sample codes and sequence names are not allowed to start with a &quot;.&quot;, and they are not allowed to contain any semicolons.</p>
-  <p>An XML format is being developed for this information, but it is not yet supported. </p>
+  <p>An XML format is being developed for this information, but it is not yet fully supported. </p>
 <!-- InstanceEndEditable -->
 
     
