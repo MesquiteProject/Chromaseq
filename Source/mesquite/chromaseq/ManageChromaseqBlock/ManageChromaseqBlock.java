@@ -726,7 +726,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	 * then the number refers to the Mesquite version.  This should be used only by modules part of the core release of Mesquite.
 	 * If a NEGATIVE integer, then the number refers to the local version of the package, e.g. a third party package*/
 	public int getVersionOfFirstRelease(){
-		return NEXTRELEASE;  
+		return -1000;  
 	}
 }
 

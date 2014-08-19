@@ -93,8 +93,8 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		exportDialog.setDefaultButton(null);
 		exportDialog.addLabel("Saving each sequence in a separate FASTA file");
 		
-		Checkbox addPrefixPlusVoucherIDBox= exportDialog.addCheckBox("Use prefix plus voucher ID as file name.", addPrefixPlusVoucherID);
-		SingleLineTextField voucherPrefixField= exportDialog.addTextField("Prefix in front of voucher ID", voucherPrefix, 8);
+		Checkbox addPrefixPlusVoucherIDBox= exportDialog.addCheckBox("Use prefix plus OTU ID as file name.", addPrefixPlusVoucherID);
+		SingleLineTextField voucherPrefixField= exportDialog.addTextField("Prefix in front of OTU ID", voucherPrefix, 8);
 
 		exportDialog.completeAndShowDialog(dataSelected, taxaSelected);
 

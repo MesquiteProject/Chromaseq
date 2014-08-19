@@ -62,7 +62,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	boolean verbose=true;
 
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		EmployeeNeed e1 = registerEmployeeNeed(ChromatogramFileNameParser.class, "Chromatogram processing requires a means to determine the sample code and primer name.", "This is activated automatically.");
+		EmployeeNeed e1 = registerEmployeeNeed(ChromatogramFileNameParser.class, "Chromatogram processing requires a means to determine the sample code.", "This is activated automatically.");
 	}
 
 	/*.................................................................................................................*/
@@ -77,7 +77,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	public boolean hireRequired(){
 
 		if (nameParserManager == null)
-			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Supplier of sample code and primer name from the chromatogram file name.");
+			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Supplier of sample code from the chromatogram file name.");
 		if (nameParserManager == null) {
 			return false;
 		} else if (!nameParserManager.queryOptions())
@@ -285,7 +285,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 		// if not passed-in, then ask
 		if (StringUtil.blank(directoryPath)) {
-			directoryPath = MesquiteFile.chooseDirectory("Choose directory containing ABI files:", previousDirectory); //MesquiteFile.saveFileAsDialog("Base name for files (files will be named <name>1.nex, <name>2.nex, etc.)", baseName);
+			directoryPath = MesquiteFile.chooseDirectory("Choose directory containing chromatograms:", previousDirectory); //MesquiteFile.saveFileAsDialog("Base name for files (files will be named <name>1.nex, <name>2.nex, etc.)", baseName);
 		}
 
 		if (StringUtil.blank(directoryPath))
@@ -387,7 +387,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 	/*.................................................................................................................*/
 	public Object doCommand(String commandName, String arguments, CommandChecker checker) {
-		if (checker.compare(this.getClass(), "Segregates into a new folder all chromatograms whose sequence names and gene fragment names contain a particular string.", null, commandName, "extract")) {
+		if (checker.compare(this.getClass(), "Segregates into a new folder all chromatograms whose file names contain sample codes that are listed in a text file.", null, commandName, "extract")) {
 
 			if (!hireRequired())
 				return null;
@@ -436,14 +436,14 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	/*.................................................................................................................*/
 	/*.................................................................................................................*/
 	public boolean isPrerelease(){
-		return true;
+		return false;
 	}
 	/*.................................................................................................................*/
 	/** returns the version number at which this module was first released.  If 0, then no version number is claimed.  If a POSITIVE integer
 	 * then the number refers to the Mesquite version.  This should be used only by modules part of the core release of Mesquite.
 	 * If a NEGATIVE integer, then the number refers to the local version of the package, e.g. a third party package*/
 	public int getVersionOfFirstRelease(){
-		return NEXTRELEASE;  
+		return -1100;  
 	}
 
 }
