@@ -192,9 +192,9 @@ Chromaseq has one feature designed to aid submitting sequences contained in a Me
   <li>A Mesquite file containing your sequences from one gene.</li>
   <li>A tab-delimited text file containing information about each sequence to
     be submitted. This file contains organism's name, authority, locality data,
-    etc. This is called the &quot;Voucher Database&quot; or &quot;Voucher DB&quot; file in Mesquite.</li>
+    etc. This is called the &quot;OTU ID code Database&quot; or &quot;OTU ID code DB&quot; file in Mesquite.</li>
   </ol>
-<p>The form of the tab-delimited Voucher DB file is as follows. The first row
+<p>The form of the tab-delimited OTU (specimen voucher) ID code file is as follows. The first row
   must begin with the word &quot;code&quot;, followed by a tab-delimited list
   of the official GenBank names of the fields that appear in each of the later
   lines. For example,
@@ -213,7 +213,7 @@ Chromaseq has one feature designed to aid submitting sequences contained in a Me
   for each specimen. The first item in the line is and ID code. This ID code
   could be your specimen voucher code, or some other unique identifying string.
   You will enter these codes in Mesquite for each sequence, which will allow
-  the system to associate the Voucher DB information with that particular sequence.
+  the system to associate the OTU ID code DB information with that particular sequence.
   The following tab-delimited items in the line are the entries for that particular
   specimen. For the example file with the header line shown above, here are two
   lines that contain the information for specimen number 1290, and specimen number
@@ -223,7 +223,7 @@ Chromaseq has one feature designed to aid submitting sequences contained in a Me
     USA: Mississippi: Walthall Co., Tylertown <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
 1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
     USA: Iowa: Jones Co., Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
-<p>Each of these lines is shown extending over two lines, but that is only for ease of display on this web page. There are thus a total of three lines in this example Voucher DB file:</p>
+<p>Each of these lines is shown extending over two lines, but that is only for ease of display on this web page. There are thus a total of three lines in this example OTU ID Code DB file:</p>
 <pre class="monospaced">
 code <img src="images/tab.gif" width="8" height="13" /> organism <img src="images/tab.gif" width="8" height="13" /> authority <img src="images/tab.gif" width="8" height="13" /> identified-by <img src="images/tab.gif" width="8" height="13" /> country <img src="images/tab.gif" width="8" height="13" /> lat-lon <img src="images/tab.gif" width="8" height="13" /> specimen-voucher
 1290 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) paraenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion paraenulum Maddison <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
@@ -233,32 +233,32 @@ code <img src="images/tab.gif" width="8" height="13" /> organism <img src="image
 
 <p>&nbsp;</p>
 <h3>Creating the FASTA file</h3>
-<p>Once you have completed the Voucher DB file, then in
+<p>Once you have completed the OTU ID code DB file, then in
     Mesquite open your file containing the sequences, and go to the Taxa List
   Window (Taxa&amp;Tree&gt;List
     of
-    Taxa). You will need to show two new columns in this table. Choose Columns&gt;Voucher
-    Database and Columns&gt;Voucher ID Code. This will show those two columns. Select
-    the entire table (with Select All), and touch on the title of the Voucher
+    Taxa). You will need to show two new columns in this table. Choose Columns&gt;OTU
+    Database and Columns&gt;OTU ID Code. This will show those two columns. Select
+    the entire table (with Select All), and touch on the title of the OTU ID code 
   DB column. A menu will appear in which you can choose to browse for your tab-delimited
-    Voucher DB file. Select that file. The Voucher DB column should indicate
+    OTU ID code DB file. Select that file. The OTU ID code  DB column should indicate
   which
-    voucher DB file to use for each sequence. (In this example, all sequences
-  are using the same voucher DB file.) </p>
-<p>Now you need to enter into the Voucher ID field the ID codes for each of the
-  sequences. In the example here, the voucher ID code for the first sequence
+    OTU ID code  DB file to use for each sequence. (In this example, all sequences
+  are using the same OTU ID code  DB file.) </p>
+<p>Now you need to enter into the OTU code  ID field the ID codes for each of the
+  sequences. In the example here, the OTU ID code for the first sequence
   is 1290. This tells Mesquite to look
-   in the Voucher DB file for the line whose code is 1290 to get the voucher
+   in the OTU ID code DB file for the line whose code is 1290 to get the OTU
   information for that sequence. To enter ID codes, use the editing tool (<img src="images/ibeam.png" width="28" height="28" align="absmiddle" />) select the entry, or select the sequence and
-  use the popup menu that appears when you touch on the Voucher ID title at the
-  top of the column. Once you have entered all of the voucher ID codes, the Taxa List Window should look something
+  use the popup menu that appears when you touch on the OTU ID Code title at the
+  top of the column. Once you have entered all of the OTU ID codes, the Taxa List Window should look something
   like this:</p>
-<p align="center"><img src="images/taxaListWindow.png" width="541" height="70" /></p>
+<p align="center"><img src="images/taxonListVoucher.png" width="468" height="226" /></p>
 <p>At this point, you are ready to export a FASTA file with your voucher information
   contained within it, ready to be imported in Sequin. Do this by choose File&gt;Export,
   and in the dialog that appears, choose &quot;FASTA (DNA/RNA) for GenBank Deposition&quot;.
   You will be queried for options:</p>
-<p align="center"><img src="images/ExportFASTA.jpg" width="477" height="321" /></p>
+<p align="center"><img src="images/FASTAGenbank.jpg" width="493" height="367" /></p>
 <p>&nbsp;</p>
 <h3>Importing the FASTA file into Sequin and submitting your sequences</h3>
 <ul>
