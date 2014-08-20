@@ -20,7 +20,7 @@
 			<install>
 				<location>mesquite</location>
 				<file>chromaseq</file>
-				<url>https://github.com/MesquiteProject/Chromaseq/releases/download/1.1/Chromaseq1.1.zip</url>
+				<url>https://github.com/MesquiteProject/Chromaseq/releases/download/1.1/chromaseq.1.1.zip</url>
 				<treatment>unzip</treatment>
 				<updateVersion>002</updateVersion>
 			</install>
