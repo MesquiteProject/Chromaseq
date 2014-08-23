@@ -115,7 +115,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 
 		String filePath = directory;
 
-		String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfo.voucherCodeRef, it);
+		String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
 		if (addPrefixPlusVoucherID && StringUtil.notEmpty(voucherID))
 			filePath+=StringUtil.cleanseStringOfFancyChars(voucherPrefix+voucherID,false,true);
 		else 

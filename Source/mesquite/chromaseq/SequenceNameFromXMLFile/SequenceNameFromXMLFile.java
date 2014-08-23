@@ -265,6 +265,11 @@ public class SequenceNameFromXMLFile extends SequenceNameSource implements Actio
 	public boolean isPrerelease() {
 		return true;
 	}
+	/*.................................................................................................................*/
+
+	public boolean loadModule() {
+		return false;
+	}
 
 	/*.................................................................................................................*/
 	public  void actionPerformed(ActionEvent e) {
@@ -289,8 +294,8 @@ public class SequenceNameFromXMLFile extends SequenceNameSource implements Actio
 			categoryChoice.removeAll();
 			if (xmlProcessor.isValid()) {			
 				String[] choices = xmlProcessor.getNameCategoryDescriptions();
-				Debugg.println(sampleCodeListPath);
-				Debugg.println(choices[3]);
+			//	Debugg.println(sampleCodeListPath);
+			//	Debugg.println(choices[3]);
 				for (int i=0; i<choices.length; i++) 
 					if (!StringUtil.blank(choices[i])) {
 						categoryChoice.add(choices[i]);

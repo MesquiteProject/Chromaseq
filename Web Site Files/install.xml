@@ -4,26 +4,26 @@
 		<version>1</version>
 
 		<notice><!--Chromaseq notice of update -->
-			<forBuildNumberEqualOrLess>563</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>7</noticeNumber>
+			<forBuildNumberEqualOrLess>612</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<noticeNumber>8</noticeNumber>
 			<messageType>alert</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>007</updateVersion>
-			<packageName>Chromaseq version 1.01</packageName>
+			<updateVersion>008</updateVersion>
+			<packageName>Chromaseq version 1.11</packageName>
 			<message>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
-			In order to install Chromaseq 1.01, you need to first update to Mesquite version 2.75.  
-			You can get Mesquite 2.75 at <a href = "http://mesquiteproject.org">http://mesquiteproject.org</a>
+			In order to install Chromaseq 1.11, you need to first update to Mesquite version 3.0.  
+			You can get Mesquite 3.0 at <a href = "https://mesquiteproject.wikispaces.com/Installation">https://mesquiteproject.wikispaces.com/Installation</a>
 			]]>
 			</message>
 		</notice>
 		<notice><!--Chromaseq install -->
-			<forBuildNumberEqualOrGreater>566</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>10</noticeNumber>
+			<forBuildNumberEqualOrGreater>619</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<noticeNumber>13</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>010</updateVersion>
-			<packageName>Chromaseq version 1.01</packageName>
+			<updateVersion>013</updateVersion>
+			<packageName>Chromaseq version 1.11</packageName>
 			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
@@ -36,88 +36,10 @@
 				<install>
 					<location>mesquite</location>
 					<file>chromaseq</file>
-					<url>http://mesquiteproject.org/packages/chromaseq/chromaseq.zip</url>
+					<url>https://github.com/MesquiteProject/Chromaseq/releases/download/1.1.1/chromaseq.1.1.1.zip</url>
 					<treatment>unzip</treatment>
-					<updateVersion>010</updateVersion>
+					<updateVersion>013</updateVersion>
 				</install>
-		</notice>
-		<notice><!--Chromaseq install -->
-			<forBuildNumberExactly>565</forBuildNumberExactly> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>9</noticeNumber>
-			<messageType>update</messageType>
-			<identity>Chromaseq</identity>
-			<updateVersion>009</updateVersion>
-			<packageName>Chromaseq version 1.01</packageName>
-			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
-			<explanation>
-			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
-			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
-			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap.  
-			For more information about the features of Chromaseq, see the 
-			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>. (2)
-			]]>
-			</explanation>
-				<install>
-					<location>mesquite</location>
-					<file>chromaseq</file>
-					<url>http://mesquiteproject.org/packages/chromaseq/chromaseq.zip</url>
-					<treatment>unzip</treatment>
-					<updateVersion>009</updateVersion>
-				</install>
-				<install>
-					<location>mesquite/lib</location>
-					<file>MesquiteModule.class</file>
-					<url>http://mesquiteproject.org/packages/chromaseq/MesquiteModule.class</url>
-					<treatment>asis</treatment>
-					<updateVersion>009</updateVersion>
-				</install>
-				<install>
-					<location>mesquite/lib</location>
-					<file>UndoInstructions.class</file>
-					<url>http://mesquiteproject.org/packages/chromaseq/UndoInstructions.class</url>
-					<treatment>asis</treatment>
-					<updateVersion>009</updateVersion>
-				</install>
-				
-		</notice>
-		<notice><!--Chromaseq install -->
-			<forBuildNumberExactly>564</forBuildNumberExactly> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>8</noticeNumber>
-			<messageType>update</messageType>
-			<identity>Chromaseq</identity>
-			<updateVersion>008</updateVersion>
-			<packageName>Chromaseq version 1.01</packageName>
-			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
-			<explanation>
-			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
-			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
-			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap.  
-			For more information about the features of Chromaseq, see the 
-			<a href = "http://mesquiteproject.org/packages/chromaseq/manual/index.html">Chromaseq web page</a>.  (1)
-			]]>
-			</explanation>
-				<install>
-					<location>mesquite/lib</location>
-					<file>MesquiteModule.class</file>
-					<url>http://mesquiteproject.org/packages/chromaseq/MesquiteModule.class</url>
-					<treatment>asis</treatment>
-					<updateVersion>008</updateVersion>
-				</install>
-				<install>
-					<location>mesquite/lib</location>
-					<file>UndoInstructions.class</file>
-					<url>http://mesquiteproject.org/packages/chromaseq/UndoInstructions.class</url>
-					<treatment>asis</treatment>
-					<updateVersion>008</updateVersion>
-				</install>
-				<install>
-					<location>mesquite</location>
-					<file>chromaseq</file>
-					<url>http://mesquiteproject.org/packages/chromaseq/chromaseq.zip</url>
-					<treatment>unzip</treatment>
-					<updateVersion>008</updateVersion>
-				</install>
-				
 		</notice>
 		
 		
