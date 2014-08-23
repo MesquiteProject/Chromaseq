@@ -28,6 +28,10 @@ public class DropChromatogramsOnMatrix extends DataWindowAssistantI implements M
 		this.data = data;
 		table.addDropListener(this);
 	}
+	
+	public boolean loadModule(){
+		return false;
+	}
 
 	public String getName() {
 		return "Drop Chromatograms On Matrix";

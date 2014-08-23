@@ -60,6 +60,9 @@ public class AbiDownloaderImpl extends AbiDownloader {
 	public String getName() {
 		return "Abi Downloader";
 	}
+	public boolean isPrerelease() {
+		return false;
+	}
 	public boolean downloadAbiFilesFromDb() {
 		return downloadAbiFilesFromDb(null);
 	}
