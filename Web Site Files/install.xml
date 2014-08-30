@@ -4,7 +4,7 @@
 		<version>1</version>
 
 		<notice><!--Chromaseq notice of update -->
-			<forBuildNumberEqualOrLess>612</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<forBuildNumberEqualOrLess>620</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<noticeNumber>8</noticeNumber>
 			<messageType>alert</messageType>
 			<identity>Chromaseq</identity>
@@ -12,13 +12,13 @@
 			<packageName>Chromaseq version 1.11</packageName>
 			<message>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
-			In order to install Chromaseq 1.11, you need to first update to Mesquite version 3.0.  
-			You can get Mesquite 3.0 at <a href = "https://mesquiteproject.wikispaces.com/Installation">https://mesquiteproject.wikispaces.com/Installation</a>
+			In order to install Chromaseq 1.11, you need to first update to <b>Mesquite version 3.0</b>.  
+			You can get Mesquite 3.0 at https://mesquiteproject.wikispaces.com/Installation
 			]]>
 			</message>
 		</notice>
 		<notice><!--Chromaseq install -->
-			<forBuildNumberEqualOrGreater>619</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<forBuildNumberEqualOrGreater>644</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
 			<noticeNumber>13</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
