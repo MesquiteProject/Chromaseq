@@ -773,7 +773,7 @@ class ChromaseqBlock extends NexusBlock {
 		return "CHROMASEQ block";
 	}
 	public boolean mustBeAfter(NexusBlock block){
-		return false;
+		return (block.getBlockName().equalsIgnoreCase("TAXA") ||  block.getBlockName().equalsIgnoreCase("CHARACTERS") ||  block.getBlockName().equalsIgnoreCase("SETS") ||  block.getBlockName().equalsIgnoreCase("LABELS"));
 	}
 	public String getBlockName(){
 		return "CHROMASEQ";
