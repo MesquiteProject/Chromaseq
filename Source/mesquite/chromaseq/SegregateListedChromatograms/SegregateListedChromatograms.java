@@ -243,7 +243,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 								count++;
 							}
 							if (copyFile){
-								Debugg.println("********* trying to copy");
+								//Debugg.println("********* trying to copy");
 								try {
 									MesquiteFile.copy(cFile, newFile);
 								}
