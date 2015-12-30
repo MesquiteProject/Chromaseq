@@ -33,7 +33,7 @@ import mesquite.lib.table.*;
 import mesquite.chromaseq.lib.*;
 
 /* ======================================================================== */
-public class RemoveTrimmable extends DataAlterer {
+public class RemoveTrimmable extends DataAlterer implements AltererSimpleCell{
 	CharacterState fillState=null;
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
