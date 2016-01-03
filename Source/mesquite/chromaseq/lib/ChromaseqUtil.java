@@ -650,7 +650,7 @@ public class ChromaseqUtil{
 		attachStringToMatrix(addedBaseData,uid);
 		attachStringToMatrix(addedBaseData,gN);
 		attachStringToMatrix(addedBaseData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.ADDEDBASEREF));
-		addedBaseData.setLocked(true);
+		addedBaseData.incrementEditInhibition();
 		addedBaseData.setColorCellsByDefault(true);
 		addedBaseData.setUseDiagonalCharacterNames(false);
 	}
@@ -762,7 +762,7 @@ public class ChromaseqUtil{
 		setReverseRegistryDataValues(reverseRegistryData, originalData, dataGeneName, uid, gN);
 
 		fillReverseRegistryData(reverseRegistryData);
-		reverseRegistryData.setEditorInhibition(true);
+		reverseRegistryData.incrementEditInhibition();
 		reverseRegistryData.setUserVisible(isChromaseqDevelopment());
 
 		return reverseRegistryData;
@@ -773,12 +773,12 @@ public class ChromaseqUtil{
 		ContinuousData qualityData = getQualityData(data);
 		if (qualityData!=null) {
 			qualityData.resignFromLinkageGroup();
-			qualityData.setLocked(true);
+			qualityData.incrementEditInhibition();
 		}
 		DNAData originalData = getOriginalData(data);
 		if (originalData!=null) {
 			originalData.resignFromLinkageGroup();
-			originalData.setLocked(true);
+			originalData.incrementEditInhibition();
 		}
 	}
 
@@ -839,7 +839,7 @@ public class ChromaseqUtil{
 		attachStringToMatrix(registryData,gN);
 		attachStringToMatrix(registryData,new MesquiteString(ChromaseqUtil.PHPHIMPORTMATRIXTYPEREF, ChromaseqUtil.REGISTRYREF));
 		registryData.setResourcePanelIsOpen(false);
-		registryData.setEditorInhibition(true);
+		registryData.incrementEditInhibition();
 	}
 	
 	/*.................................................................................................................*/
