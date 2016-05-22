@@ -81,8 +81,10 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	boolean permitMixed = false;
 	boolean generateMBBlock = true;
 	boolean simplifyNames = false;
-	boolean addPrefixPlusVoucherID = false;
+	boolean buildFileName = false;
+	boolean includeTaxonName = true;
 	String voucherPrefix = "DNA";
+	String voucherSuffix = "";
 
 	boolean removeExcluded = false;
 
@@ -93,8 +95,10 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		exportDialog.setDefaultButton(null);
 		exportDialog.addLabel("Saving each sequence in a separate FASTA file");
 		
-		Checkbox addPrefixPlusVoucherIDBox= exportDialog.addCheckBox("Use prefix plus OTU ID as file name.", addPrefixPlusVoucherID);
-		SingleLineTextField voucherPrefixField= exportDialog.addTextField("Prefix in front of OTU ID", voucherPrefix, 8);
+		RadioButtons radios = exportDialog.addRadioButtons(new String[] {"use taxon name and gene fragment as file name", "build file name around Voucher ID and gene fragment as follows"}, 0);
+		SingleLineTextField voucherPrefixField= exportDialog.addTextField("Prefix before Voucher ID", voucherPrefix, 8);
+		Checkbox includeTaxonNameBox= exportDialog.addCheckBox("Include taxon name", includeTaxonName);
+		SingleLineTextField voucherSuffixField= exportDialog.addTextField("Suffix (before file extension)", voucherSuffix, 8);
 
 		exportDialog.completeAndShowDialog(dataSelected, taxaSelected);
 
@@ -103,7 +107,9 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		//		convertAmbiguities = convertToMissing.getState();
 		if (ok) {
 			voucherPrefix = voucherPrefixField.getText();
-			addPrefixPlusVoucherID = addPrefixPlusVoucherIDBox.getState();
+			buildFileName = radios.getValue()==1;
+			voucherSuffix = voucherSuffixField.getText();
+			includeTaxonName = includeTaxonNameBox.getState();
 		}
 
 		exportDialog.dispose();
@@ -116,17 +122,25 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		String filePath = directory;
 
 		String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
-		if (addPrefixPlusVoucherID && StringUtil.notEmpty(voucherID))
+		
+		boolean prefixWithID = buildFileName && StringUtil.notEmpty(voucherID);
+		if (prefixWithID)
 			filePath+=StringUtil.cleanseStringOfFancyChars(voucherPrefix+voucherID,false,true);
 		else 
 			filePath+=StringUtil.cleanseStringOfFancyChars(taxa.getName(it),false,true);
 
 		String s = ChromaseqUtil.getFragmentName(data, index);
 		if (StringUtil.notEmpty(s)) 
-			filePath += "."+StringUtil.cleanseStringOfFancyChars(s,false,true);
+			filePath += "_"+StringUtil.cleanseStringOfFancyChars(s,false,true);
 		else
-			filePath += "."+StringUtil.cleanseStringOfFancyChars(data.getName(),false,true);
+			filePath += "_"+StringUtil.cleanseStringOfFancyChars(data.getName(),false,true);
 			
+		if (buildFileName) {
+			if (includeTaxonName && prefixWithID)
+				filePath+="_"+StringUtil.cleanseStringOfFancyChars(taxa.getName(it),false,true);
+			if (StringUtil.notEmpty(voucherSuffix))
+				filePath+="_"+StringUtil.cleanseStringOfFancyChars(voucherSuffix,false,true);
+		}
 
 		filePath += ".fas";
 		MesquiteFile.putFileContents(filePath, fasta, true);
