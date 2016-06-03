@@ -42,9 +42,6 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 	int sequenceCount = 0;
 	String importedDirectoryPath, importedDirectoryName;
 	StringBuffer logBuffer;
-	final String processedFolder = "processed";
-	final String sequencesFolder = "sequences";
-	final String processedFastaFolder = "processedFasta";
 	String processedFastaDirectory = null;
 	String sampleNameToMatch = null;
 	String geneNameToMatch = null;

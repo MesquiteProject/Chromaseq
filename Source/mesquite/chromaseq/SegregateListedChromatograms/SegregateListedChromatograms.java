@@ -176,7 +176,6 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		}
 
 
-
 		for (int i=0; i<files.length; i++) {
 			if (progIndicator!=null){
 				progIndicator.setCurrentValue(i);
