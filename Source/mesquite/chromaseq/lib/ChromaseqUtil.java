@@ -1,5 +1,4 @@
-/* Mesquite Chromaseq source code.  Copyright 2005-2011 David Maddison and Wayne Maddison.
-Version 1.0   December 2011
+/* Mesquite Chromaseq source code.  Copyright 2005 and onwards David Maddison and Wayne Maddison.
 Disclaimer:  The Mesquite source code is lengthy and we are few.  There are no doubt inefficiencies and goofs in this code. 
 The commenting leaves much to be desired. Please approach this source code with the spirit of helping out.
 Perhaps with your help we can be more than a few, and make Mesquite better.
@@ -307,6 +306,23 @@ public class ChromaseqUtil{
 	}
 
 
+	public static boolean isChromaseqMatrix(CharacterData data) {
+		if (!(data instanceof DNAData))
+			return false;
+		Object obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTIDREF);
+		if (obj==null) {
+			return false;
+		}
+		obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTMATRIXTYPEREF);
+		if (obj instanceof MesquiteString){
+			MesquiteString chromaseqDataType = (MesquiteString)obj;
+			if (!chromaseqDataType.isBlank() && chromaseqDataType.getValue().equalsIgnoreCase(MATRIXTODELETE)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static boolean isChromaseqEditedMatrix(CharacterData data) {
 		if (!(data instanceof DNAData))
 			return false;
@@ -453,8 +469,6 @@ public class ChromaseqUtil{
 		return getAceFilePath(file.getDirectoryName(),ownerModule,data,it,returnOriginalAceFile);
 	}
 	/*.................................................................................................................*/
-
-
 	public static CharacterData getAssociatedData(CharacterData data, String dataType) {
 		if (data==null)
 			return null;
@@ -482,6 +496,13 @@ public class ChromaseqUtil{
 	}
 	/*.................................................................................................................*/
 
+	public static DNAData getEditedData(CharacterData data) {  // this is the core matrix
+		CharacterData d = getAssociatedData(data,EDITEDREF);
+		if (d instanceof DNAData)
+			return (DNAData)d;
+		return null;
+	}
+
 	public static ContinuousData getQualityData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,QUALITYREF);
 		if (d instanceof ContinuousData)
@@ -491,13 +512,6 @@ public class ChromaseqUtil{
 
 	public static DNAData getOriginalData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,ORIGINALREF);
-		if (d instanceof DNAData)
-			return (DNAData)d;
-		return null;
-	}
-
-	public static DNAData getEditedData(CharacterData data) {
-		CharacterData d = getAssociatedData(data,EDITEDREF);
 		if (d instanceof DNAData)
 			return (DNAData)d;
 		return null;
@@ -517,12 +531,6 @@ public class ChromaseqUtil{
 			return (MeristicData)d;
 		return null;
 	}
-	
-	/*.................................................................................................................*/
-	public static boolean isChromaseqDevelopment(){
-		return StringArray.indexOf(MesquiteTrunk.startupArguments, "-chromaseqDev")>=0;
-	}
-
 	/*.................................................................................................................*/
 	public static CategoricalData getAddedBaseData(CharacterData data) {
 		CharacterData d = getAssociatedData(data,ADDEDBASEREF);
@@ -530,7 +538,13 @@ public class ChromaseqUtil{
 			return (CategoricalData)d;
 		return null;
 	}
+	
+	/*.................................................................................................................*/
+	public static boolean isChromaseqDevelopment(){
+		return StringArray.indexOf(MesquiteTrunk.startupArguments, "-chromaseqDev")>=0;
+	}
 
+	
 
 	/*.................................................................................................................*
 	public static void specifyAsMovedBase(ContigDisplay contigDisplay, CharacterData data, int ic, int it) {
