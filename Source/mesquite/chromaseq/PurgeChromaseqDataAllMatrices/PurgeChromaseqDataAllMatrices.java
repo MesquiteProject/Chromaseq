@@ -47,7 +47,7 @@ public class PurgeChromaseqDataAllMatrices extends FileAssistantM {
 		if (AlertDialog.query(containerOfModule(), "Purge Chromaseq Data", "Are you sure you want to remove all data associated with Chromaseq from this file? This cannot be undone.", "Purge", "Cancel", 2)){
 			ListableVector datas = getProject().getCharacterMatrices();
 			//First purge all chromaseq data for edited matrices
-			for (int i=0; i<datas.size(); i++) { 
+			for (int i=datas.size()-1; i>=0; i--) { 
 				mesquite.lib.characters.CharacterData data = (mesquite.lib.characters.CharacterData)datas.elementAt(i);
 				if (!data.isDoomed() && ChromaseqUtil.isChromaseqEditedMatrix(data)){
 					ChromaseqUtil.purgeChromaseqData(data);
@@ -56,9 +56,8 @@ public class PurgeChromaseqDataAllMatrices extends FileAssistantM {
 				}
 			}
 			//now purge any other chromaseq matrices that might be orphans because their edited matrices had been deleted
-			for (int i=0; i<datas.size(); i++) { 
+			for (int i=datas.size()-1; i>=0; i--) { 
 				mesquite.lib.characters.CharacterData data = (mesquite.lib.characters.CharacterData)datas.elementAt(i);
-				Debugg.println("data " + data.getName() + " %%% " + ChromaseqUtil.isChromaseqMatrix(data));
 				if (!data.isDoomed() && ChromaseqUtil.isChromaseqMatrix(data)){
 					data.deleteMe(false);
 				}
