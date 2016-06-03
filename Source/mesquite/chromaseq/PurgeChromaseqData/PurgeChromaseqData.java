@@ -53,7 +53,7 @@ public class PurgeChromaseqData extends DataUtility {
 	public boolean operateOnData(CharacterData data){ 
 		if (data==null)
 			return false;
-		if (AlertDialog.query(containerOfModule(), "Purge Chromaseq Data", "Are you sure you want to remove all data associated with Chromaseq from this matrix? This can not be undone.", "Purge", "Cancel", 2)){
+		if (AlertDialog.query(containerOfModule(), "Purge Chromaseq Data", "Are you sure you want to remove all data associated with Chromaseq from this matrix? This cannot be undone.", "Purge", "Cancel", 2)){
 			ChromaseqUtil.purgeChromaseqData(data);
 /*			MesquiteModule mbc = findEmployeeWithName("#ColorByState", true);
 			MesquiteWindow mw = containerOfModule();

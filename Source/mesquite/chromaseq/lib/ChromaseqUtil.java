@@ -906,6 +906,7 @@ public class ChromaseqUtil{
 		removeAssociatedObjects(editedData, aceRef);
 		removeAssociatedObjects(editedData, reprocessContigRef);
 		removeAssociatedObjects(editedData, chromatogramReadsRef);
+		editedData.removeCellObjects(chromaseqCellFlagsNameRef);
 		
 		 Associable tInfo = editedData.getTaxaInfo(false);
 		 if (tInfo != null){
