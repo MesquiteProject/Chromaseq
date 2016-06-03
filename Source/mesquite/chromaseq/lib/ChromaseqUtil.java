@@ -307,8 +307,6 @@ public class ChromaseqUtil{
 
 
 	public static boolean isChromaseqMatrix(CharacterData data) {
-		if (!(data instanceof DNAData))
-			return false;
 		Object obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTIDREF);
 		if (obj==null) {
 			return false;
@@ -316,7 +314,7 @@ public class ChromaseqUtil{
 		obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTMATRIXTYPEREF);
 		if (obj instanceof MesquiteString){
 			MesquiteString chromaseqDataType = (MesquiteString)obj;
-			if (!chromaseqDataType.isBlank() && chromaseqDataType.getValue().equalsIgnoreCase(MATRIXTODELETE)) {
+			if (!chromaseqDataType.isBlank() && !chromaseqDataType.getValue().equalsIgnoreCase(MATRIXTODELETE)) {
 				return true;
 			}
 		}
@@ -339,7 +337,7 @@ public class ChromaseqUtil{
 	}
 	
 	public static boolean isChromaseqRegistryMatrix(CharacterData data) {
-		if (!(data instanceof DNAData))
+		if (!(data instanceof MeristicData))
 			return false;
 		Object obj = ChromaseqUtil.getStringAttached(data, PHPHIMPORTIDREF);
 		if (obj==null) {
