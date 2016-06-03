@@ -27,14 +27,14 @@ import mesquite.lib.duties.*;
 public class PurgeChromaseqDataAllMatrices extends FileAssistantM {
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
-		includeFuse();
+		purge();
 		return true;
 	}
 
 	/*.................................................................................................................*/
 	public Object doCommand(String commandName, String arguments, CommandChecker checker) {
-		if (checker.compare(this.getClass(), "Includes a file and optionally fuses taxa/characters block", null, commandName, "fuse")) {
-			includeFuse();
+		if (checker.compare(this.getClass(), "Purges the chromaseq data", null, commandName, "purge")) {
+			purge();
 		}
 		else
 			return  super.doCommand(commandName, arguments, checker);
@@ -42,17 +42,31 @@ public class PurgeChromaseqDataAllMatrices extends FileAssistantM {
 	}
 
 	/*.................................................................................................................*/
+	private int numEditedMatrices(ListableVector datas){
+		int count = 0;
+		//First purge all chromaseq data for edited matrices
+		for (int i=datas.size()-1; i>=0; i--) { //ask how many edited datas there are and keep looping until they are gone
+			mesquite.lib.characters.CharacterData data = (mesquite.lib.characters.CharacterData)datas.elementAt(i);
+			if (!data.isDoomed() && ChromaseqUtil.isChromaseqEditedMatrix(data)){
+				count++;
+			}
+		}
+		return count;
+	}
 
-	private void includeFuse(){
+	private void purge(){
 		if (AlertDialog.query(containerOfModule(), "Purge Chromaseq Data", "Are you sure you want to remove all data associated with Chromaseq from this file? This cannot be undone.", "Purge", "Cancel", 2)){
 			ListableVector datas = getProject().getCharacterMatrices();
 			//First purge all chromaseq data for edited matrices
-			for (int i=datas.size()-1; i>=0; i--) { 
-				mesquite.lib.characters.CharacterData data = (mesquite.lib.characters.CharacterData)datas.elementAt(i);
-				if (!data.isDoomed() && ChromaseqUtil.isChromaseqEditedMatrix(data)){
-					ChromaseqUtil.purgeChromaseqData(data);
-					data.notifyListeners(this, new Notification(MesquiteListener.DATA_CHANGED));
-					data.setDirty(true);
+			while (numEditedMatrices(datas)>0){
+				for (int i=datas.size()-1; i>=0; i--) { //ask how many edited datas there are and keep looping until they are gone
+					mesquite.lib.characters.CharacterData data = (mesquite.lib.characters.CharacterData)datas.elementAt(i);
+					if (!data.isDoomed() && ChromaseqUtil.isChromaseqEditedMatrix(data)){
+						ChromaseqUtil.purgeChromaseqData(data);
+						data.notifyListeners(this, new Notification(MesquiteListener.DATA_CHANGED));
+						data.setDirty(true);
+						break;
+					}
 				}
 			}
 			//now purge any other chromaseq matrices that might be orphans because their edited matrices had been deleted
@@ -65,7 +79,7 @@ public class PurgeChromaseqDataAllMatrices extends FileAssistantM {
 		}
 
 		//NOW set matrix editors to show by state
-		
+
 		iQuit();
 
 	}
