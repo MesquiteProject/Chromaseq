@@ -100,7 +100,7 @@ public class PurgeChromaseqDataAllMatrices extends FileAssistantM {
 	 * then the number refers to the Mesquite version.  This should be used only by modules part of the core release of Mesquite.
 	 * If a NEGATIVE integer, then the number refers to the local version of the package, e.g. a third party package*/
 	public int getVersionOfFirstRelease(){
-		return 305;  
+		return NEXTRELEASE;  
 	}
 	/*.................................................................................................................*/
 	/** returns an explanation of what the module does.*/
