@@ -25,6 +25,7 @@ import java.awt.Checkbox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JLabel;
 
@@ -56,6 +57,8 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	String sampleCodeListFile = null;
 	String sampleCodeList = "";
 	Parser sampleCodeListParser = null;
+	
+	boolean copyFile = false;
 
 
 	boolean preferencesSet = false;
@@ -69,7 +72,6 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	public boolean startJob(String arguments, Object condition, boolean hiredByName){
 		loadPreferences();
 		
-
 		addMenuItem(null, "Segregate Chromatograms of Listed Codes...", makeCommand("extract", this));
 		return true;
 	}
@@ -174,7 +176,6 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		}
 
 
-
 		for (int i=0; i<files.length; i++) {
 			if (progIndicator!=null){
 				progIndicator.setCurrentValue(i);
@@ -240,7 +241,16 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 								newFile = new File(newFilePath);
 								count++;
 							}
-							cFile.renameTo(newFile); 
+							if (copyFile){
+								try {
+									MesquiteFile.copy(cFile, newFile);
+								}
+								catch (IOException e) {
+									logln( "Can't copy: " + chromFileName);
+								}
+							}
+							else
+								cFile.renameTo(newFile); 
 						}
 						catch (SecurityException e) {
 							logln( "Can't rename: " + chromFileName);
@@ -290,6 +300,9 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 		if (StringUtil.blank(directoryPath))
 			return false;
+
+
+		copyFile = QueryDialogs.queryTwoRadioButtons(containerOfModule(), "Move or Copy files", "", null, "Move files", "Copy files")==1;
 
 		File directory = new File(directoryPath);
 		importedDirectoryPath = directoryPath + MesquiteFile.fileSeparator;

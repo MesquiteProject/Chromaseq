@@ -13,6 +13,8 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.TaxonHasAnyData;
 
+import java.awt.Container;
+
 import mesquite.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.duties.*;
@@ -62,6 +64,7 @@ public class TaxonHasAnyData extends BooleanForTaxon {
 		saveLastResult(result);
 		saveLastResultString(resultString);
 	}
+
 	/*.................................................................................................................*/
 	public String getName() {
 		return "Has Any Data";  

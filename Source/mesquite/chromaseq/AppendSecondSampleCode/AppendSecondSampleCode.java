@@ -218,6 +218,7 @@ public class AppendSecondSampleCode extends UtilitiesAssistant implements Action
 
 			String lowerCaseSampleNameToMatch=null;
 			String newSampleCode = "";
+			int renamed=0;
 
 			for (int i=0; i<files.length; i++) {
 				if (progIndicator!=null){
@@ -287,6 +288,7 @@ public class AppendSecondSampleCode extends UtilitiesAssistant implements Action
 							}
 							try { 
 								MesquiteFile.copy(cFile,newFile);
+								renamed++;
 							}
 							catch (IOException e) {
 								if (!alreadyWarned)
@@ -306,7 +308,8 @@ public class AppendSecondSampleCode extends UtilitiesAssistant implements Action
 				}
 			}
 
-			loglnEchoToStringBuffer("Number of files examined: " + files.length, logBuffer);
+			loglnEchoToStringBuffer("Number of files examined: " + (files.length-1), logBuffer);
+			loglnEchoToStringBuffer("Number of files renamed: " + renamed, logBuffer);
 
 
 
