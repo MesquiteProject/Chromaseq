@@ -81,9 +81,9 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	boolean permitMixed = false;
 	boolean generateMBBlock = true;
 	boolean simplifyNames = false;
-	boolean buildFileName = false;
-	boolean includeTaxonName = true;
-	String voucherPrefix = "DNA";
+	protected boolean buildFileName = false;
+	protected boolean includeTaxonName = true;
+	protected String voucherPrefix = "DNA";
 	String voucherSuffix = "";
 
 	boolean removeExcluded = false;
@@ -116,33 +116,37 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		return ok;
 	}	
 	/*.................................................................................................................*/
-	
-	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta) {
-
-		String filePath = directory;
-
-		String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
-		
+	public String getFileName(Taxa taxa, int it, CharacterData data, int index, String voucherID) {
+		String fileName = "";
 		boolean prefixWithID = buildFileName && StringUtil.notEmpty(voucherID);
 		if (prefixWithID)
-			filePath+=StringUtil.cleanseStringOfFancyChars(voucherPrefix+voucherID,false,true);
+			fileName=StringUtil.cleanseStringOfFancyChars(voucherPrefix+voucherID,false,true);
 		else 
-			filePath+=StringUtil.cleanseStringOfFancyChars(taxa.getName(it),false,true);
+			fileName=StringUtil.cleanseStringOfFancyChars(taxa.getName(it),false,true);
 
 		String s = ChromaseqUtil.getFragmentName(data, index);
 		if (StringUtil.notEmpty(s)) 
-			filePath += "_"+StringUtil.cleanseStringOfFancyChars(s,false,true);
+			fileName += "_"+StringUtil.cleanseStringOfFancyChars(s,false,true);
 		else
-			filePath += "_"+StringUtil.cleanseStringOfFancyChars(data.getName(),false,true);
+			fileName += "_"+StringUtil.cleanseStringOfFancyChars(data.getName(),false,true);
 			
 		if (buildFileName) {
 			if (includeTaxonName && prefixWithID)
-				filePath+="_"+StringUtil.cleanseStringOfFancyChars(taxa.getName(it),false,true);
+				fileName+="_"+StringUtil.cleanseStringOfFancyChars(taxa.getName(it),false,true);
 			if (StringUtil.notEmpty(voucherSuffix))
-				filePath+="_"+StringUtil.cleanseStringOfFancyChars(voucherSuffix,false,true);
+				fileName+="_"+StringUtil.cleanseStringOfFancyChars(voucherSuffix,false,true);
 		}
 
-		filePath += ".fas";
+		fileName += ".fas";
+
+		return fileName;
+	}
+	/*.................................................................................................................*/
+	
+	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta) {
+		String filePath = directory;
+		String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
+		filePath = directory+getFileName(taxa, it, data, index, voucherID);
 		MesquiteFile.putFileContents(filePath, fasta, true);
 	}
 	/*.................................................................................................................*/
