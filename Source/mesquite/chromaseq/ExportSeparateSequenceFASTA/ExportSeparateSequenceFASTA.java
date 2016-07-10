@@ -90,7 +90,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 
 	public boolean getExportOptions(boolean dataSelected, boolean taxaSelected){
 		MesquiteInteger buttonPressed = new MesquiteInteger(1);
-		ExporterDialog exportDialog = new ExporterDialog(this,containerOfModule(), "Sequence-sequence FASTA export", buttonPressed);
+		ExporterDialog exportDialog = new ExporterDialog(this,containerOfModule(), "Single-sequence FASTA export", buttonPressed);
 		exportDialog.setSuppressLineEndQuery(true);
 		exportDialog.setDefaultButton(null);
 		exportDialog.addLabel("Saving each sequence in a separate FASTA file");
@@ -143,11 +143,14 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	}
 	/*.................................................................................................................*/
 	
-	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta) {
+	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta, String voucherID) {
 		String filePath = directory;
-		String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
 		filePath = directory+getFileName(taxa, it, data, index, voucherID);
 		MesquiteFile.putFileContents(filePath, fasta, true);
+	}
+	/*.................................................................................................................*/
+	public String getSequenceName(Taxa taxa, int it, String voucherID) {
+		return taxa.getTaxonName(it);
 	}
 	/*.................................................................................................................*/
 	public boolean exportFile(MesquiteFile file, String arguments) { //if file is null, consider whole project open to export
@@ -176,11 +179,12 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 				if (data != null) {
 					int numTaxa = taxa.getNumTaxa();
 					for (int it = 0; it<numTaxa; it++) {
+						String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
 						buffer.setLength(0);
-						buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it);
+						buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it, getSequenceName(taxa,it,voucherID));
 						String content = buffer.toString();
 						if (StringUtil.notEmpty(content)){
-							putFastaAsFile(taxa, it, data, iM, directory, content);
+							putFastaAsFile(taxa, it, data, iM, directory, content, voucherID);
 							count++;
 						}
 					}
