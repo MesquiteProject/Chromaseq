@@ -32,6 +32,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 	public String primerEndToken = "_";
 
 	public String path;
+	boolean warnIfCantExtract = true;
 
 	boolean sampleCodeFirst = true;
 
@@ -51,6 +52,11 @@ public class ChromFileNameParsing implements Listable, Explainable {
 		name = rule.name;
 		sampleCodeFirst = rule.sampleCodeFirst;
 	}
+
+	public void setWarnIfCantExtract(boolean warnIfCantExtract) {
+		this.warnIfCantExtract = warnIfCantExtract;
+	}
+
 
 	public void setPath(String path){
 		this.path = path;
@@ -284,7 +290,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 				}
 				// didn't find it via regex so return
 				if (StringUtil.blank(piece)) {
-					if (ownerModule!=null)
+					if (ownerModule!=null && warnIfCantExtract)
 						ownerModule.loglnEchoToStringBuffer(" ** Can't extract " + message + " from file name: " + s, logBuffer);					
 					return null;
 				}

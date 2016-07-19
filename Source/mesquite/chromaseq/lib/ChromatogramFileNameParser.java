@@ -20,6 +20,7 @@ import java.awt.*;
 
 /* Modules of this duty class are responsible for being able to supply the sample code and primer name given the chromatogram file name */
 public abstract class ChromatogramFileNameParser extends MesquiteInit {
+	protected boolean warnIfCantExtract = true;
 
 	public Class getDutyClass(){
 		return ChromatogramFileNameParser.class;
@@ -27,7 +28,9 @@ public abstract class ChromatogramFileNameParser extends MesquiteInit {
 
 	public abstract boolean parseFileName(String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, MesquiteString startTokenResult, MesquiteInteger sampleCodeEndIndex);
 
-
+	public void setWarnIfCantExtract(boolean warnIfCantExtract) {
+		this.warnIfCantExtract = warnIfCantExtract;
+	}
 
 	public boolean queryOptions(){
 		return true;
