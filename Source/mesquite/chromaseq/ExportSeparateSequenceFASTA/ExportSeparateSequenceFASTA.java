@@ -33,8 +33,8 @@ import mesquite.io.lib.*;
 
 public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-	//	EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for FASTA export for Genbank submissions.",
-	//			"This is activated automatically when you choose this exporter.");
+		//	EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for FASTA export for Genbank submissions.",
+		//			"This is activated automatically when you choose this exporter.");
 	}
 	//VoucherInfoCoord voucherInfoTask;
 	/*.................................................................................................................*/
@@ -43,7 +43,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		return true;
 	}
 	public void readFile(MesquiteProject mf, MesquiteFile mNF, String arguments) {
-		
+
 	}
 
 	/*.................................................................................................................*/
@@ -59,7 +59,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	}
 	/** returns whether module has something it can export in the project.  Should be overridden*/
 	public boolean canExportProject(MesquiteProject project){
-		 return project.getNumberCharMatrices(MolecularState.class) > 0;  //
+		return project.getNumberCharMatrices(MolecularState.class) > 0;  //
 	}
 
 	/** returns whether module can export a character data matrix of the given type.  Should be overridden*/
@@ -94,7 +94,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		exportDialog.setSuppressLineEndQuery(true);
 		exportDialog.setDefaultButton(null);
 		exportDialog.addLabel("Saving each sequence in a separate FASTA file");
-		
+
 		RadioButtons radios = exportDialog.addRadioButtons(new String[] {"use taxon name and gene fragment as file name", "build file name around Voucher ID and gene fragment as follows"}, 0);
 		SingleLineTextField voucherPrefixField= exportDialog.addTextField("Prefix before Voucher ID", voucherPrefix, 8);
 		Checkbox includeTaxonNameBox= exportDialog.addCheckBox("Include taxon name", includeTaxonName);
@@ -129,7 +129,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 			fileName += "_"+StringUtil.cleanseStringOfFancyChars(s,false,true);
 		else
 			fileName += "_"+StringUtil.cleanseStringOfFancyChars(data.getName(),false,true);
-			
+
 		if (buildFileName) {
 			if (includeTaxonName && prefixWithID)
 				fileName+="_"+StringUtil.cleanseStringOfFancyChars(taxa.getName(it),false,true);
@@ -142,7 +142,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		return fileName;
 	}
 	/*.................................................................................................................*/
-	
+
 	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta, String voucherID) {
 		String filePath = directory;
 		filePath = directory+getFileName(taxa, it, data, index, voucherID);
@@ -155,10 +155,10 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	/*.................................................................................................................*/
 	public boolean exportFile(MesquiteFile file, String arguments) { //if file is null, consider whole project open to export
 		Arguments args = new Arguments(new Parser(arguments), true);
-//		boolean usePrevious = args.parameterExists("usePrevious");
+		//		boolean usePrevious = args.parameterExists("usePrevious");
 
 		if (!MesquiteThread.isScripting())
-			if (!getExportOptions(false, false))
+			if (!getExportOptions(false, true))
 				return false;
 
 		String directory = MesquiteFile.chooseDirectory("Choose directory into which files will be saved:");
@@ -167,7 +167,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		if (!directory.endsWith(MesquiteFile.fileSeparator))
 			directory+=MesquiteFile.fileSeparator;
 
-		
+
 		StringBuffer buffer = new StringBuffer(500);
 		int count = 0;
 
@@ -179,19 +179,21 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 				if (data != null) {
 					int numTaxa = taxa.getNumTaxa();
 					for (int it = 0; it<numTaxa; it++) {
-						String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
-						buffer.setLength(0);
-						buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it, getSequenceName(taxa,it,voucherID));
-						String content = buffer.toString();
-						if (StringUtil.notEmpty(content)){
-							putFastaAsFile(taxa, it, data, iM, directory, content, voucherID);
-							count++;
+						if (!writeOnlySelectedTaxa || taxa.getSelected(it)){
+							String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
+							buffer.setLength(0);
+							buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it, getSequenceName(taxa,it,voucherID));
+							String content = buffer.toString();
+							if (StringUtil.notEmpty(content)){
+								putFastaAsFile(taxa, it, data, iM, directory, content, voucherID);
+								count++;
+							}
 						}
 					}
 				}
 			}
 		}
-		
+
 		logln(""+ count + " FASTA files saved");
 
 		return true;
