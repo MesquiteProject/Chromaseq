@@ -42,22 +42,20 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	ChromatogramFileNameParser nameParserManager;
 
 	boolean requiresExtension=true;
-	
+
 	static String previousDirectory = null;
 	ProgressIndicator progIndicator = null;
 	int sequenceCount = 0;
 	String importedDirectoryPath, importedDirectoryName;
 	StringBuffer logBuffer;
-	final String processedFolder = "processed";
-	final String sequencesFolder = "sequences";
-	final String processedFastaFolder = "processedFasta";
-	String processedFastaDirectory = null;
-	
+
 	String sampleCodeListPath = null;
 	String sampleCodeListFile = null;
 	String sampleCodeList = "";
 	Parser sampleCodeListParser = null;
 	
+	String segregatedFolderName = "SampleCodeInList";
+
 	boolean copyFile = false;
 
 
@@ -71,7 +69,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName){
 		loadPreferences();
-		
+
 		addMenuItem(null, "Segregate Chromatograms of Listed Codes...", makeCommand("extract", this));
 		return true;
 	}
@@ -83,7 +81,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		if (nameParserManager == null) {
 			return false;
 		} else if (!nameParserManager.queryOptions())
-				return false;
+			return false;
 
 		return true;
 	}
@@ -110,7 +108,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 			}
 		}	
 		return false;
-		
+
 	}
 	/*.................................................................................................................*/
 
@@ -124,18 +122,18 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		Parser subParser = new Parser();
 		String line = sampleCodeListParser.getRawNextDarkLine();
 		while (StringUtil.notEmpty(line)) {
-				subParser.setString(line);
-				subParser.setWhitespaceString("\t");
-				subParser.setPunctuationString("");
-				String code = subParser.getFirstToken();
-				if (sampleCodeString.equalsIgnoreCase(code)) {
-					return true;
-				}
+			subParser.setString(line);
+			subParser.setWhitespaceString("\t");
+			subParser.setPunctuationString("");
+			String code = subParser.getFirstToken();
+			if (sampleCodeString.equalsIgnoreCase(code)) {
+				return true;
+			}
 			line = sampleCodeListParser.getRawNextDarkLine();
 		}
 		return false;
 	}
-	
+
 	/*.................................................................................................................*/
 	public boolean extractChromatograms(String directoryPath, File directory){
 
@@ -154,8 +152,12 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 		int loc = 0;
 
-		
-		String processedDirPath = directoryPath + MesquiteFile.fileSeparator + "SampleCodeInList";
+
+		String processedDirPath = "";
+		if (StringUtil.notEmpty(segregatedFolderName))
+			processedDirPath =directoryPath + MesquiteFile.fileSeparator + segregatedFolderName;
+		else
+			processedDirPath = directoryPath + MesquiteFile.fileSeparator + "SampleCodeInList";
 
 		loglnEchoToStringBuffer(" Searching for chromatograms that match the specified criteria. ", logBuffer);
 		loglnEchoToStringBuffer(" Processing directory: ", logBuffer);
@@ -219,7 +221,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 						startTokenResult.setValue("");
 
 					boolean match = sampleCodeIsInCodesFile(sampleCode);
-					
+
 
 
 					if (match) {
@@ -255,10 +257,10 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 						catch (SecurityException e) {
 							logln( "Can't rename: " + chromFileName);
 						}
-						
+
 					} 
-				
-						
+
+
 				}
 			}
 		}
@@ -276,16 +278,16 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 		if (progIndicator!=null)
 			progIndicator.goAway();
-	
+
 		return true;
-	
+
 	}
 	/*.................................................................................................................*/
 	public boolean extractChromatograms(String directoryPath){
 		if ( logBuffer==null)
 			logBuffer = new StringBuffer();
-		
-			loglnEchoToStringBuffer("Segregating chromatograms with codes present in text file: " + sampleCodeListFile, logBuffer);
+
+		loglnEchoToStringBuffer("Segregating chromatograms with codes present in text file: " + sampleCodeListFile, logBuffer);
 
 
 		MesquiteBoolean pleaseStorePrefs = new MesquiteBoolean(false);
@@ -339,14 +341,14 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		preferencesSet = true;
 		return buffer.toString();
 	}
-	
-	
+
+
 	JLabel nameParserLabel = null;
-	
+
 	MesquiteTextCanvas nameParserTextCanvas = null;
 	Button nameParserButton = null;
 
-	
+
 	/*.................................................................................................................*/
 	private String getModuleText(MesquiteModule mod) {
 		return mod.getName() + "\n" + mod.getParameters();
@@ -359,24 +361,25 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		TextCanvasWithButtons textCanvasWithButtons;
 
 		//section for name parser
-				
-				dialog.addHorizontalLine(1);
-				dialog.addLabel("Chromatogram File Name Parser");
-				dialog.forceNewPanel();
-				String s = getModuleText(nameParserManager);
-				if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(ChromatogramFileNameParser.class)>1){
-					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s,"File Name Parser...", "nameParserReplace", "Options...", "nameParserButton",this);
-					nameParserButton = textCanvasWithButtons.getButton2();
-				}
-				else {
-					textCanvasWithButtons = dialog.addATextCanvasWithButtons(s, "Options...", "nameParserButton",this);
-					nameParserButton = textCanvasWithButtons.getButton();
-				}
-				nameParserButton.setEnabled (nameParserManager.hasOptions());
-				nameParserTextCanvas = textCanvasWithButtons.getTextCanvas();
-				
 
-				dialog.setDefaultButton("Segregate");
+		dialog.addHorizontalLine(1);
+		dialog.addLabel("Chromatogram File Name Parser");
+		dialog.forceNewPanel();
+		String s = getModuleText(nameParserManager);
+		if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(ChromatogramFileNameParser.class)>1){
+			textCanvasWithButtons = dialog.addATextCanvasWithButtons(s,"File Name Parser...", "nameParserReplace", "Options...", "nameParserButton",this);
+			nameParserButton = textCanvasWithButtons.getButton2();
+		}
+		else {
+			textCanvasWithButtons = dialog.addATextCanvasWithButtons(s, "Options...", "nameParserButton",this);
+			nameParserButton = textCanvasWithButtons.getButton();
+		}
+		nameParserButton.setEnabled (nameParserManager.hasOptions());
+		nameParserTextCanvas = textCanvasWithButtons.getTextCanvas();
+		SingleLineTextField segregatedFolderNameField = dialog.addTextField("Name of folder into which files will be segregated", segregatedFolderName, 40);
+
+
+		dialog.setDefaultButton("Segregate");
 
 		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
 		dialog.addHorizontalLine(2);
@@ -392,6 +395,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
 			requiresExtension = requiresExtensionBox.getState();
+			segregatedFolderName = segregatedFolderNameField.getText();
 		}
 		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
 		dialog.dispose();
@@ -404,7 +408,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 			if (!hireRequired())
 				return null;
-			
+
 			if (queryOptions()) {
 				MesquiteString dnaNumberListDir = new MesquiteString();
 				MesquiteString dnaNumberListFile = new MesquiteString();
@@ -422,10 +426,10 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 			return  super.doCommand(commandName, arguments, checker);
 		return null;
 	}
-	
+
 	/*.................................................................................................................*/
 	public  void actionPerformed(ActionEvent e) {
-		 if (e.getActionCommand().equalsIgnoreCase("nameParserButton")) {
+		if (e.getActionCommand().equalsIgnoreCase("nameParserButton")) {
 			if (nameParserManager!=null) {
 				if (nameParserManager.queryOptions() && nameParserTextCanvas!=null)
 					nameParserTextCanvas.setText(getModuleText(nameParserManager));

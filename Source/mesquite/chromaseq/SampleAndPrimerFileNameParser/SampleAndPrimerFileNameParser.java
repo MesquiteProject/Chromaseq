@@ -61,6 +61,10 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 	public boolean hasOptions(){
 		return true;
 	}
+	public void setWarnIfCantExtract(boolean warnIfCantExtract) {
+		this.warnIfCantExtract = warnIfCantExtract;
+		nameParsingRule.setWarnIfCantExtract(warnIfCantExtract);
+	}
 
 
 	/*.................................................................................................................*/
