@@ -153,7 +153,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		return taxa.getTaxonName(it);
 	}
 	/*.................................................................................................................*/
-	public boolean exportFile(MesquiteFile file, String arguments) { //if file is null, consider whole project open to export
+	public synchronized boolean exportFile(MesquiteFile file, String arguments) { //if file is null, consider whole project open to export
 		Arguments args = new Arguments(new Parser(arguments), true);
 		//		boolean usePrevious = args.parameterExists("usePrevious");
 
@@ -183,7 +183,11 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 							String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
 							buffer.setLength(0);
 							buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it, getSequenceName(taxa,it,voucherID));
-							String content = buffer.toString();
+							String content=null;
+							if (buffer!=null) 
+								content = buffer.toString();
+							else 
+								buffer = new StringBuffer(500);
 							if (StringUtil.notEmpty(content)){
 								putFastaAsFile(taxa, it, data, iM, directory, content, voucherID);
 								count++;
