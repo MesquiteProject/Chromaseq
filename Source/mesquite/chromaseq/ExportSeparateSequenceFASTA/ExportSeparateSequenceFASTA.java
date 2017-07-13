@@ -19,6 +19,7 @@ import java.util.Vector;
 
 import mesquite.lib.*;
 import mesquite.lib.characters.*;
+import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.*;
 import mesquite.assoc.lib.AssociationSource;
 import mesquite.assoc.lib.TaxaAssociation;
@@ -116,7 +117,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		return ok;
 	}	
 	/*.................................................................................................................*/
-	public String getFileName(Taxa taxa, int it, CharacterData data, int index, String voucherID) {
+	public String getFileName(Taxa taxa, int it, CharacterData data, int index, String voucherID, String identifierString) {
 		String fileName = "";
 		boolean prefixWithID = buildFileName && StringUtil.notEmpty(voucherID);
 		if (prefixWithID)
@@ -141,16 +142,31 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 
 		return fileName;
 	}
+	
+	/*.................................................................................................................*/
+	public String getTitleLineForTabbedFile() {
+		return "";
+	}
+
+	/*.................................................................................................................*/
+	public String getLineForTabbedFile(Taxa taxa, int it, CharacterData data, int index, String voucherID, String identifierString) {
+		return "";
+	}
+
 	/*.................................................................................................................*/
 
-	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta, String voucherID) {
+	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta, String voucherID, String identifierString) {
 		String filePath = directory;
-		filePath = directory+getFileName(taxa, it, data, index, voucherID);
+		filePath = directory+getFileName(taxa, it, data, index, voucherID, identifierString);
 		MesquiteFile.putFileContents(filePath, fasta, true);
 	}
 	/*.................................................................................................................*/
 	public String getSequenceName(Taxa taxa, int it, String voucherID) {
 		return taxa.getTaxonName(it);
+	}
+	/*.................................................................................................................*/
+	public String getIdentifierString() {
+		return "";
 	}
 	/*.................................................................................................................*/
 	public synchronized boolean exportFile(MesquiteFile file, String arguments) { //if file is null, consider whole project open to export
@@ -169,6 +185,8 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 
 
 		StringBuffer buffer = new StringBuffer(500);
+		StringBuffer metadataBuffer = new StringBuffer(0);
+		metadataBuffer.append(getTitleLineForTabbedFile());
 		int count = 0;
 
 		for (int taxaNumber=0; taxaNumber<getProject().getNumberTaxas(file); taxaNumber++) {
@@ -189,7 +207,11 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 							else 
 								buffer = new StringBuffer(500);
 							if (StringUtil.notEmpty(content)){
-								putFastaAsFile(taxa, it, data, iM, directory, content, voucherID);
+								String idString = getIdentifierString();
+								putFastaAsFile(taxa, it, data, iM, directory, content, voucherID, idString);
+								String metadata = getLineForTabbedFile(taxa, it, data, iM, voucherID, idString);
+								if (StringUtil.notEmpty(metadata)) 
+									metadataBuffer.append(metadata);
 								count++;
 							}
 						}
@@ -197,6 +219,9 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 				}
 			}
 		}
+		
+		if (metadataBuffer.length()>0)
+			MesquiteFile.putFileContentsQuery("Choose location for metadata file", metadataBuffer.toString(), true);
 
 		logln(""+ count + " FASTA files saved");
 
