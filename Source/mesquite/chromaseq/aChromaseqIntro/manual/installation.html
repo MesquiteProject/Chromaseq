@@ -262,7 +262,7 @@ red {
 </ul>
 <h4>Windows</h4>
 <ul>
-  <li>Install the cygwin toolkit available for free at <a href="http://www.cygwin.com">http://www.cygwin.com</a> -- make sure you have both the C compiler selected (<strong>gcc</strong>), as well as <strong>make</strong> (makefile support).</li>
+  <li>Install  cygwin  available for free at <a href="http://www.cygwin.com">http://www.cygwin.com</a> -- make sure you download the x86 version, and that you have both the C compiler selected (<strong>gcc</strong>), as well as <strong>make</strong> (makefile support).</li>
   <li>Start the cygwin shell. </li>
   <li>In the cygwin shell, change the directory to be the phrap source directory (e.g., &quot;cd /cygdrive/c/phredPhrap Source/distrib/&quot;).</li>
   <li>Type &quot;make&quot;; this will cause your C compiler to compile phrap, and  create a file named &quot;phrap.exe&quot;.  If you have problems, you might look into the phrap.doc file in the phrap directory for more information about installation.</li>
@@ -274,6 +274,8 @@ red {
   <li>Type &quot;make&quot;; this will cause your C compiler to compile phd2fasta, and  create a file named &quot;phd2fasta.exe&quot;.</li>
   <li>Copy phd2fasta.exe to the previously created program directory (e.g., &quot;cp phd2fasta.exe /cygdrive/c/phredphrap/&quot;).</li>
   <li>You should now have three programs in your program directory: phrap.exe, phred.exe, and phd2fasta.exe. </li>
+  <li>Find cygwin1.dll in the C:\cygwin\bin directory. Copy it, and paste the copy into the same directory that holds phrap.exe</li>
+  <li>Now make an empty (0 kilobytes) file named phrap.exe.local and put it int the same directory as phrap.exe.  You can do this by opening Notepad, and saving an empty file of that name. Repeat this process to create empty files &quot;phred.exe.local&quot; and &quot;phd2fasta.exe.local&quot; in the program directory. </li>
   </ul>
 <h3>Making sure you have the approriate shell</h3>
 <h4>Ubuntu</h4>
