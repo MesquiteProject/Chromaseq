@@ -20,6 +20,7 @@ import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteString;
+import mesquite.lib.ProgressIndicator;
 import mesquite.lib.StringUtil;
 import mesquite.lib.XMLUtil;
 
@@ -81,13 +82,15 @@ public class ChromaseqInfoFile {
 		return null;
 	}
 	/*.................................................................................................................*/
-	public static void writeInfoFiles(Vector infoFiles) {
+	public static void writeInfoFiles(Vector infoFiles, ProgressIndicator progIndicator) {
 		if (infoFiles==null)
 				return;
 		for (int i=0; i<infoFiles.size(); i++) {
 			ChromaseqInfoFile infoFile = (ChromaseqInfoFile) infoFiles.get(i);
-			if (infoFile!=null)
+			if (infoFile!=null) {
 				infoFile.write();
+				progIndicator.spin();
+			}
 		}
 	}
 	/*.................................................................................................................*/
@@ -101,7 +104,7 @@ public class ChromaseqInfoFile {
 		infoFiles.removeAllElements();
 	}
 	/*.................................................................................................................*/
-	public  boolean write(){
+	public synchronized boolean write(){
 		if (StringUtil.blank(filePath))
 			return false;
 		String xml = XMLUtil.getDocumentAsXMLString(doc, false);
