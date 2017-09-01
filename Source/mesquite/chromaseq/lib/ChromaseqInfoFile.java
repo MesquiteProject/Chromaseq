@@ -15,6 +15,7 @@ package mesquite.chromaseq.lib;
 
 import java.util.Vector;
 
+import mesquite.lib.CommandRecord;
 import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
@@ -90,6 +91,7 @@ public class ChromaseqInfoFile {
 			if (infoFile!=null) {
 				infoFile.write();
 				progIndicator.spin();
+				CommandRecord.tick("Writing info.xml file " + (i+1) + " of " +infoFiles.size());
 			}
 		}
 	}
