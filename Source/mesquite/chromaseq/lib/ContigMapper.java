@@ -90,7 +90,8 @@ public class ContigMapper {
 		if (contigMapper==null) {
 			contigMapper = new ContigMapper(contig);
 			ChromaseqUtil.setContigMapperAssociated(data, it, contigMapper);
-		}
+		} else
+			contigMapper.setContig(contig);
 		return contigMapper;
 	}
 	/*.................................................................................................................*/
