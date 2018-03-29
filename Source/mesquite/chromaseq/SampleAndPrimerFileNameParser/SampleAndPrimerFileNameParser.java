@@ -286,7 +286,7 @@ class ChooseNameParsingRuleDLOG extends ExtensibleListDialog {
 	boolean editLastItem = false;
 
 	public ChooseNameParsingRuleDLOG (SampleAndPrimerFileNameParser ownerModule, String nameParsingRulesName, MesquiteInteger buttonPressed){
-		super(ownerModule.containerOfModule(), "File Name Rules Manager", "File Name Rules", ownerModule.nameParsingRules);
+		super(ownerModule.containerOfModule(), "File Name Rules Manager", "File Name Rules", buttonPressed, ownerModule.nameParsingRules);
 		this.ownerModule = ownerModule;
 		/*
 			String message = "This dialog box allows you to create and edit snippets of code stored in the current file or project, to be inserted into batch files according to their names.";
