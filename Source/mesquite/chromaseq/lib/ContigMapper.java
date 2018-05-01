@@ -90,6 +90,9 @@ public class ContigMapper {
 		if (contigMapper==null) {
 			contigMapper = new ContigMapper(contig);
 			ChromaseqUtil.setContigMapperAssociated(data, it, contigMapper);
+		} else if (contig!=null) {
+			contigMapper.setContig(contig);
+			ChromaseqUtil.setContigMapperAssociated(data, it, contigMapper);
 		}
 		return contigMapper;
 	}
@@ -183,6 +186,8 @@ public class ContigMapper {
 		if (editedData==null)
 			return;
 		MolecularData originalData = ChromaseqUtil.getOriginalData(editedData);
+		if (originalData==null)
+			return;
 		int contigBase = numTrimmedFromStart-1;
 		int lastContigBaseInOriginal = -1;
 
