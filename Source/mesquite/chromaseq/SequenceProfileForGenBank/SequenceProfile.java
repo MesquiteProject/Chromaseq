@@ -12,7 +12,7 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 
 
-package mesquite.chromaseq.SequenceSpecificationForGenBank;
+package mesquite.chromaseq.SequenceProfileForGenBank;
 
 import java.awt.*;
 import java.util.regex.*;
@@ -21,7 +21,7 @@ import org.dom4j.*;
 
 import mesquite.lib.*;
 
-public class SequenceSpecification implements Listable, Explainable {
+public class SequenceProfile implements Listable, Explainable {
 
 	public String location = "genome";   
 	public String moltype = "DNA";  
@@ -35,10 +35,10 @@ public class SequenceSpecification implements Listable, Explainable {
 	public String name = "default";
 	public String explanation;
 
-	public SequenceSpecification() {
+	public SequenceProfile() {
 	}
 
-	public SequenceSpecification(SequenceSpecification spec) {
+	public SequenceProfile(SequenceProfile spec) {
 		if (spec!=null) {
 			description = spec.description;
 			location = spec.location;
@@ -79,11 +79,11 @@ public class SequenceSpecification implements Listable, Explainable {
 	public String getXML(){
 		Element mesquiteElement = DocumentHelper.createElement("mesquite");
 		Document doc = DocumentHelper.createDocument(mesquiteElement);
-		Element sequenceSpecificationElement = DocumentHelper.createElement("sequenceSpecification");
-		mesquiteElement.add(sequenceSpecificationElement);
-		XMLUtil.addFilledElement(sequenceSpecificationElement, "version","1");
+		Element sequenceProfileElement = DocumentHelper.createElement("sequenceProfile");
+		mesquiteElement.add(sequenceProfileElement);
+		XMLUtil.addFilledElement(sequenceProfileElement, "version","1");
 		Element boundedByTokensElement = DocumentHelper.createElement("boundedByTokens");
-		sequenceSpecificationElement.add(boundedByTokensElement);
+		sequenceProfileElement.add(boundedByTokensElement);
 		XMLUtil.addFilledElement(boundedByTokensElement, "name",name);
 		XMLUtil.addFilledElement(boundedByTokensElement, "description",DocumentHelper.createCDATA(description));
 		XMLUtil.addFilledElement(boundedByTokensElement, "location",DocumentHelper.createCDATA(location));
@@ -110,13 +110,13 @@ public class SequenceSpecification implements Listable, Explainable {
 		if (root==null)
 			return false;
 
-		Element sequenceSpecificationElement = root.element("sequenceSpecification");
-		if (sequenceSpecificationElement != null) {
-			Element versionElement = sequenceSpecificationElement.element("version");
+		Element sequenceProfileElement = root.element("sequenceProfile");
+		if (sequenceProfileElement != null) {
+			Element versionElement = sequenceProfileElement.element("version");
 			if (versionElement == null || !versionElement.getText().equals("1")) {
 				return false;
 			}
-			Element boundedByTokens = sequenceSpecificationElement.element("boundedByTokens");
+			Element boundedByTokens = sequenceProfileElement.element("boundedByTokens");
 			if (boundedByTokens == null) {
 				return false;
 			}
@@ -127,8 +127,6 @@ public class SequenceSpecification implements Listable, Explainable {
 			productName = boundedByTokens.elementText("productName");
 			seqIDSuffix = boundedByTokens.elementText("seqIDSuffix");
 			gcode = MesquiteInteger.fromString(boundedByTokens.elementText("gcode"));			
-			//primerListPath = boundedByTokens.elementTextTrim("primerListPath");
-			//dnaNumberListPath = boundedByTokens.elementTextTrim("dnaNumberListPath");
 			//translateSampleCodes = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementTextTrim("translateSampleCodes"));
 		} else {
 			return false;
@@ -146,41 +144,59 @@ public class SequenceSpecification implements Listable, Explainable {
 			return s;
 	}
 	/*.................................................................................................................*/
-	public String[] moltypeStrings() {
+	public String[] moltypeStrings() {   // from http://www.insdc.org/controlled-vocabulary-moltype-qualifier
 		return new String[] {
-				"genomic", 
-				"precursor RNA", 
+				"genomic DNA", 
+				"genomic RNA", 
 				"mRNA", 
-				"rRNA", 
 				"tRNA", 
-				"snRNA", 
-				"scRNA", 
-				"other-genetic", 
-				"cRNA", 
-				"snoRNA", 
-				"transcribed RNA"
+				"rRNA", 
+				"other RNA", 
+				"other DNA", 
+				"transcribed RNA", 
+				"viral cRNA", 
+				"unassigned DNA", 
+				"unassigned RNA" 
 		};
 	}
 	/*.................................................................................................................*/
-	public String[] locationStrings() {
+	public String[] organelleStrings() {   // from http://www.insdc.org/controlled-vocabulary-organelle-qualifier
 		return new String[] {
-				"genomic", 
-				"chloroplast", 
-				"kinetoplast", 
-				"mitochondrion", 
-				"plastid", 
-				"macronuclear", 
-				"extrachromosomal", 
-				"plasmid", 
-				"cyanelle", 
-				"proviral", 
-				"virion", 
-				"nucleomorph", 
-				"apicoplast", 
-				"leucoplast", 
-				"proplastid", 
-				"endogenous-virus", 
-				"hydrogenosome"
+				"chromatophore",
+				"hydrogenosome",
+				"mitochondrion",
+				"nucleomorph",
+				"plastid",
+				"mitochondrion:kinetoplast",
+				"plastid:chloroplast",
+				"plastid:apicoplast",
+				"plastid:chromoplast",
+				"plastid:cyanelle",
+				"plastid:leucoplast",
+				"plastid:proplastid"
+		};
+	}
+	/*.................................................................................................................*/
+	public String[] locationStrings() { // from https://www.ncbi.nlm.nih.gov/projects/Sequin/sequin.hlp.html#Location
+		return new String[] {
+				"Genomic", 
+				"Mitochondrion", 
+				"Chloroplast", 
+				"Apicoplast", 
+				"Chromatophore", 
+				"Chromoplast", 
+				"Cyanelle", 
+				"Endogenous_virus", 
+				"Extrachromosomal", 
+				"Hydrogenosome", 
+				"Kinetoplast", 
+				"Leucoplast", 
+				"Macronuclear", 
+				"Nucleomorph", 
+				"Plasmid", 
+				"Plastid", 
+				"Proplastid", 
+				"Proviral"
 		};
 	}
 	/*.................................................................................................................*/
@@ -224,11 +240,11 @@ public class SequenceSpecification implements Listable, Explainable {
 	/*.................................................................................................................*/
 	public boolean queryOptions(String name) {
 		MesquiteInteger buttonPressed = new MesquiteInteger(1);
-		ExtensibleDialog dialog = new ExtensibleDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), "Gene Fragment Specification",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
+		ExtensibleDialog dialog = new ExtensibleDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), "Sequence Profile",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 		if (!StringUtil.blank(name))
-			dialog.addLabel("Gene Fragment Specification: "+name);
+			dialog.addLabel("Sequence Profile: "+name);
 		else
-			dialog.addLabel("Gene Fragment Specification");
+			dialog.addLabel("Sequence Profile");
 
 		SingleLineTextField descriptionField = dialog.addTextField("description of sequence:", description,80, true);
 		int item = StringArray.indexOfIgnoreCase(locationStrings(), location);
@@ -247,7 +263,7 @@ public class SequenceSpecification implements Listable, Explainable {
 		//		Checkbox requiresExtensionBox = dialog.addCheckBox("only process files with standard extensions (ab1,abi,ab,CRO,scf)", requiresExtension);
 
 
-		String s = "For each gene, gene fragment, or type of sequence data, this allows you to create a profile for that gene; the information in this specification "
+		String s = "For each gene, gene fragment, or type of sequence data, this allows you to create a profile for that gene; the information in this profile "
 				+ "is then included in your submission to GenBank .\n";
 		dialog.appendToHelpString(s);
 

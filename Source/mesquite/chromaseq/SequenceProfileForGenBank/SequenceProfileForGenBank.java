@@ -11,7 +11,7 @@ This source code and its compiled class files are free and modifiable under the 
 GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 
-package mesquite.chromaseq.SequenceSpecificationForGenBank;
+package mesquite.chromaseq.SequenceProfileForGenBank;
 
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -26,37 +26,36 @@ import mesquite.lib.*;
 
 /* This module supplies the sample code and primer name given the chromatogram file name, for chromatogram file names that contain the sample code and primer name directly */
 
-public class SequenceSpecificationForGenBank extends SequenceSpecificationManager {
-	public ListableVector sequenceSpecificationVector;
+public class SequenceProfileForGenBank extends SequenceProfileManager {
+	public ListableVector sequenceProfileVector;
 	public Choice choice;
-	public String prefDirectoryName = "SequenceSpecifications";
-	ChooseGeneSpecificationDLOG chooseSequenceSpecificationDialog;
+	public String prefDirectoryName = "SequenceProfilesForGenBank";
+	ManageGeneProfileDLOG chooseSequenceProfileDialog;
 
-	private SequenceSpecification sequenceSpecification=null;
-	private Choice sequenceSpecificationChoice;	
-	private String sequenceSpecificationName="";	
+	private SequenceProfile sequenceProfile=null;
+	private String sequenceProfileName="";	
 
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		sequenceSpecificationVector = new ListableVector();
+		sequenceProfileVector = new ListableVector();
 		loadSequenceSpecifications();
 		if (getNumRules()<=0) {
-			SequenceSpecification defaultRule = new SequenceSpecification();
-			sequenceSpecificationVector.addElement(defaultRule, false);
+			SequenceProfile defaultRule = new SequenceProfile();
+			sequenceProfileVector.addElement(defaultRule, false);
 		}
-		int ruleNumber = sequenceSpecificationVector.indexOfByNameIgnoreCase(sequenceSpecificationName);
+		int ruleNumber = sequenceProfileVector.indexOfByNameIgnoreCase(sequenceProfileName);
 		if (ruleNumber>=0)
-			sequenceSpecification = (SequenceSpecification)(sequenceSpecificationVector.elementAt(ruleNumber));
+			sequenceProfile = (SequenceProfile)(sequenceProfileVector.elementAt(ruleNumber));
 		return true;
 	}
 	/*.................................................................................................................*/
 	
 	public boolean optionsSpecified(){
-		boolean db = StringUtil.notEmpty(sequenceSpecificationName);
-		db = sequenceSpecification!=null;
-		int ruleNumber = sequenceSpecificationVector.indexOfByNameIgnoreCase(sequenceSpecificationName);
+		boolean db = StringUtil.notEmpty(sequenceProfileName);
+		db = sequenceProfile!=null;
+		int ruleNumber = sequenceProfileVector.indexOfByNameIgnoreCase(sequenceProfileName);
 		
-		return (StringUtil.notEmpty(sequenceSpecificationName) && sequenceSpecification!=null) ;
+		return (StringUtil.notEmpty(sequenceProfileName) && sequenceProfile!=null) ;
 	}
 	public boolean hasOptions(){
 		return true;
@@ -66,16 +65,16 @@ public class SequenceSpecificationForGenBank extends SequenceSpecificationManage
 		return "";
 	}
 	/*.................................................................................................................*/
-	public String[] getListOfSpecifications(){
-		if (sequenceSpecificationVector==null || sequenceSpecificationVector.size()<1)
+	public String[] getListOfProfiles(){
+		if (sequenceProfileVector==null || sequenceProfileVector.size()<1)
 			return null;
-		return sequenceSpecificationVector.getStringArrayList();
+		return sequenceProfileVector.getStringArrayList();
 	}
 
 	/*.................................................................................................................*/
 	public boolean queryOptions() {
 		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);
-		SequenceSpecificationDialog dialog = new SequenceSpecificationDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), "Choose the sequence specification", buttonPressed, this, sequenceSpecificationName);		
+		SequenceProfileDialog dialog = new SequenceProfileDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), "Choose the sequence profile", buttonPressed, this, sequenceProfileName);		
 
 
 		String s = "In preparing sequences for GenBank submission, Mesquite saves data about the sequence (e.g., gene name, genetic code, etc.). ";
@@ -84,8 +83,8 @@ public class SequenceSpecificationForGenBank extends SequenceSpecificationManage
 		dialog.completeAndShowDialog(true);
 		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
-			sequenceSpecification = dialog.getNameParsingRule();
-			sequenceSpecificationName = sequenceSpecification.getName();
+			sequenceProfile = dialog.getNameParsingRule();
+			sequenceProfileName = sequenceProfile.getName();
 		}
 		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
 		dialog.dispose();
@@ -94,31 +93,31 @@ public class SequenceSpecificationForGenBank extends SequenceSpecificationManage
 	/*.................................................................................................................*/
 	public String preparePreferencesForXML () {
 		StringBuffer buffer = new StringBuffer();
-		StringUtil.appendXMLTag(buffer, 2, "sequenceSpecificationName", sequenceSpecificationName);  
+		StringUtil.appendXMLTag(buffer, 2, "sequenceSpecificationName", sequenceProfileName);  
 		return buffer.toString();
 	}
 	/*.................................................................................................................*/
 	public String getParameters () {
-		if (StringUtil.blank(sequenceSpecificationName))
-			return "Sequence specification: not chosen.";
-		return "Sequence specification: " + sequenceSpecificationName;
+		if (StringUtil.blank(sequenceProfileName))
+			return "Sequence profile: not chosen.";
+		return "Sequence profile: " + sequenceProfileName;
 	}
 
 	/*.................................................................................................................*/
 	public void processSingleXMLPreference (String tag, String content) {
 		if ("sequenceSpecificationName".equalsIgnoreCase(tag))
-			sequenceSpecificationName = StringUtil.cleanXMLEscapeCharacters(content);
+			sequenceProfileName = StringUtil.cleanXMLEscapeCharacters(content);
 	}
 	/*.................................................................................................................*/
-	public SequenceSpecification loadSequenceSpecificationFile(String cPath, String fileName, boolean requiresEnding,  boolean userDef) {
+	public SequenceProfile loadSequenceSpecificationFile(String cPath, String fileName, boolean requiresEnding,  boolean userDef) {
 		File cFile = new File(cPath);
 		if (cFile.exists() && !cFile.isDirectory() && (!requiresEnding || fileName.endsWith("xml"))) {
 			String contents = MesquiteFile.getFileContentsAsString(cPath);
 			if (!StringUtil.blank(contents)) {
-				SequenceSpecification localSequenceSpecification = new SequenceSpecification();
+				SequenceProfile localSequenceSpecification = new SequenceProfile();
 				localSequenceSpecification.path = cPath;
 				if  (localSequenceSpecification.readXML(contents)){
-					sequenceSpecificationVector.addElement(localSequenceSpecification, false);
+					sequenceProfileVector.addElement(localSequenceSpecification, false);
 					return localSequenceSpecification;
 				}
 				return null;
@@ -135,7 +134,7 @@ public class SequenceSpecificationForGenBank extends SequenceSpecificationManage
 		return choice;
 	}
 	public int getNumRules() {
-		return sequenceSpecificationVector.getNumberOfParts();
+		return sequenceProfileVector.getNumberOfParts();
 	}
 
 	/*.................................................................................................................*/
@@ -158,55 +157,55 @@ public class SequenceSpecificationForGenBank extends SequenceSpecificationManage
 		loadSequenceSpecifications(path, storageDir, true);
 	}
 
-	public SequenceSpecification chooseSequenceSpecifiation(SequenceSpecification spec) {
+	public SequenceProfile chooseSequenceSpecifiation(SequenceProfile spec) {
 
-		SequenceSpecification sequenceSpecification = spec;
+		SequenceProfile sequenceSpecification = spec;
 		MesquiteInteger buttonPressed = new MesquiteInteger(1);
-		chooseSequenceSpecificationDialog = new ChooseGeneSpecificationDLOG(this, sequenceSpecificationName, buttonPressed);
+		chooseSequenceProfileDialog = new ManageGeneProfileDLOG(this, sequenceProfileName, buttonPressed);
 		boolean ok = (buttonPressed.getValue()==0);
 
 		if (ok && choice !=null) {
-			sequenceSpecificationName = choice.getSelectedItem();
-			int sL = sequenceSpecificationVector.indexOfByName(sequenceSpecificationName);
-			if (sL >=0 && sL < sequenceSpecificationVector.size()) {
-				sequenceSpecification = (SequenceSpecification)sequenceSpecificationVector.elementAt(sL);
+			sequenceProfileName = choice.getSelectedItem();
+			int sL = sequenceProfileVector.indexOfByName(sequenceProfileName);
+			if (sL >=0 && sL < sequenceProfileVector.size()) {
+				sequenceSpecification = (SequenceProfile)sequenceProfileVector.elementAt(sL);
 			}
 			storePreferences();
 		}
-		chooseSequenceSpecificationDialog.dispose();
-		chooseSequenceSpecificationDialog = null;
+		chooseSequenceProfileDialog.dispose();
+		chooseSequenceProfileDialog = null;
 		return sequenceSpecification;
 	}
 	/*.................................................................................................................*/
-	public boolean manageSequenceSpecifications() {
+	public boolean manageSequenceProfiles() {
 
 		MesquiteInteger buttonPressed = new MesquiteInteger(1);
-		chooseSequenceSpecificationDialog = new ChooseGeneSpecificationDLOG(this, sequenceSpecificationName, buttonPressed);
+		chooseSequenceProfileDialog = new ManageGeneProfileDLOG(this, sequenceProfileName, buttonPressed);
 
 		if (choice !=null) {
-			sequenceSpecificationName = choice.getSelectedItem();
-			int sL = sequenceSpecificationVector.indexOfByName(sequenceSpecificationName);
-			if (sL >=0 && sL < sequenceSpecificationVector.size()) {
-				sequenceSpecification = (SequenceSpecification)sequenceSpecificationVector.elementAt(sL);
+			sequenceProfileName = choice.getSelectedItem();
+			int sL = sequenceProfileVector.indexOfByName(sequenceProfileName);
+			if (sL >=0 && sL < sequenceProfileVector.size()) {
+				sequenceProfile = (SequenceProfile)sequenceProfileVector.elementAt(sL);
 			}
 			storePreferences();
 		}
-		chooseSequenceSpecificationDialog.dispose();
-		chooseSequenceSpecificationDialog = null;
+		chooseSequenceProfileDialog.dispose();
+		chooseSequenceProfileDialog = null;
 		return true;
 	}
 
 
 	/*.................................................................................................................*/
 	public int numSpecifications(){
-		return sequenceSpecificationVector.size();
+		return sequenceProfileVector.size();
 	}
 	/*.................................................................................................................*/
 	public MesquiteString getSpecification(String name){
-		int i = sequenceSpecificationVector.indexOfByName(name);
+		int i = sequenceProfileVector.indexOfByName(name);
 		if (i<0)
 			return null;
-		Listable listable = sequenceSpecificationVector.elementAt(i);
+		Listable listable = sequenceProfileVector.elementAt(i);
 		if (listable!=null)
 			return new MesquiteString(listable.getName());	
 		else 
@@ -214,13 +213,13 @@ public class SequenceSpecificationForGenBank extends SequenceSpecificationManage
 	}
 	/*.................................................................................................................*/
 	public int findSpecification(String name){
-		return sequenceSpecificationVector.indexOfByName(name);
+		return sequenceProfileVector.indexOfByName(name);
 	}
 	/*.................................................................................................................*/
 	public MesquiteString getSpecification(int i){
-		if (i<0 || i>= sequenceSpecificationVector.size())
+		if (i<0 || i>= sequenceProfileVector.size())
 			return null;
-		Listable listable = sequenceSpecificationVector.elementAt(i);
+		Listable listable = sequenceProfileVector.elementAt(i);
 		if (listable!=null)
 			return new MesquiteString(listable.getName());	
 		else 
@@ -244,50 +243,50 @@ public class SequenceSpecificationForGenBank extends SequenceSpecificationManage
 		return candidate;
 	}
 	/*.................................................................................................................*/
-	public void addSpecification(SequenceSpecification sequenceSpecification, String name){
+	public void addSpecification(SequenceProfile sequenceSpecification, String name){
 		sequenceSpecification.save(newSpecificationPath(name), name);
-		sequenceSpecificationVector.addElement(sequenceSpecification, false);	
+		sequenceProfileVector.addElement(sequenceSpecification, false);	
 		choice.add(name);
-		sequenceSpecificationName = name;
+		sequenceProfileName = name;
 		//	return s;
 	}
 	/*.................................................................................................................*/
-	public SequenceSpecification duplicateNameRule(SequenceSpecification sequenceSpecification, String name){
-		SequenceSpecification specification = new SequenceSpecification(sequenceSpecification);
+	public SequenceProfile duplicateNameRule(SequenceProfile sequenceSpecification, String name){
+		SequenceProfile specification = new SequenceProfile(sequenceSpecification);
 		specification.setName(name);
 		specification.setPath(newSpecificationPath(name));
 		specification.save();
-		sequenceSpecificationVector.addElement(specification, false);	
+		sequenceProfileVector.addElement(specification, false);	
 		choice.add(name);
-		sequenceSpecificationName = name;
+		sequenceProfileName = name;
 		return specification;
 		//	return s;
 	}
 	/*.................................................................................................................*/
 	void renameSpecification(int i, String name){
-		SequenceSpecification specification = (SequenceSpecification)sequenceSpecificationVector.elementAt(i);
+		SequenceProfile specification = (SequenceProfile)sequenceProfileVector.elementAt(i);
 		specification.setName(name);
 		specification.save();
 		choice.remove(i);
 		choice.insert(name,i);
-		sequenceSpecificationName=name;
+		sequenceProfileName=name;
 	}
 	/*.................................................................................................................*/
 	void deleteSpecification(int i){
-		SequenceSpecification specification = (SequenceSpecification)sequenceSpecificationVector.elementAt(i);
+		SequenceProfile specification = (SequenceProfile)sequenceProfileVector.elementAt(i);
 		if (specification!=null) {
 			String oldTemplateName = specification.getName();
 			File f = new File(specification.path);
 			f.delete();		
 			//MesquiteString s = getNameRule(i);
 			//if (s !=null)
-			sequenceSpecificationVector.removeElement(specification, false);  //deletes it from the vector
+			sequenceProfileVector.removeElement(specification, false);  //deletes it from the vector
 			choice.remove(i);
 		}
 	}
 	/*.................................................................................................................*/
 	public String getName() {
-		return "Sequence Specification for GenBank";
+		return "Sequence Profile for GenBank";
 	}
 
 }	
@@ -295,12 +294,12 @@ public class SequenceSpecificationForGenBank extends SequenceSpecificationManage
 
 
 /*=======================================================================*/
-class ChooseGeneSpecificationDLOG extends ExtensibleListDialog {
-	SequenceSpecificationForGenBank ownerModule;
+class ManageGeneProfileDLOG extends ExtensibleListDialog {
+	SequenceProfileForGenBank ownerModule;
 	boolean editLastItem = false;
 
-	public ChooseGeneSpecificationDLOG (SequenceSpecificationForGenBank ownerModule, String nameParsingRulesName, MesquiteInteger buttonPressed){
-		super(ownerModule.containerOfModule(), "Sequence Specification Manager", "Sequence Specification", buttonPressed, ownerModule.sequenceSpecificationVector);
+	public ManageGeneProfileDLOG (SequenceProfileForGenBank ownerModule, String nameParsingRulesName, MesquiteInteger buttonPressed){
+		super(ownerModule.containerOfModule(), "Sequence Profile Manager", "Sequence Profile", buttonPressed, ownerModule.sequenceProfileVector);
 		this.ownerModule = ownerModule;
 		completeAndShowDialog("Done", null, true, null);
 
@@ -315,18 +314,18 @@ class ChooseGeneSpecificationDLOG extends ExtensibleListDialog {
 	/*.................................................................................................................*/
 	/** this is the name of the class of objects */
 	public  String objectName(){
-		return "Sequence Specification";
+		return "Sequence Profile";
 	}
 	/*.................................................................................................................*/
 	/** this is the name of the class of objects */
 	public  String pluralObjectName(){
-		return "Sequence Specifications";
+		return "Sequence Profiles";
 	}
 
 	/*.................................................................................................................*/
 	public Listable createNewElement(String name, MesquiteBoolean success){
 		hide();
-		SequenceSpecification sequenceSpecification = new SequenceSpecification();
+		SequenceProfile sequenceSpecification = new SequenceProfile();
 		if (sequenceSpecification.queryOptions(name)) {
 			addNewElement(sequenceSpecification,name);  //add name to list
 			ownerModule.addSpecification(sequenceSpecification, name);
@@ -353,7 +352,7 @@ class ChooseGeneSpecificationDLOG extends ExtensibleListDialog {
 	}
 	/*.................................................................................................................*/
 	public Listable duplicateElement(String name){
-		SequenceSpecification sequenceSpecification = ownerModule.duplicateNameRule((SequenceSpecification)currentElement, name);
+		SequenceProfile sequenceSpecification = ownerModule.duplicateNameRule((SequenceProfile)currentElement, name);
 		return sequenceSpecification;
 	}
 	/*.................................................................................................................*/
@@ -363,7 +362,7 @@ class ChooseGeneSpecificationDLOG extends ExtensibleListDialog {
 	/*.................................................................................................................*/
 	public void editElement(int item){
 		//hide();
-		SequenceSpecification sequenceSpecification = ((SequenceSpecification)ownerModule.sequenceSpecificationVector.elementAt(item));
+		SequenceProfile sequenceSpecification = ((SequenceProfile)ownerModule.sequenceProfileVector.elementAt(item));
 		if (sequenceSpecification.queryOptions(sequenceSpecification.getName()))
 			sequenceSpecification.save();
 		setVisible(true);

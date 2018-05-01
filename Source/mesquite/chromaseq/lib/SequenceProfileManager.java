@@ -14,23 +14,23 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.lib;
 
 
-import mesquite.chromaseq.SequenceSpecificationForGenBank.SequenceSpecification;
+import mesquite.chromaseq.SequenceProfileForGenBank.SequenceProfile;
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
 import java.awt.*;
 
 /* Modules of this duty class are responsible for being able to supply the sample code and primer name given the chromatogram file name */
-public abstract class SequenceSpecificationManager extends MesquiteInit {
+public abstract class SequenceProfileManager extends MesquiteInit {
 
 	public Class getDutyClass(){
-		return SequenceSpecificationManager.class;
+		return SequenceProfileManager.class;
 	}
 
 	public abstract String getSequenceModifiers(int sequenceType);
 
-	public abstract String[] getListOfSpecifications();
+	public abstract String[] getListOfProfiles();
 
-	public abstract boolean manageSequenceSpecifications();
+	public abstract boolean manageSequenceProfiles();
 
 	public boolean queryOptions(){
 		return true;
