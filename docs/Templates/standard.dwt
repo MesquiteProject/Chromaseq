@@ -32,7 +32,7 @@
       <li><a href="../overview.html">Overview</a></li>
       <li><a href="../quickstart.html">Quickstart</a></li>
 	  <li><a href="../tutorial.html">Tutorial</a></li>
-	  <li><a href="../phredphrap.html">Phred / Phrap with Chromaseq</a></li>
+	  <li><a href="../phredPhrap.html">Phred / Phrap with Chromaseq</a></li>
 	  <ul id="subUL">
 	  	<li><a href="../installation.html">Installing Phred &amp; Phrap </a></li>
   		<li><a href="../primers.html">Primer List File</a></li>
