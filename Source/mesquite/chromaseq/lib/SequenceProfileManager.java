@@ -14,7 +14,6 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.lib;
 
 
-import mesquite.chromaseq.SequenceProfileForGenBank.SequenceProfile;
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
 import java.awt.*;
@@ -39,6 +38,10 @@ public abstract class SequenceProfileManager extends MesquiteInit {
 	public boolean optionsSpecified(){
 		return false;
 	}
+
+	/*.................................................................................................................*/
+	public abstract SequenceProfile getSequenceProfile(int index);
+
 
 	public boolean hasOptions(){
 		return false;

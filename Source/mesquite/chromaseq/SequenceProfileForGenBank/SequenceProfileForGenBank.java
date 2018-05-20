@@ -216,6 +216,11 @@ public class SequenceProfileForGenBank extends SequenceProfileManager {
 		return sequenceProfileVector.indexOfByName(name);
 	}
 	/*.................................................................................................................*/
+	public SequenceProfile getSequenceProfile(int index){
+		return (SequenceProfile)(sequenceProfileVector.elementAt(index));
+
+	}
+	/*.................................................................................................................*/
 	public MesquiteString getSpecification(int i){
 		if (i<0 || i>= sequenceProfileVector.size())
 			return null;

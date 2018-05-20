@@ -12,7 +12,7 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 
 
-package mesquite.chromaseq.SequenceProfileForGenBank;
+package mesquite.chromaseq.lib;
 
 import java.awt.*;
 import java.util.regex.*;
@@ -132,6 +132,22 @@ public class SequenceProfile implements Listable, Explainable {
 			return false;
 		}
 		return true;
+	}
+
+	/*.................................................................................................................*/
+	public  String getFASTASourceModifiers() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[name = " + name + "] ");
+		sb.append("[productName = " + productName + "] ");
+		sb.append("[description = " + description + "] ");
+		sb.append("[location = " + location + "] ");
+		sb.append("[gcode = " + gcode + "] ");
+		sb.append("[moltype = " + moltype + "] ");
+		return sb.toString();
+	}
+	/*.................................................................................................................*/
+	public  String getSeqIDSuffix() {
+		return seqIDSuffix;
 	}
 
 	/*.................................................................................................................*
