@@ -212,7 +212,7 @@ public class SequenceProfileForGenBank extends SequenceProfileManager {
 			return null;
 	}
 	/*.................................................................................................................*/
-	public int findSpecification(String name){
+	public int findSpecificationIndex(String name){
 		return sequenceProfileVector.indexOfByName(name);
 	}
 	/*.................................................................................................................*/

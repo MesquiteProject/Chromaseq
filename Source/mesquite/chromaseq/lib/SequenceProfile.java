@@ -28,6 +28,7 @@ public class SequenceProfile implements Listable, Explainable {
 	public String description = "";  
 	public String productName = "";  
 	public String seqIDSuffix = "";  
+	public boolean CDS = true;  
 	int gcode= 1;
 
 	public String path;
@@ -47,6 +48,7 @@ public class SequenceProfile implements Listable, Explainable {
 			seqIDSuffix = spec.seqIDSuffix;
 			gcode = spec.gcode;
 			name = spec.name;
+			CDS = spec.CDS;
 		}
 	}
 
@@ -61,6 +63,9 @@ public class SequenceProfile implements Listable, Explainable {
 	}
 	public String getDescription(){
 		return description;
+	}
+	public boolean isCDS(){
+		return CDS;
 	}
 	public String getLocation(){
 		return location;
@@ -91,6 +96,7 @@ public class SequenceProfile implements Listable, Explainable {
 		XMLUtil.addFilledElement(boundedByTokensElement, "productName",DocumentHelper.createCDATA(productName));
 		XMLUtil.addFilledElement(boundedByTokensElement, "seqIDSuffix",DocumentHelper.createCDATA(seqIDSuffix));
 		XMLUtil.addFilledElement(boundedByTokensElement, "gcode",DocumentHelper.createCDATA(""+gcode));
+		XMLUtil.addFilledElement(boundedByTokensElement, "CDS",DocumentHelper.createCDATA(MesquiteBoolean.toTrueFalseString(CDS)));
 		return XMLUtil.getDocumentAsXMLString(doc);
 	}
 	public void save(String path, String name){
@@ -127,6 +133,7 @@ public class SequenceProfile implements Listable, Explainable {
 			productName = boundedByTokens.elementText("productName");
 			seqIDSuffix = boundedByTokens.elementText("seqIDSuffix");
 			gcode = MesquiteInteger.fromString(boundedByTokens.elementText("gcode"));			
+			CDS = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementText("CDS"));			
 			//translateSampleCodes = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementTextTrim("translateSampleCodes"));
 		} else {
 			return false;
@@ -137,9 +144,8 @@ public class SequenceProfile implements Listable, Explainable {
 	/*.................................................................................................................*/
 	public  String getFASTASourceModifiers() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("[name = " + name + "] ");
-		sb.append("[productName = " + productName + "] ");
-		sb.append("[description = " + description + "] ");
+	//	sb.append("[productName = " + productName + "] ");
+	//	sb.append("[description = " + description + "] ");
 		sb.append("[location = " + location + "] ");
 		sb.append("[gcode = " + gcode + "] ");
 		sb.append("[moltype = " + moltype + "] ");
@@ -272,6 +278,7 @@ public class SequenceProfile implements Listable, Explainable {
 		Choice moltypeChoice = dialog.addPopUpMenu("Molecular type", moltypeStrings(), 	item);
 		SingleLineTextField productNameField = dialog.addTextField("Product name:", productName, 80, true);
 		SingleLineTextField seqIDSuffixField = dialog.addTextField("SeqID suffix:", seqIDSuffix,30, true);
+		Checkbox CDSbox = dialog.addCheckBox("CDS", CDS);
 
 		dialog.addHorizontalLine(2);
 
@@ -291,6 +298,7 @@ public class SequenceProfile implements Listable, Explainable {
 			productName = productNameField.getText();
 			seqIDSuffix = seqIDSuffixField.getText();
 			gcode = geneticCodeChoice.getSelectedIndex()+1;
+			CDS =CDSbox.getState();
 			//			translateSampleCodes = translateCodesBox.getState();
 		}
 		//storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used

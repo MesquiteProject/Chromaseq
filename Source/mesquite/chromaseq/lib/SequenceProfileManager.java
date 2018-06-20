@@ -42,6 +42,9 @@ public abstract class SequenceProfileManager extends MesquiteInit {
 	/*.................................................................................................................*/
 	public abstract SequenceProfile getSequenceProfile(int index);
 
+	/*.................................................................................................................*/
+	public abstract int findSpecificationIndex(String name);
+
 
 	public boolean hasOptions(){
 		return false;
