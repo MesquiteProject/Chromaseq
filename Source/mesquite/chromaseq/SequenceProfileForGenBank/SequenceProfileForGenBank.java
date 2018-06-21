@@ -11,7 +11,7 @@ This source code and its compiled class files are free and modifiable under the 
 GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 
-package mesquite.chromaseq.SampleAndPrimerFileNameParser;
+package mesquite.chromaseq.SequenceProfileForGenBank;
 
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -26,62 +26,65 @@ import mesquite.lib.*;
 
 /* This module supplies the sample code and primer name given the chromatogram file name, for chromatogram file names that contain the sample code and primer name directly */
 
-public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
-	public ListableVector nameParsingRules;
+public class SequenceProfileForGenBank extends SequenceProfileManager {
+	public ListableVector sequenceProfileVector;
 	public Choice choice;
-	public String prefDirectoryName = "ChromNameParsingRules";
-	ChooseNameParsingRuleDLOG chooseNameParsingRuleDialog;
+	public String prefDirectoryName = "SequenceProfilesForGenBank";
+	ManageGeneProfileDLOG chooseSequenceProfileDialog;
 
-	private ChromFileNameParsing nameParsingRule=null;
-	private Choice nameRulesChoice;	
-	private String nameParsingRulesName="";	
+	private SequenceProfile sequenceProfile=null;
+	private String sequenceProfileName="";	
 
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		nameParsingRules = new ListableVector();
-		loadNameParsingRules();
+		sequenceProfileVector = new ListableVector();
+		loadSequenceSpecifications();
 		if (getNumRules()<=0) {
-			ChromFileNameParsing defaultRule = new ChromFileNameParsing();
-			nameParsingRules.addElement(defaultRule, false);
+			SequenceProfile defaultRule = new SequenceProfile();
+			sequenceProfileVector.addElement(defaultRule, false);
 		}
-		int ruleNumber = nameParsingRules.indexOfByNameIgnoreCase(nameParsingRulesName);
+		int ruleNumber = sequenceProfileVector.indexOfByNameIgnoreCase(sequenceProfileName);
 		if (ruleNumber>=0)
-			nameParsingRule = (ChromFileNameParsing)(nameParsingRules.elementAt(ruleNumber));
+			sequenceProfile = (SequenceProfile)(sequenceProfileVector.elementAt(ruleNumber));
 		return true;
 	}
 	/*.................................................................................................................*/
 	
 	public boolean optionsSpecified(){
-		boolean db = StringUtil.notEmpty(nameParsingRulesName);
-		db = nameParsingRule!=null;
-		int ruleNumber = nameParsingRules.indexOfByNameIgnoreCase(nameParsingRulesName);
+		boolean db = StringUtil.notEmpty(sequenceProfileName);
+		db = sequenceProfile!=null;
+		int ruleNumber = sequenceProfileVector.indexOfByNameIgnoreCase(sequenceProfileName);
 		
-		return (StringUtil.notEmpty(nameParsingRulesName) && nameParsingRule!=null) ;
+		return (StringUtil.notEmpty(sequenceProfileName) && sequenceProfile!=null) ;
 	}
 	public boolean hasOptions(){
 		return true;
 	}
-	public void setWarnIfCantExtract(boolean warnIfCantExtract) {
-		this.warnIfCantExtract = warnIfCantExtract;
-		nameParsingRule.setWarnIfCantExtract(warnIfCantExtract);
-	}
 
+	public  String getSequenceModifiers(int sequenceType) {
+		return "";
+	}
+	/*.................................................................................................................*/
+	public String[] getListOfProfiles(){
+		if (sequenceProfileVector==null || sequenceProfileVector.size()<1)
+			return null;
+		return sequenceProfileVector.getStringArrayList();
+	}
 
 	/*.................................................................................................................*/
 	public boolean queryOptions() {
 		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);
-		ChromFileNameDialog dialog = new ChromFileNameDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), "Choose rule describing file name structure", buttonPressed, this, nameParsingRulesName);		
+		SequenceProfileDialog dialog = new SequenceProfileDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), "Choose the sequence profile", buttonPressed, this, sequenceProfileName);		
 
 
-		String s = "Mesquite searches within the name of each chromatogram file for both a code indicating the sample (e.g., a voucher number) and the primer name. ";
-		s+= "To allow this, you must first define a rule that defines how the chromatogram file names are structured.\n\n";
+		String s = "In preparing sequences for GenBank submission, Mesquite saves data about the sequence (e.g., gene name, genetic code, etc.). ";
 		dialog.appendToHelpString(s);
 
 		dialog.completeAndShowDialog(true);
 		boolean success=(buttonPressed.getValue()== dialog.defaultOK);
 		if (success)  {
-			nameParsingRule = dialog.getNameParsingRule();
-			nameParsingRulesName = nameParsingRule.getName();
+			sequenceProfile = dialog.getNameParsingRule();
+			sequenceProfileName = sequenceProfile.getName();
 		}
 		storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
 		dialog.dispose();
@@ -90,32 +93,32 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 	/*.................................................................................................................*/
 	public String preparePreferencesForXML () {
 		StringBuffer buffer = new StringBuffer();
-		StringUtil.appendXMLTag(buffer, 2, "nameParsingRulesName", nameParsingRulesName);  
+		StringUtil.appendXMLTag(buffer, 2, "sequenceSpecificationName", sequenceProfileName);  
 		return buffer.toString();
 	}
 	/*.................................................................................................................*/
 	public String getParameters () {
-		if (StringUtil.blank(nameParsingRulesName))
-			return "Chromatogram File Name Rule: not specified.";
-		return "Chromatogram File Name Rule: " + nameParsingRulesName;
+		if (StringUtil.blank(sequenceProfileName))
+			return "Sequence profile: not chosen.";
+		return "Sequence profile: " + sequenceProfileName;
 	}
 
 	/*.................................................................................................................*/
 	public void processSingleXMLPreference (String tag, String content) {
-		if ("nameParsingRulesName".equalsIgnoreCase(tag))
-			nameParsingRulesName = StringUtil.cleanXMLEscapeCharacters(content);
+		if ("sequenceSpecificationName".equalsIgnoreCase(tag))
+			sequenceProfileName = StringUtil.cleanXMLEscapeCharacters(content);
 	}
 	/*.................................................................................................................*/
-	public ChromFileNameParsing loadNameRulesFile(String cPath, String fileName, boolean requiresEnding,  boolean userDef) {
+	public SequenceProfile loadSequenceSpecificationFile(String cPath, String fileName, boolean requiresEnding,  boolean userDef) {
 		File cFile = new File(cPath);
 		if (cFile.exists() && !cFile.isDirectory() && (!requiresEnding || fileName.endsWith("xml"))) {
 			String contents = MesquiteFile.getFileContentsAsString(cPath);
 			if (!StringUtil.blank(contents)) {
-				ChromFileNameParsing localNameParsingRules = new ChromFileNameParsing();
-				localNameParsingRules.path = cPath;
-				if  (localNameParsingRules.readXML(contents)){
-					nameParsingRules.addElement(localNameParsingRules, false);
-					return localNameParsingRules;
+				SequenceProfile localSequenceSpecification = new SequenceProfile();
+				localSequenceSpecification.path = cPath;
+				if  (localSequenceSpecification.readXML(contents)){
+					sequenceProfileVector.addElement(localSequenceSpecification, false);
+					return localSequenceSpecification;
 				}
 				return null;
 			}
@@ -123,13 +126,6 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 		return null;
 	}
 
-	/*.................................................................................................................*/
-
-	public boolean parseFileName(String fileName, MesquiteString sampleCode, MesquiteString sampleCodeSuffix, MesquiteString primerName, StringBuffer logBuffer, MesquiteString startTokenResult, MesquiteInteger sampleCodeEndIndex){
-		if (nameParsingRule==null)
-			return false;
-		return nameParsingRule.parseFileName(this, fileName, sampleCode, sampleCodeSuffix, primerName, logBuffer, startTokenResult, sampleCodeEndIndex);
-	}
 
 	public void setChoice (Choice choice) {
 		this.choice = choice;
@@ -138,82 +134,104 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 		return choice;
 	}
 	public int getNumRules() {
-		return nameParsingRules.getNumberOfParts();
+		return sequenceProfileVector.getNumberOfParts();
 	}
 
 	/*.................................................................................................................*/
-	private void loadNameParsingRules(String path, File nameRulesDir, boolean userDef){
-		if (nameRulesDir.exists() && nameRulesDir.isDirectory()) {
-			String[] nameRulesList = nameRulesDir.list();
-			for (int i=0; i<nameRulesList.length; i++) {
-				if (nameRulesList[i]==null )
+	private void loadSequenceSpecifications(String path, File storageDir, boolean userDef){
+		if (storageDir.exists() && storageDir.isDirectory()) {
+			String[] fileNames = storageDir.list();
+			for (int i=0; i<fileNames.length; i++) {
+				if (fileNames[i]==null )
 					;
 				else {
-					String cPath = path + MesquiteFile.fileSeparator + nameRulesList[i];
-					loadNameRulesFile(cPath, nameRulesList[i], true, userDef);
+					String cPath = path + MesquiteFile.fileSeparator + fileNames[i];
+					loadSequenceSpecificationFile(cPath, fileNames[i], true, userDef);
 				}
 			}
 		}
 	}
-	private void loadNameParsingRules(){
+	private void loadSequenceSpecifications(){
 		String path = MesquiteModule.prefsDirectory+ MesquiteFile.fileSeparator + prefDirectoryName;
-		File nameRulesDir = new File(path);
-		loadNameParsingRules(path, nameRulesDir, true);
+		File storageDir = new File(path);
+		loadSequenceSpecifications(path, storageDir, true);
 	}
 
-	public ChromFileNameParsing chooseNameParsingRules(ChromFileNameParsing rule) {
+	public SequenceProfile chooseSequenceSpecifiation(SequenceProfile spec) {
 
-		ChromFileNameParsing nameParsingRule = rule;
+		SequenceProfile sequenceSpecification = spec;
 		MesquiteInteger buttonPressed = new MesquiteInteger(1);
-		chooseNameParsingRuleDialog = new ChooseNameParsingRuleDLOG(this, nameParsingRulesName, buttonPressed);
-		//chooseNameParsingRuleDialog.completeAndShowDialog();
+		chooseSequenceProfileDialog = new ManageGeneProfileDLOG(this, sequenceProfileName, buttonPressed);
 		boolean ok = (buttonPressed.getValue()==0);
 
 		if (ok && choice !=null) {
-			nameParsingRulesName = choice.getSelectedItem();
-			int sL = nameParsingRules.indexOfByName(nameParsingRulesName);
-			if (sL >=0 && sL < nameParsingRules.size()) {
-				nameParsingRule = (ChromFileNameParsing)nameParsingRules.elementAt(sL);
+			sequenceProfileName = choice.getSelectedItem();
+			int sL = sequenceProfileVector.indexOfByName(sequenceProfileName);
+			if (sL >=0 && sL < sequenceProfileVector.size()) {
+				sequenceSpecification = (SequenceProfile)sequenceProfileVector.elementAt(sL);
 			}
 			storePreferences();
 		}
-		chooseNameParsingRuleDialog.dispose();
-		chooseNameParsingRuleDialog = null;
-		return nameParsingRule;
+		chooseSequenceProfileDialog.dispose();
+		chooseSequenceProfileDialog = null;
+		return sequenceSpecification;
+	}
+	/*.................................................................................................................*/
+	public boolean manageSequenceProfiles() {
+
+		MesquiteInteger buttonPressed = new MesquiteInteger(1);
+		chooseSequenceProfileDialog = new ManageGeneProfileDLOG(this, sequenceProfileName, buttonPressed);
+
+		if (choice !=null) {
+			sequenceProfileName = choice.getSelectedItem();
+			int sL = sequenceProfileVector.indexOfByName(sequenceProfileName);
+			if (sL >=0 && sL < sequenceProfileVector.size()) {
+				sequenceProfile = (SequenceProfile)sequenceProfileVector.elementAt(sL);
+			}
+			storePreferences();
+		}
+		chooseSequenceProfileDialog.dispose();
+		chooseSequenceProfileDialog = null;
+		return true;
 	}
 
 
 	/*.................................................................................................................*/
-	public int numNameRules(){
-		return nameParsingRules.size();
+	public int numSpecifications(){
+		return sequenceProfileVector.size();
 	}
 	/*.................................................................................................................*/
-	public MesquiteString getNameRule(String name){
-		int i = nameParsingRules.indexOfByName(name);
+	public MesquiteString getSpecification(String name){
+		int i = sequenceProfileVector.indexOfByName(name);
 		if (i<0)
 			return null;
-		Listable listable = nameParsingRules.elementAt(i);
+		Listable listable = sequenceProfileVector.elementAt(i);
 		if (listable!=null)
 			return new MesquiteString(listable.getName());	
 		else 
 			return null;
 	}
 	/*.................................................................................................................*/
-	public int findNameRule(String name){
-		return nameParsingRules.indexOfByName(name);
+	public int findSpecificationIndex(String name){
+		return sequenceProfileVector.indexOfByName(name);
 	}
 	/*.................................................................................................................*/
-	public MesquiteString getNameRule(int i){
-		if (i<0 || i>= nameParsingRules.size())
+	public SequenceProfile getSequenceProfile(int index){
+		return (SequenceProfile)(sequenceProfileVector.elementAt(index));
+
+	}
+	/*.................................................................................................................*/
+	public MesquiteString getSpecification(int i){
+		if (i<0 || i>= sequenceProfileVector.size())
 			return null;
-		Listable listable = nameParsingRules.elementAt(i);
+		Listable listable = sequenceProfileVector.elementAt(i);
 		if (listable!=null)
 			return new MesquiteString(listable.getName());	
 		else 
 			return null;
 	}
 	/*.................................................................................................................*/
-	private String newNameRulePath(String name){
+	private String newSpecificationPath(String name){
 		String base = MesquiteModule.prefsDirectory+ MesquiteFile.fileSeparator + prefDirectoryName;
 		if (!MesquiteFile.fileExists(base)) {
 			File f = new File(base);
@@ -222,58 +240,58 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 		String candidate = base + MesquiteFile.fileSeparator + StringUtil.punctuationToUnderline(name)+ ".xml";
 		if (!MesquiteFile.fileExists(candidate))
 			return candidate;
-		candidate = base + MesquiteFile.fileSeparator  + "nameRule1.xml";
+		candidate = base + MesquiteFile.fileSeparator  + "specification1.xml";
 		int count = 2;
 		while (MesquiteFile.fileExists(candidate)){
-			candidate = base + MesquiteFile.fileSeparator  + "nameRule" + (count++) + ".xml";
+			candidate = base + MesquiteFile.fileSeparator  + "specification" + (count++) + ".xml";
 		}
 		return candidate;
 	}
 	/*.................................................................................................................*/
-	public void addNameRule(ChromFileNameParsing chromFileNameParsing, String name){
-		chromFileNameParsing.save(newNameRulePath(name), name);
-		nameParsingRules.addElement(chromFileNameParsing, false);	
+	public void addSpecification(SequenceProfile sequenceSpecification, String name){
+		sequenceSpecification.save(newSpecificationPath(name), name);
+		sequenceProfileVector.addElement(sequenceSpecification, false);	
 		choice.add(name);
-		nameParsingRulesName = name;
+		sequenceProfileName = name;
 		//	return s;
 	}
 	/*.................................................................................................................*/
-	public ChromFileNameParsing duplicateNameRule(ChromFileNameParsing chromFileNameParsing, String name){
-		ChromFileNameParsing rule = new ChromFileNameParsing(chromFileNameParsing);
-		rule.setName(name);
-		rule.setPath(newNameRulePath(name));
-		rule.save();
-		nameParsingRules.addElement(rule, false);	
+	public SequenceProfile duplicateNameRule(SequenceProfile sequenceSpecification, String name){
+		SequenceProfile specification = new SequenceProfile(sequenceSpecification);
+		specification.setName(name);
+		specification.setPath(newSpecificationPath(name));
+		specification.save();
+		sequenceProfileVector.addElement(specification, false);	
 		choice.add(name);
-		nameParsingRulesName = name;
-		return rule;
+		sequenceProfileName = name;
+		return specification;
 		//	return s;
 	}
 	/*.................................................................................................................*/
-	void renameNameRule(int i, String name){
-		ChromFileNameParsing rule = (ChromFileNameParsing)nameParsingRules.elementAt(i);
-		rule.setName(name);
-		rule.save();
+	void renameSpecification(int i, String name){
+		SequenceProfile specification = (SequenceProfile)sequenceProfileVector.elementAt(i);
+		specification.setName(name);
+		specification.save();
 		choice.remove(i);
 		choice.insert(name,i);
-		nameParsingRulesName=name;
+		sequenceProfileName=name;
 	}
 	/*.................................................................................................................*/
-	void deleteNameRule(int i){
-		ChromFileNameParsing rule = (ChromFileNameParsing)nameParsingRules.elementAt(i);
-		if (rule!=null) {
-			String oldTemplateName = rule.getName();
-			File f = new File(rule.path);
+	void deleteSpecification(int i){
+		SequenceProfile specification = (SequenceProfile)sequenceProfileVector.elementAt(i);
+		if (specification!=null) {
+			String oldTemplateName = specification.getName();
+			File f = new File(specification.path);
 			f.delete();		
 			//MesquiteString s = getNameRule(i);
 			//if (s !=null)
-			nameParsingRules.removeElement(rule, false);  //deletes it from the vector
+			sequenceProfileVector.removeElement(specification, false);  //deletes it from the vector
 			choice.remove(i);
 		}
 	}
 	/*.................................................................................................................*/
 	public String getName() {
-		return "Basic Chromatogram File Name Parser";
+		return "Sequence Profile for GenBank";
 	}
 
 }	
@@ -281,20 +299,13 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 
 
 /*=======================================================================*/
-class ChooseNameParsingRuleDLOG extends ExtensibleListDialog {
-	SampleAndPrimerFileNameParser ownerModule;
+class ManageGeneProfileDLOG extends ExtensibleListDialog {
+	SequenceProfileForGenBank ownerModule;
 	boolean editLastItem = false;
 
-	public ChooseNameParsingRuleDLOG (SampleAndPrimerFileNameParser ownerModule, String nameParsingRulesName, MesquiteInteger buttonPressed){
-		super(ownerModule.containerOfModule(), "File Name Rules Manager", "File Name Rules", buttonPressed, ownerModule.nameParsingRules);
+	public ManageGeneProfileDLOG (SequenceProfileForGenBank ownerModule, String nameParsingRulesName, MesquiteInteger buttonPressed){
+		super(ownerModule.containerOfModule(), "Sequence Profile Manager", "Sequence Profile", buttonPressed, ownerModule.sequenceProfileVector);
 		this.ownerModule = ownerModule;
-		/*
-			String message = "This dialog box allows you to create and edit snippets of code stored in the current file or project, to be inserted into batch files according to their names.";
-			message += "  They are used, for instance, in parametric bootstrapping to store commands (specific to this file) that might be placed in the batch file to instruct another program.";
-			message += " Code snippets are stored in the Mesquite file, and thus in order to save them, you need to save the Mesquite file.";
-			appendToHelpString(message);
-			setHelpURL(ownerModule,"");
-		 */		
 		completeAndShowDialog("Done", null, true, null);
 
 	}
@@ -308,24 +319,24 @@ class ChooseNameParsingRuleDLOG extends ExtensibleListDialog {
 	/*.................................................................................................................*/
 	/** this is the name of the class of objects */
 	public  String objectName(){
-		return "Chromatogram File Name Rule";
+		return "Sequence Profile";
 	}
 	/*.................................................................................................................*/
 	/** this is the name of the class of objects */
 	public  String pluralObjectName(){
-		return "Chromatogram File Name Rules";
+		return "Sequence Profiles";
 	}
 
 	/*.................................................................................................................*/
 	public Listable createNewElement(String name, MesquiteBoolean success){
 		hide();
-		ChromFileNameParsing chromFileNameParsing = new ChromFileNameParsing();
-		if (chromFileNameParsing.queryOptions(name)) {
-			addNewElement(chromFileNameParsing,name);  //add name to list
-			ownerModule.addNameRule(chromFileNameParsing, name);
+		SequenceProfile sequenceSpecification = new SequenceProfile();
+		if (sequenceSpecification.queryOptions(name)) {
+			addNewElement(sequenceSpecification,name);  //add name to list
+			ownerModule.addSpecification(sequenceSpecification, name);
 			if (success!=null) success.setValue(true);
 			setVisible(true);
-			return chromFileNameParsing;
+			return sequenceSpecification;
 
 		}
 		else  {
@@ -337,17 +348,17 @@ class ChooseNameParsingRuleDLOG extends ExtensibleListDialog {
 	/*.................................................................................................................*/
 	public void deleteElement(int item, int newSelectedItem){
 		hide();
-		ownerModule.deleteNameRule(item);
+		ownerModule.deleteSpecification(item);
 		setVisible(true);
 	}
 	/*.................................................................................................................*/
 	public void renameElement(int item, Listable element, String newName){
-		ownerModule.renameNameRule(item,newName);
+		ownerModule.renameSpecification(item,newName);
 	}
 	/*.................................................................................................................*/
 	public Listable duplicateElement(String name){
-		ChromFileNameParsing rule = ownerModule.duplicateNameRule((ChromFileNameParsing)currentElement, name);
-		return rule;
+		SequenceProfile sequenceSpecification = ownerModule.duplicateNameRule((SequenceProfile)currentElement, name);
+		return sequenceSpecification;
 	}
 	/*.................................................................................................................*/
 	public boolean getEditable(int item){
@@ -355,10 +366,10 @@ class ChooseNameParsingRuleDLOG extends ExtensibleListDialog {
 	}
 	/*.................................................................................................................*/
 	public void editElement(int item){
-		hide();
-		ChromFileNameParsing rule = ((ChromFileNameParsing)ownerModule.nameParsingRules.elementAt(item));
-		if (rule.queryOptions(rule.getName()))
-			rule.save();
+		//hide();
+		SequenceProfile sequenceSpecification = ((SequenceProfile)ownerModule.sequenceProfileVector.elementAt(item));
+		if (sequenceSpecification.queryOptions(sequenceSpecification.getName()))
+			sequenceSpecification.save();
 		setVisible(true);
 	}
 
