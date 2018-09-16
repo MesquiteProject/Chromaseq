@@ -28,6 +28,7 @@ public class SequenceProfile implements Listable, Explainable {
 	public String description = "";  
 	public String productName = "";  
 	public String seqIDSuffix = "";  
+	public String note = "";  
 	public boolean CDS = true;  
 	int gcode= 1;
 
@@ -46,6 +47,7 @@ public class SequenceProfile implements Listable, Explainable {
 			moltype = spec.moltype;
 			productName = spec.productName;
 			seqIDSuffix = spec.seqIDSuffix;
+			note = spec.note;
 			gcode = spec.gcode;
 			name = spec.name;
 			CDS = spec.CDS;
@@ -55,11 +57,20 @@ public class SequenceProfile implements Listable, Explainable {
 	public void setPath(String path){
 		this.path = path;
 	}
+	public void setNote(String note){
+		this.note = note;
+	}
+	public String getNote(){
+		return note;
+	}
 	public void setName(String name){
 		this.name = name;
 	}
 	public String getName(){
 		return name;
+	}
+	public String getProductName(){
+		return productName;
 	}
 	public String getDescription(){
 		return description;
@@ -96,6 +107,7 @@ public class SequenceProfile implements Listable, Explainable {
 		XMLUtil.addFilledElement(boundedByTokensElement, "productName",DocumentHelper.createCDATA(productName));
 		XMLUtil.addFilledElement(boundedByTokensElement, "seqIDSuffix",DocumentHelper.createCDATA(seqIDSuffix));
 		XMLUtil.addFilledElement(boundedByTokensElement, "gcode",DocumentHelper.createCDATA(""+gcode));
+		XMLUtil.addFilledElement(boundedByTokensElement, "note",DocumentHelper.createCDATA(""+note));
 		XMLUtil.addFilledElement(boundedByTokensElement, "CDS",DocumentHelper.createCDATA(MesquiteBoolean.toTrueFalseString(CDS)));
 		return XMLUtil.getDocumentAsXMLString(doc);
 	}
@@ -132,6 +144,7 @@ public class SequenceProfile implements Listable, Explainable {
 			moltype = boundedByTokens.elementText("moltype");
 			productName = boundedByTokens.elementText("productName");
 			seqIDSuffix = boundedByTokens.elementText("seqIDSuffix");
+			note = boundedByTokens.elementText("note");
 			gcode = MesquiteInteger.fromString(boundedByTokens.elementText("gcode"));			
 			CDS = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementText("CDS"));			
 			//translateSampleCodes = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementTextTrim("translateSampleCodes"));
@@ -149,6 +162,8 @@ public class SequenceProfile implements Listable, Explainable {
 		sb.append("[location = " + location + "] ");
 		sb.append("[gcode = " + gcode + "] ");
 		sb.append("[moltype = " + moltype + "] ");
+		if (StringUtil.notEmpty(note))
+			sb.append("[note = " + note + "] ");
 		return sb.toString();
 	}
 	/*.................................................................................................................*/
@@ -269,6 +284,7 @@ public class SequenceProfile implements Listable, Explainable {
 			dialog.addLabel("Sequence Profile");
 
 		SingleLineTextField descriptionField = dialog.addTextField("description of sequence:", description,80, true);
+		SingleLineTextField productNameField = dialog.addTextField("Product name:", productName, 80, true);
 		int item = StringArray.indexOfIgnoreCase(locationStrings(), location);
 		if (item<0) item=0;
 		Choice locationChoice = dialog.addPopUpMenu("Location", locationStrings(), 	item);
@@ -276,7 +292,7 @@ public class SequenceProfile implements Listable, Explainable {
 		Choice geneticCodeChoice = dialog.addPopUpMenu("Genetic Code", gCodeStrings(), gcode-1);
 		if (item<0) item=0;
 		Choice moltypeChoice = dialog.addPopUpMenu("Molecular type", moltypeStrings(), 	item);
-		SingleLineTextField productNameField = dialog.addTextField("Product name:", productName, 80, true);
+		SingleLineTextField noteField = dialog.addTextField("Note:", note,30, true);
 		SingleLineTextField seqIDSuffixField = dialog.addTextField("SeqID suffix:", seqIDSuffix,30, true);
 		Checkbox CDSbox = dialog.addCheckBox("CDS", CDS);
 
@@ -297,6 +313,7 @@ public class SequenceProfile implements Listable, Explainable {
 			moltype = moltypeChoice.getSelectedItem();
 			productName = productNameField.getText();
 			seqIDSuffix = seqIDSuffixField.getText();
+			note = noteField.getText();
 			gcode = geneticCodeChoice.getSelectedIndex()+1;
 			CDS =CDSbox.getState();
 			//			translateSampleCodes = translateCodesBox.getState();

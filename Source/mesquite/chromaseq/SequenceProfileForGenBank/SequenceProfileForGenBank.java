@@ -141,6 +141,7 @@ public class SequenceProfileForGenBank extends SequenceProfileManager {
 	private void loadSequenceSpecifications(String path, File storageDir, boolean userDef){
 		if (storageDir.exists() && storageDir.isDirectory()) {
 			String[] fileNames = storageDir.list();
+			StringArray.sort(fileNames);
 			for (int i=0; i<fileNames.length; i++) {
 				if (fileNames[i]==null )
 					;
