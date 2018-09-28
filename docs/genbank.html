@@ -308,40 +308,42 @@ code <img src="images/tab.gif" width="8" height="13" /> organism <img src="image
 <li>unassigned DNA </li>
 <li>unassigned RNA</li>
 </ul>
+<p><em>SeqID suffix</em>: This should be short, and should uniquely distinguish the sequences in one matrix from those in a second matrix that you might submit. For example, it could be the gene name. This will be appended onto each taxon name to form the SeqID for the sequences in the matrix to be submitted.</p>
 <p>The optional fields are:</p>
-<p>Product name: If the entire fragment to be submitted includes genes for only one product, then you can include the producdt name here. In contrast, if </p>
-<p>Note:</p>
-<p>SeqID suffix:</p>
-<p>&nbsp;</p>
+<p><em>Product name</em>: If the entire fragment to be submitted includes genes for only one product, then you can include the product name here. As an alternative, you could specify character groups (see above) and check the &quot;use character group name as product name for coding regions&quot; option in the main export dialog box. For protein-coding regions, you must specify a product name one of these two ways.</p>
+<p><em>Note</em>: If you wish to include a note with each of the entries, then enter it in the notes field. For example, you could give details about the fragment of the gene sequenced, or other metadata of relevance to your project.</p>
 <h3>Sharing sequence profiles</h3>
 <p>The sequence profiles are stored in the &quot;SequenceProfilesForGenBank&quot; directory that is in the &quot;Mesquite_Prefs&quot; directory of your &quot;Mesquite_Support_Files&quot; directory. You can put copies of any of these files into the equivalent place on another computer to make those profiles available to Mesquite on that other computer.</p>
 <h3>Creating the file containing information about the paper</h3>
 <p>Go to the <a href="#">NCBI Submission Portal</a><a href="https://submit.ncbi.nlm.nih.gov/genbank/template/submission/"></a> and create a Submission Template for your paper. This will contain information about your submission to GenBank. Once you have filled in the form, press the Create Template button at the bottom of the page. That will create a text file containing information about your paper, and that file will be downloaded to your computer. Move that file (which will likely be called &quot;template.sbt.txt&quot;), and move it into the same folder as the fasta files you created. You will only need to make this file once; the one file can be used for all of your submissions for that paper.</p>
 <h3>Download tbl2asn and get it ready for use</h3>
-<p>To create the file for submission to GenBank, you will need to use the program tbl2asn. Information about this program is availalble from</p>
+<p>To create the file for submission to GenBank, you will need to use the program tbl2asn. Information about this program is available from</p>
 <p><a href="https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/">https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<h3>Importing the FASTA file into Sequin and submitting your sequences</h3>
+<p>Download tbl2asn, and put it in the same directory as the files you have created. </p>
+<p>You may need to make the file executable. On a UNIX-based machine (MacOSX or Linux), open up a shell (e.g., Terminal on a Mac), cd into the directory containing the file, and then use a command like the following:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;chmod +x mac.tbl2asn</p>
+<h3>Using tbl2asn</h3>
 <ul>
-  <li>Download the latest version of Sequin.</li>
-  <li>In the Welcome to Sequin window, press Start New Submission</li>
-  <li>In the Submitting Authors window, enter the appropriate information for
-    each of the 4 tabs. If you have more than one gene to submit, we recommend
-    that you click back to the Submission tab, and chose File&gt;Export Submitter
-    Info, and save a file containing the entries. For the next gene, you can
-    then choose File&gt;Import Submitter Info and choose that file, saving you the
-    effort of re-entering those data.</li>
-  <li>For standard phylogenetic matrices, in the Sequence Format window, choose Phylogenetic Study, and Sequence
-    data format as FASTA. </li>
-  <li>In the Organism and Sequence window, choose Import Nucleotide FASTA</li>
-  <li>Struggle with the arcane interface of Sequin to complete your submission.</li>
+  <li>On the Mac or Linux, open up a UNIX shell. (On the Mac, you can start the application called Terminal in the Utilities folder in the Applications folder.) On Windows, open up the command line tool. </li>
+  <li>cd into the directory containing tbl2asn and all of the files.</li>
+  <li>type one of the following commands and hit Return, where you substitute &quot;fileName.fsa&quot; with the name of the FASTA file:
+    <ul>
+      <li>MacOSX: <strong>./mac.tbl2asn -t template.sbt.txt -a s2 -V vb -i fileName.fsa</strong></li>
+      <li>Windows: <strong>tbl2asn.exe -t template.sbt.txt -a s2 -V vb -i fileName.fsa</strong></li>
+      <li>Linux: <strong>./tbl2asn -t template.sbt.txt -a s2 -V vb -i fileName.fsa</strong></li>
+    </ul>
+  </li>
+  </ul>
+<p>If you wish to see more details about the command-line options available for tbl2asn, see <a href="https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/">https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/</a></p>
+<ul>
+  <li>once you have run tbl2asn, several files will be produced. Examine the errorsummary.val file for a summary of errors and warnings. If you wish to see the GenBank files as they would be formed, examing the .gbf files in a text editor.</li>
 </ul>
-<p></p>
 <p>&nbsp;</p>
+<p>&nbsp;</p>
+<hr />
 <h2>Preparation of files for submission by Sequin</h2>
 
-<p>This system is built to submit sequences from one gene at a time.</p>
+<p>This older system is built to submit sequences from one gene at a time.</p>
 <p>To prepare
     files for submission by Sequin, you will need the following: </p>
 <ol>

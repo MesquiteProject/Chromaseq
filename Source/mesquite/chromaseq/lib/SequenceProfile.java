@@ -294,7 +294,7 @@ public class SequenceProfile implements Listable, Explainable {
 		if (item<0) item=0;
 		Choice moltypeChoice = dialog.addPopUpMenu("Molecular type*", moltypeStrings(), 	item);
 		SingleLineTextField noteField = dialog.addTextField("Note:", note,80, true);
-		SingleLineTextField seqIDSuffixField = dialog.addTextField("SeqID suffix:", seqIDSuffix,30, true);
+		SingleLineTextField seqIDSuffixField = dialog.addTextField("SeqID suffix*:", seqIDSuffix,30, true);
 		//Checkbox CDSbox = dialog.addCheckBox("CDS", CDS);
 
 		dialog.addHorizontalLine(2);
