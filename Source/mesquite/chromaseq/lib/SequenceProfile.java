@@ -29,7 +29,7 @@ public class SequenceProfile implements Listable, Explainable {
 	public String productName = "";  
 	public String seqIDSuffix = "";  
 	public String note = "";  
-	public boolean CDS = true;  
+	//public boolean CDS = true;  
 	int gcode= 1;
 
 	public String path;
@@ -50,7 +50,7 @@ public class SequenceProfile implements Listable, Explainable {
 			note = spec.note;
 			gcode = spec.gcode;
 			name = spec.name;
-			CDS = spec.CDS;
+//			CDS = spec.CDS;
 		}
 	}
 
@@ -75,9 +75,10 @@ public class SequenceProfile implements Listable, Explainable {
 	public String getDescription(){
 		return description;
 	}
-	public boolean isCDS(){
+/*	public boolean isCDS(){
 		return CDS;
 	}
+	*/
 	public String getLocation(){
 		return location;
 	}
@@ -108,7 +109,7 @@ public class SequenceProfile implements Listable, Explainable {
 		XMLUtil.addFilledElement(boundedByTokensElement, "seqIDSuffix",DocumentHelper.createCDATA(seqIDSuffix));
 		XMLUtil.addFilledElement(boundedByTokensElement, "gcode",DocumentHelper.createCDATA(""+gcode));
 		XMLUtil.addFilledElement(boundedByTokensElement, "note",DocumentHelper.createCDATA(""+note));
-		XMLUtil.addFilledElement(boundedByTokensElement, "CDS",DocumentHelper.createCDATA(MesquiteBoolean.toTrueFalseString(CDS)));
+//		XMLUtil.addFilledElement(boundedByTokensElement, "CDS",DocumentHelper.createCDATA(MesquiteBoolean.toTrueFalseString(CDS)));
 		return XMLUtil.getDocumentAsXMLString(doc);
 	}
 	public void save(String path, String name){
@@ -146,7 +147,7 @@ public class SequenceProfile implements Listable, Explainable {
 			seqIDSuffix = boundedByTokens.elementText("seqIDSuffix");
 			note = boundedByTokens.elementText("note");
 			gcode = MesquiteInteger.fromString(boundedByTokens.elementText("gcode"));			
-			CDS = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementText("CDS"));			
+//			CDS = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementText("CDS"));			
 			//translateSampleCodes = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementTextTrim("translateSampleCodes"));
 		} else {
 			return false;
@@ -283,18 +284,18 @@ public class SequenceProfile implements Listable, Explainable {
 		else
 			dialog.addLabel("Sequence Profile");
 
-		SingleLineTextField descriptionField = dialog.addTextField("description of sequence:", description,80, true);
+		SingleLineTextField descriptionField = dialog.addTextField("Description of sequence*:", description,80, true);
 		SingleLineTextField productNameField = dialog.addTextField("Product name:", productName, 80, true);
 		int item = StringArray.indexOfIgnoreCase(locationStrings(), location);
 		if (item<0) item=0;
-		Choice locationChoice = dialog.addPopUpMenu("Location", locationStrings(), 	item);
+		Choice locationChoice = dialog.addPopUpMenu("Location*", locationStrings(), 	item);
 		item = StringArray.indexOfIgnoreCase(moltypeStrings(), moltype);
-		Choice geneticCodeChoice = dialog.addPopUpMenu("Genetic Code", gCodeStrings(), gcode-1);
+		Choice geneticCodeChoice = dialog.addPopUpMenu("Genetic Code*", gCodeStrings(), gcode-1);
 		if (item<0) item=0;
-		Choice moltypeChoice = dialog.addPopUpMenu("Molecular type", moltypeStrings(), 	item);
+		Choice moltypeChoice = dialog.addPopUpMenu("Molecular type*", moltypeStrings(), 	item);
 		SingleLineTextField noteField = dialog.addTextField("Note:", note,80, true);
 		SingleLineTextField seqIDSuffixField = dialog.addTextField("SeqID suffix:", seqIDSuffix,30, true);
-		Checkbox CDSbox = dialog.addCheckBox("CDS", CDS);
+		//Checkbox CDSbox = dialog.addCheckBox("CDS", CDS);
 
 		dialog.addHorizontalLine(2);
 
@@ -315,7 +316,7 @@ public class SequenceProfile implements Listable, Explainable {
 			seqIDSuffix = seqIDSuffixField.getText();
 			note = noteField.getText();
 			gcode = geneticCodeChoice.getSelectedIndex()+1;
-			CDS =CDSbox.getState();
+//			CDS =CDSbox.getState();
 			//			translateSampleCodes = translateCodesBox.getState();
 		}
 		//storePreferences();  // do this here even if Cancel pressed as the File Locations subdialog box might have been used
