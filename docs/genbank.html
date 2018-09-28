@@ -188,11 +188,11 @@
   files for submission by tbl2asn, you will need the following: </p>
 <ol>
   <li>A Mesquite file containing your sequences from one gene.</li>
-  <li>A tab-delimited text file containing information about each sequence to
-    be submitted. This file contains organism's name, authority, locality data,
+  <li>A tab-delimited text file containing information about each sample whose data will be submitted. This file contains organism's name, authority, locality data,
     etc. This is called the &quot;OTU ID code Database&quot; or &quot;OTU ID code DB&quot; file in Mesquite.</li>
   </ol>
-<p>The form of the tab-delimited OTU (specimen voucher) ID code file is as follows. The first row
+<h3>Creating the sample table</h3>
+<p>The form of the tab-delimited OTU (specimen voucher) ID code file containing the information about the samples is as follows. The first row
   must begin with the word &quot;code&quot;, followed by a tab-delimited list
   of the official GenBank names of the fields that appear in each of the later
   lines. For example,
@@ -228,8 +228,11 @@ code <img src="images/tab.gif" width="8" height="13" /> organism <img src="image
     USA: Mississippi: Walthall Co., Tylertown <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
 1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
     USA: Iowa: Jones Co., Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
-<p>&nbsp;</p>
-<h3>Creating the FASTA file</h3>
+<h3>Preparing the matrix</h3>
+<p>For each matrix to be submitted, you will need to annotated the sequences appropriately. </p>
+<p>In particular, the codon positions will need to be specified if any of the sequence are protein-coding. You can specify the codon positions in the List of Characters window in Mesquite. This does not necessarily require that the sequences be aligned, but it will be easier if they are. If they are not aligned, then each will need to be in the correct reading frame (which you can accomplish using the &quot;Alter&gt;Shift to Minimize Stop Codons&quot; tool in Mesquite's matrix editor after you have specified the codon positions in general. </p>
+<p>In addition, if there are distinct regions in the fragment that need to be specified in your GenBank submission (e.g., exons and introns, or multiple genes with intervening non-transcribed regions), then you will need to specify these using  Character Groups, which you can do in Mesquite's List of Characters window.</p>
+<h3>Creating the FASTA file and other files needed by tbl2asn</h3>
 <p>Once you have completed the OTU ID code DB file, then in
   Mesquite open your file containing the sequences, and go to the Taxa List
   Window (Taxa&amp;Tree&gt;List
@@ -256,11 +259,67 @@ code <img src="images/tab.gif" width="8" height="13" /> organism <img src="image
   and in the dialog that appears, choose &quot;FASTA (DNA/RNA) for tbl2asn&quot;.
   You will be queried for options:</p>
 <p><img src="images/ExportTbl2asnDialog.png" width="511" height="402" alt=""/></p>
-<h3>&nbsp;</h3>
+<p>In this dialog box, you will need to choose a sequence profile and various other options. If you haven't created the relevant sequence profile, you should do that first. Sequence profiles are described in the following sections.</p>
+<p>In addition to specifiying a sequence profile, you will need to specify various aspects of how Chromaseq formulates  entries. </p>
+<p>If you wish to have the OTU ID code added to the DEFINITION line (between the organismal specification and the description of the sequence), then check the &quot;add OTU (Specimen) ID Code to DEFINITION&quot; option. If you have that option checked, then the text you include in the next field will be included immediately in front of the ID code.</p>
+<p>A GenBank submission requires that each submission be specied by a &quot;seqID&quot;, a text string that must be unique for each sequence to be submitted. By default, Mesquite uses the taxon name, to which  the gene fragment name can be appended, as the seqID. However, GenBank will automatically truncate the seqID if it is too long. If you have some important text at the end of the seqID that you don't want removed by GenBank, then yoiu can check the &quot;if seqID is too long, shorten in middle&quot; option.</p>
+<p>If you are using character gropus to specify the product names for regions of your submission, you should check &quot;use character group name as product name for coding regions&quot; option.</p>
 <h3>Creating a sequence profile</h3>
+<p>A sequence profile stores information about a particular gene, gene fragment, or other region of DNA that you might wish to submit to GenBank. For example, if you have sequenced a region of the CAD gene, you might wish to create a sequence profile for that region. The metadata you include in the sequence profile will then be included along with the rest of your GenBank submission. This sequence profile is then saved by Chromaseq, and the next time you wish to submit sequences of that fragment, you can simply choose that profile from the pull-down menu.</p>
+<p>To create a sequence profile, first press the Manage button in the main dialog box. The Sequence Profile Manager will appear:</p>
 <p><img src="images/sequenceProfileManager.png" width="539" height="336" alt=""/></p>
-<h3>&nbsp;</h3>
-<p><img src="images/sequenceProfileDialog.png" width="716" height="363" alt=""/></p>
+<p>To create a new profile, press &quot;New...&quot;; to edit the contents of a previously created profile, select it in the list and press &quot;Edit...&quot;. The other buttons should be self-explanatory.</p>
+<p>By pressing New or Edit, you will be presented with the dialog box in which you can enter data for the sequence profile.</p>
+<p><img src="images/sequenceProfileDialog.png" width="717" height="363" alt=""/></p>
+<p>You will need to enter data for the following fields:</p>
+<p><em>Description of sequence</em>: the text you enter in this field will be appended to the end of the DESCRIPTION field of GenBank</p>
+<p><em>Location</em>: This is the location of the source of the molecular data. The options are:</p>
+<ul><li>Genomic</li> 
+<li>Mitochondrion</li> 
+<li>Chloroplast</li> 
+<li>Apicoplast</li> 
+<li>Chromatophore</li> 
+<li>Chromoplast</li> 
+<li>Cyanelle</li> 
+<li>Endogenous_virus</li> 
+<li>Extrachromosomal</li> 
+<li>Hydrogenosome</li> 
+<li>Kinetoplast</li> 
+<li>Leucoplast</li> 
+<li>Macronuclear</li> 
+<li>Nucleomorph</li> 
+<li>Plasmid</li> 
+<li>Plastid</li> 
+<li>Proplastid</li> 
+<li>Proviral</li> 
+</ul>
+<p><em>Genetic Code</em>: You will need to specify the genetic code for any protein-coding sequences. For non-coding regions, you can leave this to &quot;The Standard Code&quot;.</p>
+<p><em>Molecular type</em>: This is the type of molecular data being submitted. The options are:	</p>
+<ul>
+<li>genomic DNA </li>
+<li>genomic RNA </li>
+<li>mRNA </li>
+<li>tRNA </li>
+<li>rRNA </li>
+<li>other RNA </li>
+<li>other DNA </li>
+<li>transcribed RNA </li>
+<li>viral cRNA </li>
+<li>unassigned DNA </li>
+<li>unassigned RNA</li>
+</ul>
+<p>The optional fields are:</p>
+<p>Product name: If the entire fragment to be submitted includes genes for only one product, then you can include the producdt name here. In contrast, if </p>
+<p>Note:</p>
+<p>SeqID suffix:</p>
+<p>&nbsp;</p>
+<h3>Sharing sequence profiles</h3>
+<p>The sequence profiles are stored in the &quot;SequenceProfilesForGenBank&quot; directory that is in the &quot;Mesquite_Prefs&quot; directory of your &quot;Mesquite_Support_Files&quot; directory. You can put copies of any of these files into the equivalent place on another computer to make those profiles available to Mesquite on that other computer.</p>
+<h3>Creating the file containing information about the paper</h3>
+<p>Go to the <a href="#">NCBI Submission Portal</a><a href="https://submit.ncbi.nlm.nih.gov/genbank/template/submission/"></a> and create a Submission Template for your paper. This will contain information about your submission to GenBank. Once you have filled in the form, press the Create Template button at the bottom of the page. That will create a text file containing information about your paper, and that file will be downloaded to your computer. Move that file (which will likely be called &quot;template.sbt.txt&quot;), and move it into the same folder as the fasta files you created. You will only need to make this file once; the one file can be used for all of your submissions for that paper.</p>
+<h3>Download tbl2asn and get it ready for use</h3>
+<p>To create the file for submission to GenBank, you will need to use the program tbl2asn. Information about this program is availalble from</p>
+<p><a href="https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/">https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/</a></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <h3>Importing the FASTA file into Sequin and submitting your sequences</h3>
