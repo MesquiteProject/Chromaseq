@@ -82,6 +82,9 @@ public class SequenceProfile implements Listable, Explainable {
 	public String getLocation(){
 		return location;
 	}
+	public int getTranslationTable(){
+		return gcode;
+	}
 	public String getExplanation(){
 		return explanation;
 	}
@@ -161,7 +164,10 @@ public class SequenceProfile implements Listable, Explainable {
 	//	sb.append("[productName = " + productName + "] ");
 	//	sb.append("[description = " + description + "] ");
 		sb.append("[location = " + location + "] ");
-		sb.append("[gcode = " + gcode + "] ");
+		if (location.equalsIgnoreCase("Mitochondrion"))
+			sb.append("[mgcode = " + gcode + "] ");
+		else
+			sb.append("[gcode = " + gcode + "] ");
 		sb.append("[moltype = " + moltype + "] ");
 		if (StringUtil.notEmpty(note))
 			sb.append("[note = " + note + "] ");
