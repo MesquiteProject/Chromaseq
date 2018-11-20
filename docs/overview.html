@@ -40,8 +40,8 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Overview<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.31+<br />
-      28 September 2018<br /></td>
+    <td width="14%">Version 1.5 beta<br />
+      20 November 2018<br /></td>
   </tr>
 </table>
 
@@ -116,11 +116,20 @@
   </div>
 </div>
 
+<div id="GenBankPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">GenBank Submission ˇ</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank via tbl2asn</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('genbankSequin.html');">GenBank via Sequin</a></td></tr>
+		</table>
+  </div>
+</div>
+
 <div id="OtherFeaturesPanel" class="CollapsiblePanel">
   <div class="CollapsiblePanelTab" tabindex="0">Other Features ˇ</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
   			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
@@ -231,6 +240,7 @@ var ProcessingChromatoPanel = null;
 var PreparingDataPanel = null;
 var CreditPanel = null;
 var HelpPanel = null;
+var GenBankPanel = null;
 var OtherFeaturesPanel = null;
 var TechnicalPanel = null;
 
@@ -264,6 +274,11 @@ if (qsParm['HelpPanel']=='open')
 else
  	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: false});
 
+if (qsParm['GenBankPanel']=='open')
+ 	GenBankPanel = new Spry.Widget.CollapsiblePanel("GenBankPanel", {contentIsOpen: true});
+else
+ 	GenBankPanel = new Spry.Widget.CollapsiblePanel("GenBankPanel", {contentIsOpen: false});
+    
 if (qsParm['OtherFeaturesPanel']=='open')
  	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: true});
 else

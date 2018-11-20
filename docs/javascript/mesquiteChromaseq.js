@@ -9,6 +9,7 @@ qsParm['PreparingDataPanel'] = null;
 qsParm['CreditPanel'] = null;
 qsParm['HelpPanel'] = null;
 qsParm['OtherFeaturesPanel'] = null;
+qsParm['GenBankPanel'] = null;
 qsParm['TechnicalPanel'] = null;
 
 qs();
@@ -52,6 +53,10 @@ parameterString = function()
 	if (HelpPanel.isOpen()){
 		if (paramString=='') paramString+='?'; else paramString+='&';
 		paramString+= 'HelpPanel=open';
+	}
+	if (GenBankPanel.isOpen()){
+		if (paramString=='') paramString+='?'; else paramString+='&';
+		paramString+= 'GenBankPanel=open';
 	}
 	if (OtherFeaturesPanel.isOpen()){
 		if (paramString=='') paramString+='?'; else paramString+='&';

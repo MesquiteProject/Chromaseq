@@ -5,7 +5,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Voucher Information</title>
+<title>Submitting sequences to GenBank</title>
 <!-- InstanceEndEditable -->
 
 <![endif]--><!--[if IE]>
@@ -28,8 +28,7 @@
 <script type="text/javascript" src="SpryAssets/SpryURLUtils.js"></script>
 <script type="text/javascript" src="javascript/mesquiteChromaseq.js"></script>
 
-<!-- InstanceBeginEditable name="head" -->
-<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" --><!-- InstanceEndEditable -->
 </head>
 
 <body bgcolor="#f4f0e2" class="thrColFixHdr" >
@@ -39,7 +38,8 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Voucher Information<!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Submitting
+      Sequences via Sequin<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%">Version 1.5 beta<br />
       20 November 2018<br /></td>
@@ -190,7 +190,98 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-<h2>Voucher Information</h2>
+<h2>Preparation of files for submission by Sequin</h2>
+
+<p>This older system is built to submit sequences from one gene at a time. As Sequin is no longer supported by NCBI, this is a legacy system. The <a href="genbank.html">primary tool</a> for submitting sequences using Chromaseq is that which uses tbl2asn.</p>
+<p>To prepare
+    files for submission by Sequin, you will need the following: </p>
+<ol>
+  <li>A Mesquite file containing your sequences from one gene.</li>
+  <li>A tab-delimited text file containing information about each sequence to
+    be submitted. This file contains organism's name, authority, locality data,
+    etc. This is called the &quot;OTU ID code Database&quot; or &quot;OTU ID code DB&quot; file in Mesquite.</li>
+  </ol>
+<p>The form of the tab-delimited OTU (specimen voucher) ID code file is as follows. The first row
+  must begin with the word &quot;code&quot;, followed by a tab-delimited list
+  of the official GenBank names of the fields that appear in each of the later
+  lines. For example,
+  if the fields to be included are the organismal name, the taxonomic authority,
+  the name of the person who identified the specimen, the country (locality)
+  field, the latitude and longitude, and the information identifying the specimen
+  voucher, then this first line would appear as follows:</p>
+<pre class="monospaced"> code <img src="images/tab.gif" width="8" height="13" /> organism <img src="images/tab.gif" width="8" height="13" /> authority <img src="images/tab.gif" width="8" height="13" /> identified-by <img src="images/tab.gif" width="8" height="13" /> country <img src="images/tab.gif" width="8" height="13" /> lat-lon <img src="images/tab.gif" width="8" height="13" /> specimen-voucher</pre>
+<p>(The black triangle,  <img src="images/tab.gif" width="8" height="13" />, represents
+  a tab.)</p>
+<p>The official GenBank names of the fields and the definition of those fields
+  is given on the <a href="http://www.ncbi.nlm.nih.gov/Sequin/modifiers.html">Modifiers
+  for FASTA Definition Lines</a> page, with more information on the <a href="http://www.ncbi.nlm.nih.gov/Sequin/sequin.hlp.html#ModifiersPage">Sequin
+  Help</a>  page. You may include whatever fields you need.</p>
+<p> On the following lines are the data about  the specimens, one line
+  for each specimen. The first item in the line is and ID code. This ID code
+  could be your specimen voucher code, or some other unique identifying string.
+  You will enter these codes in Mesquite for each sequence, which will allow
+  the system to associate the OTU ID code DB information with that particular sequence.
+  The following tab-delimited items in the line are the entries for that particular
+  specimen. For the example file with the header line shown above, here are two
+  lines that contain the information for specimen number 1290, and specimen number
+  1633:</p>
+<pre class="monospaced">
+1290 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) paraenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion paraenulum Maddison <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
+    USA: Mississippi: Walthall Co., Tylertown <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
+1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
+    USA: Iowa: Jones Co., Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
+<p>Each of these lines is shown extending over two lines, but that is only for ease of display on this web page. There are thus a total of three lines in this example OTU ID Code DB file:</p>
+<pre class="monospaced">
+code <img src="images/tab.gif" width="8" height="13" /> organism <img src="images/tab.gif" width="8" height="13" /> authority <img src="images/tab.gif" width="8" height="13" /> identified-by <img src="images/tab.gif" width="8" height="13" /> country <img src="images/tab.gif" width="8" height="13" /> lat-lon <img src="images/tab.gif" width="8" height="13" /> specimen-voucher
+1290 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) paraenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion paraenulum Maddison <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
+    USA: Mississippi: Walthall Co., Tylertown <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
+1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
+    USA: Iowa: Jones Co., Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
+
+<p>&nbsp;</p>
+<h3>Creating the FASTA file</h3>
+<p>Once you have completed the OTU ID code DB file, then in
+    Mesquite open your file containing the sequences, and go to the Taxa List
+  Window (Taxa&amp;Tree&gt;List
+    of
+    Taxa). You will need to show two new columns in this table. Choose Columns&gt;OTU
+    Database and Columns&gt;OTU ID Code. This will show those two columns. Select
+    the entire table (with Select All), and touch on the title of the OTU ID code 
+  DB column. A menu will appear in which you can choose to browse for your tab-delimited
+    OTU ID code DB file. Select that file. The OTU ID code  DB column should indicate
+  which
+    OTU ID code  DB file to use for each sequence. (In this example, all sequences
+  are using the same OTU ID code  DB file.) </p>
+<p>Now you need to enter into the OTU code  ID field the ID codes for each of the
+  sequences. In the example here, the OTU ID code for the first sequence
+  is 1290. This tells Mesquite to look
+   in the OTU ID code DB file for the line whose code is 1290 to get the OTU
+  information for that sequence. To enter ID codes, use the editing tool (<img src="images/ibeam.png" width="28" height="28" align="absmiddle" />) select the entry, or select the sequence and
+  use the popup menu that appears when you touch on the OTU ID Code title at the
+  top of the column. Once you have entered all of the OTU ID codes, the Taxa List Window should look something
+  like this:</p>
+<p align="center"><img src="images/taxonListVoucher.png" width="468" height="226" /></p>
+<p>At this point, you are ready to export a FASTA file with your voucher information
+  contained within it, ready to be imported in Sequin. Do this by choose File&gt;Export,
+  and in the dialog that appears, choose &quot;FASTA (DNA/RNA) for GenBank Deposition&quot;.
+  You will be queried for options:</p>
+<p align="center"><img src="images/FASTAGenbank.jpg" width="493" height="367" /></p>
+<p>&nbsp;</p>
+<h3>Importing the FASTA file into Sequin and submitting your sequences</h3>
+<ul>
+  <li>Download the latest version of Sequin.</li>
+  <li>In the Welcome to Sequin window, press Start New Submission</li>
+  <li>In the Submitting Authors window, enter the appropriate information for
+    each of the 4 tabs. If you have more than one gene to submit, we recommend
+    that you click back to the Submission tab, and chose File&gt;Export Submitter
+    Info, and save a file containing the entries. For the next gene, you can
+    then choose File&gt;Import Submitter Info and choose that file, saving you the
+    effort of re-entering those data.</li>
+  <li>For standard phylogenetic matrices, in the Sequence Format window, choose Phylogenetic Study, and Sequence
+    data format as FASTA. </li>
+  <li>In the Organism and Sequence window, choose Import Nucleotide FASTA</li>
+  <li>Struggle with the arcane interface of Sequin to complete your submission.</li>
+</ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <!-- InstanceEndEditable -->
