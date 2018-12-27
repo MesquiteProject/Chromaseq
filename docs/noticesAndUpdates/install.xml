@@ -4,31 +4,32 @@
 		<version>1</version>
 
 		<notice><!--Chromaseq notice of update -->
-			<forBuildNumberEqualOrLess>885</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>12</noticeNumber>
+			<forBuildNumberEqualOrLess>915</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<noticeNumber>13</noticeNumber>
 			<messageType>alert</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>012</updateVersion>
-			<packageName>Chromaseq version 1.31</packageName>
+			<updateVersion>013</updateVersion>
+			<packageName>Chromaseq version 1.5</packageName>
 			<message>
 			<![CDATA[<img src="http://chromaseq.mesquiteproject.org/splash.gif"><p>
-			In order to install Chromaseq, you need to first update to Mesquite version 3.5.  
-			You can get Mesquite 3.5 at <a href = "http://www.mesquiteproject.org/Installation.html">http://www.mesquiteproject.org/Installation.html</a>
+			In order to install this version of Chromaseq, you need to first update to Mesquite version 3.6.  
+			You can get Mesquite 3.6 at <a href = "http://www.mesquiteproject.org/Installation.html">http://www.mesquiteproject.org/Installation.html</a>
 			]]>
 			</message>
 		</notice>
 		<notice><!--Chromaseq install -->
-			<forBuildNumberEqualOrGreater>885</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>17</noticeNumber>
+			<forBuildNumberEqualOrGreater>916</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<noticeNumber>18</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>017</updateVersion>
-			<packageName>Chromaseq version 1.31</packageName>
+			<updateVersion>018</updateVersion>
+			<packageName>Chromaseq version 1.5</packageName>
 			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
 			Chromaseq is a package of Mesquite modules designed for analyzing chromatograms, by making contigs, allowing one to 
-			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap.  
+			view chromatograms from within Mesquite, make base calls, etc., with the help of Phred and Phrap. It also provides tools
+			for submission of sequences to GenBank.
 			For more information about the features of Chromaseq, see the 
 			<a href = "http://chromaseq.mesquiteproject.org">Chromaseq web page</a>. (3)
 			]]>
@@ -36,9 +37,9 @@
 				<install>
 					<location>mesquite</location>
 					<file>chromaseq</file>
-					<url>https://github.com/MesquiteProject/Chromaseq/releases/download/1.31/chromaseq.1.31.zip</url>
+					<url>https://github.com/MesquiteProject/Chromaseq/releases/download/1.5/chromaseq.1.5.zip</url>
 					<treatment>unzip</treatment>
-					<updateVersion>017</updateVersion>
+					<updateVersion>018</updateVersion>
 				</install>
 		</notice>
 		
