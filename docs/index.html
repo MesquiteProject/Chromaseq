@@ -49,8 +49,10 @@
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" --><!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%">Version 1.31<br />
-      4 May 2018<br /></td>
+    <td width="14%"><p>Version 1.5 <br />
+      27 December
+2018<br />
+      </p></td>
   </tr>
 </table>
 
@@ -70,12 +72,6 @@
   </div>
   <div id="NonCollapsiblePanel">
     <a href="javascript:pageLink('download.html')">Download</a>
-  </div>
-  <div id="NonCollapsiblePanel">
-    <a href="javascript:pageLink('knownIssues.html')">Known Issues</a>
-  </div>
-  <div id="NonCollapsiblePanel">
-    <a href="javascript:pageLink('versions.html')">Versions</a>
   </div>
 
   <div id="GettingStartedPanel" class="CollapsiblePanel">
@@ -131,11 +127,20 @@
   </div>
 </div>
 
+<div id="GenBankPanel" class="CollapsiblePanel">
+  <div class="CollapsiblePanelTab" tabindex="0">GenBank Submission ˇ</div>
+  <div class="CollapsiblePanelContent" style="display: block">
+  		<table width="100%" border="0" cellpadding="1">
+  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank via tbl2asn</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('genbankSequin.html');">GenBank via Sequin</a></td></tr>
+		</table>
+  </div>
+</div>
+
 <div id="OtherFeaturesPanel" class="CollapsiblePanel">
   <div class="CollapsiblePanelTab" tabindex="0">Other Features ˇ</div>
   <div class="CollapsiblePanelContent" style="display: block">
   		<table width="100%" border="0" cellpadding="1">
-  			<tr><td><a href="javascript:pageLink('genbank.html');">GenBank Submissions</a></td></tr>
   			<tr><td><a href="javascript:pageLink('listWindow.html');">List Window Features</a></td></tr>
   			<tr><td><a href="javascript:pageLink('matrixCells.html');">Matrix Colors</a></td></tr>
   			<tr><td><a href="javascript:pageLink('purging.html');">Purging Chromaseq Data</a></td></tr>
@@ -171,6 +176,12 @@
 		</table>
   </div>
 </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('knownIssues.html')">Known Issues</a>
+  </div>
+  <div id="NonCollapsiblePanel">
+    <a href="javascript:pageLink('versions.html')">Versions</a>
+  </div>
 
 <div id="CreditPanel" class="CollapsiblePanel">
   <div class="CollapsiblePanelTab" tabindex="0">Citation & Credit ˇ</div>
@@ -212,8 +223,8 @@
     <li><font >Edit the base calls in a chromatogram viewer</font></li>
   </ol>
 <p>In addition, there are a few other tools in Chromaseq that aid with GenBank submission, chromatogram organization, and data visualization.</p>
-<p>Chromaseq version 1.31 requires <a href="http://mesquiteproject.org">Mesquite
-  3.3</a> or later, as well as <a href="javascript:pageLink('phredphrap.html');">Phred and Phrap</a>.</p>
+<p>Chromaseq version 1.5 requires <a href="http://mesquiteproject.org">Mesquite
+  3.6</a> or later, as well as <a href="javascript:pageLink('phredPhrap.html');">Phred and Phrap</a>.</p>
 <p align="center"><img src="images/homePageImage.png" width="811" height="844" /></p>
 <p>The following sections provide introductory information about Chromaseq:</p>
   <ul>
@@ -253,6 +264,7 @@ var ProcessingChromatoPanel = null;
 var PreparingDataPanel = null;
 var CreditPanel = null;
 var HelpPanel = null;
+var GenBankPanel = null;
 var OtherFeaturesPanel = null;
 var TechnicalPanel = null;
 
@@ -286,6 +298,11 @@ if (qsParm['HelpPanel']=='open')
 else
  	HelpPanel = new Spry.Widget.CollapsiblePanel("HelpPanel", {contentIsOpen: false});
 
+if (qsParm['GenBankPanel']=='open')
+ 	GenBankPanel = new Spry.Widget.CollapsiblePanel("GenBankPanel", {contentIsOpen: true});
+else
+ 	GenBankPanel = new Spry.Widget.CollapsiblePanel("GenBankPanel", {contentIsOpen: false});
+    
 if (qsParm['OtherFeaturesPanel']=='open')
  	OtherFeaturesPanel = new Spry.Widget.CollapsiblePanel("OtherFeaturesPanel", {contentIsOpen: true});
 else

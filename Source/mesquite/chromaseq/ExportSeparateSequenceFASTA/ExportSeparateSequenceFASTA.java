@@ -70,7 +70,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	}
 
 	protected int taxonNameLengthLimit() {
-		return 15;
+		return 50;
 	}
 
 	/* ============================  exporting ============================*/
