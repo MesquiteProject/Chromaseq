@@ -314,6 +314,7 @@ public class ChromFileNameParsing implements Listable, Explainable {
 				//	if (endTokenIndex!=null)
 				//		endTokenIndex.add(piece.indexOf(endToken));
 				} else if (regexMatchIndex > 0) {
+					//DAVIDCHECK: if the endToken isn't found, the indexOf is -1, and this crashes
 					remainder.setValue(piece.substring(piece.indexOf(regexMatchIndex), piece.length()));
 				//	if (endTokenIndex!=null)
 				//		endTokenIndex.add(piece.indexOf(regexMatchIndex));

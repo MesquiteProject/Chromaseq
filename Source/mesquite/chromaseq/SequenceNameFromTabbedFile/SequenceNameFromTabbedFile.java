@@ -39,6 +39,7 @@ public class SequenceNameFromTabbedFile extends SequenceNameSource implements Ac
 	public boolean processNameCategories() {
 		sampleCodeListParser = new Parser(sampleCodeList);
 		Parser subParser = new Parser();
+		//DAVIDCHECK: I think we've encountered this before: this isn't using tabs, but rather NEXUS tokens. Should be using tabs.
 		String line = sampleCodeListParser.getRawNextDarkLine();
 		subParser.setString(line);
 		subParser.setWhitespaceString("\t");

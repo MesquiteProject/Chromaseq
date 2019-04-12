@@ -82,7 +82,6 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 	public void initialize() {
 		if (!StringUtil.blank(sampleCodeListPath)) {
 			sampleCodeList = MesquiteFile.getFileContentsAsString(sampleCodeListPath);
-
 			if (!StringUtil.blank(sampleCodeList)) {
 				sampleCodeListParser = new Parser(sampleCodeList);
 			}
@@ -107,8 +106,9 @@ public class SequenceNameFromTextFile extends SequenceNameSource implements Acti
 		sampleCodeListParser.setPosition(0);
 		Parser subParser = new Parser();
 		String line = sampleCodeListParser.getRawNextDarkLine();
+
 		while (StringUtil.notEmpty(line)) {
-			if (line.indexOf("\t")>=0){
+			if (line.indexOf("\t")>=0){  //Debugg.println(Why is this using NEXUS tokenization rules? e.g. [] are stripped
 				subParser.setString(line);
 				subParser.setWhitespaceString("\t");
 				subParser.setPunctuationString(";");
