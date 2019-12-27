@@ -142,6 +142,8 @@ public class ChromaseqUtil{
 		a.setAssociatedObject(nr, index, c);
 	}
 	public static String[] getStringsAssociated(Associable a, NameReference nr, int index){
+		if (a==null)
+			return null;
 		return (String[])a.getAssociatedObject(nr, index);
 	}
 	public static void setStringsAssociated(Associable a, NameReference nr, int index, String[] c){

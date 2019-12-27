@@ -110,6 +110,55 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		return false;
 
 	}
+	
+	String[] listedCodes;
+	boolean[] codePresent;
+	/*.................................................................................................................*/
+	public void recordCode(String code) {
+		if (listedCodes==null || codePresent==null || StringUtil.blank(code))
+			return;
+		for (int i=0; i<listedCodes.length && i<codePresent.length;i++)
+			if (code.equalsIgnoreCase(listedCodes[i])) 
+				codePresent[i]=true;
+	}
+	/*.................................................................................................................*/
+	public void storeListedCodesAsArray() {
+		if (sampleCodeListParser==null)
+			return;
+		sampleCodeListParser.setPosition(0);
+		Parser subParser = new Parser();
+		String line = sampleCodeListParser.getRawNextDarkLine();
+		int count=0;
+		while (StringUtil.notEmpty(line)) {
+			subParser.setString(line);
+			subParser.setWhitespaceString("\t");
+			subParser.setPunctuationString("");
+			String code = subParser.getFirstToken();
+			if (StringUtil.notEmpty(code))
+				count++;
+			line = sampleCodeListParser.getRawNextDarkLine();
+		}
+		if (count<=0) return;
+		listedCodes = new String[count];
+		codePresent = new boolean[count];
+		for (int i=0; i<count;i++)
+			codePresent[i]=false;
+		sampleCodeListParser.setPosition(0);
+		count=0;
+		line = sampleCodeListParser.getRawNextDarkLine();
+		while (StringUtil.notEmpty(line)) {
+			subParser.setString(line);
+			subParser.setWhitespaceString("\t");
+			subParser.setPunctuationString("");
+			String code = subParser.getFirstToken();
+			if (StringUtil.notEmpty(code)) {
+				if (count<listedCodes.length)
+					listedCodes[count]=code;
+				count++;
+			}
+			line = sampleCodeListParser.getRawNextDarkLine();
+		}
+	}
 	/*.................................................................................................................*/
 
 	public boolean sampleCodeIsInCodesFile(MesquiteString sampleCode) {
@@ -127,6 +176,8 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 			subParser.setPunctuationString("");
 			String code = subParser.getFirstToken();
 			if (sampleCodeString.equalsIgnoreCase(code)) {
+				if (listedCodes!=null)
+					recordCode(code);
 				return true;
 			}
 			line = sampleCodeListParser.getRawNextDarkLine();
@@ -177,6 +228,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 			return false;
 		}
 
+		storeListedCodesAsArray();
 
 		for (int i=0; i<files.length; i++) {
 			if (progIndicator!=null){
@@ -263,6 +315,18 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 				}
 			}
+		}
+
+		if (MesquiteTrunk.debugMode && listedCodes!=null && codePresent!=null) {
+			loglnEchoToStringBuffer("\nListed codes not found:", logBuffer);
+			int count=0;
+			for (int i=0; i<listedCodes.length && i<codePresent.length;i++)
+				if (!codePresent[i]) {
+					loglnEchoToStringBuffer(listedCodes[i], logBuffer);
+					count++;
+				}
+			loglnEchoToStringBuffer("Number of codes not found: " + count, logBuffer);
+			loglnEchoToStringBuffer("", logBuffer);
 		}
 
 		loglnEchoToStringBuffer("Number of files examined: " + files.length, logBuffer);

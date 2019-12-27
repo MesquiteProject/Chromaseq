@@ -3,40 +3,40 @@
 	<MessagesFromHome>
 		<version>1</version>
 		<notice><!--Chromaseq notice of update -->
-			<forBuildNumberEqualOrLess>915</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>13</noticeNumber>
+			<forBuildNumberEqualOrLess>926</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<noticeNumber>14</noticeNumber>
 			<messageType>alert</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>013</updateVersion>
-			<packageName>Chromaseq version 1.5</packageName>
+			<updateVersion>014</updateVersion>
+			<packageName>Chromaseq version 1.51</packageName>
 			<message>
 			<![CDATA[<img src="http://chromaseq.mesquiteproject.org/splash.gif"><p>
-			In order to install Chromaseq, you need to first update to Mesquite version 3.6.  
-			You can get Mesquite 3.6 at <a href = "http://www.mesquiteproject.org/Installation.html">http://www.mesquiteproject.org/Installation.html</a>
+			In order to install Chromaseq, you need to first update to Mesquite version 3.61.  
+			You can get Mesquite 3.61 at <a href = "http://www.mesquiteproject.org/Installation.html">http://www.mesquiteproject.org/Installation.html</a>
 			]]>
 			</message>
 		</notice>
 		<currentReleaseVersion>
-			<versionString>1.5</versionString>
-			<version>1500</version>
+			<versionString>1.51</versionString>
+			<version>1510</version>
 			<downloadURL>http://chromaseq.mesquiteproject.org/download.html</downloadURL>
 		</currentReleaseVersion>
 		<notice>
-			<forPackageVersionEqualOrLess>1400</forPackageVersionEqualOrLess>
+			<forPackageVersionEqualOrLess>1500</forPackageVersionEqualOrLess>
 			<messageType>update</messageType>
 			<identity>chromaseq</identity>
-			<packageName>Chromaseq 1.50</packageName>
+			<packageName>Chromaseq 1.51</packageName>
 			<explanation><![CDATA[This is an update for Chromaseq, a Mesquite package for processing chromatogram data and 
-				DNA sequences. This version is compatable with Version 3.6 of Mesquite. ]]>
+				DNA sequences. This version is compatable with Version 3.61 of Mesquite. ]]>
 			</explanation>
-			<noticeNumber>018</noticeNumber>
-			<updateVersion>018</updateVersion>
+			<noticeNumber>019</noticeNumber>
+			<updateVersion>019</updateVersion>
 			<install>
 				<location>mesquite</location>
 				<file>chromaseq</file>
-				<url>https://github.com/MesquiteProject/Chromaseq/releases/download/v1.5/Chromaseq.1.5.zip</url>
+				<url>https://github.com/MesquiteProject/Chromaseq/releases/download/v1.51/Chromaseq.1.51.zip</url>
 				<treatment>unzip</treatment>
-				<updateVersion>018</updateVersion>
+				<updateVersion>019</updateVersion>
 			</install>
 		</notice>
 		

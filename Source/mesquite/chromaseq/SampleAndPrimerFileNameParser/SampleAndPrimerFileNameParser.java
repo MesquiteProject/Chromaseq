@@ -141,10 +141,12 @@ public class SampleAndPrimerFileNameParser extends ChromatogramFileNameParser {
 		return nameParsingRules.getNumberOfParts();
 	}
 
+
 	/*.................................................................................................................*/
 	private void loadNameParsingRules(String path, File nameRulesDir, boolean userDef){
 		if (nameRulesDir.exists() && nameRulesDir.isDirectory()) {
 			String[] nameRulesList = nameRulesDir.list();
+			StringArray.sort(nameRulesList);
 			for (int i=0; i<nameRulesList.length; i++) {
 				if (nameRulesList[i]==null )
 					;
