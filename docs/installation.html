@@ -258,10 +258,16 @@ red {
 <h4>MacOS X, Linux</h4>
 <ul>
   
+    <li>For modern versions of MacOS X (anything after 10.9), you likely will need to modify the makefile for each of the applications. You will need to find the makefile in the source code directories, and open them up in a simple text editor like BBEdit, and modify the line that begin with &quot;CFLAGS&quot;. In particular:
+      <ul>
+        <li>for the Phrap makefile, make sure the &quot;CFLAGS&quot; line has the following elements appended to it: &quot; -Wno-return-type -arch x86_64&quot;. The line will thus probably look like this: CFLAGS= -O2 -Wno-return-type -Wimplicit-function-declaration -arch x86_64</li>
+        <li>for the Phred and Phd2Fasta makefiles, make sure the &quot;CFLAGS&quot; line has the following element appended to it: &quot; -arch x86_64&quot;. </li>
+      </ul>
+    </li>
     <li>If you are on Mac OSX, you will first need to install Xcode, which you can download at <a href="http://developer.apple.com/technologies/tools/xcode.html">http://developer.apple.com/technologies/tools/xcode.html</a>. Install Xcode.</li>
     <li>Start up a UNIX shell. On Mac OSX, you can start the application called Terminal in the Utilities folder in the Applications folder. </li>
-  <li>Change the directory to be the phrap source directory (e.g., &quot;cd /phredPhrap Source/distrib/&quot;)</li>
-  <li>Type &quot;make&quot;; this will cause your C compiler to compile phrap as well as some other programs. Various text will be written to the shell or terminal, and once it stops, there should be a file named named &quot;phrap&quot; in the directory. If you have problems, you might look into the phrap.doc file in the phrap directory for more information about installation.</li>
+    <li>Change the directory to be the phrap source directory (e.g., &quot;cd /phredPhrap Source/distrib/&quot;)</li>
+  <li>Type &quot;make&quot;; this will cause your C compiler to compile phrap as well as some other programs. Various text will be written to the shell or terminal, and once it stops, there should be a file named named &quot;phrap&quot; in the directory. If you have problems, you might look into the phrap.doc file in the phrap directory for more information about installation.  </li>
   <li>Copy phrap to the previously created program directory.</li>
   <li>cd to the phred directory (&quot;cd /phredPhrap Source/phred-dist-020425.c-acd&quot;).</li>
   <li>Type &quot;make&quot;; this will cause your C compiler to compile phred. If you have problems, you might look into the INSTALL file in the phred directory for more information. </li>
@@ -270,6 +276,7 @@ red {
   <li>Type &quot;make&quot;; this will cause your C compiler to compile phd2fasta. If you have problems, you might look into the INSTALL file in the phd2fasta directory for more information.</li>
   <li>Copy phd2fasta to the previously created program directory.</li>
   <li>You should now have three programs in your program directory: phrap, phred, and phd2fasta. </li>
+  <li>If you are using MacOS 10.15 (Catalina) or later, you may need to right-click or control-click on each of those programs, and choose Open With &gt; Terminal, and in the dialog box choose Open. You should only need to do this once for each program.</li>
 </ul>
 <h4>Windows</h4>
 <ul>
