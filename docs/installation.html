@@ -67,9 +67,8 @@ red {
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Installation<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%"><p>Version 1.51 <br />
-      26 December
-2019<br />
+    <td width="14%"><p>Version 1.52<br />
+      22 April 2020<br />
       </p></td>
   </tr>
 </table>
@@ -176,6 +175,7 @@ red {
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('features.html');">Features & Bug History</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
   			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
@@ -223,19 +223,9 @@ red {
 <p>To install Chromaseq,  go to the <a href="javascript:pageLink('download.html');">download page</a> and follow the instructions.</p>
 <h2>Acquiring Phred and Phrap</h2>
 <p>You can either acquire Phred and Phrap as source code (see <a href="http://www.phrap.org/consed/consed.html#howToGet">How to Get Phred/Phrap/Consed</a>), which most people at academic institutions can obtain free, or you can purchase precompiled versions from <a href="http://www.codoncode.com">CodonCode Corporation</a>. Note that Chromaseq does not require Consed, and so you will not need to obtain Consed for use with Chromaseq.</p>
-<p><strong><em>Please note</em></strong> that for most newer operating systems (ones that are 64-bit operating systems, e.g., MacOS X 10.6 or later on a Mac purchased in the last few years) <strong class="redboldfaced">the default version of Phrap will fail to run properly</strong>. To use Phrap (and thus Chromaseq) on these newer operating systems, you need to get the newest, beta version of Phrap. Here are the details to acquire this, as specified by the author of Phrap: </p>
-<table width="800" border="0" cellspacing="0" cellpadding="4" align="center" bgcolor="#EEEEEE">
-  <tr>
-    <td><p> A beta test version of the package, with many new features and capabilities (including some support for next-generation sequencing data), is now also available. It is not yet the default distribution version because it is still being tested, so you must request it separately, as follows: send an email to <img src="images/php.gif" alt="" width="135" height="16" />, with a Subject: line that says &quot;phrap new version request&quot;, and an email body that consists of the following two lines (it should be in exactly this format, to be computer readable):</p>
-      <p>Request: phrap ver 1.080721 or later<br />
-        Registered phrap email address: [insert your email address here]</p>
-      <p>Your email address should be the same one you supplied in your previous phrap request. Keep the square brackets ('[' and ']') around your email address.</p></td>
-  </tr>
-</table>
-<p></p>
+<p><strong><em>Please note</em></strong> that for most newer operating systems (ones that are 64-bit operating systems, e.g., MacOS X 10.6 or later on a Mac purchased in the last few years) <strong class="redboldfaced">older versions of Phrap will fail to run properly</strong>. To use Phrap (and thus Chromaseq) on these newer operating systems, you need to get the newest version of Phrap (which, at the time of writing, is 1.090518). </p>
 <h2>Compiling Phred, Phd2Fasta, and Phrap </h2>
-<p>If you are not familiar with compiling source code into executable programs, you may wish to ask for help from a local expert. <em>(Not us.)</em> Basically, you are taking the source code, present as text written in the computer language C, and asking a compiler to convert that text into machine code that your computer can understand. To do this, you will need access to a compiler. Here are some basic instructions, but they cannot be guaranteed to work on all computers. </p>
-<p>Note: there is a bug in the current release version of Phrap (version 0.990329) when compiled for 64-bit machines that will cause it to fail when used within the Chromaseq context. Please see the <a href="troubleshooting.html">Troubleshooting</a> page if you have problems.</p>
+<p>If you are not familiar with compiling source code into executable programs, you may wish to ask for help from a local expert. <em>(Not us.)</em> Basically, you are taking the source code, present as text written in the computer language C, and asking a compiler to convert that text into machine code that your computer can understand. To do this, you will need access to a compiler. Here are some basic instructions, but they cannot be guaranteed to work on all computers.</p>
 <h3>Preparing the source code</h3>
 <p>You will receive the source code as  archives, in three pieces, which might have names like this:</p>
 <ul>
