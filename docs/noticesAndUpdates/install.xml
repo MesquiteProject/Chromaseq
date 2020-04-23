@@ -8,8 +8,8 @@
 			<noticeNumber>14</noticeNumber>
 			<messageType>alert</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>014</updateVersion>
-			<packageName>Chromaseq version 1.51</packageName>
+			<updateVersion>015</updateVersion>
+			<packageName>Chromaseq version 1.52</packageName>
 			<message>
 			<![CDATA[<img src="http://chromaseq.mesquiteproject.org/splash.gif"><p>
 			In order to install this version of Chromaseq, you need to first update to Mesquite version 3.61.  
@@ -19,11 +19,11 @@
 		</notice>
 		<notice><!--Chromaseq install -->
 			<forBuildNumberEqualOrGreater>927</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>19</noticeNumber>
+			<noticeNumber>20</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>019</updateVersion>
-			<packageName>Chromaseq version 1.51</packageName>
+			<updateVersion>020</updateVersion>
+			<packageName>Chromaseq version 1.52</packageName>
 			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
@@ -37,9 +37,9 @@
 				<install>
 					<location>mesquite</location>
 					<file>chromaseq</file>
-					<url>https://github.com/MesquiteProject/Chromaseq/releases/download/v1.51/chromaseq.1.51.zip</url>
+					<url>https://github.com/MesquiteProject/Chromaseq/releases/download/v1.52/chromaseq.1.52.zip</url>
 					<treatment>unzip</treatment>
-					<updateVersion>019</updateVersion>
+					<updateVersion>020</updateVersion>
 				</install>
 		</notice>
 		

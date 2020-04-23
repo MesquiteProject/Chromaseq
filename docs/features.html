@@ -5,7 +5,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Chromatogram File Names</title>
+<title>Features & Bug History</title>
 <!-- InstanceEndEditable -->
 
 <![endif]--><!--[if IE]>
@@ -39,7 +39,7 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Preparing Chromatograms<!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Feature&amp; Bug History<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%"><p>Version 1.52<br />
       23 April 2020<br />
@@ -192,11 +192,41 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-  <p>The main preparation you need to do with the chromatograms is to ensure that they have standardized names. The file names of chromatograms are key in that they must  be standardized enough that a naming rule can be defined, to allow Chromaseq to find, easily, in the file names both the sample code and the primer name. See the page on <a href="javascript:pageLink('fileNamingRules.html');">File Naming Rules</a> for details on how the files might be named.</p>
-  <p>The chromatograms will also need to be in one single directory, and not subdirectories of it. For example, if Chromaseq is to asked to process the  directory shown below, it will only process the files in the directory itself, and <strong><em>not</em></strong> any contained subdirectories. Files in &quot;more chromatograms&quot; will be untouched:</p>
-  <p align="center"><img src="images/subdirectory.png" width="274" height="309" /></p>
-  <h2>&nbsp;</h2>
-<p>&nbsp;</p>
+    
+    
+<p>Here are some of the more notable new features and bug fixes since version 1.5. If the previous way Chromaseq worked could have yielded errors in substantive results (e.g., there was a bug in a phylogenetic calculation) are marked with <img src="images/substantiveBug.gif" alt="substantiveBug.gif" title="substantiveBug.gif" />.<br />
+  <br />
+  There is also a list of<a class="wiki_link" href="versions.html"> release dates.</a></p>
+<p><a name="New Features, Bugs, and History of Features and Bug Fixes--Features in the next release version of Mesquite; the latest source code in the development branch of the MesquiteProject/MesquiteCore repository on GitHub contains these changes" id="New Features, Bugs, and History of Features and Bug Fixes--Features in the next release version of Mesquite; the latest source code in the development branch of the MesquiteProject/MesquiteCore repository on GitHub contains these changes"></a>Features to come in the next release version of Chromaseq are listed <a href="https://github.com/MesquiteProject/Chromaseq/wiki/New-features-and-bug-fixes-in-the-development-version">on this web page</a>. These new features and bug fixes are already contained in latest source code in the development branch of the MesquiteProject/Chromaseq repository on GitHub.<br />
+</p>
+<p><br />
+</p>
+<hr />
+<h3 id="toc8"><a name="Version 1.52" id="Version 1.52"></a>Version 1.52</h3>
+<p><strong><br />
+  Bug fixes <br />
+</strong></p>
+<ul>
+  <li>Phred Phrap processing would not work in MacOS X 10.15 (Catalina). This was fixed by splitting the script file into multiple pieces. Thanks to Yu-Ling Huang for reporting this bug and testing the new version.<br />
+    <br />
+  </li>
+</ul>
+<hr />
+<h3 id="toc7"><a name="Version 1.51" id="Version 1.51"></a>Version 1.51 </h3>
+<p><strong><br />
+New Features
+</strong></p>
+<ul>
+  <li>Improved log window output.</li>
+</ul>
+<p><strong><br />
+  Bug fixes <br />
+</strong></p>
+<ul>
+  <li>Occasionally when scrolling in the chromatogram window using the left and right arrow keys the various rows on the window would not all be updated, so that they would appear out of register. This was fixed by adding an extra redraw (that's why the screen flashes a bit now).<br />
+  </li>
+</ul>
+<hr />
 <!-- InstanceEndEditable -->
 
     
