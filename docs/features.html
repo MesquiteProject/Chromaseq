@@ -5,7 +5,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Detecting Conflicts</title>
+<title>Features & Bug History</title>
 <!-- InstanceEndEditable -->
 
 <![endif]--><!--[if IE]>
@@ -39,7 +39,7 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Detecting Conflicts<!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Feature&amp; Bug History<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%"><p>Version 1.52<br />
       22 April 2020<br />
@@ -194,39 +194,45 @@
 <!-- InstanceBeginEditable name="content" -->
     
     
-<p>Chromaseq can highlight conflicts among reads and sequences. There are three primary types conflict displayed:</p>
+<p>Here are some of the more notable new features and bug fixes since version 1.51. If the previous way Chromaseq worked could have yielded errors in substantive results (e.g., there was a bug in a phylogenetic calculation) are marked with <img src="images/substantiveBug.gif" alt="substantiveBug.gif" title="substantiveBug.gif" />.<br />
+  <br />
+  There is also a list of<a class="wiki_link" href="versions.html"> release dates.</a></p>
+<p><a name="New Features, Bugs, and History of Features and Bug Fixes--Features in the next release version of Mesquite; the latest source code in the development branch of the MesquiteProject/MesquiteCore repository on GitHub contains these changes" id="New Features, Bugs, and History of Features and Bug Fixes--Features in the next release version of Mesquite; the latest source code in the development branch of the MesquiteProject/MesquiteCore repository on GitHub contains these changes"></a>Features to come in the next release version of Chromaseq are listed <a href="https://github.com/MesquiteProject/Chromaseq/wiki/New-features-and-bug-fixes-in-the-development-version">on this web page</a>. These new features and bug fixes are already contained in latest source code in the development branch of the MesquiteProject/Mesquite-Zephyr repository on GitHub.<br />
+</p>
+<p><br />
+</p>
+<hr />
+<h3 id="toc8"><a name="Version 3.11" id="Version 3.2"></a>Next version</h3>
+<p><strong><br />
+  New Features<br />
+</strong></p>
 <ul>
-  <li><a href="#twoReads">Conflict between two reads</a></li>
-  <li><a href="#sourceReadHigherRead">Conflict between the source read and a higher quality read</a></li>
-  <li><a href="#readMatrix">Conflict between a read and the base  in the matrix</a></li>
+  <li>None yet.</li>
 </ul>
-<p>&nbsp;</p>
-<h2><a name="twoReads" id="twoReads"></a>Conflicts between two reads</h2>
-<p>If Chromatograms&gt;Show Read-Read Conflict is turned on (which it is by default), then if the base call Phred makes for one read contradicts that made at the same site in another read, then a pink or red bar will be shown under the Original Untrimmed sequence. In the following image, the middle site in the top read is called as a T, wherease in the bottom read it is called a C. This conflict is shown as a red bar:</p>
-<p><img src="images/redBarConflict.png" width="66" height="289" /></p>
-<p>By default, the higher the minimum quality scores of the conflicting reads at that site, the darker the red will be; if one of the conflicting reads has a low quality score at that site, below a specified threshold, then the bar will be pink, and will be increasingly pale as the quality score of the conflicting read decreases. You can specify the threshold value using the Chromatograms&gt;Dim Conflict Marker Threshold. If you wish to always have the conflicts shown with undimmed, red bars, then uncheck Chromatograms&gt;Dim Conflict Markers if Low Quality. </p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<h2><a name="sourceReadHigherRead" id="sourceReadHigherRead"></a>Conflicts between the source read and a higher quality read</h2>
-<p>Chromaseq by default will also draw a box around any base in the Original Untrimmed sequence for which there is a conflict between the source read's called base and a base of higher quality in another read. This is common at the ends of sequences, where Phrap chooses a clearly inferior read as its source read; these bases are normally trimmed by Chromaseq.  For example, in this contig, many of the bases at the 5' end have the lower read as their source read, but the upper read, with conflicting bases, is clearly superior, and the boxes around the bases in the Original Untrimmed sequence indicate this:</p>
-<p><img src="images/boxConflict.png" width="329" height="304" /></p>
-<p>For a box to be shown, the source read must be at least 10 units lower in quality score than the conflicting, higher-quality read at that site.  If the source read is more than 20 units lower in quality, the box shown around the base is blue and thickened. In summary, if there is a conflicting higher-quality read at that site that is </p>
+<p><strong><br />
+  Bug fixes <br />
+</strong></p>
 <ul>
-  <li>0-9 quality units better than source read, no box is shown</li>
-  <li>10-19 quality units better than source read, a thin black box is shown</li>
-  <li>≥20 quality units better than source read, a thick blue box is shown</li>
+  <li>Phred Phrap processing would not work in MacOS X 10.15 (Catalina). This was fixed by splitting the script file into multiple pieces. Thanks to Yu-Ling Huang for reporting this bug and testing the new version.<br />
+    <br />
+  </li>
 </ul>
-<p>You can turn this display off or on using the Chromatograms&gt;Show Source Read Conflicts with Higher Quality Read.</p>
-<h2><a name="readMatrix" id="readMatrix"></a>Conflicts between a read and the base in the matrix</h2>
-<p>If you turn on Chromatograms&gt;Show Read Matrix Conflict (which by default is off), then Chromaseq will display a brown bar at each site in a read whose called base conflicts with the base present in the sequence in the matrix:</p>
-<p>&nbsp;</p>
-<p><img src="images/readMatrixConflict.png" width="153" height="304" /></p>
-<p>By default, if the quality score of the read at that site is below a threshold, the brown bar will be dimmed, and will be dimmer for lower qualities. You can specify the threshold value using the Chromatograms&gt;Dim Conflict Marker Threshold. If you wish to always have the conflicts shown with undimmed, red bars, then uncheck Chromatograms&gt;Dim Conflict Markers if Low Quality. If you turn off the dimming, the conflict markers will be shown in their full color:</p>
-<p>&nbsp;</p>
-<p><img src="images/readMatrixConflictUndimmed.png" width="153" height="304" /></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<hr />
+<h3 id="toc7"><a name="Version 3.11" id="Version 3.11"></a>Version 1.51 </h3>
+<p><strong><br />
+New Features
+</strong></p>
+<ul>
+  <li>Improved log window output.</li>
+</ul>
+<p><strong><br />
+  Bug fixes <br />
+</strong></p>
+<ul>
+  <li>Occasionally when scrolling in the chromatogram window using the left and right arrow keys the various rows on the window would not all be updated, so that they would appear out of register. This was fixed by adding an extra redraw (that's why the screen flashes a bit now).<br />
+  </li>
+</ul>
+<hr />
 <!-- InstanceEndEditable -->
 
     
