@@ -17,7 +17,7 @@ import mesquite.lib.duties.*;import mesquite.lib.table.*;
 	public String getExplanation() {		return "This will delete any sequence for which there is OR is not an attached GenBank accession number.";	}
 	/*.................................................................................................................*/
 	public boolean isPrerelease(){
-		return true;
+		return false;
 	}
 	/*.................................................................................................................*/	public int getVersionOfFirstRelease(){		return -NEXTRELEASE;  	}	/*.................................................................................................................*/	public boolean startJob(String arguments, Object condition, boolean hiredByName){
 		addMenuItem("Delete Sequences with OR without GenBank Numbers...", new MesquiteCommand("deleteDataGB", this));		return true;	}
