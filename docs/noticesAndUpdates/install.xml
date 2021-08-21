@@ -4,26 +4,26 @@
 		<version>1</version>
 
 		<notice><!--Chromaseq notice of update -->
-			<forBuildNumberEqualOrLess>926</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>14</noticeNumber>
+			<forBuildNumberEqualOrLess>939</forBuildNumberEqualOrLess> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<noticeNumber>16</noticeNumber>
 			<messageType>alert</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>015</updateVersion>
-			<packageName>Chromaseq version 1.52</packageName>
+			<updateVersion>016</updateVersion>
+			<packageName>Chromaseq version 1.53</packageName>
 			<message>
 			<![CDATA[<img src="http://chromaseq.mesquiteproject.org/splash.gif"><p>
-			In order to install this version of Chromaseq, you need to first update to Mesquite version 3.61.  
-			You can get Mesquite 3.61 at <a href = "http://www.mesquiteproject.org/Installation.html">http://www.mesquiteproject.org/Installation.html</a>
+			In order to install this version of Chromaseq, you need to first update to Mesquite version 3.70.  
+			You can get Mesquite 3.70 at <a href = "http://www.mesquiteproject.org/Installation.html">http://www.mesquiteproject.org/Installation.html</a>
 			]]>
 			</message>
 		</notice>
 		<notice><!--Chromaseq install -->
-			<forBuildNumberEqualOrGreater>927</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
-			<noticeNumber>20</noticeNumber>
+			<forBuildNumberEqualOrGreater>940</forBuildNumberEqualOrGreater> <!-- this refers to Mesquite build, e.g. for compatibility -->
+			<noticeNumber>21</noticeNumber>
 			<messageType>update</messageType>
 			<identity>Chromaseq</identity>
-			<updateVersion>020</updateVersion>
-			<packageName>Chromaseq version 1.52</packageName>
+			<updateVersion>021</updateVersion>
+			<packageName>Chromaseq version 1.53</packageName>
 			<beforeMessage>This may take a while to download; please wait until a message appears saying it's finished.</beforeMessage>
 			<explanation>
 			<![CDATA[<img src="http://mesquiteproject.org/packages/chromaseq/splash.gif"><p>
@@ -37,9 +37,9 @@
 				<install>
 					<location>mesquite</location>
 					<file>chromaseq</file>
-					<url>https://github.com/MesquiteProject/Chromaseq/releases/download/v1.52/chromaseq.1.52.zip</url>
+					<url>https://github.com/MesquiteProject/Chromaseq/releases/download/v1.53/chromaseq.1.53.zip</url>
 					<treatment>unzip</treatment>
-					<updateVersion>020</updateVersion>
+					<updateVersion>021</updateVersion>
 				</install>
 		</notice>
 		
