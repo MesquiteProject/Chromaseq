@@ -5,7 +5,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Purging Chromaseq Data</title>
+<title>Features & Bug History</title>
 <!-- InstanceEndEditable -->
 
 <![endif]--><!--[if IE]>
@@ -39,7 +39,7 @@
     <table width="100%" border="0" cellpadding="4">
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
-    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Purging Chromaseq Data<!-- InstanceEndEditable --></div></td>
+    <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Feature&amp; Bug History<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%"><p>Version 1.53<br />
       August 2021<br />
@@ -192,8 +192,57 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-<p>There can be contexts in which it is valuable to disconnect your matrix or matrices from the extra data and metadata that Chromaseq uses. For example, if the data are still connected, but you move your data file to another directory, Mesquite might complain that it can no longer find the Chromaseq data. </p>
-<p>If you wish to remove all ties to the chromatogrs and other data for one and only one matrix, then bring that data matrix to the front. Then choose Matrix&gt;Utilities&gt;Purge Chromaseq Data. If, instead, you wish to purge <strong><em>all</em></strong> matrices of their Chromaseq data, then choose Characters&gt;Purge Chromaseq Data from File.</p>
+    
+    
+<p>Here are some of the more notable new features and bug fixes since version 1.5. If the previous way Chromaseq worked could have yielded errors in substantive results (e.g., there was a bug in a phylogenetic calculation) are marked with <img src="images/substantiveBug.gif" alt="substantiveBug.gif" title="substantiveBug.gif" />.<br />
+  <br />
+  There is also a list of<a class="wiki_link" href="versions.html"> release dates.</a></p>
+<p><a name="New Features, Bugs, and History of Features and Bug Fixes--Features in the next release version of Mesquite; the latest source code in the development branch of the MesquiteProject/MesquiteCore repository on GitHub contains these changes" id="New Features, Bugs, and History of Features and Bug Fixes--Features in the next release version of Mesquite; the latest source code in the development branch of the MesquiteProject/MesquiteCore repository on GitHub contains these changes"></a>Features to come in the next release version of Chromaseq are listed <a href="https://github.com/MesquiteProject/Chromaseq/wiki/New-features-and-bug-fixes-in-the-development-version">on this web page</a>. These new features and bug fixes are already contained in latest source code in the development branch of the MesquiteProject/Chromaseq repository on GitHub.<br />
+</p>
+<p>&nbsp;
+</p>
+<hr />
+<h3 id="toc8"><a name="Version 1.53" id="Version 1.53"></a>Version 1.53</h3>
+<p><strong>
+	<br />
+  New Features&nbsp; <br />
+</strong></p>
+<ul>
+  <li>
+    In Taxon List window, added (to List menu) features to delete data for sequences that do or do not have associated GenBank numbers&nbsp; </li>
+</ul><p><strong>
+	<br />
+  Bug fixes <br />
+</strong></p>
+<ul>
+  <li>
+    Improved various aspects of feature annotation in the export to tbl2asn for submitting to GenBank </li>
+</ul><hr />
+<h3 id="toc8"><a name="Version 1.52" id="Version 1.52"></a>Version 1.52</h3>
+<p><strong><br />
+  Bug fixes <br />
+</strong></p>
+<ul>
+  <li>Phred Phrap processing would not work in MacOS X 10.15 (Catalina). This was fixed by splitting the script file into multiple pieces. Thanks to Yu-Ling Huang for reporting this bug and testing the new version.<br />
+    <br />
+  </li>
+</ul>
+<hr />
+<h3 id="toc7"><a name="Version 1.51" id="Version 1.51"></a>Version 1.51 </h3>
+<p><strong><br />
+New Features
+</strong></p>
+<ul>
+  <li>Improved log window output.</li>
+</ul>
+<p><strong><br />
+  Bug fixes <br />
+</strong></p>
+<ul>
+  <li>Occasionally when scrolling in the chromatogram window using the left and right arrow keys the various rows on the window would not all be updated, so that they would appear out of register. This was fixed by adding an extra redraw (that's why the screen flashes a bit now).<br />
+  </li>
+</ul>
+<hr />
 <!-- InstanceEndEditable -->
 
     

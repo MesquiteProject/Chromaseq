@@ -51,9 +51,8 @@
       <p>Samples &amp; Sequence Names</p>
     <!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%"><p>Version 1.5 <br />
-      27 December
-2018<br />
+    <td width="14%"><p>Version 1.53<br />
+      August 2021<br />
       </p></td>
   </tr>
 </table>
@@ -160,6 +159,7 @@
   		<table width="100%" border="0" cellpadding="1">
   			<tr><td><a href="javascript:pageLink('tutorial.html');">Tutorial</a></td></tr>
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
+  			<tr><td><a href="javascript:pageLink('features.html');">Features & Bug History</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
   			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
@@ -224,7 +224,22 @@ If you wish to have the sample codes that are contained in the chromatogram file
   1856	Bemb paraenulum VA 1856	Bembidion paraenulum VA 1856	Bembidion paraenulum VA: Big Otter River 1856<br />
   1960	Bemb rothfelsi MO 1960	Bembidion rothfelsi MO 1960	Bembidion rothfelsi MO: Big River 1960<br />
   2320	Bemb perspicuum CA 2320	Bembidion perspicuum CA 2320	Bembidion perspicuum CA: Pine Creek 2320</p>
-<p class="monospaced">&nbsp;</p>
+<p>You can has as many columns as you would like, as long as each has a different name in its title. David's Sample Code and Sequence Name file has and they are called: &quot;Name for Files and Folders&quot;,	&quot;Full name with no numbers and no locality&quot;,	&quot;Full name with numbers but no locality&quot;,	&quot;Full name with numbers with locality&quot;,	&quot;Full name with numbers with suffix with locality&quot;,	&quot;Name for GenBank&quot;. Again, you will get to choose which of these names to use.</p>
+<p>You can also use this tab-delimited file with Mesquite's Rename Taxa Based On Table In File feature available in the Taxon Names submenu, which is either in the List menu or the Matrix menu. This allows you to have taxa that have OTU ID codes listed renamed according to the entry in the file for that code. For example, you can use it to rename all of the sequences according to a format that works well for GenBank submissions. </p>
+<p>Note: Chromaseq uses the entry in the second column to decide which chromatograms are processed together, and for this reason you will in general want the file name for every one of those to be unique. For example, if you had four specimens of &quot;pumpkin&quot;, then you might want to give them unique identifiers, perhaps by appending the sample code to the name, e.g.:</p>
+<p><span class="monospaced">code	file name<br />
+1000	pumpkin	1000<br />
+1001	pumpkin	1001<br />
+</span><span class="monospaced">1002	pumpkin	1002<br />
+</span><span class="monospaced">1003	pumpkin	1003<br />
+</span></p>
+<p>If you do this, all of the chromatograms for a given gene for pumpkin 1000 will be placed in one folder and processed together, all for pumpkin 1001 in another folder, and so on. You will end up with perhaps four sequences. However, if the entries were not unique, for example:</p>
+<p><span class="monospaced">code	file name<br />
+1000	pumpkin<br />
+1001	pumpkin<br />
+</span><span class="monospaced">1002	pumpkin<br />
+</span><span class="monospaced">1003	pumpkin</span></p>
+<p>then all of pumpkin chromatograms will be processed together, and and they will be contiged together (if possible), which means you would likely end up with only a single sequence total for all pumpkins for each gene.</p>
 <h3>Version 1.0 (&quot;classic&quot;) format</h3>
 <p>The format of  the sample codes &amp; names file is:</p>
   <p class="monospaced">&lt;sample code&gt;&lt;tab&gt;&lt;short sample name&gt;&lt;tab&gt;&lt;long sample name&gt;;<br />
@@ -251,7 +266,7 @@ If you wish to have the sample codes that are contained in the chromatogram file
     </div>
 	<!-- This clearing element should immediately follow the #mainContent div in order to force the #container div to contain all child floats --><br class="clearfloat" />
   <div id="footer">
-    <p> ©2018 David R. Maddison &amp; Wayne P. Maddison</p>
+    <p> ©2021 David R. Maddison &amp; Wayne P. Maddison</p>
   <!-- end #footer --></div>
 <!-- end #container --></div>
 
