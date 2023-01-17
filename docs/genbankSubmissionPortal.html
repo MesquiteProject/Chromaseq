@@ -39,7 +39,7 @@
   <tr>
     <td width="51%"><strong id="PackageTitle">Chromaseq</strong></td>
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Submitting
-      Sequences to GenBank<!-- InstanceEndEditable --></div></td>
+      Sequences to GenBank via Submission Portal<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
     <td width="14%"><p>Version 1.53<br />
       August 2021<br />
@@ -192,14 +192,13 @@
   <div id="mainContent">
     
 <!-- InstanceBeginEditable name="content" -->
-<h2>Preparation of files for submission using tbl2asn </h2>
-<p>Chromaseq has two features designed to aid submitting sequences contained in a Mesquite file to GenBank. The primary tool, described here, allows for preparing files for use by tbl2asn. This tool can also help you to submit files to the Submissions Portal.&nbsp; &nbsp;There is also a <a href="genbankSequin.html">legacy tool</a> for submitting sequences via Sequin. </p>
+<h2>Preparation of files for submission using the Submission Portal </h2>
+<p>Chromaseq has  features designed to aid submitting sequences contained in a Mesquite file to GenBank. The primary tool, described here, allows for preparing files to submit files to the Submissions Portal (<a href="https://submit.ncbi.nlm.nih.gov/subs/genbank/">https://submit.ncbi.nlm.nih.gov/subs/genbank/)</a>.&nbsp; &nbsp; </p>
 <p>This system is built to submit sequences from one matrix at a time.</p>
 <p>To prepare
-  files for submission by <strong>tbl2asn</strong>, you will need the following: </p>
+  files for submission by <strong>Submission Portal</strong>, you will need the following: </p>
 <ol>
-  <li>The <a href="#downloadTbl2asn">tbl2asn program</a> from NCBI.</li>
-  <li>A <a href="#submissionTemplate">submission template file</a> containing information about your paper.</li>
+  <li>Information about your paper.</li>
   <li>A <a href="#sampleTable">tab-delimited text file</a> containing information about each sample whose data will be submitted. This file contains organism's name, authority, locality data,
     etc. This is called the &quot;OTU ID code Database&quot; or &quot;OTU ID code DB&quot; file in Mesquite.</li>
   <li>A Mesquite file containing your sequences in a matrix. This will need to be <a href="#prepareMatrix">prepared</a>, including setting of codon positions for protein-coding regions.</li>
@@ -209,11 +208,7 @@
   <li><a href="#exporting">Export the matrix and feature table</a> from within Mesquite. This will involve creating or choosing a <a href="#sequenceProfile">sequence profile</a> containing information about the properties of the sequences such as the genetic code, sequence description, etc.</li>
   <li><a href="#usingTbl2asn">Run tbl2asn</a> to create the file to be submitted to GenBank.</li>
 </ol>
-<h3><a name="downloadTbl2asn"></a>Download tbl2asn and get it ready for use</h3>
-<p>To create the file for submission to GenBank, you will need to use the program tbl2asn. Information about this program is available from</p>
-<p><a href="https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/">https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2/</a></p>
-<p>Download tbl2asn, and put it in the same directory as the files that you will create in the export process (see below). </p>
-<p>You may need to make the file executable. On a UNIX-based machine (MacOSX or Linux), open up a shell (e.g., Terminal on a Mac), cd into the directory containing the file, and then use a command like the following:</p><pre class="monospaced">    chmod +x mac.tbl2asn</pre></p>
+
 <h3><a name="submissionTemplate"></a>Creating the file containing information about the paper</h3>
 <p>Go to the <a href="https://submit.ncbi.nlm.nih.gov/genbank/template/submission/">NCBI Submission Portal</a> and create a Submission Template for your paper. This will contain information about your submission to GenBank. Once you have filled in the form, press the Create Template button at the bottom of the page. That will create a text file containing information about your paper, and that file will be downloaded to your computer. Move that file (which will likely be called &quot;template.sbt.txt&quot;), and move it into the same folder as the fasta files you created. You will only need to make this file once; the one file can be used for all of your submissions for that paper.</p>
 <h3><a name="sampleTable"></a>Creating the sample table</h3>
