@@ -86,6 +86,7 @@ public class AceFileListAssistant extends TaxonListAssistant {
 			String path = arguments; //parser.getFirstToken(arguments);
 			if (StringUtil.blank(path))
 				return;
+			path = StringUtil.stripTrailingWhitespace(path);   //DRM March 2023   Strip trailing whitespace as will be incorrectly saved in file path
 			if (employer!=null && employer instanceof ListModule) {
 				int c = ((ListModule)employer).getMyColumn(this);
 				for (int i=0; i<taxa.getNumTaxa(); i++) {
