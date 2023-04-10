@@ -38,6 +38,10 @@ public class PrimerInfoFromDatabase extends PrimerInfoSource {
 	public boolean hasOptions(){
 		return true;
 	}
+	/*.................................................................................................................*/
+	public boolean loadModule(){
+		return false;
+	}
 
 	/*.................................................................................................................*
 	public  void addMenuItemsForPrimerSubmenu(MesquiteSubmenuSpec primerSubmenu){

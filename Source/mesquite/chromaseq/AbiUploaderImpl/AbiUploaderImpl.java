@@ -53,6 +53,12 @@ public class AbiUploaderImpl extends AbiUploader {
 		}
 	}
 	
+	/*.................................................................................................................*/
+	public boolean loadModule(){
+		return false;
+	}
+
+	
 	public Class getDutyClass() {
 		return AbiUploaderImpl.class;
 	}

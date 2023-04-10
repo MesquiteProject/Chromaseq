@@ -29,6 +29,11 @@ public class SequenceNameFromDatabase extends SequenceNameSource  {
 	}
 
 	/*.................................................................................................................*/
+	public boolean loadModule(){
+		return false;
+	}
+
+	/*.................................................................................................................*/
 	public  void addXMLAttributes(Element element){
 		element.addAttribute("databaseURLSource", databaseURLSource.getClassName());
 	}
