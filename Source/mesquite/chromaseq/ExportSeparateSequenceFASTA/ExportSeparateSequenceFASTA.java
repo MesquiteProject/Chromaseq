@@ -86,6 +86,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	protected boolean includeTaxonName = true;
 	protected String voucherPrefix = "DNA";
 	String voucherSuffix = "";
+	protected boolean includeGeneNameInFastaHeader = false;
 
 	boolean removeExcluded = false;
 
@@ -100,6 +101,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		SingleLineTextField voucherPrefixField= exportDialog.addTextField("Prefix before Voucher ID", voucherPrefix, 8);
 		Checkbox includeTaxonNameBox= exportDialog.addCheckBox("Include taxon name", includeTaxonName);
 		SingleLineTextField voucherSuffixField= exportDialog.addTextField("Suffix (before file extension)", voucherSuffix, 8);
+		Checkbox includeGeneNameBox= exportDialog.addCheckBox("Include gene name in FASTA header", includeGeneNameInFastaHeader);
 
 		exportDialog.completeAndShowDialog(dataSelected, taxaSelected);
 
@@ -111,6 +113,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 			buildFileName = radios.getValue()==1;
 			voucherSuffix = voucherSuffixField.getText();
 			includeTaxonName = includeTaxonNameBox.getState();
+			includeGeneNameInFastaHeader = includeGeneNameBox.getState();
 		}
 
 		exportDialog.dispose();
@@ -161,8 +164,11 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		MesquiteFile.putFileContents(filePath, fasta, true);
 	}
 	/*.................................................................................................................*/
-	public String getSequenceName(Taxa taxa, int it, String voucherID) {
-		return taxa.getTaxonName(it);
+	public String getSequenceName(Taxa taxa, int it, CharacterData data, String voucherID) {
+		String s = taxa.getTaxonName(it);
+		if (includeGeneNameInFastaHeader)
+			s=data.getName()+": " + s;
+		return s;
 	}
 	/*.................................................................................................................*/
 	public String getIdentifierString() {
@@ -200,7 +206,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 						if (!writeOnlySelectedTaxa || taxa.getSelected(it)){
 							String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
 							buffer.setLength(0);
-							buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it, getSequenceName(taxa,it,voucherID));
+							buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it, getSequenceName(taxa,it,data, voucherID));
 							String content=null;
 							if (buffer!=null) 
 								content = buffer.toString();

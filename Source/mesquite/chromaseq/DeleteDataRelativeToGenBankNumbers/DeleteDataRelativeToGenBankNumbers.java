@@ -8,6 +8,7 @@ import mesquite.categ.lib.*;
 import mesquite.lib.duties.*;import mesquite.lib.table.*;
 /* ======================================================================== */public class DeleteDataRelativeToGenBankNumbers extends TaxaListAssistantI  {	Taxa taxa;	MesquiteTable table;
 	boolean deleteWithGenBankNumbers = true;
+	boolean removeGenBankNumbers = true;
 	public String getName() {
 		return "Delete Sequences with OR without GenBank Numbers";
 	}
@@ -34,15 +35,28 @@ import mesquite.lib.duties.*;import mesquite.lib.table.*;
 		}
 		return false;
 	}
+	/*...............................................................................................................*/
+	/** Removes the GenBank number of a particular taxon in this data object. */
+	public void deleteGenBankNumber(MolecularData data, int it){
+		if (data==null) return ;
+		Taxon taxon = data.getTaxa().getTaxon(it);
+		Associable tInfo = data.getTaxaInfo(true);
+		if (tInfo != null && taxon != null) {
+			tInfo.setAssociatedObject(MolecularData.genBankNumberRef, it, "");
+		}
+}
 	/*.................................................................................................................*/
 	public void processSingleXMLPreference (String tag, String content) {
 		 if ("deleteWithGenBankNumbers".equalsIgnoreCase(tag))
 			 deleteWithGenBankNumbers = MesquiteBoolean.fromTrueFalseString(content);
+		 if ("removeGenBankNumbers".equalsIgnoreCase(tag))
+			 removeGenBankNumbers = MesquiteBoolean.fromTrueFalseString(content);
 	}
 	/*.................................................................................................................*/
 	public String preparePreferencesForXML () {
 		StringBuffer buffer = new StringBuffer(200);
 		StringUtil.appendXMLTag(buffer, 2, "deleteWithGenBankNumbers", deleteWithGenBankNumbers);  
+		StringUtil.appendXMLTag(buffer, 2, "removeGenBankNumbers", removeGenBankNumbers);  
 		return buffer.toString();
 	}
 
@@ -57,10 +71,14 @@ import mesquite.lib.duties.*;import mesquite.lib.table.*;
 		if (!deleteWithGenBankNumbers) 
 			defaultValue=1;
 		RadioButtons deleteWithGenBankRadioButtons = dialog.addRadioButtons(new String[] {"delete each sequence for which there IS an associated GenBank accession number", "delete each sequence for which there is NOT an associated GenBank accession number"}, defaultValue);
+		Checkbox removeGenBankNumbersBox = dialog.addCheckBox ("remove GenBank number if sequence is deleted", removeGenBankNumbers);
+
+		
 		dialog.completeAndShowDialog(true);
 		boolean success = buttonPressed.getValue()== dialog.defaultOK; 
 		if (success) {
 			deleteWithGenBankNumbers = deleteWithGenBankRadioButtons.getValue()==0;		
+			removeGenBankNumbers=removeGenBankNumbersBox.getState();
 		}
 		return success;
 	}
@@ -111,6 +129,9 @@ import mesquite.lib.duties.*;import mesquite.lib.table.*;
 									dataToDelete=true;
 									for (int ic=0; ic<sequenceData.getNumChars(); ic++)
 										sequenceData.deassign(ic, it);
+									if (deleteWithGenBankNumbers && removeGenBankNumbers) {
+										deleteGenBankNumber(sequenceData,it);
+									}
 								}
 									
 							}
