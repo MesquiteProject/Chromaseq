@@ -459,12 +459,12 @@ public class InterpretASNGenBank extends FileInterpreterI {
 	}
 	/*.................................................................................................................*/
 
-	public  StringBuffer getDataAsFileText(CharacterData data) {
+	public  MesquiteStringBuffer getDataAsFileText(CharacterData data) {
 		Taxa taxa = data.getTaxa();
 
 		int numTaxa = taxa.getNumTaxa();
 		int numChars = data.getNumChars();
-		StringBuffer outputBuffer = new StringBuffer(numTaxa*(20 + numChars));
+		MesquiteStringBuffer outputBuffer = new MesquiteStringBuffer(numTaxa*(20L + numChars));
 		outputBuffer.append("Seq-submit ::= {" + getLineEnding());
 
 		ASNNode rootNode = new ASNNode("root");
@@ -507,7 +507,7 @@ public class InterpretASNGenBank extends FileInterpreterI {
 			if (!getExportOptions(data.anySelected(), taxa.anySelected()))
 				return false;
 
-		StringBuffer outputBuffer = getDataAsFileText(data);
+		MesquiteStringBuffer outputBuffer = getDataAsFileText(data);
 
 		if (outputBuffer!=null) {
 			saveExportedFileWithExtension(outputBuffer, arguments, "sqn");

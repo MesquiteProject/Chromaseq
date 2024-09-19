@@ -190,7 +190,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 			directory+=MesquiteFile.fileSeparator;
 
 
-		StringBuffer buffer = new StringBuffer(500);
+		MesquiteStringBuffer buffer = new MesquiteStringBuffer(500);
 		StringBuffer metadataBuffer = new StringBuffer(0);
 		metadataBuffer.append(getTitleLineForTabbedFile());
 		int count = 0;
@@ -211,7 +211,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 							if (buffer!=null) 
 								content = buffer.toString();
 							else 
-								buffer = new StringBuffer(500);
+								buffer = new MesquiteStringBuffer(500);
 							if (StringUtil.notEmpty(content)){
 								String idString = getIdentifierString();
 								putFastaAsFile(taxa, it, data, iM, directory, content, voucherID, idString);

@@ -523,7 +523,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 			}
 		}
 		else if  (commandName.equalsIgnoreCase("CONTIGMAPPER")) {
-			stringPos.setValue(parser.getPosition());
+			stringPos.setValue((int)parser.getPosition());
 			String[][] subcommands  = ParseUtil.getSubcommands(command, stringPos);
 			if (subcommands == null || subcommands.length == 0 || subcommands[0] == null || subcommands[0].length == 0)
 				return false;

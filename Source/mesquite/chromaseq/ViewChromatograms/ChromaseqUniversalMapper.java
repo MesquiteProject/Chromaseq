@@ -634,7 +634,7 @@ public class ChromaseqUniversalMapper implements MesquiteListener {
 	}
 	/*.................................................................................................................*/
 	private String firstApplicable(CharacterData data, int it, int num) {
-		StringBuffer sb = new StringBuffer();
+		MesquiteStringBuffer sb = new MesquiteStringBuffer();
 		boolean foundOne = false;
 		int count = 0;
 		for (int ic=0; ic<data.getNumChars(); ic++) {
