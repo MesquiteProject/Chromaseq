@@ -64,12 +64,11 @@ public class RemoveTrimmable extends DataAlterer implements AltererSimpleCell{
    	}
 	/*.................................................................................................................*/
    	/** Called to alter data in those cells selected in table*/
-   	public boolean alterData(CharacterData data, MesquiteTable table,UndoReference undoReference){
+   	public int alterData(CharacterData data, MesquiteTable table,UndoReference undoReference){
 
    		fillState = data.getCharacterState(fillState, 0, 0); //just to have a template
    		fillState.setToInapplicable();
-		boolean success = alterContentOfCells(data,table, undoReference);
-		return success;
+		return alterContentOfCells(data,table, undoReference);
    	}
 
    	
