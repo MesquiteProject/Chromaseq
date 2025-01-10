@@ -18,6 +18,7 @@ import java.awt.Container;
 import mesquite.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.duties.*;
+import mesquite.lib.taxa.Taxa;
 
 public class TaxonHasAnyData extends BooleanForTaxon {
 

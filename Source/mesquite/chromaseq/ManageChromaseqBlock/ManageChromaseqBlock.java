@@ -19,6 +19,8 @@ import mesquite.lib.characters.*;
 import mesquite.categ.lib.*;
 import mesquite.lib.duties.*;
 import mesquite.lib.misc.VoucherInfoFromOTUIDDB;
+import mesquite.lib.taxa.Taxa;
+import mesquite.lib.taxa.Taxon;
 import mesquite.meristic.lib.MeristicData;
 import mesquite.chromaseq.lib.*;
 

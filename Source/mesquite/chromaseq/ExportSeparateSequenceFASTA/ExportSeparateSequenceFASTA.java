@@ -22,6 +22,7 @@ import mesquite.lib.characters.*;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.*;
 import mesquite.lib.misc.VoucherInfoFromOTUIDDB;
+import mesquite.lib.taxa.Taxa;
 import mesquite.lib.ui.RadioButtons;
 import mesquite.lib.ui.SingleLineTextField;
 import mesquite.assoc.lib.AssociationSource;

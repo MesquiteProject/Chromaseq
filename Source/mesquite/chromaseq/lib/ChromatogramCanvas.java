@@ -23,6 +23,7 @@ import java.awt.geom.QuadCurve2D;
 import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.chromaseq.ViewChromatograms.ChromatogramCloseupPanel;
 import mesquite.lib.ui.ColorDistribution;
+import mesquite.lib.ui.MesquiteTool;
 import mesquite.lib.ui.MousePanel;
 import mesquite.lib.*;
 

@@ -21,6 +21,7 @@ import mesquite.lib.ui.ClosablePanelContainer;
 import mesquite.lib.ui.ColorDistribution;
 import mesquite.lib.ui.GraphicsUtil;
 import mesquite.lib.ui.MesquitePanel;
+import mesquite.lib.ui.MesquiteTool;
 
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;

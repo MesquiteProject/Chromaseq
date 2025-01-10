@@ -21,6 +21,7 @@ import mesquite.categ.lib.*;
 import mesquite.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.duties.*;
+import mesquite.lib.taxa.Taxa;
 import mesquite.lib.ui.AlertDialog;
 import mesquite.tol.lib.MesquiteXMLToLUtilities;
 import mesquite.chromaseq.lib.*;

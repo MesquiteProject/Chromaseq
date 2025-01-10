@@ -20,6 +20,7 @@ import mesquite.lib.ui.ClosablePanel;
 import mesquite.lib.ui.ClosablePanelContainer;
 import mesquite.lib.ui.ColorDistribution;
 import mesquite.lib.ui.GraphicsUtil;
+import mesquite.lib.ui.MesquiteTool;
 import mesquite.chromaseq.lib.ChromatogramPanel;
 import mesquite.chromaseq.lib.ChromatogramCanvas;
 

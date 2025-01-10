@@ -21,6 +21,7 @@ import mesquite.categ.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.table.CMTable;
 import mesquite.lib.table.MesquiteTable;
+import mesquite.lib.taxa.Taxa;
 import mesquite.lib.ui.AlertDialog;
 import mesquite.lib.ui.MesquiteMenuItemSpec;
 

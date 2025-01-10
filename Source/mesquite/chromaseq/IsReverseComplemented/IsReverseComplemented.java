@@ -17,6 +17,7 @@ import mesquite.categ.lib.*;
 import mesquite.lib.*;
 import mesquite.lib.characters.MCharactersDistribution;
 import mesquite.lib.duties.*;
+import mesquite.lib.taxa.Taxa;
 
 public class IsReverseComplemented extends BooleanForTaxon {
 

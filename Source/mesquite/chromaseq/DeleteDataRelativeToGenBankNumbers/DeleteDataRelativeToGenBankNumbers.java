@@ -6,6 +6,8 @@ import java.io.IOException;import java.net.URI;import java.net.URISyntaxExcept
 import mesquite.lib.*;import mesquite.lib.characters.CharacterData;
 import mesquite.categ.lib.*;
 import mesquite.lib.duties.*;import mesquite.lib.table.*;
+import mesquite.lib.taxa.Taxa;
+import mesquite.lib.taxa.Taxon;
 import mesquite.lib.ui.AlertDialog;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.RadioButtons;

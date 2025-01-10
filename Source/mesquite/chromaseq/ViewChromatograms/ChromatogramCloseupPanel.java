@@ -24,6 +24,7 @@ import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
 import mesquite.lib.ui.ClosablePanelContainer;
 import mesquite.lib.ui.GraphicsUtil;
+import mesquite.lib.ui.MesquiteTool;
 import mesquite.lib.ui.MesquiteWindow;
 import mesquite.categ.lib.*;
 
