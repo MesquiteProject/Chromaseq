@@ -20,6 +20,8 @@ import java.util.regex.*;
 import org.dom4j.*;
 
 import mesquite.lib.*;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.SingleLineTextField;
 
 public class SequenceProfile implements Listable, Explainable {
 

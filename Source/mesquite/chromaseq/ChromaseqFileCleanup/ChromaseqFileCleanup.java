@@ -18,6 +18,7 @@ import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
 import mesquite.lib.duties.FileCoordinator;
 import mesquite.lib.duties.FileInit;
+import mesquite.lib.ui.AlertDialog;
 import mesquite.lib.characters.*;
 import mesquite.meristic.lib.*;
 import java.util.*;

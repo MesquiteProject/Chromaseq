@@ -7,9 +7,9 @@ import mesquite.lib.CompatibilityTest;
 import mesquite.lib.EmployerEmployee;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteProject;
-import mesquite.lib.MesquiteSubmenuSpec;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.StringUtil;
+import mesquite.lib.ui.MesquiteSubmenuSpec;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
 public class PrimerInfoFromDatabase extends PrimerInfoSource {

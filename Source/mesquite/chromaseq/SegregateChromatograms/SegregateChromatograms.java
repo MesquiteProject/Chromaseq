@@ -24,6 +24,11 @@ import javax.swing.JLabel;
 
 import mesquite.lib.*;
 import mesquite.lib.duties.*;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.MesquiteTextCanvas;
+import mesquite.lib.ui.ProgressIndicator;
+import mesquite.lib.ui.SingleLineTextField;
+import mesquite.lib.ui.TextCanvasWithButtons;
 import mesquite.chromaseq.lib.*;
 
 /* ======================================================================== */

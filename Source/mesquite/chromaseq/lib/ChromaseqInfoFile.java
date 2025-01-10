@@ -21,9 +21,9 @@ import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteString;
-import mesquite.lib.ProgressIndicator;
 import mesquite.lib.StringUtil;
 import mesquite.lib.XMLUtil;
+import mesquite.lib.ui.ProgressIndicator;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;

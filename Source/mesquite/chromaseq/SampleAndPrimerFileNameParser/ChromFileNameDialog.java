@@ -11,6 +11,8 @@ import java.awt.event.ItemListener;
 
 import mesquite.chromaseq.lib.ChromatogramFileNameParser;
 import mesquite.lib.*;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.MesquiteWindow;
 
 
 public class ChromFileNameDialog extends ExtensibleDialog {

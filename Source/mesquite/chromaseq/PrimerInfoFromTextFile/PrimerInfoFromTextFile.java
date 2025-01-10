@@ -10,6 +10,10 @@ import org.dom4j.Element;
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
 import mesquite.lib.duties.CharSourceCoordObed;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.MesquiteMenuItemSpec;
+import mesquite.lib.ui.MesquiteSubmenuSpec;
+import mesquite.lib.ui.SingleLineTextField;
 
 public class PrimerInfoFromTextFile extends PrimerInfoSource implements ActionListener {
 	String primerListPath = null;

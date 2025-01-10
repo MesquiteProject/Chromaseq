@@ -16,6 +16,10 @@ package mesquite.chromaseq.ViewChromatograms;
 import mesquite.categ.lib.*;
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
+import mesquite.lib.ui.ClosablePanel;
+import mesquite.lib.ui.ClosablePanelContainer;
+import mesquite.lib.ui.ColorDistribution;
+import mesquite.lib.ui.GraphicsUtil;
 import mesquite.chromaseq.lib.ChromatogramPanel;
 import mesquite.chromaseq.lib.ChromatogramCanvas;
 
@@ -489,7 +493,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		String s = "";
 		if (quality>=0)
 			s+= "Base quality: " + quality + ",   Peak heights: " + getPeakHeightsOfBase(whichRead,readBaseNumber);
-		s+= "\n# Bases with Quality ³ " + reads[whichRead].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[whichRead].getTitle()+")";
+		s+= "\n# Bases with Quality ï¿½ " + reads[whichRead].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[whichRead].getTitle()+")";
 		contigDisplay.setExplanation( s);
 		if (tool == null)
 			return;

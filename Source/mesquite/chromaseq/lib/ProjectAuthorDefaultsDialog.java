@@ -16,6 +16,9 @@ import org.dom4j.*;
 import mesquite.tol.lib.*;
 
 import mesquite.lib.*;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.MesquiteWindow;
+import mesquite.lib.ui.SingleLineTextField;
 
 /**
  * Dialog to choose an author from a list of project collaborators

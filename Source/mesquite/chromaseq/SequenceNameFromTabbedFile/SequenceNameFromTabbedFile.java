@@ -9,6 +9,8 @@ import java.awt.event.TextListener;
 
 import mesquite.chromaseq.lib.SequenceNameSource;
 import mesquite.lib.*;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.SingleLineTextField;
 
 public class SequenceNameFromTabbedFile extends SequenceNameSource implements ActionListener, TextListener {
 	String sampleCodeListPath = null;

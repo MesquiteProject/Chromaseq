@@ -16,6 +16,11 @@ package mesquite.chromaseq.ViewChromatograms;
 
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
+import mesquite.lib.ui.ClosablePanel;
+import mesquite.lib.ui.ClosablePanelContainer;
+import mesquite.lib.ui.ColorDistribution;
+import mesquite.lib.ui.GraphicsUtil;
+import mesquite.lib.ui.MesquitePanel;
 
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;

@@ -22,6 +22,9 @@ import java.awt.geom.QuadCurve2D;
 import mesquite.align.lib.*;
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
+import mesquite.lib.ui.ClosablePanelContainer;
+import mesquite.lib.ui.GraphicsUtil;
+import mesquite.lib.ui.MesquiteWindow;
 import mesquite.categ.lib.*;
 
 public class ChromatogramCloseupPanel extends ChromatogramPanel{

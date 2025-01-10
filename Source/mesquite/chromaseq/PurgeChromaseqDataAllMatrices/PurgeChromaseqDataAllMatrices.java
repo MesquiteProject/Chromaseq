@@ -22,6 +22,7 @@ import mesquite.chromaseq.lib.ChromaseqUtil;
 import mesquite.lib.*;
 import mesquite.lib.characters.*;
 import mesquite.lib.duties.*;
+import mesquite.lib.ui.AlertDialog;
 
 /* ======================================================================== */
 public class PurgeChromaseqDataAllMatrices extends FileAssistantM {

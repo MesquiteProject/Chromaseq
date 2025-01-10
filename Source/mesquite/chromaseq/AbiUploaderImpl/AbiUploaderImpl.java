@@ -13,7 +13,6 @@ import mesquite.chromaseq.lib.ChromatogramFileNameParser;
 import mesquite.chromaseq.lib.SequenceUploader;
 import mesquite.lib.CompatibilityTest;
 import mesquite.lib.EmployerEmployee;
-import mesquite.lib.ExtensibleDialog;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteMessage;
@@ -21,8 +20,9 @@ import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteProject;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.MesquiteTrunk;
-import mesquite.lib.SingleLineTextField;
 import mesquite.lib.StringUtil;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.SingleLineTextField;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
 /**

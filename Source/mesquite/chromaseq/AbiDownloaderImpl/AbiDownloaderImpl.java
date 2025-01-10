@@ -28,6 +28,8 @@ import mesquite.tol.lib.*;
 
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.SingleLineTextField;
 //import mesquite.BTOL.lib.*;
 import mesquite.molec.lib.DNADatabaseURLSource;
 

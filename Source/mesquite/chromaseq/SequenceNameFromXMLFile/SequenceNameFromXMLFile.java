@@ -15,6 +15,8 @@ import org.dom4j.Element;
 import mesquite.chromaseq.ViewChromatograms.VChromWindow;
 import mesquite.chromaseq.lib.*;
 import mesquite.lib.*;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.SingleLineTextField;
 
 public class SequenceNameFromXMLFile extends SequenceNameSource implements ActionListener, TextListener {
 	ChromaseqSampleToNamesXMLProcessor xmlProcessor;

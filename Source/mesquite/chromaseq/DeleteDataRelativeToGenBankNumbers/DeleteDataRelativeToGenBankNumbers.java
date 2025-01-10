@@ -6,6 +6,9 @@ import java.io.IOException;import java.net.URI;import java.net.URISyntaxExcept
 import mesquite.lib.*;import mesquite.lib.characters.CharacterData;
 import mesquite.categ.lib.*;
 import mesquite.lib.duties.*;import mesquite.lib.table.*;
+import mesquite.lib.ui.AlertDialog;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.RadioButtons;
 /* ======================================================================== */public class DeleteDataRelativeToGenBankNumbers extends TaxaListAssistantI  {	Taxa taxa;	MesquiteTable table;
 	boolean deleteWithGenBankNumbers = true;
 	boolean removeGenBankNumbers = true;

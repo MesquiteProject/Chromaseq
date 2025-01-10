@@ -23,6 +23,7 @@ import mesquite.lib.*;
 import mesquite.lib.duties.*;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.CharactersManager;
+import mesquite.lib.ui.ColorDistribution;
 import mesquite.align.lib.PairwiseAligner;
 import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.cont.lib.*;
