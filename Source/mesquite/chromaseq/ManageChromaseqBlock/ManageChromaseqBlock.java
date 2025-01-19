@@ -500,7 +500,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		}
 	}
 	/*...................................................................................................................*/
-	public boolean readNexusCommand(MesquiteFile file, NexusBlock nBlock, String command, MesquiteString comment){ 
+	public boolean readNexusCommand(MesquiteFile file, NexusBlock nBlock, String command, MesquiteString comment, String fileReadingArguments){ 
 		MesquiteProject project = file.getProject();
 		String commandName = parser.getFirstToken(command);
 		if (commandName.equalsIgnoreCase("VERSION")) {
@@ -709,7 +709,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		int version = 0;
 
 		while (!StringUtil.blank(commandString = block.getNextFileCommand(comment))) {
-			readNexusCommand(file, b, commandString,  comment);
+			readNexusCommand(file, b, commandString,  comment,  fileReadingArguments);
 		}
 		return b;
 	}
