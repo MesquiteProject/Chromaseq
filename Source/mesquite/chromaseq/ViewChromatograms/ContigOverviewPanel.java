@@ -20,6 +20,7 @@ import mesquite.lib.ui.ClosablePanel;
 import mesquite.lib.ui.ClosablePanelContainer;
 import mesquite.lib.ui.ColorDistribution;
 import mesquite.lib.ui.GraphicsUtil;
+import mesquite.lib.ui.MQScrollbar;
 import mesquite.lib.ui.MesquitePanel;
 import mesquite.lib.ui.MesquiteTool;
 
@@ -51,7 +52,7 @@ public class ContigOverviewPanel extends ChromatogramPanel implements Adjustment
 
 		scrollPanel = new MesquitePanel();
 		scrollPanel.setBackground(Color.blue);
-		scrollBar = new Scrollbar(Scrollbar.HORIZONTAL);
+		scrollBar = new MQScrollbar(Scrollbar.HORIZONTAL);
 		scrollBar.addAdjustmentListener(this);
 		numBases = panel.getTotalNumUniversalBases();
 		numBasesVisible = panel.getApproximateNumberOfPeaksVisible();
