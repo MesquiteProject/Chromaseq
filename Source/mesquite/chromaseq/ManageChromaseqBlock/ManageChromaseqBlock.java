@@ -266,7 +266,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	/*----------------------------------------*/
 	boolean writeLongs(StringBuffer sb, Associable a, NameReference nr){
 		boolean some = false;
-		if (a.getWhichAssociatedLong(nr) != null){
+		if (a.getAssociatedLongs(nr) != null){
 			for (int i= 0; i< a.getNumberOfParts(); i++){
 				long value = ChromaseqUtil.getLongAssociated(a,nr, i);
 
@@ -281,7 +281,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	}
 	boolean writeDoubles(StringBuffer sb, Associable a, NameReference nr){
 		boolean some = false;
-		if (a.getWhichAssociatedDouble(nr) != null){
+		if (a.getAssociatedDoubles(nr) != null){
 			for (int i= 0; i< a.getNumberOfParts(); i++){
 				double value = ChromaseqUtil.getDoubleAssociated(a,nr, i);
 

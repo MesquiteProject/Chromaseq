@@ -156,7 +156,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				array = null;
 				Associable assoc = data.getTaxaInfo(false);
 				if (assoc != null){
-					LongArray Larray = assoc.getWhichAssociatedLong(trimmable);
+					LongArray Larray = assoc.getAssociatedLongs(trimmable);
 					if (Larray != null)
 						Larray.setNameReference(ChromaseqUtil.chromaseqCellFlagsNameRef);
 				}
