@@ -61,7 +61,7 @@ public class RecordSourceFile extends FileAssistantT {
 			boolean anySelected = taxa.anySelected();
 			for (int it = 0; it< taxa.getNumTaxa(); it++){
 				if (data.hasDataForTaxon(it) && (!anySelected || taxa.getSelected(it)))
-					tInfo.setAssociatedObject(sourceRef, it, s.getValue());
+					tInfo.setAssociatedString(sourceRef, it, s.getValue());
 			}
 		}
 

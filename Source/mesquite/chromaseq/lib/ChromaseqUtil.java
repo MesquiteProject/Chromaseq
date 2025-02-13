@@ -138,10 +138,10 @@ public class ChromaseqUtil{
 	}
 
 	public static String getStringAssociated(Associable a, NameReference nr, int index){
-		return (String)a.getAssociatedObject(nr, index);
+		return (String)a.getAssociatedString(nr, index);
 	}
 	public static void setStringAssociated(Associable a, NameReference nr, int index, String c){
-		a.setAssociatedObject(nr, index, c);
+		a.setAssociatedString(nr, index, c);
 	}
 	public static String[] getStringsAssociated(Associable a, NameReference nr, int index){
 		if (a==null)
@@ -438,13 +438,13 @@ public class ChromaseqUtil{
 		ChromaseqUtil.setStringAssociated(tInfo, ChromaseqUtil.reprocessContigRef, it, "reprocess contig");
 	}
 	/*.................................................................................................................*/
-	public static void removeAssociatedObjects(DNAData data, NameReference nr) {
+	public static void removeAssociatedStrings(DNAData data, NameReference nr) {
 		if (data==null)
 			return;
 		Associable tInfo = data.getTaxaInfo(true);
 		if (tInfo == null)
 			return;
-		tInfo.removeAssociatedObjects(nr);
+		tInfo.removeAssociatedStrings(nr);
 	}
 	/*.................................................................................................................*/
 	public static String getAceFilePath(String directoryName, MesquiteModule ownerModule, DNAData data, int it, boolean returnOriginalAceFile) {
@@ -904,10 +904,10 @@ public class ChromaseqUtil{
 		editedData.detachAllObjectsOfName(ChromaseqUtil.GENENAMEREF);
 		editedData.detachAllObjectsOfName(ChromaseqUtil.REGISTRATIONBUILDREF);
 
-		removeAssociatedObjects(editedData, origTaxonNameRef);
-		removeAssociatedObjects(editedData, aceRef);
-		removeAssociatedObjects(editedData, reprocessContigRef);
-		removeAssociatedObjects(editedData, chromatogramReadsRef);
+		removeAssociatedStrings(editedData, origTaxonNameRef);
+		removeAssociatedStrings(editedData, aceRef);
+		removeAssociatedStrings(editedData, reprocessContigRef);
+		removeAssociatedStrings(editedData, chromatogramReadsRef);
 		editedData.removeCellObjects(chromaseqCellFlagsNameRef);
 		
 		 Associable tInfo = editedData.getTaxaInfo(false);
@@ -918,16 +918,14 @@ public class ChromaseqUtil{
 			 tInfo.removeAssociatedLongs(chromaseqCellFlagsNameRef);
 			 tInfo.removeAssociatedDoubles(qualityNameRef);
 		 }
-		removeAssociatedObjects(editedData, paddingRef);
-	//	removeAssociatedObjects(editedData, qualityNameRef);
-		removeAssociatedObjects(editedData, contigMapperRef);
-		removeAssociatedObjects(editedData, chromaseqCellFlagsNameRef);
-	//	removeAssociatedObjects(editedData, whichContigRef);
-		removeAssociatedObjects(editedData, startTrimRef);
-		removeAssociatedObjects(editedData, sampleCodeRef);
-		removeAssociatedObjects(editedData, sampleCodeNamesRef);
-		removeAssociatedObjects(editedData, primerForEachReadNamesRef);
-		removeAssociatedObjects(editedData, origReadFileNamesRef);
+		removeAssociatedStrings(editedData, paddingRef);
+		removeAssociatedStrings(editedData, contigMapperRef);
+		removeAssociatedStrings(editedData, chromaseqCellFlagsNameRef);
+		removeAssociatedStrings(editedData, startTrimRef);
+		removeAssociatedStrings(editedData, sampleCodeRef);
+		removeAssociatedStrings(editedData, sampleCodeNamesRef);
+		removeAssociatedStrings(editedData, primerForEachReadNamesRef);
+		removeAssociatedStrings(editedData, origReadFileNamesRef);
 		
 }
 

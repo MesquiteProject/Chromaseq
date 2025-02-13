@@ -54,7 +54,7 @@ public class ProcessChromatogramsTaxonRedo extends CategDataEditorInit {
 		if (data!=null) {
 			Associable tInfo= data.getTaxaInfo(false);
 			if (tInfo!=null)
-				b = tInfo.anyAssociatedObject(ChromaseqUtil.aceRef);
+				b = tInfo.anyAssociatedString(ChromaseqUtil.aceRef);
 
 		}
 		if (ms!=null)

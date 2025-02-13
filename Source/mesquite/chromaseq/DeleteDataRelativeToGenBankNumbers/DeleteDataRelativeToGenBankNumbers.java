@@ -34,7 +34,7 @@ import mesquite.lib.ui.RadioButtons;
 		Taxon taxon = data.getTaxa().getTaxon(it);
 		Associable tInfo = data.getTaxaInfo(true);
 		if (tInfo != null && taxon != null) {
-			String s = (String)tInfo.getAssociatedObject(MolecularData.genBankNumberRef, it);
+			String s = (String)tInfo.getAssociatedString(MolecularData.genBankNumberRef, it);
 			if (StringUtil.notEmpty(s))
 				return true;
 		}
@@ -47,7 +47,7 @@ import mesquite.lib.ui.RadioButtons;
 		Taxon taxon = data.getTaxa().getTaxon(it);
 		Associable tInfo = data.getTaxaInfo(true);
 		if (tInfo != null && taxon != null) {
-			tInfo.setAssociatedObject(MolecularData.genBankNumberRef, it, "");
+			tInfo.setAssociatedString(MolecularData.genBankNumberRef, it, "");
 		}
 }
 	/*.................................................................................................................*/

@@ -152,6 +152,8 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		else
 			logln("NO attached [" + nr + "] " + a.getName());
 	}
+	
+	NOTE: if this gets revived, many of these shold be changed to AssociatedString
 	void reportObject(Associable a, NameReference nr){
 		if (a.anyAssociatedObject(nr))
 			logln("YES object [" + nr.getValue() + " ; 0 = " + a.getAssociatedObject(nr, 0)+ "] " + a.getName());

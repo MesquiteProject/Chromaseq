@@ -313,7 +313,7 @@ public class AceDirectoryProcessor {
 		else if (originalChars > editedData.getNumChars())
 			editedData.notifyListeners(ownerModule, new Notification(ownerModule.PARTS_DELETED));
 
-		ChromaseqUtil.removeAssociatedObjects(editedData, ChromaseqUtil.reprocessContigRef);
+		ChromaseqUtil.removeAssociatedStrings(editedData, ChromaseqUtil.reprocessContigRef);
 		return changed;
 	}
 
