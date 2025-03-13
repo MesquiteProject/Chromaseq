@@ -239,7 +239,7 @@ public class InterpretASNGenBank extends FileInterpreterI {
 		else 
 			return ParseUtil.tokenize(taxa.getTaxonName(it));
 	}
-	protected void saveExtraFiles(CharacterData data){
+	protected void saveExtraFiles(CharacterData data, String filePath){
 	}
 
 	public void appendTabbedLine(StringBuffer sb, int numTabs, String s){
@@ -513,7 +513,7 @@ public class InterpretASNGenBank extends FileInterpreterI {
 			saveExportedFileWithExtension(outputBuffer, arguments, "sqn");
 			return true;
 		}
-		saveExtraFiles(data);
+		saveExtraFiles(data, filePath);
 		return false;
 	}
 
