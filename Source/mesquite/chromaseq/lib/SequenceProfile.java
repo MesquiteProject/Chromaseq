@@ -38,7 +38,7 @@ public class SequenceProfile implements Listable, Explainable {
 
 	public String name = "default";
 	public String explanation;
-	public boolean includeDate = false;
+//	public boolean includeDate = false;
 
 	public SequenceProfile() {
 	}
@@ -115,7 +115,7 @@ public class SequenceProfile implements Listable, Explainable {
 		XMLUtil.addFilledElement(boundedByTokensElement, "seqIDSuffix",DocumentHelper.createCDATA(seqIDSuffix));
 		XMLUtil.addFilledElement(boundedByTokensElement, "gcode",DocumentHelper.createCDATA(""+gcode));
 		XMLUtil.addFilledElement(boundedByTokensElement, "note",DocumentHelper.createCDATA(""+note));
-		XMLUtil.addFilledElement(boundedByTokensElement, "includeDate",DocumentHelper.createCDATA(MesquiteBoolean.toTrueFalseString(includeDate)));
+//		XMLUtil.addFilledElement(boundedByTokensElement, "includeDate",DocumentHelper.createCDATA(MesquiteBoolean.toTrueFalseString(includeDate)));
 //		XMLUtil.addFilledElement(boundedByTokensElement, "CDS",DocumentHelper.createCDATA(MesquiteBoolean.toTrueFalseString(CDS)));
 		return XMLUtil.getDocumentAsXMLString(doc);
 	}
@@ -154,7 +154,7 @@ public class SequenceProfile implements Listable, Explainable {
 			seqIDSuffix = boundedByTokens.elementText("seqIDSuffix");
 			note = boundedByTokens.elementText("note");
 			gcode = MesquiteInteger.fromString(boundedByTokens.elementText("gcode"));			
-			includeDate = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementText("includeDate"));			
+//			includeDate = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementText("includeDate"));			
 //			CDS = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementText("CDS"));			
 			//translateSampleCodes = MesquiteBoolean.fromTrueFalseString(boundedByTokens.elementTextTrim("translateSampleCodes"));
 		} else {
@@ -306,7 +306,7 @@ public class SequenceProfile implements Listable, Explainable {
 		Choice moltypeChoice = dialog.addPopUpMenu("Molecular type*", moltypeStrings(), 	item);
 		SingleLineTextField noteField = dialog.addTextField("Note:", note,80, true);
 		SingleLineTextField seqIDSuffixField = dialog.addTextField("SeqID suffix*:", seqIDSuffix,30, true);
-		Checkbox includeDateBox = dialog.addCheckBox("include date", includeDate);
+//		Checkbox includeDateBox = dialog.addCheckBox("include date", includeDate);
 		//Checkbox CDSbox = dialog.addCheckBox("CDS", CDS);
 
 		dialog.addHorizontalLine(2);
@@ -328,7 +328,7 @@ public class SequenceProfile implements Listable, Explainable {
 			seqIDSuffix = seqIDSuffixField.getText();
 			note = noteField.getText();
 			gcode = geneticCodeChoice.getSelectedIndex()+1;
-			includeDate = includeDateBox.getState();
+//			includeDate = includeDateBox.getState();
 //			CDS =CDSbox.getState();
 			//			translateSampleCodes = translateCodesBox.getState();
 		}
