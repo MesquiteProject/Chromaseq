@@ -650,7 +650,7 @@ public class ChromatogramCanvas extends MousePanel {
 				contigDisplay.repaintPanels();
 			}
 		}
-		else if (MesquiteEvent.commandOrControlKeyDown(modifiers)){
+		else if (MesquiteEvent.commandOrControlKeyDown(modifiers)){ //ZQ: If this was intended as right click, now use .rightClick(modifiers) instead
 			if (MesquiteInteger.isCombinable(ic)){
 				selectOverallBase(ic);
 				contigDisplay.repaintPanels();
