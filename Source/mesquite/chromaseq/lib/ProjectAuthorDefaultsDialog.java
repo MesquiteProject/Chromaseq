@@ -17,6 +17,7 @@ import mesquite.tol.lib.*;
 
 import mesquite.lib.*;
 import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.MQJLabel;
 import mesquite.lib.ui.MesquiteWindow;
 import mesquite.lib.ui.SingleLineTextField;
 
@@ -97,7 +98,7 @@ public class ProjectAuthorDefaultsDialog extends ExtensibleDialog {
 		addHorizontalLine(1);
 		choiceStrings = new String[1];
 		choiceStrings[0] = "";
-		selectNameLabel = new JLabel("Select your name:");
+		selectNameLabel = new MQJLabel("Select your name:");
 		popupMenu = addPopUpMenu(selectNameLabel, choiceStrings, 0);
 		popupMenu.setVisible(false);
 		selectNameLabel.setVisible(false);
