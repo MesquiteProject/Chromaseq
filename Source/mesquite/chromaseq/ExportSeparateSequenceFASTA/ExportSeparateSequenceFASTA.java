@@ -38,7 +38,7 @@ import mesquite.io.lib.*;
 
 public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		//	EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for FASTA export for Genbank submissions.",
+		//	EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for FASTA export for GenBank submissions.",
 		//			"This is activated automatically when you choose this exporter.");
 	}
 	//VoucherInfoCoord voucherInfoTask;
@@ -165,6 +165,8 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta, String voucherID, String identifierString) {
 		String filePath = directory;
 		filePath = directory+getFileName(taxa, it, data, index, voucherID, identifierString);
+		if (filePath == null)
+			return;
 		MesquiteFile.putFileContents(filePath, fasta, true);
 	}
 	/*.................................................................................................................*/

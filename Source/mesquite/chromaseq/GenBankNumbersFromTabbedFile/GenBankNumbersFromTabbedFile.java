@@ -12,7 +12,10 @@ import mesquite.lib.duties.*;import mesquite.lib.table.*;
 import mesquite.chromaseq.lib.*;
 /* ======================================================================== */public class GenBankNumbersFromTabbedFile extends TaxaListAssistantI  {	Taxa taxa;	MesquiteTable table;
 	GenBankTabbedFileProcessor codeFileWithGenBankNumbers;
-	public String getName() {
+
+	public boolean loadModule(){
+		return false;
+	}	public String getName() {
 		return "Get GenBank Accession Numbers from File";
 	}
 	public String getNameForMenuItem() {

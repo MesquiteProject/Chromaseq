@@ -14,7 +14,10 @@ import mesquite.lib.ui.RadioButtons;
 /* ======================================================================== */public class DeleteDataRelativeToGenBankNumbers extends TaxaListAssistantI  {	Taxa taxa;	MesquiteTable table;
 	boolean deleteWithGenBankNumbers = true;
 	boolean removeGenBankNumbers = true;
-	public String getName() {
+	
+	public boolean loadModule(){
+		return false;
+	}	public String getName() {
 		return "Delete Sequences with OR without GenBank Numbers";
 	}
 	public String getNameForMenuItem() {

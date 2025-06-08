@@ -50,7 +50,7 @@ public class InterpretASNGenBank extends FileInterpreterI {
 	VoucherInfoCoord voucherInfoTask;
 
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for ASN export for Genbank submissions.",
+		EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for ASN export for GenBank submissions.",
 		"This is activated automatically when you choose this exporter.");
 	}
 	/*.................................................................................................................*/

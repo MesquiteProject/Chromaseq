@@ -92,15 +92,15 @@ public class ReadWGenBankNumbersTable extends GenBankNumbersFileReader  {
    	}
 
 	public String getName() {
-		return "Columns for genes (with headings)";
+		return "Columns for genes, rows for taxa";
 	}
 	
-	public String getNameForMenuItem() {
-		return "Columns for genes (with headings)";
-	}
 	public String getExplanation() {
-		return "Reads GenBank numbers from simple tab-delimited text file, with first row being column names (\"id\" for specimen/taxon ID, then gene/matrix names for other columns)," +
-	" and subsequent rows being one for each specimen/taxon, listing its GenBank number in the column for that gene. The columns must be separated by TABs!!";
+		return "Reads GenBank numbers from a simple tab-delimited table as a text file, with first row being column names," +
+	" and subsequent rows being one for each specimen/taxon.\n—There must be a column with heading \"id\" for specimen/taxon ID. "
+				+"These taxon IDs must match either a taxon's name in the data file, or its taxon ID code (as in the Taxon ID Code column of the List of Taxa window)."
+				+ "\n—Each different gene locus gets a separate column, whose heading must be the name of the gene."
+				+" Entries in gene columns are that gene's GenBank number in row's taxon.\nThe columns must be separated by TABs!!";
 	}
 
 }

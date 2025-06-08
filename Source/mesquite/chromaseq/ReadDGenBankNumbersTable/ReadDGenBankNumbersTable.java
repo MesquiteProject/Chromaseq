@@ -47,12 +47,13 @@ public class ReadDGenBankNumbersTable extends GenBankNumbersFileReader  {
    	}
 
 	public String getName() {
-		return "Each row has 3 columns: Specimen ID, gene, GenBank number";
+		return "Three columns: Specimen ID, gene, GenBank number";
 	}
 	
 	public String getExplanation() {
 		return "Reads GenBank numbers from simple tab-delimited text file, each row of which pertains to the GenBank number in a sample/specimen for a single gene. There must be three columns,"
-+ " separated by tabs: (1) specimen/taxon ID, (2) the name of the gene/matrix, and (3) the GenBank number. The columns must be separated by TABs!!";
+				+ " separated by tabs: (1) taxon ID code, (2) the name of the gene/matrix, and (3) the GenBank number. The columns must be separated by TABs!! "
+				+"The taxon ID code must match the unique code for the sample that appears in the Taxon ID Code column of the List of Taxa window.";
 	}
 
 }

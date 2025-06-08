@@ -39,16 +39,16 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 
 	/* ................................................................................................................. */
 	public String getName() {
-		return "Import Genbank Numbers from File";
+		return "Import GenBank Numbers from File";
 	}
 	/* ................................................................................................................. */
 	public String getNameForMenuItem() {
-		return "Import Genbank Numbers from File...";
+		return "Import GenBank Numbers from File...";
 	}
 
 	/* ................................................................................................................. */
 	public String getExplanation() {
-		return "Reads text files of voucher codes or taxon names by genes and imports matches into '\"GenbankStatus\" note.";
+		return "Reads text files of voucher codes or taxon names by genes and imports matches into '\"GenBankStatus\" note.";
 	}
 
 	/* ................................................................................................................. */
@@ -116,7 +116,7 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 			if (emps.elementAt(i) instanceof GenBankNumbersFileReader)
 				choices.addElement(emps.elementAt(i), false);
 		dialog.addLabel("Format of table in file:");
-		formats = dialog.addPopUpMenu ("Built-in versions:", choices, 0);
+		formats = dialog.addPopUpMenu ("File formats:", choices, 0);
 		formats.addItemListener(this);
 		explanationOfReader =dialog.addLargeTextLabel("Explanation of chosen file format:\n\n" + getChoice(0).getExplanation());
 		exampleButton = dialog.addButton("Example");
@@ -127,13 +127,13 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 		parentOfFormats.add(exampleButton);
 		exampleButton.addActionListener(this);
 	//	examplePane = dialog.addHTMLPanel("<tt>Hello   hello    hello</tt>", 150, 150, null);
-		dialog.addStackedLabels("If you choose to import, and there is already an existing Genbank number", " recorded in the data file, and also an incoming one from the import file:", 0);
+		dialog.addStackedLabels("If you choose to import, and there is already an existing GenBank number", " recorded in the data file, and also an incoming one from the import file:", 0);
 		RadioButtons rb = dialog.addRadioButtons(new String[]{"Ignore Incoming", "Add Incoming to Existing", "Replace Existing by Incoming"},0);
 
 		dialog.addHorizontalLine(1);
 		dialog.addLargeOrSmallTextLabel("You can choose to Import the GenBank numbers according to the options above, or you can choose to see what is available (but not import or change your current data file) by Surveying the file.");
 	
-		dialog.completeAndShowDialog("Survey", "Import", "Cancel", "Cancel");
+		dialog.completeAndShowDialog("Survey Only", "Import", "Cancel", "Cancel");
 		surveyOnly = buttonPressed.getValue()==0;
 		if (buttonPressed.getValue()<2)  { //not cancel
 		  			int which = formats.getSelectedIndex();
@@ -169,17 +169,19 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 		}
 		fireEmployee(displayer);
 		
-		log("If GenBank information already exists in data file, any incoming GenBank information will ");
+		if (!surveyOnly){
+			log("If GenBank information already exists in data file for the taxon and gene, any incoming GenBank information will ");
 		if (conflictBehaviour == 0)
-			logln("be ignored");
+			logln("be ignored.");
 		else if (conflictBehaviour == 1)
-			logln("be added to the information already existing");
+			logln("be added to the information already existing.");
 		else if (conflictBehaviour == 2)
-			logln("replace the information already existing");
-	
+			logln("replace the information already existing!");
+		}
+		
 		String[][] table = readerChosen.readTable(path);
 		
-		Debugg.println(StringArray.toString(table));
+		//Debugg.println(StringArray.toString(table) +"\n@@@@@");
 		if (table == null || table.length == 0)
 			return false;
 	
@@ -188,62 +190,96 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 		if (anySelected)
 			logln("Only those taxa that are selected will be considered.");
 		String thoseNotFound = "";
+		boolean first = true;
 		boolean colored = false;
+		
+		for (int im = 0; im<getProject().getNumberCharMatrices(taxa); im++){
+			CharacterData data = getProject().getCharacterMatrix(taxa, im);
+			Associable associable = data.getTaxaInfo(false);  //the metadata is associated with this, not with the matrix directly
+			if (associable != null){
+				for (int it = 0; it<taxa.getNumTaxa(); it++) {
+					if (associable.getAssociatedObject(genBankColor, it) != null){
+					associable.setAssociatedObject(genBankColor,  it, null);  //reset to no color before starting
+					colored = true;
+					}
+				}
+			}
+		}
+
+					
 		for (int row = 0; row< table.length; row++){
 			int it = findTaxon(taxa, table[row][GenBankNumbersFileReader.ID]);
 			if (it>=0 && (!anySelected || taxa.getSelected(it))){
 					CharacterData matrix =  getProject().getCharacterMatrixReverseOrder((MesquiteFile)null, taxa, null, table[row][GenBankNumbersFileReader.GENE]);
-					if (matrix != null &&  !StringUtil.blank(table[row][GenBankNumbersFileReader.GENBANK])){
-						Associable associable = matrix.getTaxaInfo(false);  //the metadata is associated with this, not with the matrix directly
+				if (matrix != null){
+					Associable associable = matrix.getTaxaInfo(false);  //the metadata is associated with this, not with the matrix directly
+					if (!StringUtil.blank(table[row][GenBankNumbersFileReader.GENBANK])){
 						String current = (String)associable.getAssociatedString(MolecularData.genBankNumberRef,  it);
-						associable.setAssociatedObject(genBankColor,  it, null);  //reset to no color before starting
 						if (surveyOnly || conflictBehaviour != 0 || StringUtil.blank(current)){
 							String incoming = StringUtil.stripBoundingWhitespace(table[row][GenBankNumbersFileReader.GENBANK]);
 							String incomingCompact = StringUtil.stripWhitespace(incoming);
 							String currentCompact = StringUtil.stripWhitespace(current);
 							Color color = null;
+							String report = null;
 							if (!StringUtil.blank(incoming) && incoming.length() > 1){
 								if (StringUtil.blank(current)){
 									current = incoming;
-									logln("--- Genbank number \"" + incoming + "\" to be acquired for taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
-									if (surveyOnly)
+									if (surveyOnly) {
+										report = "to be acquired";
 										color = Color.yellow;
-									else
+									}
+									else {
+										report = "acquired";
 										color = ColorDistribution.veryLightYellow;
+									}
 								}
 								else if (current.length() == 1 && incoming.length()>1){ //current is just one character, a placeholder; ignore it and replace by incoming
 									current = incoming;
-									logln("--- Genbank number \"" + incoming + "\" to be acquired for taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
-									if (surveyOnly)
+									if (surveyOnly) {
+										report = "to be acquired";
 										color = Color.yellow;
-									else
+									}
+									else {
+										report = "acquired";
 										color = ColorDistribution.veryLightYellow;
+									}
 								}
 								else if (incoming.indexOf(current)>= 0 && incoming.length() > current.length()){  //incoming is superstring of current; replace by current
 									current = incoming;
-									logln("--- Genbank number \"" + incoming + "\" to replace previous \"" + current + "\" for taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
-									if (surveyOnly)
+									if (surveyOnly) {
 										color = Color.magenta;
-									else
+										report = "to REPLACE previous \"" + current + "\"";
+									}
+									else {
 										color = ColorDistribution.veryLightYellow;
+										report = "REPLACED previous \"" + current + "\"";
+									}
 								}
 								else if (current.equals(incoming)){  //same; do nothing
-									logln("    Genbank number \"" + incoming + "\" same as previous \"" + current + "\" for taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
-									if (surveyOnly)
+									report = "same as previous \"" + current + "\"";
+									if (surveyOnly) {
 										color = ColorDistribution.veryLightGreen;
+									}
 								}
 								else if (current.indexOf(incoming)>= 0){  //already included
-									logln("    Genbank number \"" + incoming + "\" already included in previous \"" + current + "\" for taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
+									report = "already included in previous \"" + current + "\"";
 									if (surveyOnly)
 										color = ColorDistribution.veryLightGreen;
 								}
 								else if (!StringUtil.blank(incomingCompact) && incomingCompact.indexOf(currentCompact)<0){  
 									if (conflictBehaviour == 1){
-										logln("#-- Genbank number \"" + incoming + "\" to append to previous \"" + current + "\" for taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
+										if (surveyOnly)
+											report = "to append to previous \"" + current + "\"";
+										else
+											report = "appended to previous \"" + current + "\"";
+
 										current = current + ";" + incoming;
 									}
 									else {
-										logln("#-- Genbank number \"" + incoming + "\" to replace previous \"" + current + "\" for taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
+										if (surveyOnly)
+											report = "to REPLACE previous \"" + current + "\"";
+										else
+											report = "REPLACED to previous \"" + current + "\"";
 										current =  incoming;
 										}
 									if (surveyOnly)
@@ -254,6 +290,12 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 								if (!surveyOnly)
 									associable.setAssociatedString(MolecularData.genBankNumberRef,  it, StringUtil.stripBoundingWhitespace(current));
 							}
+							if (report != null) {
+								if (first)
+									logln("GenBank numbers found:");
+								logln("\"" + incoming + "\" " + report + " for gene " + matrix.getName() + " in taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
+								first = false;
+							}
 							if (color != null) {
 								colored = true;
 								associable.setAssociatedObject(genBankColor,  it, color);  //color is not saved
@@ -263,17 +305,23 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 					
 				}
 			}
+			}
 			else if (!StringUtil.blank(table[row][GenBankNumbersFileReader.ID]))
 				thoseNotFound += " " + table[row][GenBankNumbersFileReader.ID];
 
 		}
+		logln("");
+		if (first)
+			logln("No GenBank numbers found that match taxon IDs and genes in this file.");
 		if (colored) {
 			ListableVector datas = getProject().getCharacterMatrices();
 			datas.notifyListeners(this, new Notification(MesquiteListener.ANNOTATION_CHANGED));
 		}
-		logln("Genbank status imported.  Number of matches found: " + count);
+		if (!surveyOnly && !first)
+			logln("GenBank numbers imported.  Number of matches found: " + count);
 		if (!StringUtil.blank(thoseNotFound))
 			logln("Taxon ID's in table but not found in taxa block: " + thoseNotFound);
+		logln("");
 		return true;
 	}
 	private int findTaxon(Taxa taxa, String id){
