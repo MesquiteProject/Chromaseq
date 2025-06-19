@@ -30,7 +30,7 @@ import mesquite.lib.ui.SingleLineTextField;
 import mesquite.lib.ui.TextCanvasWithButtons;
 
 public class AppendSecondSampleCode extends UtilitiesAssistant implements ActionListener {
-	ChromatogramFileNameParser nameParserManager;
+	static ChromatogramFileNameParser nameParserManager;  //ZQ static issue
 	String importedDirectoryPath, importedDirectoryName;
 	ProgressIndicator progIndicator = null;
 	static String previousDirectory = null;

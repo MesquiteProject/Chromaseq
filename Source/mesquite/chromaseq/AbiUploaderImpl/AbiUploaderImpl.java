@@ -31,7 +31,7 @@ import mesquite.molec.lib.DNADatabaseURLSource;
  *
  */
 public class AbiUploaderImpl extends AbiUploader {
-	private ChromatogramFileNameParser nameParserManager;
+	static ChromatogramFileNameParser nameParserManager;  //ZQ static issue
 	private ChromaseqAuthorDefaults authorDefaults;
 	private String url;
 	private SingleLineTextField uploadBatchNameField;

@@ -45,7 +45,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	MesquiteProject proj = null;
 	FileCoordinator coord = null;
 	MesquiteFile file = null;
-	ChromatogramFileNameParser nameParserManager;
+	static ChromatogramFileNameParser nameParserManager;  //ZQ static issue
 
 	boolean requiresExtension=true;
 
