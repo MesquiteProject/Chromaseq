@@ -59,7 +59,7 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 
 	/* ................................................................................................................. */
 	public boolean isPrerelease() {
-		return true;
+		return false;
 	}
 
 	/* ................................................................................................................. */
@@ -109,7 +109,7 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 		MesquiteWindow w = containerOfModule();
 		if (displayer != null)
 			w = displayer.containerOfModule();
-		dialog = new ExtensibleDialog(w,  "Importing GenBank Numbers",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
+		dialog = new ExtensibleDialog(w,  "Importing GenBank Numbers",buttonPressed);  
 		ListableVector emps = getEmployeeVector();
 		choices = new ListableVector();
 		for (int i = 0; i<emps.size(); i++)
@@ -126,7 +126,7 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 		parentOfButton.remove(exampleButton);
 		parentOfFormats.add(exampleButton);
 		exampleButton.addActionListener(this);
-	//	examplePane = dialog.addHTMLPanel("<tt>Hello   hello    hello</tt>", 150, 150, null);
+
 		dialog.addStackedLabels("If you choose to import, and there is already an existing GenBank number", " recorded in the data file, and also an incoming one from the import file:", 0);
 		RadioButtons rb = dialog.addRadioButtons(new String[]{"Ignore Incoming", "Add Incoming to Existing", "Replace Existing by Incoming"},0);
 
@@ -181,7 +181,6 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 		
 		String[][] table = readerChosen.readTable(path);
 		
-		//Debugg.println(StringArray.toString(table) +"\n@@@@@");
 		if (table == null || table.length == 0)
 			return false;
 	

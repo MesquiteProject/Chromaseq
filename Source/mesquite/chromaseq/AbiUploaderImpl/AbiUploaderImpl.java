@@ -31,7 +31,7 @@ import mesquite.molec.lib.DNADatabaseURLSource;
  *
  */
 public class AbiUploaderImpl extends AbiUploader {
-	static ChromatogramFileNameParser nameParserManager;  //ZQ static issue
+	ChromatogramFileNameParser nameParserManager;  
 	private ChromaseqAuthorDefaults authorDefaults;
 	private String url;
 	private SingleLineTextField uploadBatchNameField;
@@ -40,9 +40,8 @@ public class AbiUploaderImpl extends AbiUploader {
 	
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		loadPreferences();
-		if (nameParserManager == null) {
-			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Manager for determining how to determine sample code and primer name.");
-		}
+		nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.findEmployeeWithDuty(ChromatogramFileNameParser.class);
+
 		if (authorDefaults == null) {
 			authorDefaults = (ChromaseqAuthorDefaults)MesquiteTrunk.mesquiteTrunk.findEmployeeWithName("#ChromaseqAuthorDefaults");
 		}

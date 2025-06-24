@@ -30,7 +30,7 @@ import mesquite.lib.ui.SingleLineTextField;
 import mesquite.lib.ui.TextCanvasWithButtons;
 
 public class AppendSecondSampleCode extends UtilitiesAssistant implements ActionListener {
-	static ChromatogramFileNameParser nameParserManager;  //ZQ static issue
+	ChromatogramFileNameParser nameParserManager;  //ZQ static issue
 	String importedDirectoryPath, importedDirectoryName;
 	ProgressIndicator progIndicator = null;
 	static String previousDirectory = null;
@@ -53,7 +53,7 @@ public class AppendSecondSampleCode extends UtilitiesAssistant implements Action
 	public boolean hireRequired(){
 
 		if (nameParserManager == null)
-			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Supplier of sample code from the chromatogram file name.");
+			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.findEmployeeWithDuty(ChromatogramFileNameParser.class);
 		if (nameParserManager == null) {
 			return false;
 		} else if (!nameParserManager.queryOptions())

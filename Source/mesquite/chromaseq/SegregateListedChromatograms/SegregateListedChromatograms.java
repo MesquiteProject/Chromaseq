@@ -45,7 +45,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	MesquiteProject proj = null;
 	FileCoordinator coord = null;
 	MesquiteFile file = null;
-	static ChromatogramFileNameParser nameParserManager;  //ZQ static issue
+	ChromatogramFileNameParser nameParserManager;  //ZQ static issue
 
 	boolean requiresExtension=true;
 
@@ -83,7 +83,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	public boolean hireRequired(){
 
 		if (nameParserManager == null)
-			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Supplier of sample code from the chromatogram file name.");
+			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.findEmployeeWithDuty(ChromatogramFileNameParser.class);
 		if (nameParserManager == null) {
 			return false;
 		} else if (!nameParserManager.queryOptions())

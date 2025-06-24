@@ -30,7 +30,10 @@ public class ReadWGenBankNumbersTable extends GenBankNumbersFileReader  {
 		return true;
 	}
  
-   	public String exampleFile(){
+	public boolean isPrerelease(){
+		return false;
+	}
+ 	public String exampleFile(){
    		return "<tt>id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;28s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>"
    				+ "voucher123&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EF201661&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>"
    				+"voucher116&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DQ665754<br>"
