@@ -6,8 +6,6 @@ import java.awt.TextArea;
 import java.io.File;
 
 import mesquite.chromaseq.ChromaseqAuthorDefaults.ChromaseqAuthorDefaults;
-import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameDialog;
-import mesquite.chromaseq.SampleAndPrimerFileNameParser.ChromFileNameParsing;
 import mesquite.chromaseq.lib.AbiUploader;
 import mesquite.chromaseq.lib.ChromatogramFileNameParser;
 import mesquite.chromaseq.lib.SequenceUploader;

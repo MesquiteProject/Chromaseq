@@ -13,10 +13,17 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.IsReverseComplemented;
 
-import mesquite.categ.lib.*;
-import mesquite.lib.*;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.DNAState;
+import mesquite.categ.lib.RequiresAnyDNAData;
+import mesquite.lib.CompatibilityTest;
+import mesquite.lib.EmployeeNeed;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteString;
 import mesquite.lib.characters.MCharactersDistribution;
-import mesquite.lib.duties.*;
+import mesquite.lib.duties.BooleanForTaxon;
+import mesquite.lib.duties.MatrixSourceCoord;
 import mesquite.lib.taxa.Taxa;
 
 public class IsReverseComplemented extends BooleanForTaxon {

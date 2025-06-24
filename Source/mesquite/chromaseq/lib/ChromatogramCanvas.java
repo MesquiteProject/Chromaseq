@@ -22,10 +22,13 @@ import java.awt.geom.QuadCurve2D;
 
 import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.chromaseq.ViewChromatograms.ChromatogramCloseupPanel;
+import mesquite.lib.IntegerArray;
+import mesquite.lib.MesquiteEvent;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.StringUtil;
 import mesquite.lib.ui.ColorDistribution;
 import mesquite.lib.ui.MesquiteTool;
 import mesquite.lib.ui.MousePanel;
-import mesquite.lib.*;
 
 public class ChromatogramCanvas extends MousePanel {
 

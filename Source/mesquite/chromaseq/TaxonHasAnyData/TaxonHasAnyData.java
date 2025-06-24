@@ -13,11 +13,10 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.TaxonHasAnyData;
 
-import java.awt.Container;
-
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.lib.duties.*;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.characters.CharacterData;
+import mesquite.lib.duties.BooleanForTaxon;
 import mesquite.lib.taxa.Taxa;
 
 public class TaxonHasAnyData extends BooleanForTaxon {

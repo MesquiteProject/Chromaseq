@@ -13,16 +13,27 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.ViewChromatograms;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import mesquite.categ.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.lib.duties.FileCoordinator;
-import mesquite.lib.*;
-import mesquite.chromaseq.lib.*;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.DNAState;
+import mesquite.categ.lib.MesquiteSequence;
+import mesquite.categ.lib.MolecularData;
+import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.chromaseq.lib.Contig;
+import mesquite.chromaseq.lib.ContigDisplay;
+import mesquite.chromaseq.lib.ContigMapper;
+import mesquite.chromaseq.lib.Read;
+import mesquite.chromaseq.lib.SequenceCanvas;
+import mesquite.chromaseq.lib.SequencePanel;
 import mesquite.cont.lib.ContinuousData;
-import mesquite.meristic.lib.*;
+import mesquite.lib.MesquiteDouble;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteListener;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteStringBuffer;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.Notification;
+import mesquite.lib.characters.CharacterData;
+import mesquite.meristic.lib.MeristicData;
 
 public class ChromaseqUniversalMapper implements MesquiteListener {
 	public ContigMapper getContigMapper() {

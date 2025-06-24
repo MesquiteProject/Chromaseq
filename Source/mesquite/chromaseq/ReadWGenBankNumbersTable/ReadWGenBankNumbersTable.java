@@ -16,10 +16,9 @@ package mesquite.chromaseq.ReadWGenBankNumbersTable;
 import java.util.Vector;
 
 import mesquite.chromaseq.lib.GenBankNumbersFileReader;
-import mesquite.lib.*;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.StringUtil;
 import mesquite.lib.characters.CharacterData;
-import mesquite.lib.duties.*;
-import mesquite.lib.taxa.Taxa;
 
 
 

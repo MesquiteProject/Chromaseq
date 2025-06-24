@@ -1,14 +1,20 @@
 package mesquite.chromaseq.lib;
 
-import java.awt.Button;
 import java.awt.Choice;
 import java.util.Iterator;
 import java.util.List;
 
-import mesquite.lib.*;
-import mesquite.lib.ui.ExtensibleDialog;
+import org.dom4j.Document;
+import org.dom4j.Element;
 
-import org.dom4j.*;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.StringUtil;
+import mesquite.lib.XMLUtil;
+import mesquite.lib.ui.ExtensibleDialog;
 
 public class ChromaseqSampleToNamesXMLProcessor {
 	Document namesDoc = null;

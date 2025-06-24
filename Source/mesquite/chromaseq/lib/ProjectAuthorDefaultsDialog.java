@@ -2,24 +2,30 @@
 
 package mesquite.chromaseq.lib;
 
-import java.awt.*;
+import java.awt.Choice;
+import java.awt.Cursor;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 
-import org.dom4j.*;
+import org.dom4j.Document;
+import org.dom4j.Element;
 
-import mesquite.tol.lib.*;
-
-import mesquite.lib.*;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.StringUtil;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.MQJLabel;
 import mesquite.lib.ui.MesquiteWindow;
 import mesquite.lib.ui.SingleLineTextField;
+import mesquite.tol.lib.BaseHttpRequestMaker;
+import mesquite.tol.lib.XMLConstants;
 
 /**
  * Dialog to choose an author from a list of project collaborators

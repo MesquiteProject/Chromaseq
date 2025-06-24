@@ -13,7 +13,8 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.NumberOfReadsT;
 
-import mesquite.categ.lib.*;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.DNAState;
 import mesquite.chromaseq.lib.AceFile;
 import mesquite.lib.EmployeeNeed;
 import mesquite.lib.MesquiteModule;

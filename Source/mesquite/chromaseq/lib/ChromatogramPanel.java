@@ -13,7 +13,6 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.lib;
 
-import mesquite.lib.*;
 import mesquite.lib.ui.MesquitePanel;
 
 public  class ChromatogramPanel extends MesquitePanel{

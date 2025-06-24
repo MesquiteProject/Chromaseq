@@ -22,16 +22,28 @@ import java.util.Hashtable;
 import java.util.Random;
 
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.dom4j.*;
+import org.dom4j.Document;
+import org.dom4j.Element;
 
-import mesquite.tol.lib.*;
-
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
+import mesquite.chromaseq.lib.AbiDownloader;
+import mesquite.chromaseq.lib.ChromatogramProcessor;
+import mesquite.lib.CompatibilityTest;
+import mesquite.lib.EmployeeNeed;
+import mesquite.lib.EmployerEmployee;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.MesquiteXMLUtilities;
+import mesquite.lib.StringUtil;
+import mesquite.lib.ZipUtil;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.SingleLineTextField;
 //import mesquite.BTOL.lib.*;
 import mesquite.molec.lib.DNADatabaseURLSource;
+import mesquite.tol.lib.BaseHttpRequestMaker;
+import mesquite.tol.lib.XMLConstants;
 
 public class AbiDownloaderImpl extends AbiDownloader {
 	protected DNADatabaseURLSource databaseURLSource = null;

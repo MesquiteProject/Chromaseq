@@ -14,14 +14,16 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.PurgeChromaseqData; 
 
 
-import java.awt.*;
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.lib.duties.*;
+import mesquite.categ.lib.RequiresAnyMolecularData;
+import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.lib.CompatibilityTest;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteListener;
+import mesquite.lib.Notification;
+import mesquite.lib.Snapshot;
+import mesquite.lib.characters.CharacterData;
+import mesquite.lib.duties.DataUtility;
 import mesquite.lib.ui.AlertDialog;
-import mesquite.categ.lib.*;
-import mesquite.chromaseq.lib.*;
-import mesquite.molec.lib.*;
 
 /* ======================================================================== */
 public class PurgeChromaseqData extends DataUtility { 

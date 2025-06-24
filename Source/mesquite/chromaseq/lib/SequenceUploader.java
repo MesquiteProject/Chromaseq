@@ -2,17 +2,18 @@ package mesquite.chromaseq.lib;
 
 import java.io.File;
 import java.util.Hashtable;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
-import mesquite.lib.StringUtil;
 import mesquite.lib.MesquiteXMLUtilities;
+import mesquite.lib.StringUtil;
 import mesquite.molec.lib.DNADatabaseURLSource;
 //import mesquite.BTOL.lib.*;
-
-
-import org.dom4j.*;
-
-import mesquite.tol.lib.*;
+import mesquite.tol.lib.ToLRequestParameters;
+import mesquite.tol.lib.XMLConstants;
 
 
 public class SequenceUploader {

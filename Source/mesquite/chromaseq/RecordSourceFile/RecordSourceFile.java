@@ -14,15 +14,13 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.RecordSourceFile; 
 
 
-import java.awt.*;
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.lib.duties.*;
+import mesquite.lib.Associable;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.NameReference;
+import mesquite.lib.characters.CharacterData;
+import mesquite.lib.duties.FileAssistantT;
 import mesquite.lib.taxa.Taxa;
 import mesquite.lib.ui.QueryDialogs;
-import mesquite.categ.lib.*;
-import mesquite.chromaseq.lib.*;
-import mesquite.molec.lib.*;
 
 /* ======================================================================== */
 public class RecordSourceFile extends FileAssistantT { 

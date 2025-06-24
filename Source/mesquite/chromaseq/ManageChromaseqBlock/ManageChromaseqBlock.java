@@ -14,15 +14,37 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.ManageChromaseqBlock;
 
 
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.categ.lib.*;
-import mesquite.lib.duties.*;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.MolecularData;
+import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.chromaseq.lib.ContigMapper;
+import mesquite.lib.Associable;
+import mesquite.lib.FileBlock;
+import mesquite.lib.FileElement;
+import mesquite.lib.ListableVector;
+import mesquite.lib.MesquiteDouble;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteListener;
+import mesquite.lib.MesquiteLong;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTimer;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.NameReference;
+import mesquite.lib.NexusBlock;
+import mesquite.lib.NexusBlockTest;
+import mesquite.lib.Notification;
+import mesquite.lib.ObjectArray;
+import mesquite.lib.ParseUtil;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
+import mesquite.lib.characters.CharacterData;
+import mesquite.lib.characters.CharacterStates;
+import mesquite.lib.duties.FileInit;
 import mesquite.lib.misc.VoucherInfoFromOTUIDDB;
 import mesquite.lib.taxa.Taxa;
 import mesquite.lib.taxa.Taxon;
-import mesquite.meristic.lib.MeristicData;
-import mesquite.chromaseq.lib.*;
 
 public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 

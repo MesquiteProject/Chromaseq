@@ -4,7 +4,7 @@ import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.Parser;
-import mesquite.lib.*;
+import mesquite.lib.StringUtil;
 
 public class GenBankTabbedFileProcessor {
 

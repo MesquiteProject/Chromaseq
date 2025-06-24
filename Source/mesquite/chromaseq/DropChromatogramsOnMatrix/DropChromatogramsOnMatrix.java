@@ -13,11 +13,12 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.DropChromatogramsOnMatrix;
 
-import mesquite.lib.*;
+import java.io.File;
+
+import mesquite.lib.MesquiteDropListener;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.DataWindowAssistantI;
 import mesquite.lib.table.MesquiteTable;
-import java.io.*;
 
 public class DropChromatogramsOnMatrix extends DataWindowAssistantI implements MesquiteDropListener{
 	MesquiteTable table;

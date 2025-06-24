@@ -1,8 +1,8 @@
 package mesquite.chromaseq.SequenceNameFromSampleCode;
 
 
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
+import mesquite.chromaseq.lib.SequenceNameSource;
+import mesquite.lib.StringUtil;
 
 public class SequenceNameFromSampleCode extends SequenceNameSource  {
 

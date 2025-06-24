@@ -14,8 +14,23 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.ViewChromatograms;
 
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.Scrollbar;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+
+import mesquite.chromaseq.lib.AceFile;
+import mesquite.chromaseq.lib.Chromatogram;
+import mesquite.chromaseq.lib.ChromatogramCanvas;
+import mesquite.chromaseq.lib.ChromatogramPanel;
+import mesquite.chromaseq.lib.ChromatogramTool;
+import mesquite.chromaseq.lib.ContigDisplay;
+import mesquite.chromaseq.lib.Read;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.StringUtil;
 import mesquite.lib.ui.ClosablePanel;
 import mesquite.lib.ui.ClosablePanelContainer;
 import mesquite.lib.ui.ColorDistribution;
@@ -23,10 +38,6 @@ import mesquite.lib.ui.GraphicsUtil;
 import mesquite.lib.ui.MQScrollbar;
 import mesquite.lib.ui.MesquitePanel;
 import mesquite.lib.ui.MesquiteTool;
-
-import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 
 public class ContigOverviewPanel extends ChromatogramPanel implements AdjustmentListener{
 	ContigOverviewCanvas contigOverviewCanvas = null;

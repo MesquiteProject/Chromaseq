@@ -15,19 +15,18 @@ package mesquite.chromaseq.lib;
 
 import java.util.Vector;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
 import mesquite.lib.CommandRecord;
 import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
-import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.StringUtil;
 import mesquite.lib.XMLUtil;
 import mesquite.lib.ui.ProgressIndicator;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 
 public class ChromaseqInfoFile {
 

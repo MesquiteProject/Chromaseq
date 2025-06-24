@@ -14,16 +14,11 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.lib;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import mesquite.categ.lib.DNAData;
-import mesquite.categ.lib.DNAState;
 import mesquite.categ.lib.MolecularData;
-import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
+import mesquite.lib.MesquiteDouble;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteModule;
 import mesquite.meristic.lib.MeristicData;
-import mesquite.lib.*;
-import mesquite.lib.characters.CharacterData;
 
 public class ContigMapper {
 	int numAddedToEnd, numResurrectedAtStart;

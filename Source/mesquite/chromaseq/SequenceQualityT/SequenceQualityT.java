@@ -14,9 +14,14 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.SequenceQualityT;
 
 import mesquite.categ.lib.MolecularState;
-import mesquite.chromaseq.lib.*;
+import mesquite.chromaseq.lib.ChromaseqUtil;
 import mesquite.cont.lib.ContinuousData;
-import mesquite.lib.*;
+import mesquite.lib.EmployeeNeed;
+import mesquite.lib.MesquiteDouble;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteNumber;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.Notification;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.characters.MCharactersDistribution;
 import mesquite.lib.duties.MatrixSourceCoord;

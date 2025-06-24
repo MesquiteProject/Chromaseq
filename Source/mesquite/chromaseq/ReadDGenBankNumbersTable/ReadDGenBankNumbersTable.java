@@ -13,13 +13,8 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 */
 package mesquite.chromaseq.ReadDGenBankNumbersTable;
 
-import java.util.Vector;
-
 import mesquite.chromaseq.lib.GenBankNumbersFileReader;
-import mesquite.lib.*;
-import mesquite.lib.characters.CharacterData;
-import mesquite.lib.duties.*;
-import mesquite.lib.taxa.Taxa;
+import mesquite.lib.MesquiteFile;
 
 
 

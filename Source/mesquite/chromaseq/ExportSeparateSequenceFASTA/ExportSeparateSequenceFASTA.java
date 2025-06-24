@@ -14,24 +14,26 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.ExportSeparateSequenceFASTA;
 /*~~  */
 
-import java.awt.*;
-import java.util.Vector;
+import java.awt.Checkbox;
 
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
+import mesquite.categ.lib.MolecularData;
+import mesquite.categ.lib.MolecularState;
+import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.lib.Arguments;
+import mesquite.lib.ExporterDialog;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteStringBuffer;
+import mesquite.lib.MesquiteThread;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
 import mesquite.lib.characters.CharacterData;
-import mesquite.lib.duties.*;
+import mesquite.lib.duties.FileInterpreterI;
 import mesquite.lib.misc.VoucherInfoFromOTUIDDB;
 import mesquite.lib.taxa.Taxa;
 import mesquite.lib.ui.RadioButtons;
 import mesquite.lib.ui.SingleLineTextField;
-import mesquite.assoc.lib.AssociationSource;
-import mesquite.assoc.lib.TaxaAssociation;
-import mesquite.basic.ManageTaxaPartitions.ManageTaxaPartitions;
-import mesquite.categ.lib.*;
-import mesquite.chromaseq.lib.ChromaseqUtil;
-import mesquite.cont.lib.ContinuousData;
-import mesquite.io.lib.*;
 
 
 /* ============  a file interpreter for DNA/RNA  Fasta files ============*/

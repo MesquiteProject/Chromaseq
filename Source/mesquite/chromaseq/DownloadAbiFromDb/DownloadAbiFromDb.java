@@ -8,7 +8,6 @@ import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteProject;
 import mesquite.lib.MesquiteTrunk;
 import mesquite.lib.duties.UtilitiesAssistant;
-import mesquite.molec.lib.DNADatabaseURLSource;
 
 public class DownloadAbiFromDb extends UtilitiesAssistant {
 	private static final String COMMAND_NAME = "downloadAbiFromDb";

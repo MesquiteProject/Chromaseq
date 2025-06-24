@@ -16,15 +16,19 @@ package mesquite.chromaseq.lib;
 
 import java.io.File;
 
-import mesquite.align.lib.PairwiseAligner;
-import mesquite.categ.lib.*;
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.lib.duties.*;
+import mesquite.categ.lib.DNAData;
+import mesquite.lib.Associable;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.Notification;
+import mesquite.lib.StringUtil;
+import mesquite.lib.characters.CharacterData;
 import mesquite.lib.taxa.Taxa;
 import mesquite.lib.ui.AlertDialog;
-import mesquite.tol.lib.MesquiteXMLToLUtilities;
-import mesquite.chromaseq.lib.*;
 
 public class AceDirectoryProcessor {
 	

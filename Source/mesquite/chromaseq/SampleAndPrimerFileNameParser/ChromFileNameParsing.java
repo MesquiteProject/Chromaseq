@@ -14,12 +14,24 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.SampleAndPrimerFileNameParser;
 
-import java.awt.*;
-import java.util.regex.*;
+import java.awt.Checkbox;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.dom4j.*;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
-import mesquite.lib.*;
+import mesquite.lib.Explainable;
+import mesquite.lib.Listable;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.StringUtil;
+import mesquite.lib.XMLUtil;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.SingleLineTextField;
 

@@ -29,15 +29,26 @@ import java.io.IOException;
 
 import javax.swing.JLabel;
 
-import mesquite.lib.*;
-import mesquite.lib.duties.*;
+import mesquite.chromaseq.lib.ChromatogramFileNameParser;
+import mesquite.lib.CommandChecker;
+import mesquite.lib.EmployeeNeed;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
+import mesquite.lib.duties.FileCoordinator;
+import mesquite.lib.duties.UtilitiesAssistant;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.MesquiteTextCanvas;
 import mesquite.lib.ui.ProgressIndicator;
 import mesquite.lib.ui.QueryDialogs;
 import mesquite.lib.ui.SingleLineTextField;
 import mesquite.lib.ui.TextCanvasWithButtons;
-import mesquite.chromaseq.lib.*;
 
 /* ======================================================================== */
 public class SegregateListedChromatograms extends UtilitiesAssistant implements ActionListener{ 

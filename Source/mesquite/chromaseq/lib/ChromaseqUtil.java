@@ -12,24 +12,38 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.lib;
 
-import java.awt.*;
-import java.util.Iterator;
-import java.util.List;
+import java.awt.Color;
+import java.awt.Component;
 
-import org.apache.hivemind.util.PropertyUtils;
-import org.dom4j.*;
-
-import mesquite.lib.*;
-import mesquite.lib.duties.*;
+import mesquite.align.lib.PairwiseAligner;
+import mesquite.categ.lib.CategoricalData;
+import mesquite.categ.lib.CategoricalState;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.DNAState;
+import mesquite.categ.lib.MolecularData;
+import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
+import mesquite.cont.lib.ContinuousData;
+import mesquite.lib.Associable;
+import mesquite.lib.Attachable;
+import mesquite.lib.CommandRecord;
+import mesquite.lib.ListableVector;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteLong;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteNumber;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.NameReference;
+import mesquite.lib.StringArray;
+import mesquite.lib.StringUtil;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.CharactersManager;
+import mesquite.lib.duties.FileCoordinator;
 import mesquite.lib.taxa.Taxon;
 import mesquite.lib.ui.ColorDistribution;
-import mesquite.align.lib.PairwiseAligner;
-import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
-import mesquite.cont.lib.*;
-import mesquite.categ.lib.*;
-import mesquite.meristic.lib.*;
+import mesquite.meristic.lib.MeristicData;
+import mesquite.meristic.lib.MeristicState;
 
 public class ChromaseqUtil{
 	

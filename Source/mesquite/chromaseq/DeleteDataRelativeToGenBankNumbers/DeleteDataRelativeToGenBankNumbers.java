@@ -1,16 +1,29 @@
 /* Mesquite source code.  Copyright 1997 and onward, W. Maddison and D. Maddison. 
-Disclaimer:  The Mesquite source code is lengthy and we are few.  There are no doubt inefficiencies and goofs in this code. The commenting leaves much to be desired. Please approach this source code with the spirit of helping out.Perhaps with your help we can be more than a few, and make Mesquite better.Mesquite is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.Mesquite's web site is http://mesquiteproject.orgThis source code and its compiled class files are free and modifiable under the terms of GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html) */package mesquite.chromaseq.DeleteDataRelativeToGenBankNumbers;/*~~  */import mesquite.lists.lib.*;
+Disclaimer:  The Mesquite source code is lengthy and we are few.  There are no doubt inefficiencies and goofs in this code. The commenting leaves much to be desired. Please approach this source code with the spirit of helping out.Perhaps with your help we can be more than a few, and make Mesquite better.Mesquite is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.Mesquite's web site is http://mesquiteproject.orgThis source code and its compiled class files are free and modifiable under the terms of GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html) */package mesquite.chromaseq.DeleteDataRelativeToGenBankNumbers;/*~~  */import java.awt.Checkbox;
+import java.util.Vector;
 
-import java.io.IOException;import java.net.URI;import java.net.URISyntaxException;import java.util.*;import java.awt.*;import java.awt.event.*;
-
-import mesquite.lib.*;import mesquite.lib.characters.CharacterData;
-import mesquite.categ.lib.*;
-import mesquite.lib.duties.*;import mesquite.lib.table.*;
+import mesquite.categ.lib.MolecularData;
+import mesquite.lib.Associable;
+import mesquite.lib.CommandChecker;
+import mesquite.lib.CommandRecord;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteCommand;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteListener;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteThread;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.Notification;
+import mesquite.lib.Puppeteer;
+import mesquite.lib.StringUtil;import mesquite.lib.characters.CharacterData;
+import mesquite.lib.table.MesquiteTable;
 import mesquite.lib.taxa.Taxa;
 import mesquite.lib.taxa.Taxon;
 import mesquite.lib.ui.AlertDialog;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.RadioButtons;
+import mesquite.lists.lib.ListModule;
+import mesquite.lists.lib.TaxaListAssistantI;
 /* ======================================================================== */public class DeleteDataRelativeToGenBankNumbers extends TaxaListAssistantI  {	Taxa taxa;	MesquiteTable table;
 	boolean deleteWithGenBankNumbers = true;
 	boolean removeGenBankNumbers = true;

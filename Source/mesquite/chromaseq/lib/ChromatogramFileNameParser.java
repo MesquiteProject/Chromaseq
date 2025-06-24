@@ -14,9 +14,9 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.lib;
 
 
-import mesquite.lib.*;
-import mesquite.lib.duties.*;
-import java.awt.*;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.duties.MesquiteInit;
 
 /* Modules of this duty class are responsible for being able to supply the sample code and primer name given the chromatogram file name */
 public abstract class ChromatogramFileNameParser extends MesquiteInit {

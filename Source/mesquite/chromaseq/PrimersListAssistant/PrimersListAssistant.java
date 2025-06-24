@@ -13,16 +13,22 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.PrimersListAssistant;
 
-import mesquite.categ.lib.*;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.DNAState;
 import mesquite.chromaseq.lib.ChromaseqUtil;
-import mesquite.lists.lib.*;
-
-import mesquite.lib.*;
+import mesquite.lib.Associable;
+import mesquite.lib.CommandChecker;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.Notification;
+import mesquite.lib.Snapshot;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.characters.MCharactersDistribution;
 import mesquite.lib.duties.MatrixSourceCoord;
-import mesquite.lib.table.*;
+import mesquite.lib.table.MesquiteTable;
 import mesquite.lib.taxa.Taxa;
+import mesquite.lists.lib.TaxonListAssistant;
 
 
 /* ======================================================================== */

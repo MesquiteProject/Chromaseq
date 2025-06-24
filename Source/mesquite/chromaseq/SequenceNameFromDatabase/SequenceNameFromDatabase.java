@@ -3,8 +3,12 @@ package mesquite.chromaseq.SequenceNameFromDatabase;
 
 import org.dom4j.Element;
 
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
+import mesquite.chromaseq.lib.DatabaseSampleCodeSource;
+import mesquite.chromaseq.lib.SequenceNameSource;
+import mesquite.lib.CompatibilityTest;
+import mesquite.lib.EmployerEmployee;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteTrunk;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
 public class SequenceNameFromDatabase extends SequenceNameSource  {

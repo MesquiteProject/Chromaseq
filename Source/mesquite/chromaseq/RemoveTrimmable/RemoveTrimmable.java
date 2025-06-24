@@ -12,6 +12,8 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
  */
 package mesquite.chromaseq.RemoveTrimmable;
 
+import mesquite.chromaseq.lib.ChromaseqUtil;
+
 /* Mesquite source code.  Copyright 1997-2009 W. Maddison and D. Maddison.
 Version 2.7, August 2009.
 Disclaimer:  The Mesquite source code is lengthy and we are few.  There are no doubt inefficiencies and goofs in this code. 
@@ -24,13 +26,13 @@ Mesquite's web site is http://mesquiteproject.org
 This source code and its compiled class files are free and modifiable under the terms of 
 GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 */
-
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
+import mesquite.lib.MesquiteLong;
+import mesquite.lib.UndoReference;
+import mesquite.lib.characters.AltererSimpleCell;
 import mesquite.lib.characters.CharacterData;
-import mesquite.lib.duties.*;
-import mesquite.lib.table.*;
-import mesquite.chromaseq.lib.*;
+import mesquite.lib.characters.CharacterState;
+import mesquite.lib.duties.DataAlterer;
+import mesquite.lib.table.MesquiteTable;
 
 /* ======================================================================== */
 public class RemoveTrimmable extends DataAlterer implements AltererSimpleCell{

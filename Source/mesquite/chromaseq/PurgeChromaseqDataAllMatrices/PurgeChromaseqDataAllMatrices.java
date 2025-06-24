@@ -14,14 +14,12 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.PurgeChromaseqDataAllMatrices;
 /*~~  */
 
-import java.util.*;
-import java.awt.*;
-import java.awt.image.*;
-
 import mesquite.chromaseq.lib.ChromaseqUtil;
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.lib.duties.*;
+import mesquite.lib.CommandChecker;
+import mesquite.lib.ListableVector;
+import mesquite.lib.MesquiteListener;
+import mesquite.lib.Notification;
+import mesquite.lib.duties.FileAssistantM;
 import mesquite.lib.ui.AlertDialog;
 
 /* ======================================================================== */

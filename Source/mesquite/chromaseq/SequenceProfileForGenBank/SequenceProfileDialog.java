@@ -9,9 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import mesquite.chromaseq.lib.ChromatogramFileNameParser;
 import mesquite.chromaseq.lib.SequenceProfile;
-import mesquite.lib.*;
+import mesquite.lib.MesquiteInteger;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.MesquiteWindow;
 

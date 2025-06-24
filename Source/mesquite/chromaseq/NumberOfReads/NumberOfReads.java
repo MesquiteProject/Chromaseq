@@ -13,16 +13,12 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.NumberOfReads;
 
-import mesquite.categ.lib.*;
+import mesquite.categ.lib.DNAData;
 import mesquite.chromaseq.lib.AceFile;
-import mesquite.lib.EmployeeNeed;
-import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteNumber;
 import mesquite.lib.MesquiteString;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.characters.MCharactersDistribution;
-import mesquite.lib.duties.MatrixSourceCoord;
-import mesquite.lib.duties.NumberForTaxon;
 import mesquite.lib.duties.NumberForTaxonAndMatrix;
 import mesquite.lib.taxa.Taxa;
 import mesquite.lib.taxa.Taxon;
