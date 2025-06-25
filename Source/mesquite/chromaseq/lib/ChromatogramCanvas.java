@@ -755,7 +755,7 @@ public class ChromatogramCanvas extends MousePanel {
 		String s = "";
 		if (quality>=0)
 			s+= "Base quality: " + quality + ",   Peak heights: " + getPeakHeightsOfBase(SETREAD,readBaseNumber);
-		s+= "\n# Bases with Quality � " + reads[SETREAD].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[SETREAD].getTitle()+")";
+		s+= "\n# Bases with Quality ≥ " + reads[SETREAD].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[SETREAD].getTitle()+")";
 		contigDisplay.setExplanation( s);
 		if (tool == null)
 			return;

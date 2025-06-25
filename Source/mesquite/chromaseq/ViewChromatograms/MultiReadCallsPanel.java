@@ -504,7 +504,7 @@ class MultiReadCallsCanvas extends ChromatogramCanvas {
 		String s = "";
 		if (quality>=0)
 			s+= "Base quality: " + quality + ",   Peak heights: " + getPeakHeightsOfBase(whichRead,readBaseNumber);
-		s+= "\n# Bases with Quality � " + reads[whichRead].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[whichRead].getTitle()+")";
+		s+= "\n# Bases with Quality ≥ " + reads[whichRead].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[whichRead].getTitle()+")";
 		contigDisplay.setExplanation( s);
 		if (tool == null)
 			return;
