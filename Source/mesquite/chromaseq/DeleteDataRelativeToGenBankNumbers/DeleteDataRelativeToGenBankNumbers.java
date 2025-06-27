@@ -87,12 +87,13 @@ import mesquite.lists.lib.TaxaListAssistantI;
 		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);		
 		ExtensibleDialog dialog = new ExtensibleDialog(MesquiteTrunk.mesquiteTrunk.containerOfModule(), 
 				"Delete data relative to presence of GenBank numbers", buttonPressed);
+
 		int defaultValue =0;
 		if (!deleteWithGenBankNumbers) 
 			defaultValue=1;
 		RadioButtons deleteWithGenBankRadioButtons = dialog.addRadioButtons(new String[] {"delete each sequence for which there IS an associated GenBank accession number", "delete each sequence for which there is NOT an associated GenBank accession number"}, defaultValue);
 		Checkbox removeGenBankNumbersBox = dialog.addCheckBox ("remove GenBank number if sequence is deleted", removeGenBankNumbers);
-
+		dialog.setDefaultButton("Delete Sequence Data");
 		
 		dialog.completeAndShowDialog(true);
 		boolean success = buttonPressed.getValue()== dialog.defaultOK; 
