@@ -6,7 +6,6 @@ import mesquite.categ.lib.MolecularData;
 import mesquite.lib.Associable;
 import mesquite.lib.CommandChecker;
 import mesquite.lib.CommandRecord;
-import mesquite.lib.Debugg;
 import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteCommand;
 import mesquite.lib.MesquiteInteger;
