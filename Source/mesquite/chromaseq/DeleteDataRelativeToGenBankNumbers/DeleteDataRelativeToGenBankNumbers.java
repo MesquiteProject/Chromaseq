@@ -39,7 +39,7 @@ import mesquite.lists.lib.TaxonListUtility;
 	public boolean isPrerelease(){
 		return false;
 	}
-	/*.................................................................................................................*/	public int getVersionOfFirstRelease(){		return -NEXTRELEASE;  	}	/*.................................................................................................................*/	public boolean startJob(String arguments, Object condition, boolean hiredByName){
+	/*.................................................................................................................*/	public int getVersionOfFirstRelease(){		return -1700;  	}	/*.................................................................................................................*/	public boolean startJob(String arguments, Object condition, boolean hiredByName){
 		//addMenuItem("Delete Sequences with OR without GenBank Numbers...", new MesquiteCommand("deleteDataGB", this));		return true;	}
 	/*...............................................................................................................*/
 	/** Sets the GenBank number of a particular taxon in this data object. */
