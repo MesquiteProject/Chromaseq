@@ -24,8 +24,8 @@ import mesquite.lib.ui.AlertDialog;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.RadioButtons;
 import mesquite.lists.lib.ListModule;
-import mesquite.lists.lib.TaxaListAssistantI;
-/* ======================================================================== */public class DeleteDataRelativeToGenBankNumbers extends TaxaListAssistantI  {	Taxa taxa;	MesquiteTable table;
+import mesquite.lists.lib.TaxonListUtility;
+/* ======================================================================== */public class DeleteDataRelativeToGenBankNumbers extends TaxonListUtility  {	Taxa taxa;	MesquiteTable table;
 	boolean deleteWithGenBankNumbers = true;
 	boolean removeGenBankNumbers = true;
 	
@@ -40,8 +40,8 @@ import mesquite.lists.lib.TaxaListAssistantI;
 	public boolean isPrerelease(){
 		return false;
 	}
-	/*.................................................................................................................*/	public int getVersionOfFirstRelease(){		return -1530;  	}	/*.................................................................................................................*/	public boolean startJob(String arguments, Object condition, boolean hiredByName){
-		addMenuItem("Delete Sequences with OR without GenBank Numbers...", new MesquiteCommand("deleteDataGB", this));		return true;	}
+	/*.................................................................................................................*/	public int getVersionOfFirstRelease(){		return -NEXTRELEASE;  	}	/*.................................................................................................................*/	public boolean startJob(String arguments, Object condition, boolean hiredByName){
+		//addMenuItem("Delete Sequences with OR without GenBank Numbers...", new MesquiteCommand("deleteDataGB", this));		return true;	}
 	/*...............................................................................................................*/
 	/** Sets the GenBank number of a particular taxon in this data object. */
 	public boolean hasGenBankNumber(MolecularData data, int it){
@@ -104,69 +104,72 @@ import mesquite.lists.lib.TaxaListAssistantI;
 		return success;
 	}
 
-	/*.................................................................................................................*/
+	/*.................................................................................................................*/	public boolean isSubstantive(){		return true;	}
+	
+		/*.................................................................................................................*/	public boolean operateOnTaxa(MesquiteTable table, Taxa taxa){		this.table = table;		this.taxa = taxa;		if (taxa == null)
+			return false;
+		int numMatrices = getProject().getNumberCharMatrices(taxa);
+		if (numMatrices<1)
+			return false;
+		if (!queryOptions())
+			return false;
+		if (!AlertDialog.query(containerOfModule(), "Delete data?", "Are you SURE you want to delete the sequence data?  (This cannot be undone.)")) 
+			return false;
 
-	/** A request for the MesquiteModule to perform a command.  It is passed two strings, the name of the command and the arguments.	This should be overridden by any module that wants to respond to a command.*/	public Object doCommand(String commandName, String arguments, CommandChecker checker) { 		if (checker.compare(MesquiteModule.class, null, null, commandName, "deleteDataGB")) {
-			if (taxa == null)
-				return null;
-			int numMatrices = getProject().getNumberCharMatrices(taxa);
-			if (numMatrices<1)
-				return null;
-			if (!queryOptions())
-				return null;
-			if (!AlertDialog.query(containerOfModule(), "Delete data?", "Are you SURE you want to delete the sequence data?  (This cannot be undone.)")) 
-				return null;
-
-			Vector datas = new Vector();
-			for (int i = 0; i<numMatrices; i++){
-				CharacterData data = getProject().getCharacterMatrix(taxa, i);
-				if (data.isUserVisible())
-					datas.addElement(data);
-			}			if (getEmployer() instanceof ListModule){
-				ListModule listModule = (ListModule)getEmployer();
-				/*	Vector v = listModule.getAssistants();
-				for (int k = 0; k< v.size(); k++){
-					ListAssistant a = (ListAssistant)v.elementAt(k);
-					if (a instanceof mesquite.molec.TaxaListHasData.TaxaListHasData){
-						mesquite.molec.TaxaListHasData.TaxaListHasData tLHD = (mesquite.molec.TaxaListHasData.TaxaListHasData)a;
-						CharacterData data = tLHD.getCharacterData();
-						if (datas.indexOf(data)>=0)
-							datas.removeElement(data);
-					}
+		Vector datas = new Vector();
+		for (int i = 0; i<numMatrices; i++){
+			CharacterData data = getProject().getCharacterMatrix(taxa, i);
+			if (data.isUserVisible())
+				datas.addElement(data);
+		}
+		if (getEmployer() instanceof ListModule){
+			ListModule listModule = (ListModule)getEmployer();
+			/*	Vector v = listModule.getAssistants();
+			for (int k = 0; k< v.size(); k++){
+				ListAssistant a = (ListAssistant)v.elementAt(k);
+				if (a instanceof mesquite.molec.TaxaListHasData.TaxaListHasData){
+					mesquite.molec.TaxaListHasData.TaxaListHasData tLHD = (mesquite.molec.TaxaListHasData.TaxaListHasData)a;
+					CharacterData data = tLHD.getCharacterData();
+					if (datas.indexOf(data)>=0)
+						datas.removeElement(data);
 				}
-				 */
-				Puppeteer puppeteer = new Puppeteer(this);
-				CommandRecord prevR = MesquiteThread.getCurrentCommandRecord();
-				CommandRecord cRecord = new CommandRecord(true);
-				MesquiteThread.setCurrentCommandRecord(cRecord);
-				//at this point the vector should include only the ones not being shown.
-				boolean anySelected = table.anyCellSelectedAnyWay();
-				for (int i = 0; i<datas.size(); i++) {
-					boolean dataToDelete = false;
-					if (datas.elementAt(i) instanceof MolecularData) {
-						MolecularData sequenceData =  (MolecularData)datas.elementAt(i);
-						for (int it=0; it<taxa.getNumTaxa(); it++) {
-							if (!anySelected || table.isRowSelected(it)) {
-							
-								if (deleteWithGenBankNumbers == hasGenBankNumber(sequenceData,it)) {
-									dataToDelete=true;
-									for (int ic=0; ic<sequenceData.getNumChars(); ic++)
-										sequenceData.deassign(ic, it);
-									if (deleteWithGenBankNumbers && removeGenBankNumbers) {
-										deleteGenBankNumber(sequenceData,it);
-									}
+			}
+			 */
+			Puppeteer puppeteer = new Puppeteer(this);
+			CommandRecord prevR = MesquiteThread.getCurrentCommandRecord();
+			CommandRecord cRecord = new CommandRecord(true);
+			MesquiteThread.setCurrentCommandRecord(cRecord);
+			//at this point the vector should include only the ones not being shown.
+			boolean anySelected = table.anyCellSelectedAnyWay();
+			for (int i = 0; i<datas.size(); i++) {
+				boolean dataToDelete = false;
+				if (datas.elementAt(i) instanceof MolecularData) {
+					MolecularData sequenceData =  (MolecularData)datas.elementAt(i);
+					for (int it=0; it<taxa.getNumTaxa(); it++) {
+						if (!anySelected || table.isRowSelected(it)) {
+						
+							if (deleteWithGenBankNumbers == hasGenBankNumber(sequenceData,it)) {
+								dataToDelete=true;
+								for (int ic=0; ic<sequenceData.getNumChars(); ic++)
+									sequenceData.deassign(ic, it);
+								if (deleteWithGenBankNumbers && removeGenBankNumbers) {
+									deleteGenBankNumber(sequenceData,it);
 								}
-									
 							}
-						}
-						if (dataToDelete) {
-							sequenceData.notifyListeners(this, new Notification(MesquiteListener.DATA_CHANGED));
-							outputInvalid();
-							parametersChanged();
+								
 						}
 					}
-
+					if (dataToDelete) {
+						sequenceData.notifyListeners(this, new Notification(MesquiteListener.DATA_CHANGED));
+						outputInvalid();
+						parametersChanged();
+					}
 				}
 
-				MesquiteThread.setCurrentCommandRecord(prevR);
-			}		}		else			return  super.doCommand(commandName, arguments, checker);		return null;	}	/*.................................................................................................................*/	public boolean isSubstantive(){		return true;	}	/*.................................................................................................................*/	public void setTableAndTaxa(MesquiteTable table, Taxa taxa){		this.table = table;		this.taxa = taxa;	}}
+			}
+
+			MesquiteThread.setCurrentCommandRecord(prevR);
+		}
+		return true;
+	}
+}
