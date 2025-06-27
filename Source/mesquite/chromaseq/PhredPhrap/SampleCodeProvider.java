@@ -1,10 +1,16 @@
 package mesquite.chromaseq.PhredPhrap;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
-import mesquite.lib.*;
+import org.dom4j.Document;
+import org.dom4j.Element;
 
-import org.dom4j.*;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
 
 public class SampleCodeProvider {
 	

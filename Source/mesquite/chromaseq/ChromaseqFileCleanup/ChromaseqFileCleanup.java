@@ -13,14 +13,28 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.ChromaseqFileCleanup;
 
-import mesquite.categ.lib.*;
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
+import java.util.Vector;
+
+import mesquite.categ.lib.CategoricalData;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.MolecularData;
+import mesquite.chromaseq.lib.AceDirectoryProcessor;
+import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.lib.Associable;
+import mesquite.lib.ListableVector;
+import mesquite.lib.LongArray;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteListener;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.NameReference;
+import mesquite.lib.Notification;
+import mesquite.lib.Object2DArray;
+import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.FileCoordinator;
 import mesquite.lib.duties.FileInit;
-import mesquite.lib.characters.*;
-import mesquite.meristic.lib.*;
-import java.util.*;
+import mesquite.lib.ui.AlertDialog;
+import mesquite.meristic.lib.MeristicData;
 
 public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 	Vector reverseRegistryVector ;
@@ -155,7 +169,7 @@ public class ChromaseqFileCleanup extends FileInit  implements MesquiteListener{
 				array = null;
 				Associable assoc = data.getTaxaInfo(false);
 				if (assoc != null){
-					LongArray Larray = assoc.getWhichAssociatedLong(trimmable);
+					LongArray Larray = assoc.getAssociatedLongs(trimmable);
 					if (Larray != null)
 						Larray.setNameReference(ChromaseqUtil.chromaseqCellFlagsNameRef);
 				}

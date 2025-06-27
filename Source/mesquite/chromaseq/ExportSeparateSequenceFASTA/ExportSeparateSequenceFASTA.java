@@ -14,27 +14,33 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.ExportSeparateSequenceFASTA;
 /*~~  */
 
-import java.awt.*;
-import java.util.Vector;
+import java.awt.Checkbox;
 
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.lib.characters.CharacterData;
-import mesquite.lib.duties.*;
-import mesquite.assoc.lib.AssociationSource;
-import mesquite.assoc.lib.TaxaAssociation;
-import mesquite.basic.ManageTaxaPartitions.ManageTaxaPartitions;
-import mesquite.categ.lib.*;
+import mesquite.categ.lib.MolecularData;
+import mesquite.categ.lib.MolecularState;
 import mesquite.chromaseq.lib.ChromaseqUtil;
-import mesquite.cont.lib.ContinuousData;
-import mesquite.io.lib.*;
+import mesquite.lib.Arguments;
+import mesquite.lib.ExporterDialog;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteStringBuffer;
+import mesquite.lib.MesquiteThread;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
+import mesquite.lib.characters.CharacterData;
+import mesquite.lib.duties.FileInterpreterI;
+import mesquite.lib.misc.VoucherInfoFromOTUIDDB;
+import mesquite.lib.taxa.Taxa;
+import mesquite.lib.ui.RadioButtons;
+import mesquite.lib.ui.SingleLineTextField;
 
 
 /* ============  a file interpreter for DNA/RNA  Fasta files ============*/
 
 public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		//	EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for FASTA export for Genbank submissions.",
+		//	EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for FASTA export for GenBank submissions.",
 		//			"This is activated automatically when you choose this exporter.");
 	}
 	//VoucherInfoCoord voucherInfoTask;
@@ -86,6 +92,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	protected boolean includeTaxonName = true;
 	protected String voucherPrefix = "DNA";
 	String voucherSuffix = "";
+	protected boolean includeGeneNameInFastaHeader = false;
 
 	boolean removeExcluded = false;
 
@@ -100,6 +107,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 		SingleLineTextField voucherPrefixField= exportDialog.addTextField("Prefix before Voucher ID", voucherPrefix, 8);
 		Checkbox includeTaxonNameBox= exportDialog.addCheckBox("Include taxon name", includeTaxonName);
 		SingleLineTextField voucherSuffixField= exportDialog.addTextField("Suffix (before file extension)", voucherSuffix, 8);
+		Checkbox includeGeneNameBox= exportDialog.addCheckBox("Include gene name in FASTA header", includeGeneNameInFastaHeader);
 
 		exportDialog.completeAndShowDialog(dataSelected, taxaSelected);
 
@@ -111,6 +119,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 			buildFileName = radios.getValue()==1;
 			voucherSuffix = voucherSuffixField.getText();
 			includeTaxonName = includeTaxonNameBox.getState();
+			includeGeneNameInFastaHeader = includeGeneNameBox.getState();
 		}
 
 		exportDialog.dispose();
@@ -158,11 +167,16 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	private void putFastaAsFile(Taxa taxa, int it, CharacterData data, int index, String directory, String fasta, String voucherID, String identifierString) {
 		String filePath = directory;
 		filePath = directory+getFileName(taxa, it, data, index, voucherID, identifierString);
+		if (filePath == null)
+			return;
 		MesquiteFile.putFileContents(filePath, fasta, true);
 	}
 	/*.................................................................................................................*/
-	public String getSequenceName(Taxa taxa, int it, String voucherID) {
-		return taxa.getTaxonName(it);
+	public String getSequenceName(Taxa taxa, int it, CharacterData data, String voucherID) {
+		String s = taxa.getTaxonName(it);
+		if (includeGeneNameInFastaHeader)
+			s=data.getName()+": " + s;
+		return s;
 	}
 	/*.................................................................................................................*/
 	public String getIdentifierString() {
@@ -184,7 +198,7 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 			directory+=MesquiteFile.fileSeparator;
 
 
-		StringBuffer buffer = new StringBuffer(500);
+		MesquiteStringBuffer buffer = new MesquiteStringBuffer(500);
 		StringBuffer metadataBuffer = new StringBuffer(0);
 		metadataBuffer.append(getTitleLineForTabbedFile());
 		int count = 0;
@@ -200,12 +214,12 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 						if (!writeOnlySelectedTaxa || taxa.getSelected(it)){
 							String voucherID = ChromaseqUtil.getStringAssociated(taxa, VoucherInfoFromOTUIDDB.voucherCodeRef, it);
 							buffer.setLength(0);
-							buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it, getSequenceName(taxa,it,voucherID));
+							buffer = ((MolecularData)data).getSequenceAsFasta(false,false,it, getSequenceName(taxa,it,data, voucherID));
 							String content=null;
 							if (buffer!=null) 
 								content = buffer.toString();
 							else 
-								buffer = new StringBuffer(500);
+								buffer = new MesquiteStringBuffer(500);
 							if (StringUtil.notEmpty(content)){
 								String idString = getIdentifierString();
 								putFastaAsFile(taxa, it, data, iM, directory, content, voucherID, idString);

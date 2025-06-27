@@ -3,12 +3,12 @@ package mesquite.chromaseq.lib;
 import java.util.Hashtable;
 import java.util.Map;
 
-import mesquite.lib.MesquiteMessage;
-import mesquite.lib.StringUtil;
-import mesquite.lib.MesquiteXMLUtilities;
-import mesquite.molec.lib.*;
+import org.dom4j.Document;
 
-import org.dom4j.*;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteXMLUtilities;
+import mesquite.lib.StringUtil;
+import mesquite.molec.lib.DNADatabaseURLSource;
 
 /**
  * Class that looks up sequences in a database based on a sample code 

@@ -14,13 +14,13 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.RecordSourceFile; 
 
 
-import java.awt.*;
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.lib.duties.*;
-import mesquite.categ.lib.*;
-import mesquite.chromaseq.lib.*;
-import mesquite.molec.lib.*;
+import mesquite.lib.Associable;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.NameReference;
+import mesquite.lib.characters.CharacterData;
+import mesquite.lib.duties.FileAssistantT;
+import mesquite.lib.taxa.Taxa;
+import mesquite.lib.ui.QueryDialogs;
 
 /* ======================================================================== */
 public class RecordSourceFile extends FileAssistantT { 
@@ -59,7 +59,7 @@ public class RecordSourceFile extends FileAssistantT {
 			boolean anySelected = taxa.anySelected();
 			for (int it = 0; it< taxa.getNumTaxa(); it++){
 				if (data.hasDataForTaxon(it) && (!anySelected || taxa.getSelected(it)))
-					tInfo.setAssociatedObject(sourceRef, it, s.getValue());
+					tInfo.setAssociatedString(sourceRef, it, s.getValue());
 			}
 		}
 

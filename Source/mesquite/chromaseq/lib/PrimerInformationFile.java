@@ -13,15 +13,18 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.lib;
 
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.dom4j.*;
+import org.dom4j.Document;
+import org.dom4j.Element;
 
-import mesquite.lib.*;
-import mesquite.molec.lib.*;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteXMLUtilities;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
 import mesquite.tol.lib.XMLConstants;
 //import mesquite.BTOL.lib.*;
 

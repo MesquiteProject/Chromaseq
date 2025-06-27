@@ -50,7 +50,7 @@ public class InterpretASNGenBank extends FileInterpreterI {
 	VoucherInfoCoord voucherInfoTask;
 
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for ASN export for Genbank submissions.",
+		EmployeeNeed e = registerEmployeeNeed(VoucherInfoCoord.class, "Voucher information is needed for ASN export for GenBank submissions.",
 		"This is activated automatically when you choose this exporter.");
 	}
 	/*.................................................................................................................*/
@@ -239,7 +239,7 @@ public class InterpretASNGenBank extends FileInterpreterI {
 		else 
 			return ParseUtil.tokenize(taxa.getTaxonName(it));
 	}
-	protected void saveExtraFiles(CharacterData data){
+	protected void saveExtraFiles(CharacterData data, String filePath){
 	}
 
 	public void appendTabbedLine(StringBuffer sb, int numTabs, String s){
@@ -459,12 +459,12 @@ public class InterpretASNGenBank extends FileInterpreterI {
 	}
 	/*.................................................................................................................*/
 
-	public  StringBuffer getDataAsFileText(CharacterData data) {
+	public  MesquiteStringBuffer getDataAsFileText(CharacterData data) {
 		Taxa taxa = data.getTaxa();
 
 		int numTaxa = taxa.getNumTaxa();
 		int numChars = data.getNumChars();
-		StringBuffer outputBuffer = new StringBuffer(numTaxa*(20 + numChars));
+		MesquiteStringBuffer outputBuffer = new MesquiteStringBuffer(numTaxa*(20L + numChars));
 		outputBuffer.append("Seq-submit ::= {" + getLineEnding());
 
 		ASNNode rootNode = new ASNNode("root");
@@ -507,13 +507,13 @@ public class InterpretASNGenBank extends FileInterpreterI {
 			if (!getExportOptions(data.anySelected(), taxa.anySelected()))
 				return false;
 
-		StringBuffer outputBuffer = getDataAsFileText(data);
+		MesquiteStringBuffer outputBuffer = getDataAsFileText(data);
 
 		if (outputBuffer!=null) {
 			saveExportedFileWithExtension(outputBuffer, arguments, "sqn");
 			return true;
 		}
-		saveExtraFiles(data);
+		saveExtraFiles(data, filePath);
 		return false;
 	}
 

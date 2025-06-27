@@ -22,8 +22,13 @@ import java.awt.geom.QuadCurve2D;
 
 import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
 import mesquite.chromaseq.ViewChromatograms.ChromatogramCloseupPanel;
-import mesquite.lib.ColorDistribution;
-import mesquite.lib.*;
+import mesquite.lib.IntegerArray;
+import mesquite.lib.MesquiteEvent;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.StringUtil;
+import mesquite.lib.ui.ColorDistribution;
+import mesquite.lib.ui.MesquiteTool;
+import mesquite.lib.ui.MousePanel;
 
 public class ChromatogramCanvas extends MousePanel {
 
@@ -648,7 +653,7 @@ public class ChromatogramCanvas extends MousePanel {
 				contigDisplay.repaintPanels();
 			}
 		}
-		else if (MesquiteEvent.commandOrControlKeyDown(modifiers)){
+		else if (MesquiteEvent.commandOrControlKeyDown(modifiers)){ //ZQ: If this was intended as right click, now use .rightClick(modifiers) instead
 			if (MesquiteInteger.isCombinable(ic)){
 				selectOverallBase(ic);
 				contigDisplay.repaintPanels();
@@ -750,7 +755,7 @@ public class ChromatogramCanvas extends MousePanel {
 		String s = "";
 		if (quality>=0)
 			s+= "Base quality: " + quality + ",   Peak heights: " + getPeakHeightsOfBase(SETREAD,readBaseNumber);
-		s+= "\n# Bases with Quality � " + reads[SETREAD].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[SETREAD].getTitle()+")";
+		s+= "\n# Bases with Quality ≥ " + reads[SETREAD].getNumBasesHighQualityThreshold() + ": " + numBasesHighQuality + ",  Average Quality: " + averageQuality + "  ("+chromatograms[SETREAD].getTitle()+")";
 		contigDisplay.setExplanation( s);
 		if (tool == null)
 			return;

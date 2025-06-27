@@ -6,15 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
-import java.util.Iterator;
-import java.util.List;
 
-import org.dom4j.Document;
 import org.dom4j.Element;
 
-import mesquite.chromaseq.ViewChromatograms.VChromWindow;
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
+import mesquite.chromaseq.lib.ChromaseqSampleToNamesXMLProcessor;
+import mesquite.chromaseq.lib.SequenceNameSource;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteThread;
+import mesquite.lib.StringUtil;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.SingleLineTextField;
 
 public class SequenceNameFromXMLFile extends SequenceNameSource implements ActionListener, TextListener {
 	ChromaseqSampleToNamesXMLProcessor xmlProcessor;

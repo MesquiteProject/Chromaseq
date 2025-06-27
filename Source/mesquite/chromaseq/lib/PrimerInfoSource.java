@@ -15,12 +15,8 @@ package mesquite.chromaseq.lib;
 
 import org.dom4j.Element;
 
-import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteModule;
-import mesquite.lib.MesquiteSubmenuSpec;
-import mesquite.lib.Parser;
-import mesquite.lib.StringUtil;
-import mesquite.lib.XMLUtil;
+import mesquite.lib.ui.MesquiteSubmenuSpec;
 
 public abstract class PrimerInfoSource extends MesquiteModule {
 

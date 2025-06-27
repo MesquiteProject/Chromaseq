@@ -7,9 +7,9 @@ import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteMessage;
 import mesquite.lib.MesquiteModule;
 import mesquite.lib.MesquiteTrunk;
-import mesquite.lib.MesquiteWindow;
-import mesquite.lib.MesquiteXMLPreferencesModule;
 import mesquite.lib.PropertyNamesProvider;
+import mesquite.lib.duties.MesquiteXMLPreferencesModule;
+import mesquite.lib.ui.MesquiteWindow;
 
 /**
  * class that hooks into the authoring system that shows a dialog

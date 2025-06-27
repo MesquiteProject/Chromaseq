@@ -41,8 +41,8 @@
     <td width="33%" align="right"><div id="subtitle"><!-- InstanceBeginEditable name="subtitle" -->Submitting
       Sequences to GenBank<!-- InstanceEndEditable --></div></td>
     <td width="2%">&nbsp;</td>
-    <td width="14%"><p>Version 1.60<br />
-      April 2023<br />
+    <td width="14%"><p>Version 1.70<br />
+      June 2025<br />
       </p></td>
   </tr>
 </table>
@@ -151,10 +151,8 @@
   			<tr><td><a href="javascript:pageLink('faq.html');">FAQ</a></td></tr>
   			<tr><td><a href="javascript:pageLink('features.html');">Features & Bug History</a></td></tr>
   			<tr><td><a href="javascript:pageLink('troubleshooting.html');">Troubleshooting</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('chromaseqList.html');">Chromaseq E-mail List</a></td></tr>
   			<tr><td><a href="javascript:pageLink('limitations.html');">Limitations</a></td></tr>
   			<tr><td><a href="javascript:pageLink('otherPrograms.html');">Chromaseq &amp; Other Programs</a></td></tr>
-  			<tr><td><a href="javascript:pageLink('future.html');">Future Directions</a></td></tr>
 	</table>
   </div>
 </div>
@@ -201,7 +199,7 @@
 <ol>
   <li>A <a href="#submissionTemplate">submission template file</a> containing information about your paper.</li>
   <li>A <a href="#sampleTable">tab-delimited text file</a> containing information about each sample whose data will be submitted. This file contains organism's name, authority, locality data,
-    etc. This is called the &quot;OTU ID code Database&quot; or &quot;OTU ID code DB&quot; file in Mesquite.</li>
+    etc. This is called the &quot;GenBank Voucher Info File&quot; in Mesquite.</li>
   <li>A Mesquite file containing your sequences in a matrix. This will need to be <a href="#prepareMatrix">prepared</a>, including setting of codon positions for protein-coding regions.</li>
   <li>If you are using table2asn to create the .sqn files to submit, then&nbsp;you will need the table2asn program from NCBI.&nbsp;</li>
 </ol>
@@ -214,7 +212,7 @@
 <h3><a name="submissionTemplate"></a>Creating the template file containing information about the paper</h3>
 <p>Go to the <a href="https://submit.ncbi.nlm.nih.gov/genbank/template/submission/">NCBI Submission Portal</a> and create a Submission Template for your paper. This will contain information about your submission to GenBank. Once you have filled in the form, press the Create Template button at the bottom of the page. That will create a text file containing information about your paper, and that file will be downloaded to your computer. Move that file (which will likely be called &quot;template.sbt.txt&quot;), and move it into the same folder as the fasta files you created. You will only need to make this file once; the one file can be used for all of your submissions for that paper.</p>
 <h3><a name="sampleTable"></a>Creating the sample table</h3>
-<p>The form of the tab-delimited OTU (specimen voucher) ID code file containing the information about the samples is as follows. The first row
+<p>The form of the tab-delimited GenBank Voucher Info File containing the information about the samples is as follows. The first row
   must begin with the word &quot;code&quot;, followed by a tab-delimited list
   of the official GenBank names of the fields that appear in each of the later
   lines. For example,
@@ -230,10 +228,10 @@
     for FASTA Definition Lines</a> page, with more information on the <a href="http://www.ncbi.nlm.nih.gov/Sequin/sequin.hlp.html#ModifiersPage">Sequin
       Help</a> page. You may include whatever fields you need.</p>
 <p> On the following lines are the data about  the specimens, one line
-  for each specimen. The first item in the line is and ID code. This ID code
-  could be your specimen voucher code, or some other unique identifying string.
+  for each specimen. The first item in the line is and Taxon ID code. This ID code
+  could be your  sample code, specimen voucher code, or some other unique identifying string.
   You will enter these codes in Mesquite for each sequence, which will allow
-  the system to associate the OTU ID code DB information with that particular sequence.
+  the system to associate the information in the GenBank Voucher Info File with that particular sequence.
   The following tab-delimited items in the line are the entries for that particular
   specimen. For the example file with the header line shown above, here are two
   lines that contain the information for specimen number 1290, and specimen number
@@ -243,7 +241,7 @@
     USA: Mississippi: Walthall Co., Tylertown <img src="images/tab.gif" width="8" height="13" /> 31.0414 N 90.1922 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1290
 1633 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) aenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion aenulum Hayward <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
     USA: Iowa: Jones Co., Oxford Junction <img src="images/tab.gif" width="8" height="13" /> 41.99133 N 91.00671 W <img src="images/tab.gif" width="8" height="13" /> Personal: DRMaddison : DNA1633</pre>
-<p>Each of these lines is shown extending over two lines, but that is only for ease of display on this web page. There are thus a total of three lines in this example OTU ID Code DB file:</p>
+<p>Each of these lines is shown extending over two lines, but that is only for ease of display on this web page. There are thus a total of three lines in this example GenBank Voucher Info File:</p>
 <pre class="monospaced">
 code <img src="images/tab.gif" width="8" height="13" /> organism <img src="images/tab.gif" width="8" height="13" /> authority <img src="images/tab.gif" width="8" height="13" /> identified-by <img src="images/tab.gif" width="8" height="13" /> country <img src="images/tab.gif" width="8" height="13" /> lat-lon <img src="images/tab.gif" width="8" height="13" /> specimen-voucher
 1290 <img src="images/tab.gif" width="8" height="13" /> Bembidion (Odontium) paraenulum <img src="images/tab.gif" width="8" height="13" /> Bembidion paraenulum Maddison <img src="images/tab.gif" width="8" height="13" /> David Maddison <img src="images/tab.gif" width="8" height="13" /> 
@@ -257,32 +255,30 @@ code <img src="images/tab.gif" width="8" height="13" /> organism <img src="image
 <p>You will also need to specify which taxon in your matrix corresponds to which entry in your sample table file. To do this, go to the Taxa List
   Window (Taxa&amp;Tree&gt;List
   of
-  Taxa). You will need to show two new columns in this table. Choose Columns&gt;OTU
-  Database and Columns&gt;OTU ID Code. This will show those two columns. Select
-  the entire table (with Select All), and touch on the title of the OTU ID code 
-  DB column. A menu will appear in which you can choose to browse for your tab-delimited
-  OTU ID code DB file. Select that file. The OTU ID code  DB column should indicate
+  Taxa). You will need to show two new columns in this table. Choose Columns&gt;Taxon ID Code and Columns&gt;GenBank Voucher Info File. This will show those two columns. Select
+  the entire table (with Select All), and touch on the title of the GenBank Voucher Info File. A menu will appear in which you can choose to browse for your tab-delimited
+  GenBank Voucher Info file. Select that file. The GenBank Voucher Info File column should indicate
   which
-  OTU ID code  DB file to use for each sequence. (In this example, all sequences
-  are using the same OTU ID code  DB file.) </p>
-<p>Now you need to enter into the OTU code  ID field the ID codes for each of the
-  sequences. In the example here, the OTU ID code for the first sequence
+  GenBank Voucher Info file to use for each sequence. (In this example, all sequences
+  are using the same GenBank Voucher Info file.) </p>
+<p>Now you need to enter into the Taxon ID Code field the ID codes for each of the
+  sequences. In the example here, the Taxon ID code for the first sequence
   is 1290. This tells Mesquite to look
-  in the OTU ID code DB file for the line whose code is 1290 to get the OTU
+  in the GenBank Voucher Info file for the line whose code is 1290 to get the 
   information for that sequence. To enter ID codes, use the editing tool (<img src="images/ibeam.png" width="28" height="28" align="absmiddle" />) select the entry, or select the sequence and
-  use the popup menu that appears when you touch on the OTU ID Code title at the
-  top of the column. Once you have entered all of the OTU ID codes, the Taxa List Window should look something
+  use the popup menu that appears when you touch on the Taxon ID Code title at the
+  top of the column. Once you have entered all of the Taxon ID codes, the Taxa List Window should look something
   like this:</p>
-<p align="center"><img src="images/taxonListVoucher.png" width="468" height="226" /></p>
+<p align="center"><img src="images/Export For GenBank Taxon List.png" width="587" height="262" alt=""/></p>
 <h3><a name="exporting"></a>Creating the FASTA file and feature table file</h3>
 <p>At this point, you are ready to export the files needed by table2asn to create your GenBank submission. </p>
 <p>Do this by choose File&gt;Export,
   and in the dialog that appears, choose &quot;FASTA (DNA/RNA) for GenBank&quot;.
   You will be queried for options:</p>
-<p align="center"><img src="images/ExportTbl2asnDialog.png" width="511" height="402" alt=""/></p>
+<p align="center"><img src="images/Export For GenBank DLOG.png" width="491" height="384" alt=""/></p>
 <p>In this dialog box, you will need to choose a sequence profile and various other options. If you haven't created the relevant sequence profile, you should do that first. Sequence profiles are described in the following sections.</p>
 <p>In addition to specifiying a sequence profile, you will need to specify various aspects of how Chromaseq formulates  entries. </p>
-<p>If you wish to have a voucher code added to the DEFINITION line (between the organismal specification and the description of the sequence), then check the &quot;add voucher code to DEFINITION&quot; option. By default, the voucher code that will be inserted in the DEFINITION line will be the entry in the "specimen-voucher" column in the tab-delimitted OTU ID database file.&nbsp; However, if you check "Use following text plus OTU (Specimen) ID Code for DEFINITION voucher code", then Chromaseq will instead insert  the text in the next field followed by the OTU ID code stored within the Mesquite file.</p>
+<p>If you wish to have a voucher code added to the DEFINITION line (between the organismal specification and the description of the sequence), then check the &quot;add voucher code to DEFINITION&quot; option. By default, the voucher code that will be inserted in the DEFINITION line will be the entry in the "specimen-voucher" column in the tab-delimitted GenBank Voucher Info file.&nbsp; However, if you check "Use following text plus Taxon (Specimen) ID Code for DEFINITION voucher code", then Chromaseq will instead insert  the text in the next field followed by the Taxon ID code stored within the Mesquite file.</p>
 <p>A GenBank submission requires that each submission be specified by a &quot;seqID&quot;, a text string that must be unique for each sequence to be submitted. By default, Mesquite uses the taxon name, to which  the gene fragment name can be appended, as the seqID. However, GenBank will automatically truncate the seqID if it is too long. If you have some important text at the end of the seqID that you don't want removed by GenBank, then yoiu can check the &quot;if seqID is too long, shorten in middle&quot; option.</p>
 <p>If you are using character gropus to specify the product names for regions of your submission, you should check &quot;use character group name as product name for coding regions&quot; option.</p>
 <h3><a name="sequenceProfile"></a>Creating a sequence profile</h3>

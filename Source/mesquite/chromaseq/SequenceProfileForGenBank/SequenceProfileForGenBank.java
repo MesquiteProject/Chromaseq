@@ -13,16 +13,24 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.SequenceProfileForGenBank;
 
-import java.awt.Button;
-import java.awt.Checkbox;
 import java.awt.Choice;
-import java.awt.GridBagConstraints;
-import java.awt.Panel;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.WindowEvent;
+import java.io.File;
 
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
+import mesquite.chromaseq.lib.SequenceProfile;
+import mesquite.chromaseq.lib.SequenceProfileManager;
+import mesquite.lib.Listable;
+import mesquite.lib.ListableVector;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.StringArray;
+import mesquite.lib.StringUtil;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.ExtensibleListDialog;
 
 /* This module supplies the sample code and primer name given the chromatogram file name, for chromatogram file names that contain the sample code and primer name directly */
 

@@ -13,14 +13,25 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.ProcessChromatogramsTaxonRedo;
 
+import mesquite.categ.lib.CategDataEditorInit;
+import mesquite.categ.lib.DNAData;
 import mesquite.chromaseq.lib.AceFile;
 import mesquite.chromaseq.lib.ChromaseqUtil;
 import mesquite.chromaseq.lib.ChromatogramProcessor;
-import mesquite.lib.*;
-import mesquite.categ.lib.*;
-import mesquite.lib.characters.*;
+import mesquite.lib.Associable;
+import mesquite.lib.CommandChecker;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteThread;
+import mesquite.lib.Notification;
+import mesquite.lib.StringArray;
+import mesquite.lib.StringUtil;
+import mesquite.lib.characters.CharacterData;
 import mesquite.lib.table.CMTable;
 import mesquite.lib.table.MesquiteTable;
+import mesquite.lib.taxa.Taxa;
+import mesquite.lib.ui.AlertDialog;
+import mesquite.lib.ui.MesquiteMenuItemSpec;
 
 
 
@@ -51,7 +62,7 @@ public class ProcessChromatogramsTaxonRedo extends CategDataEditorInit {
 		if (data!=null) {
 			Associable tInfo= data.getTaxaInfo(false);
 			if (tInfo!=null)
-				b = tInfo.anyAssociatedObject(ChromaseqUtil.aceRef);
+				b = tInfo.anyAssociatedString(ChromaseqUtil.aceRef);
 
 		}
 		if (ms!=null)

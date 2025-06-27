@@ -12,22 +12,38 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.lib;
 
-import java.awt.*;
-import java.util.Iterator;
-import java.util.List;
+import java.awt.Color;
+import java.awt.Component;
 
-import org.apache.hivemind.util.PropertyUtils;
-import org.dom4j.*;
-
-import mesquite.lib.*;
-import mesquite.lib.duties.*;
+import mesquite.align.lib.PairwiseAligner;
+import mesquite.categ.lib.CategoricalData;
+import mesquite.categ.lib.CategoricalState;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.DNAState;
+import mesquite.categ.lib.MolecularData;
+import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
+import mesquite.cont.lib.ContinuousData;
+import mesquite.lib.Associable;
+import mesquite.lib.Attachable;
+import mesquite.lib.CommandRecord;
+import mesquite.lib.ListableVector;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteLong;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteNumber;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.NameReference;
+import mesquite.lib.StringArray;
+import mesquite.lib.StringUtil;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.CharactersManager;
-import mesquite.align.lib.PairwiseAligner;
-import mesquite.chromaseq.ViewChromatograms.ChromaseqUniversalMapper;
-import mesquite.cont.lib.*;
-import mesquite.categ.lib.*;
-import mesquite.meristic.lib.*;
+import mesquite.lib.duties.FileCoordinator;
+import mesquite.lib.taxa.Taxon;
+import mesquite.lib.ui.ColorDistribution;
+import mesquite.meristic.lib.MeristicData;
+import mesquite.meristic.lib.MeristicState;
 
 public class ChromaseqUtil{
 	
@@ -136,10 +152,10 @@ public class ChromaseqUtil{
 	}
 
 	public static String getStringAssociated(Associable a, NameReference nr, int index){
-		return (String)a.getAssociatedObject(nr, index);
+		return (String)a.getAssociatedString(nr, index);
 	}
 	public static void setStringAssociated(Associable a, NameReference nr, int index, String c){
-		a.setAssociatedObject(nr, index, c);
+		a.setAssociatedString(nr, index, c);
 	}
 	public static String[] getStringsAssociated(Associable a, NameReference nr, int index){
 		if (a==null)
@@ -436,13 +452,13 @@ public class ChromaseqUtil{
 		ChromaseqUtil.setStringAssociated(tInfo, ChromaseqUtil.reprocessContigRef, it, "reprocess contig");
 	}
 	/*.................................................................................................................*/
-	public static void removeAssociatedObjects(DNAData data, NameReference nr) {
+	public static void removeAssociatedStrings(DNAData data, NameReference nr) {
 		if (data==null)
 			return;
 		Associable tInfo = data.getTaxaInfo(true);
 		if (tInfo == null)
 			return;
-		tInfo.removeAssociatedObjects(nr);
+		tInfo.removeAssociatedStrings(nr);
 	}
 	/*.................................................................................................................*/
 	public static String getAceFilePath(String directoryName, MesquiteModule ownerModule, DNAData data, int it, boolean returnOriginalAceFile) {
@@ -902,10 +918,10 @@ public class ChromaseqUtil{
 		editedData.detachAllObjectsOfName(ChromaseqUtil.GENENAMEREF);
 		editedData.detachAllObjectsOfName(ChromaseqUtil.REGISTRATIONBUILDREF);
 
-		removeAssociatedObjects(editedData, origTaxonNameRef);
-		removeAssociatedObjects(editedData, aceRef);
-		removeAssociatedObjects(editedData, reprocessContigRef);
-		removeAssociatedObjects(editedData, chromatogramReadsRef);
+		removeAssociatedStrings(editedData, origTaxonNameRef);
+		removeAssociatedStrings(editedData, aceRef);
+		removeAssociatedStrings(editedData, reprocessContigRef);
+		removeAssociatedStrings(editedData, chromatogramReadsRef);
 		editedData.removeCellObjects(chromaseqCellFlagsNameRef);
 		
 		 Associable tInfo = editedData.getTaxaInfo(false);
@@ -916,16 +932,14 @@ public class ChromaseqUtil{
 			 tInfo.removeAssociatedLongs(chromaseqCellFlagsNameRef);
 			 tInfo.removeAssociatedDoubles(qualityNameRef);
 		 }
-		removeAssociatedObjects(editedData, paddingRef);
-	//	removeAssociatedObjects(editedData, qualityNameRef);
-		removeAssociatedObjects(editedData, contigMapperRef);
-		removeAssociatedObjects(editedData, chromaseqCellFlagsNameRef);
-	//	removeAssociatedObjects(editedData, whichContigRef);
-		removeAssociatedObjects(editedData, startTrimRef);
-		removeAssociatedObjects(editedData, sampleCodeRef);
-		removeAssociatedObjects(editedData, sampleCodeNamesRef);
-		removeAssociatedObjects(editedData, primerForEachReadNamesRef);
-		removeAssociatedObjects(editedData, origReadFileNamesRef);
+		removeAssociatedStrings(editedData, paddingRef);
+		removeAssociatedStrings(editedData, contigMapperRef);
+		removeAssociatedStrings(editedData, chromaseqCellFlagsNameRef);
+		removeAssociatedStrings(editedData, startTrimRef);
+		removeAssociatedStrings(editedData, sampleCodeRef);
+		removeAssociatedStrings(editedData, sampleCodeNamesRef);
+		removeAssociatedStrings(editedData, primerForEachReadNamesRef);
+		removeAssociatedStrings(editedData, origReadFileNamesRef);
 		
 }
 

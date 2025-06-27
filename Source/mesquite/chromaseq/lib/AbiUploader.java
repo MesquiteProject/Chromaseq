@@ -1,6 +1,6 @@
 package mesquite.chromaseq.lib;
 
-import mesquite.lib.MesquiteXMLPreferencesModule;
+import mesquite.lib.duties.MesquiteXMLPreferencesModule;
 import mesquite.molec.lib.DNADatabaseURLSource;
 
 public abstract class AbiUploader extends MesquiteXMLPreferencesModule {

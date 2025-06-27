@@ -13,19 +13,35 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.AppendSecondSampleCode;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Button;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JLabel;
 
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
-import mesquite.lib.duties.*;
+import mesquite.chromaseq.lib.ChromatogramFileNameParser;
+import mesquite.chromaseq.lib.SampleToSampleTranslationFile;
+import mesquite.lib.CommandChecker;
+import mesquite.lib.EmployeeNeed;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.StringUtil;
+import mesquite.lib.duties.UtilitiesAssistant;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.MesquiteTextCanvas;
+import mesquite.lib.ui.ProgressIndicator;
+import mesquite.lib.ui.SingleLineTextField;
+import mesquite.lib.ui.TextCanvasWithButtons;
 
 public class AppendSecondSampleCode extends UtilitiesAssistant implements ActionListener {
-	ChromatogramFileNameParser nameParserManager;
+	ChromatogramFileNameParser nameParserManager;  //ZQ static issue
 	String importedDirectoryPath, importedDirectoryName;
 	ProgressIndicator progIndicator = null;
 	static String previousDirectory = null;
@@ -48,7 +64,7 @@ public class AppendSecondSampleCode extends UtilitiesAssistant implements Action
 	public boolean hireRequired(){
 
 		if (nameParserManager == null)
-			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Supplier of sample code from the chromatogram file name.");
+			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.findEmployeeWithDuty(ChromatogramFileNameParser.class);
 		if (nameParserManager == null) {
 			return false;
 		} else if (!nameParserManager.queryOptions())

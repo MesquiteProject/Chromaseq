@@ -29,9 +29,26 @@ import java.io.IOException;
 
 import javax.swing.JLabel;
 
-import mesquite.lib.*;
-import mesquite.lib.duties.*;
-import mesquite.chromaseq.lib.*;
+import mesquite.chromaseq.lib.ChromatogramFileNameParser;
+import mesquite.lib.CommandChecker;
+import mesquite.lib.EmployeeNeed;
+import mesquite.lib.MesquiteBoolean;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteModule;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
+import mesquite.lib.duties.FileCoordinator;
+import mesquite.lib.duties.UtilitiesAssistant;
+import mesquite.lib.ui.ExtensibleDialog;
+import mesquite.lib.ui.MesquiteTextCanvas;
+import mesquite.lib.ui.ProgressIndicator;
+import mesquite.lib.ui.QueryDialogs;
+import mesquite.lib.ui.SingleLineTextField;
+import mesquite.lib.ui.TextCanvasWithButtons;
 
 /* ======================================================================== */
 public class SegregateListedChromatograms extends UtilitiesAssistant implements ActionListener{ 
@@ -39,7 +56,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	MesquiteProject proj = null;
 	FileCoordinator coord = null;
 	MesquiteFile file = null;
-	ChromatogramFileNameParser nameParserManager;
+	ChromatogramFileNameParser nameParserManager;  //ZQ static issue
 
 	boolean requiresExtension=true;
 
@@ -77,7 +94,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	public boolean hireRequired(){
 
 		if (nameParserManager == null)
-			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.hireEmployee(ChromatogramFileNameParser.class, "Supplier of sample code from the chromatogram file name.");
+			nameParserManager= (ChromatogramFileNameParser)MesquiteTrunk.mesquiteTrunk.findEmployeeWithDuty(ChromatogramFileNameParser.class);
 		if (nameParserManager == null) {
 			return false;
 		} else if (!nameParserManager.queryOptions())

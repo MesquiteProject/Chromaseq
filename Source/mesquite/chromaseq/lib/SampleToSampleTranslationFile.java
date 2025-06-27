@@ -1,5 +1,7 @@
 package mesquite.chromaseq.lib;
-import mesquite.lib.*;
+import mesquite.lib.MesquiteMessage;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
 
 public class SampleToSampleTranslationFile {
 

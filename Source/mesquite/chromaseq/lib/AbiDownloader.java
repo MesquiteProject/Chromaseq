@@ -1,7 +1,7 @@
 package mesquite.chromaseq.lib;
 
 import mesquite.lib.MesquiteProject;
-import mesquite.lib.MesquiteXMLPreferencesModule;
+import mesquite.lib.duties.MesquiteXMLPreferencesModule;
 
 public abstract class AbiDownloader extends MesquiteXMLPreferencesModule {
 	public Class getDutyClass() {

@@ -14,12 +14,37 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 package mesquite.chromaseq.ManageChromaseqBlock;
 
 
-import mesquite.lib.*;
-import mesquite.lib.characters.*;
-import mesquite.categ.lib.*;
-import mesquite.lib.duties.*;
-import mesquite.meristic.lib.MeristicData;
-import mesquite.chromaseq.lib.*;
+import mesquite.categ.lib.DNAData;
+import mesquite.categ.lib.MolecularData;
+import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.chromaseq.lib.ContigMapper;
+import mesquite.lib.Associable;
+import mesquite.lib.FileBlock;
+import mesquite.lib.FileElement;
+import mesquite.lib.ListableVector;
+import mesquite.lib.MesquiteDouble;
+import mesquite.lib.MesquiteFile;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.MesquiteListener;
+import mesquite.lib.MesquiteLong;
+import mesquite.lib.MesquiteProject;
+import mesquite.lib.MesquiteString;
+import mesquite.lib.MesquiteTimer;
+import mesquite.lib.MesquiteTrunk;
+import mesquite.lib.NameReference;
+import mesquite.lib.NexusBlock;
+import mesquite.lib.NexusBlockTest;
+import mesquite.lib.Notification;
+import mesquite.lib.ObjectArray;
+import mesquite.lib.ParseUtil;
+import mesquite.lib.Parser;
+import mesquite.lib.StringUtil;
+import mesquite.lib.characters.CharacterData;
+import mesquite.lib.characters.CharacterStates;
+import mesquite.lib.duties.FileInit;
+import mesquite.lib.misc.VoucherInfoFromOTUIDDB;
+import mesquite.lib.taxa.Taxa;
+import mesquite.lib.taxa.Taxon;
 
 public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 
@@ -149,6 +174,8 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		else
 			logln("NO attached [" + nr + "] " + a.getName());
 	}
+	
+	NOTE: if this gets revived, many of these shold be changed to AssociatedString
 	void reportObject(Associable a, NameReference nr){
 		if (a.anyAssociatedObject(nr))
 			logln("YES object [" + nr.getValue() + " ; 0 = " + a.getAssociatedObject(nr, 0)+ "] " + a.getName());
@@ -263,7 +290,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	/*----------------------------------------*/
 	boolean writeLongs(StringBuffer sb, Associable a, NameReference nr){
 		boolean some = false;
-		if (a.getWhichAssociatedLong(nr) != null){
+		if (a.getAssociatedLongs(nr) != null){
 			for (int i= 0; i< a.getNumberOfParts(); i++){
 				long value = ChromaseqUtil.getLongAssociated(a,nr, i);
 
@@ -278,7 +305,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 	}
 	boolean writeDoubles(StringBuffer sb, Associable a, NameReference nr){
 		boolean some = false;
-		if (a.getWhichAssociatedDouble(nr) != null){
+		if (a.getAssociatedDoubles(nr) != null){
 			for (int i= 0; i< a.getNumberOfParts(); i++){
 				double value = ChromaseqUtil.getDoubleAssociated(a,nr, i);
 
@@ -497,7 +524,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		}
 	}
 	/*...................................................................................................................*/
-	public boolean readNexusCommand(MesquiteFile file, NexusBlock nBlock, String command, MesquiteString comment){ 
+	public boolean readNexusCommand(MesquiteFile file, NexusBlock nBlock, String command, MesquiteString comment, String fileReadingArguments){ 
 		MesquiteProject project = file.getProject();
 		String commandName = parser.getFirstToken(command);
 		if (commandName.equalsIgnoreCase("VERSION")) {
@@ -523,7 +550,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 			}
 		}
 		else if  (commandName.equalsIgnoreCase("CONTIGMAPPER")) {
-			stringPos.setValue(parser.getPosition());
+			stringPos.setValue((int)parser.getPosition());
 			String[][] subcommands  = ParseUtil.getSubcommands(command, stringPos);
 			if (subcommands == null || subcommands.length == 0 || subcommands[0] == null || subcommands[0].length == 0)
 				return false;
@@ -706,7 +733,7 @@ public class ManageChromaseqBlock extends FileInit implements MesquiteListener{
 		int version = 0;
 
 		while (!StringUtil.blank(commandString = block.getNextFileCommand(comment))) {
-			readNexusCommand(file, b, commandString,  comment);
+			readNexusCommand(file, b, commandString,  comment,  fileReadingArguments);
 		}
 		return b;
 	}

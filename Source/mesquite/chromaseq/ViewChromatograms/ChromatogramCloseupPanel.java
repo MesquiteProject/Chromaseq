@@ -13,16 +13,27 @@ GNU Lesser General Public License.  (http://www.gnu.org/copyleft/lesser.html)
 
 package mesquite.chromaseq.ViewChromatograms; 
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.geom.CubicCurve2D;
-import java.awt.geom.QuadCurve2D;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
-import mesquite.align.lib.*;
-import mesquite.chromaseq.lib.*;
-import mesquite.lib.*;
-import mesquite.categ.lib.*;
+import mesquite.categ.lib.DNAState;
+import mesquite.chromaseq.lib.ChromaseqUtil;
+import mesquite.chromaseq.lib.Chromatogram;
+import mesquite.chromaseq.lib.ChromatogramCanvas;
+import mesquite.chromaseq.lib.ChromatogramPanel;
+import mesquite.chromaseq.lib.ContigDisplay;
+import mesquite.chromaseq.lib.Read;
+import mesquite.lib.IntegerArray;
+import mesquite.lib.MesquiteDouble;
+import mesquite.lib.MesquiteInteger;
+import mesquite.lib.StringUtil;
+import mesquite.lib.ui.ClosablePanelContainer;
+import mesquite.lib.ui.GraphicsUtil;
+import mesquite.lib.ui.MesquiteTool;
+import mesquite.lib.ui.MesquiteWindow;
 
 public class ChromatogramCloseupPanel extends ChromatogramPanel{
 	CloseupChromatogramCanvas chromCanvas;
