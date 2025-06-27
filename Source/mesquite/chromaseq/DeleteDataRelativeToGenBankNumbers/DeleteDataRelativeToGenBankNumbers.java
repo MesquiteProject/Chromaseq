@@ -6,6 +6,7 @@ import mesquite.categ.lib.MolecularData;
 import mesquite.lib.Associable;
 import mesquite.lib.CommandChecker;
 import mesquite.lib.CommandRecord;
+import mesquite.lib.Debugg;
 import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteCommand;
 import mesquite.lib.MesquiteInteger;
@@ -110,7 +111,9 @@ import mesquite.lists.lib.TaxaListAssistantI;
 			int numMatrices = getProject().getNumberCharMatrices(taxa);
 			if (numMatrices<1)
 				return null;
-			if (queryOptions() && !AlertDialog.query(containerOfModule(), "Delete data?", "Are you SURE you want to delete the sequence data?  (This cannot be undone.)")) 
+			if (!queryOptions())
+				return null;
+			if (!AlertDialog.query(containerOfModule(), "Delete data?", "Are you SURE you want to delete the sequence data?  (This cannot be undone.)")) 
 				return null;
 
 			Vector datas = new Vector();
