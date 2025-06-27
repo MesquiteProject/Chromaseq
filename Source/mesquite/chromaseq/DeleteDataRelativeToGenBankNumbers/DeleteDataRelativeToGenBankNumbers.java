@@ -28,9 +28,7 @@ import mesquite.lists.lib.TaxaListAssistantI;
 	boolean deleteWithGenBankNumbers = true;
 	boolean removeGenBankNumbers = true;
 	
-	public boolean loadModule(){
-		return false;
-	}	public String getName() {
+	public String getName() {
 		return "Delete Sequences with OR without GenBank Numbers";
 	}
 	public String getNameForMenuItem() {
