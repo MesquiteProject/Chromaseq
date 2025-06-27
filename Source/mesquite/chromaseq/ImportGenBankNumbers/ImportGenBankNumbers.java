@@ -28,14 +28,16 @@ import mesquite.lib.characters.CharacterData;
 import mesquite.lib.duties.TaxonUtility;
 import mesquite.lib.duties.TextDisplayer;
 import mesquite.lib.misc.VoucherInfoFromOTUIDDB;
+import mesquite.lib.table.MesquiteTable;
 import mesquite.lib.taxa.Taxa;
 import mesquite.lib.ui.AlertDialog;
 import mesquite.lib.ui.ColorDistribution;
 import mesquite.lib.ui.ExtensibleDialog;
 import mesquite.lib.ui.MesquiteWindow;
 import mesquite.lib.ui.RadioButtons;
+import mesquite.lists.lib.TaxonListUtility;
 
-public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, ActionListener {
+public class ImportGenBankNumbers extends TaxonListUtility implements ItemListener, ActionListener {
 
 	/* ................................................................................................................. */
 	public boolean startJob(String arguments, Object condition,boolean hiredByName) {
@@ -153,8 +155,10 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 	
 	NameReference genBankColor = NameReference.getNameReference("genbankcolor");
 	boolean surveyOnly = true;
+	
+	
 	/** Called to operate on the taxa in the block.  Returns true if taxa altered*/
-	public boolean operateOnTaxa(Taxa taxa){
+	public boolean operateOnTaxa(MesquiteTable table, Taxa taxa){
 		MesquiteFile file = 	MesquiteFile.open(true, (String)null, "Choose text file with GenBank number information", null);
 
 		if (file == null)
@@ -185,9 +189,9 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 			logln("replace the information already existing!");
 		}
 		
-		String[][] table = readerChosen.readTable(path);
+		String[][] genbanktable = readerChosen.readTable(path);
 		
-		if (table == null || table.length == 0)
+		if (genbanktable == null || genbanktable.length == 0)
 			return false;
 	
 		int count = 0;
@@ -212,16 +216,16 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 		}
 
 					
-		for (int row = 0; row< table.length; row++){
-			int it = findTaxon(taxa, table[row][GenBankNumbersFileReader.ID]);
+		for (int row = 0; row< genbanktable.length; row++){
+			int it = findTaxon(taxa, genbanktable[row][GenBankNumbersFileReader.ID]);
 			if (it>=0 && (!anySelected || taxa.getSelected(it))){
-					CharacterData matrix =  getProject().getCharacterMatrixReverseOrder((MesquiteFile)null, taxa, null, table[row][GenBankNumbersFileReader.GENE]);
+					CharacterData matrix =  getProject().getCharacterMatrixReverseOrder((MesquiteFile)null, taxa, null, genbanktable[row][GenBankNumbersFileReader.GENE]);
 				if (matrix != null){
 					Associable associable = matrix.getTaxaInfo(false);  //the metadata is associated with this, not with the matrix directly
-					if (!StringUtil.blank(table[row][GenBankNumbersFileReader.GENBANK])){
+					if (!StringUtil.blank(genbanktable[row][GenBankNumbersFileReader.GENBANK])){
 						String current = (String)associable.getAssociatedString(MolecularData.genBankNumberRef,  it);
 						if (surveyOnly || conflictBehaviour != 0 || StringUtil.blank(current)){
-							String incoming = StringUtil.stripBoundingWhitespace(table[row][GenBankNumbersFileReader.GENBANK]);
+							String incoming = StringUtil.stripBoundingWhitespace(genbanktable[row][GenBankNumbersFileReader.GENBANK]);
 							String incomingCompact = StringUtil.stripWhitespace(incoming);
 							String currentCompact = StringUtil.stripWhitespace(current);
 							Color color = null;
@@ -298,7 +302,7 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 							if (report != null) {
 								if (first)
 									logln("GenBank numbers found:");
-								logln("\"" + incoming + "\" " + report + " for gene " + matrix.getName() + " in taxon " + taxa.getTaxonName(it) + " (" + table[row][GenBankNumbersFileReader.ID] + ")");
+								logln("\"" + incoming + "\" " + report + " for gene " + matrix.getName() + " in taxon " + taxa.getTaxonName(it) + " (" + genbanktable[row][GenBankNumbersFileReader.ID] + ")");
 								first = false;
 							}
 							if (color != null) {
@@ -311,8 +315,8 @@ public class ImportGenBankNumbers extends TaxonUtility implements ItemListener, 
 				}
 			}
 			}
-			else if (!StringUtil.blank(table[row][GenBankNumbersFileReader.ID]))
-				thoseNotFound += " " + table[row][GenBankNumbersFileReader.ID];
+			else if (!StringUtil.blank(genbanktable[row][GenBankNumbersFileReader.ID]))
+				thoseNotFound += " " + genbanktable[row][GenBankNumbersFileReader.ID];
 
 		}
 		logln("");
