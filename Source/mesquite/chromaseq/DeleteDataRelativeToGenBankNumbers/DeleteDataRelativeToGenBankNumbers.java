@@ -113,7 +113,7 @@ import mesquite.lists.lib.TaxonListUtility;
 			return false;
 		if (!queryOptions())
 			return false;
-		if (!AlertDialog.query(containerOfModule(), "Delete data?", "Are you SURE you want to delete the sequence data?  (This cannot be undone.)")) 
+		if (!AlertDialog.query(containerOfModule(), "Delete data?", "Are you SURE you want to delete the sequence data?  (This cannot be undone.)", "DELETE", "Cancel")) 
 			return false;
 
 		Vector datas = new Vector();
@@ -161,6 +161,9 @@ import mesquite.lists.lib.TaxonListUtility;
 					}
 					if (dataToDelete) {
 						sequenceData.notifyListeners(this, new Notification(MesquiteListener.DATA_CHANGED));
+						sequenceData.notifyListeners(this, new Notification(MesquiteListener.PARTS_DELETED));
+						//public final static int PARTS_DELETED=-3;
+
 						outputInvalid();
 						parametersChanged();
 					}
