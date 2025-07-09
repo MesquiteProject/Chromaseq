@@ -32,10 +32,11 @@ import mesquite.lib.characters.AltererSimpleCell;
 import mesquite.lib.characters.CharacterData;
 import mesquite.lib.characters.CharacterState;
 import mesquite.lib.duties.DataAlterer;
+import mesquite.lib.duties.DataAltererParallelizable;
 import mesquite.lib.table.MesquiteTable;
 
 /* ======================================================================== */
-public class RemoveTrimmable extends DataAlterer implements AltererSimpleCell{
+public class RemoveTrimmable extends DataAlterer implements AltererSimpleCell, DataAltererParallelizable {
 	CharacterState fillState=null;
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
