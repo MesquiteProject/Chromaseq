@@ -27,6 +27,7 @@ public class PurgeChromaseqDataAllMatrices extends FileAssistantM {
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
 		purge();
+		iQuit(); //doesn't stick around
 		return true;
 	}
 
