@@ -1,6 +1,7 @@
 package mesquite.chromaseq.ImportGenBankNumbers;
 
 import java.awt.Button;
+import java.awt.Checkbox;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Container;
@@ -17,6 +18,7 @@ import mesquite.categ.lib.MolecularData;
 import mesquite.chromaseq.lib.GenBankNumbersFileReader;
 import mesquite.lib.Associable;
 import mesquite.lib.ListableVector;
+import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteFile;
 import mesquite.lib.MesquiteInteger;
 import mesquite.lib.MesquiteListener;
@@ -39,10 +41,18 @@ import mesquite.lib.ui.RadioButtons;
 import mesquite.lists.lib.TaxonListUtility;
 
 public class ImportGenBankNumbers extends TaxonListUtility implements ItemListener, ActionListener {
+	
+	int conflictBehaviour = 0;
+	static int conflictIGNORE =0;
+	static int conflictADDED=1;
+	static int conflictREPLACE =2;
+	boolean verboseReport = true;
+
 
 	/* ................................................................................................................. */
 	public boolean startJob(String arguments, Object condition,boolean hiredByName) {
 		hireAllEmployees(GenBankNumbersFileReader.class);
+		loadPreferences();
 		return true;
 	}
 
@@ -87,6 +97,25 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 
 		}
 	}
+	
+	/*.................................................................................................................*/
+	public void processExtraSingleXMLPreference (String tag, String content) {
+		if ("verboseReport".equalsIgnoreCase(tag)){
+			verboseReport = MesquiteBoolean.fromTrueFalseString(content);
+		}
+		if ("conflictBehaviour".equalsIgnoreCase(tag))
+			conflictBehaviour = MesquiteInteger.fromString(content);
+	}
+	/*.................................................................................................................*/
+	public String preparePreferencesForXML () {
+		StringBuffer buffer = new StringBuffer(60);	
+		StringUtil.appendXMLTag(buffer, 2, "verboseReport",verboseReport);
+		StringUtil.appendXMLTag(buffer, 2, "conflictBehaviour",conflictBehaviour);
+		return buffer.toString();
+	}
+
+	
+	
 	public void actionPerformed(ActionEvent e) {
 		int which = formats.getSelectedIndex();
 		String example = ((GenBankNumbersFileReader)getChoice(which)).exampleFile();
@@ -108,7 +137,6 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 	JEditorPane examplePane = null;
 	Button exampleButton = null;
 	GenBankNumbersFileReader readerChosen = null;
-	int conflictBehaviour = 0;
 
 	ListableVector choices = null;
 	public boolean queryOptions(MesquiteModule displayer) {
@@ -138,7 +166,9 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 
 		dialog.addStackedLabels("If you choose to import, and there is already an existing GenBank number", " recorded in the data file, and also an incoming one from the import file:", 0);
 		RadioButtons rb = dialog.addRadioButtons(new String[]{"Ignore Incoming", "Add Incoming to Existing", "Replace Existing by Incoming"},0);
-
+		dialog.addHorizontalLine(1);
+		Checkbox verboseReportCheckBox = dialog.addCheckBox("verbose report", verboseReport);
+		
 		dialog.addHorizontalLine(1);
 		dialog.addLargeOrSmallTextLabel("You can choose to Import the GenBank numbers according to the options above, or you can choose to see what is available (but not import or change your current data file) by Surveying the file.");
 
@@ -147,7 +177,9 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 		if (buttonPressed.getValue()<2)  { //not cancel
 			int which = formats.getSelectedIndex();
 			readerChosen =(GenBankNumbersFileReader)getChoice(which);
+			verboseReport = verboseReportCheckBox.getState();
 			conflictBehaviour = rb.getValue();
+			storePreferences();
 		}
 		dialog.dispose();
 		return (buttonPressed.getValue()<2);
@@ -201,13 +233,15 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 
 		if (!surveyOnly){
 			log("If GenBank information already exists in data file for the taxon and gene, any incoming GenBank information will ");
-			if (conflictBehaviour == 0)
+			if (conflictBehaviour == conflictIGNORE)
 				logln("be ignored.");
-			else if (conflictBehaviour == 1)
+			else if (conflictBehaviour == conflictADDED)
 				logln("be added to the information already existing.");
-			else if (conflictBehaviour == 2)
+			else if (conflictBehaviour == conflictREPLACE)
 				logln("replace the information already existing!");
 		}
+		
+
 
 		String[][] genbanktable = readerChosen.readTable(path);
 
@@ -244,7 +278,7 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 					Associable associable = matrix.getTaxaInfo(false);  //the metadata is associated with this, not with the matrix directly
 					if (!StringUtil.blank(genbanktable[row][GenBankNumbersFileReader.GENBANK])){
 						String current = (String)associable.getAssociatedString(MolecularData.genBankNumberRef,  it);
-						if (surveyOnly || conflictBehaviour != 0 || StringUtil.blank(current)){
+						if (surveyOnly || conflictBehaviour != conflictIGNORE || StringUtil.blank(current)){
 							String incoming = StringUtil.stripBoundingWhitespace(genbanktable[row][GenBankNumbersFileReader.GENBANK]);
 							String incomingCompact = StringUtil.stripWhitespace(incoming);
 							String currentCompact = StringUtil.stripWhitespace(current);
@@ -285,7 +319,8 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 									}
 								}
 								else if (current.equals(incoming)){  //same; do nothing
-									report = "same as previous \"" + current + "\"";
+									if (verboseReport)
+										report = "same as previous \"" + current + "\"";
 									if (surveyOnly) {
 										color = ColorDistribution.veryLightGreen;
 									}
@@ -296,7 +331,7 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 										color = ColorDistribution.veryLightGreen;
 								}
 								else if (!StringUtil.blank(incomingCompact) && incomingCompact.indexOf(currentCompact)<0){  
-									if (conflictBehaviour == 1){
+									if (conflictBehaviour == conflictADDED){
 										if (surveyOnly)
 											report = "to append to previous \"" + current + "\"";
 										else
@@ -305,8 +340,10 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 										current = current + ";" + incoming;
 									}
 									else {
-										if (surveyOnly)
-											report = "to REPLACE previous \"" + current + "\"";
+										if (surveyOnly) {
+											if (conflictBehaviour==conflictREPLACE)
+												report = "to REPLACE previous \"" + current + "\"";
+										}
 										else
 											report = "REPLACED to previous \"" + current + "\"";
 										current =  incoming;
@@ -348,7 +385,7 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 		}
 		if (!surveyOnly && !first)
 			logln("GenBank numbers imported.  Number of matches found: " + count);
-		if (!StringUtil.blank(thoseNotFound))
+		if (!StringUtil.blank(thoseNotFound) && verboseReport)
 			logln("Taxon ID's in table but not found in taxa block: " + thoseNotFound);
 		logln("");
 		return true;
