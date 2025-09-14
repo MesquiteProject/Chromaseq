@@ -99,7 +99,7 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 	}
 	
 	/*.................................................................................................................*/
-	public void processExtraSingleXMLPreference (String tag, String content) {
+	public void processSingleXMLPreference (String tag, String content) {
 		if ("verboseReport".equalsIgnoreCase(tag)){
 			verboseReport = MesquiteBoolean.fromTrueFalseString(content);
 		}
@@ -165,14 +165,14 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 		exampleButton.addActionListener(this);
 
 		dialog.addStackedLabels("If you choose to import, and there is already an existing GenBank number", " recorded in the data file, and also an incoming one from the import file:", 0);
-		RadioButtons rb = dialog.addRadioButtons(new String[]{"Ignore Incoming", "Add Incoming to Existing", "Replace Existing by Incoming"},0);
+		RadioButtons rb = dialog.addRadioButtons(new String[]{"Ignore Incoming", "Add Incoming to Existing", "Replace Existing by Incoming"},conflictBehaviour);
 		dialog.addHorizontalLine(1);
 		Checkbox verboseReportCheckBox = dialog.addCheckBox("verbose report", verboseReport);
 		
 		dialog.addHorizontalLine(1);
 		dialog.addLargeOrSmallTextLabel("You can choose to Import the GenBank numbers according to the options above, or you can choose to see what is available (but not import or change your current data file) by Surveying the file.");
 
-		dialog.completeAndShowDialog("Survey Only", "Import", "Cancel", "Cancel");
+		dialog.completeAndShowDialog("Survey Only (see Log)", "Import", "Cancel", "Cancel");
 		surveyOnly = buttonPressed.getValue()==0;
 		if (buttonPressed.getValue()<2)  { //not cancel
 			int which = formats.getSelectedIndex();
@@ -230,16 +230,24 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 			return false;
 		}
 		fireEmployee(displayer);
-
-		if (!surveyOnly){
-			log("If GenBank information already exists in data file for the taxon and gene, any incoming GenBank information will ");
+		String verb = "will ";
+		if (surveyOnly){
+			verb = "would ";
+			log("\nYou have asked for \"survey-only\" mode, which means that Mesquite will not import any information to your data file," 
+			+" but will only report on what Genbank information would be imported according to the requested options. "
+					+"In addition, the cells of the \"GenBank Number\" columns in the List of Taxa will be colored to indicate what information is available in the import.\n\nOption Chosen: ");
+		}
+		
+			log("If GenBank information already exists in data file for the taxon and gene, any incoming GenBank information " + verb);
 			if (conflictBehaviour == conflictIGNORE)
 				logln("be ignored.");
 			else if (conflictBehaviour == conflictADDED)
 				logln("be added to the information already existing.");
 			else if (conflictBehaviour == conflictREPLACE)
 				logln("replace the information already existing!");
-		}
+			if (surveyOnly)
+				logln("");
+
 		
 
 
@@ -251,7 +259,7 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 		int count = 0;
 		boolean anySelected = taxa.anySelected();
 		if (anySelected)
-			logln("Only those taxa that are selected will be considered.");
+			logln("Only those taxa that are selected " + verb +"be considered.");
 		String thoseNotFound = "";
 		boolean first = true;
 		boolean colored = false;
@@ -358,7 +366,7 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 							}
 							if (report != null) {
 								if (first)
-									logln("GenBank numbers found:");
+									logln("GenBank numbers found. Report: ");
 								logln("\"" + incoming + "\" " + report + " for gene " + matrix.getName() + " in taxon " + taxa.getTaxonName(it) + " (" + genbanktable[row][GenBankNumbersFileReader.ID] + ")");
 								first = false;
 							}
