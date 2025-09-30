@@ -54,6 +54,10 @@ public class ExportSeparateSequenceFASTA extends FileInterpreterI {
 	}
 
 	/*.................................................................................................................*/
+	public boolean requestPrimaryChoice() {  
+		return true;  //
+	}
+	/*.................................................................................................................*/
 	public boolean canImport() {  
 		return false;  //
 	}
