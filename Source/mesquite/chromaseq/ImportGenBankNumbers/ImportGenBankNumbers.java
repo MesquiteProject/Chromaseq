@@ -17,6 +17,7 @@ import javax.swing.JEditorPane;
 import mesquite.categ.lib.MolecularData;
 import mesquite.chromaseq.lib.GenBankNumbersFileReader;
 import mesquite.lib.Associable;
+import mesquite.lib.Debugg;
 import mesquite.lib.ListableVector;
 import mesquite.lib.MesquiteBoolean;
 import mesquite.lib.MesquiteFile;
@@ -279,109 +280,111 @@ public class ImportGenBankNumbers extends TaxonListUtility implements ItemListen
 
 
 		for (int row = 0; row< genbanktable.length; row++){
-			int it = findTaxon(taxa, genbanktable[row][GenBankNumbersFileReader.ID]);
-			if (it>=0 && (!anySelected || taxa.getSelected(it))){
-				CharacterData matrix = getMatrixFromGenBankTableEntry(taxa, genbanktable[row][GenBankNumbersFileReader.GENE]);
-				if (matrix != null){
-					Associable associable = matrix.getTaxaInfo(false);  //the metadata is associated with this, not with the matrix directly
-					if (!StringUtil.blank(genbanktable[row][GenBankNumbersFileReader.GENBANK])){
-						String current = (String)associable.getAssociatedString(MolecularData.genBankNumberRef,  it);
-						if (surveyOnly || conflictBehaviour != conflictIGNORE || StringUtil.blank(current)){
-							String incoming = StringUtil.stripBoundingWhitespace(genbanktable[row][GenBankNumbersFileReader.GENBANK]);
-							String incomingCompact = StringUtil.stripWhitespace(incoming);
-							String currentCompact = StringUtil.stripWhitespace(current);
-							Color color = null;
-							String report = null;
-							if (!StringUtil.blank(incoming) && incoming.length() > 1){
-								if (StringUtil.blank(current)){
-									current = incoming;
-									if (surveyOnly) {
-										report = "to be acquired";
-										color = Color.yellow;
-									}
-									else {
-										report = "acquired";
-										color = ColorDistribution.veryLightYellow;
-									}
-								}
-								else if (current.length() == 1 && incoming.length()>1){ //current is just one character, a placeholder; ignore it and replace by incoming
-									current = incoming;
-									if (surveyOnly) {
-										report = "to be acquired";
-										color = Color.yellow;
-									}
-									else {
-										report = "acquired";
-										color = ColorDistribution.veryLightYellow;
-									}
-								}
-								else if (incoming.indexOf(current)>= 0 && incoming.length() > current.length()){  //incoming is superstring of current; replace by current
-									current = incoming;
-									if (surveyOnly) {
-										color = Color.magenta;
-										report = "to REPLACE previous \"" + current + "\"";
-									}
-									else {
-										color = ColorDistribution.veryLightYellow;
-										report = "REPLACED previous \"" + current + "\"";
-									}
-								}
-								else if (current.equals(incoming)){  //same; do nothing
-									if (verboseReport)
-										report = "same as previous \"" + current + "\"";
-									if (surveyOnly) {
-										color = ColorDistribution.veryLightGreen;
-									}
-								}
-								else if (current.indexOf(incoming)>= 0){  //already included
-									report = "already included in previous \"" + current + "\"";
-									if (surveyOnly)
-										color = ColorDistribution.veryLightGreen;
-								}
-								else if (!StringUtil.blank(incomingCompact) && incomingCompact.indexOf(currentCompact)<0){  
-									if (conflictBehaviour == conflictADDED){
-										if (surveyOnly)
-											report = "to append to previous \"" + current + "\"";
-										else
-											report = "appended to previous \"" + current + "\"";
-
-										current = current + ";" + incoming;
-									}
-									else {
+			if (genbanktable[row].length>0) {
+				int it = findTaxon(taxa, genbanktable[row][GenBankNumbersFileReader.ID]);  //DAVIDQUERY:  crash java.lang.ArrayIndexOutOfBoundsException: Index 0 out of bounds for length 0
+				if (it>=0 && (!anySelected || taxa.getSelected(it))){
+					CharacterData matrix = getMatrixFromGenBankTableEntry(taxa, genbanktable[row][GenBankNumbersFileReader.GENE]);
+					if (matrix != null){
+						Associable associable = matrix.getTaxaInfo(false);  //the metadata is associated with this, not with the matrix directly
+						if (!StringUtil.blank(genbanktable[row][GenBankNumbersFileReader.GENBANK])){
+							String current = (String)associable.getAssociatedString(MolecularData.genBankNumberRef,  it);
+							if (surveyOnly || conflictBehaviour != conflictIGNORE || StringUtil.blank(current)){
+								String incoming = StringUtil.stripBoundingWhitespace(genbanktable[row][GenBankNumbersFileReader.GENBANK]);
+								String incomingCompact = StringUtil.stripWhitespace(incoming);
+								String currentCompact = StringUtil.stripWhitespace(current);
+								Color color = null;
+								String report = null;
+								if (!StringUtil.blank(incoming) && incoming.length() > 1){
+									if (StringUtil.blank(current)){
+										current = incoming;
 										if (surveyOnly) {
-											if (conflictBehaviour==conflictREPLACE)
-												report = "to REPLACE previous \"" + current + "\"";
+											report = "to be acquired";
+											color = Color.yellow;
 										}
-										else
-											report = "REPLACED to previous \"" + current + "\"";
-										current =  incoming;
+										else {
+											report = "acquired";
+											color = ColorDistribution.veryLightYellow;
+										}
 									}
-									if (surveyOnly)
-										color = Color.magenta;
-									else
-										color = ColorDistribution.veryLightYellow;
-								}
-								if (!surveyOnly)
-									associable.setAssociatedString(MolecularData.genBankNumberRef,  it, StringUtil.stripBoundingWhitespace(current));
-							}
-							if (report != null) {
-								if (first)
-									logln("GenBank numbers found. Report: ");
-								logln("\"" + incoming + "\" " + report + " for gene " + matrix.getName() + " in taxon " + taxa.getTaxonName(it) + " (" + genbanktable[row][GenBankNumbersFileReader.ID] + ")");
-								first = false;
-							}
-							if (color != null) {
-								colored = true;
-								associable.setAssociatedObject(genBankColor,  it, color);  //color is not saved
-							}
-							count++;
-						}
+									else if (current.length() == 1 && incoming.length()>1){ //current is just one character, a placeholder; ignore it and replace by incoming
+										current = incoming;
+										if (surveyOnly) {
+											report = "to be acquired";
+											color = Color.yellow;
+										}
+										else {
+											report = "acquired";
+											color = ColorDistribution.veryLightYellow;
+										}
+									}
+									else if (incoming.indexOf(current)>= 0 && incoming.length() > current.length()){  //incoming is superstring of current; replace by current
+										current = incoming;
+										if (surveyOnly) {
+											color = Color.magenta;
+											report = "to REPLACE previous \"" + current + "\"";
+										}
+										else {
+											color = ColorDistribution.veryLightYellow;
+											report = "REPLACED previous \"" + current + "\"";
+										}
+									}
+									else if (current.equals(incoming)){  //same; do nothing
+										if (verboseReport)
+											report = "same as previous \"" + current + "\"";
+										if (surveyOnly) {
+											color = ColorDistribution.veryLightGreen;
+										}
+									}
+									else if (current.indexOf(incoming)>= 0){  //already included
+										report = "already included in previous \"" + current + "\"";
+										if (surveyOnly)
+											color = ColorDistribution.veryLightGreen;
+									}
+									else if (!StringUtil.blank(incomingCompact) && incomingCompact.indexOf(currentCompact)<0){  
+										if (conflictBehaviour == conflictADDED){
+											if (surveyOnly)
+												report = "to append to previous \"" + current + "\"";
+											else
+												report = "appended to previous \"" + current + "\"";
 
+											current = current + ";" + incoming;
+										}
+										else {
+											if (surveyOnly) {
+												if (conflictBehaviour==conflictREPLACE)
+													report = "to REPLACE previous \"" + current + "\"";
+											}
+											else
+												report = "REPLACED to previous \"" + current + "\"";
+											current =  incoming;
+										}
+										if (surveyOnly)
+											color = Color.magenta;
+										else
+											color = ColorDistribution.veryLightYellow;
+									}
+									if (!surveyOnly)
+										associable.setAssociatedString(MolecularData.genBankNumberRef,  it, StringUtil.stripBoundingWhitespace(current));
+								}
+								if (report != null) {
+									if (first)
+										logln("GenBank numbers found. Report: ");
+									logln("\"" + incoming + "\" " + report + " for gene " + matrix.getName() + " in taxon " + taxa.getTaxonName(it) + " (" + genbanktable[row][GenBankNumbersFileReader.ID] + ")");
+									first = false;
+								}
+								if (color != null) {
+									colored = true;
+									associable.setAssociatedObject(genBankColor,  it, color);  //color is not saved
+								}
+								count++;
+							}
+
+						}
 					}
 				}
+				else if (!StringUtil.blank(genbanktable[row][GenBankNumbersFileReader.ID]))
+					thoseNotFound += " " + genbanktable[row][GenBankNumbersFileReader.ID];
 			}
-			else if (!StringUtil.blank(genbanktable[row][GenBankNumbersFileReader.ID]))
-				thoseNotFound += " " + genbanktable[row][GenBankNumbersFileReader.ID];
 
 		}
 		logln("");
