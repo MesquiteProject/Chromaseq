@@ -80,14 +80,14 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	boolean verbose=true;
 
 	public void getEmployeeNeeds(){  //This gets called on startup to harvest information; override this and inside, call registerEmployeeNeed
-		EmployeeNeed e1 = registerEmployeeNeed(ChromatogramFileNameParser.class, "Chromatogram processing requires a means to determine the sample code.", "This is activated automatically.");
+		EmployeeNeed e1 = registerEmployeeNeed(ChromatogramFileNameParser.class, "File name processing requires a means to determine the sample code.", "This is activated automatically.");
 	}
 
 	/*.................................................................................................................*/
 	public boolean startJob(String arguments, Object condition, boolean hiredByName){
 		loadPreferences();
 
-		addMenuItem(null, "Segregate Chromatograms of Listed Codes...", makeCommand("extract", this));
+		addMenuItem(null, "Segregate Files of Listed Codes...", makeCommand("extract", this));
 		return true;
 	}
 	/*.................................................................................................................*/
@@ -207,7 +207,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 		logBuffer.setLength(0);
 		String[] files = directory.list();
-		progIndicator = new ProgressIndicator(getProject(),"Segregating Chromatograms", files.length);
+		progIndicator = new ProgressIndicator(getProject(),"Segregating Files", files.length);
 		progIndicator.setStopButtonName("Stop");
 		progIndicator.start();
 		boolean abort = false;
@@ -227,7 +227,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		else
 			processedDirPath = directoryPath + MesquiteFile.fileSeparator + "SampleCodeInList";
 
-		loglnEchoToStringBuffer(" Searching for chromatograms that match the specified criteria. ", logBuffer);
+		loglnEchoToStringBuffer(" Searching for files that match the specified criteria. ", logBuffer);
 		loglnEchoToStringBuffer(" Processing directory: ", logBuffer);
 		loglnEchoToStringBuffer("  "+directoryPath+"\n", logBuffer);
 
@@ -368,7 +368,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		if ( logBuffer==null)
 			logBuffer = new StringBuffer();
 
-		loglnEchoToStringBuffer("Segregating chromatograms with codes present in text file: " + sampleCodeListFile, logBuffer);
+		loglnEchoToStringBuffer("Segregating files with codes present in text file: " + sampleCodeListFile, logBuffer);
 
 
 		MesquiteBoolean pleaseStorePrefs = new MesquiteBoolean(false);
@@ -378,7 +378,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 		// if not passed-in, then ask
 		if (StringUtil.blank(directoryPath)) {
-			directoryPath = MesquiteFile.chooseDirectory("Choose directory containing chromatograms:", previousDirectory); //MesquiteFile.saveFileAsDialog("Base name for files (files will be named <name>1.nex, <name>2.nex, etc.)", baseName);
+			directoryPath = MesquiteFile.chooseDirectory("Choose directory containing files:", previousDirectory); //MesquiteFile.saveFileAsDialog("Base name for files (files will be named <name>1.nex, <name>2.nex, etc.)", baseName);
 		}
 
 		if (StringUtil.blank(directoryPath))
@@ -437,14 +437,14 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	/*.................................................................................................................*/
 	public boolean queryOptions() {
 		MesquiteInteger buttonPressed = new MesquiteInteger(ExtensibleDialog.defaultCANCEL);
-		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Segregate Chromatograms Options",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
+		ExtensibleDialog dialog = new ExtensibleDialog(containerOfModule(), "Segregate File Options",buttonPressed);  //MesquiteTrunk.mesquiteTrunk.containerOfModule()
 
 		TextCanvasWithButtons textCanvasWithButtons;
 
 		//section for name parser
 
 		dialog.addHorizontalLine(1);
-		dialog.addLabel("Chromatogram File Name Parser");
+		dialog.addLabel("File Name Parser");
 		dialog.forceNewPanel();
 		String s = getModuleText(nameParserManager);
 		if (MesquiteTrunk.mesquiteTrunk.numModulesAvailable(ChromatogramFileNameParser.class)>1){
@@ -466,10 +466,10 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 		dialog.addHorizontalLine(2);
 
 
-		s = "This will move all chromatograms whose sample codes are listed in a chosen file into their own folder.\n";
-		s+="Mesquite extracts from within the name of each chromatogram file a code indicating the sample (e.g., a voucher number). ";
+		s = "This will move all files whose sample codes are listed in a chosen file into their own folder.\n";
+		s+="Mesquite extracts from within the name of each file a code indicating the sample (e.g., a voucher number). ";
 		s+= "It then looks at the first entry on each line of a tab-delimited text file, and sees if it can find in that sample codes file ";
-		s+= "the sample code in the chromatogram's file name.  If so, it will move the file into a folder; if not, it will ignore the chromatogram file.";
+		s+= "the sample code in the file's name.  If so, it will move the file into a folder; if not, it will ignore the file.";
 		dialog.appendToHelpString(s);
 
 		dialog.completeAndShowDialog(true);
@@ -485,7 +485,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 	/*.................................................................................................................*/
 	public Object doCommand(String commandName, String arguments, CommandChecker checker) {
-		if (checker.compare(this.getClass(), "Segregates into a new folder all chromatograms whose file names contain sample codes that are listed in a text file.", null, commandName, "extract")) {
+		if (checker.compare(this.getClass(), "Segregates into a new folder all files whose names contain sample codes that are listed in a text file.", null, commandName, "extract")) {
 
 			if (!hireRequired())
 				return null;
@@ -521,7 +521,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 
 	/*.................................................................................................................*/
 	public String getName() {
-		return "Segregate Chromatograms in Listed Codes";
+		return "Segregate Files in Listed Codes";
 	}
 	/*.................................................................................................................*/
 	public boolean showCitation() {
@@ -529,7 +529,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	}
 	/*.................................................................................................................*/
 	public String getExplanation() {
-		return "Segregates into a new folder all chromatograms whose sample codes are listed in a specified file.";
+		return "Segregates into a new folder all files whose name contains sample codes that are listed in a specified file.";
 	}
 	/*.................................................................................................................*/
 	/*.................................................................................................................*/
