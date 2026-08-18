@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="/MesquiteCore/Resources/jars/dom4j-2.1.3.jar"/>
 	<classpathentry kind="lib" path="/MesquiteCore/Resources/jars/gson-2.6.2.jar"/>
 	<classpathentry kind="lib" path="/MesquiteCore/Resources/jars/httpclient-4.5.13.jar"/>
-	<classpathentry kind="lib" path="/MesquiteCore/Resources/jars/jsch-0.1.54.jar"/>
 	<classpathentry kind="lib" path="/MesquiteCore/Resources/jars/commons-io-2.18.0.jar"/>
 	<classpathentry kind="output" path="Mesquite_Folder"/>
 </classpath>
