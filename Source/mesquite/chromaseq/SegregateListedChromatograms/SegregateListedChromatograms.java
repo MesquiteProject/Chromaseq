@@ -87,7 +87,7 @@ public class SegregateListedChromatograms extends UtilitiesAssistant implements 
 	public boolean startJob(String arguments, Object condition, boolean hiredByName){
 		loadPreferences();
 
-		addMenuItem(null, "Segregate Files of Listed Codes...", makeCommand("extract", this));
+		addMenuItemToUtilitiesSubmenu("Segregate Files of Listed Codes...", makeCommand("extract", this));
 		return true;
 	}
 	/*.................................................................................................................*/

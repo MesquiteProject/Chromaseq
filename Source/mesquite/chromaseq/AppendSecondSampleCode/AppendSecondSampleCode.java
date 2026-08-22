@@ -56,7 +56,7 @@ public class AppendSecondSampleCode extends UtilitiesAssistant implements Action
 
 	public boolean startJob(String arguments, Object condition,  boolean hiredByName) {
 		loadPreferences();
-		addMenuItem(null, "Rename Files PCR to Sample Code...", makeCommand("rename", this));
+		addMenuItemToUtilitiesSubmenu("Rename Files PCR to Sample Code...", makeCommand("rename", this));
 		return true;
 	}
 

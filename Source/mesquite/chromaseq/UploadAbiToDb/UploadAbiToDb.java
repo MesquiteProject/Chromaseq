@@ -17,7 +17,7 @@ public class UploadAbiToDb extends UtilitiesAssistant {
 
 	/* ................................................................................................................. */
 	public boolean startJob(String arguments, Object condition,boolean hiredByName) {
-		addMenuItem(null, "Upload ABI files to database...", makeCommand(COMMAND_NAME, this));
+		addMenuItemToUtilitiesSubmenu("Upload ABI files to database...", makeCommand(COMMAND_NAME, this));
 
 		return true;
 	}

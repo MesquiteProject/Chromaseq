@@ -79,7 +79,7 @@ public class SegregateChromatograms extends UtilitiesAssistant implements Action
 		loadPreferences();
 		
 
-		addMenuItem(null, "Segregate Matching Chromatograms...", makeCommand("extract", this));
+		addMenuItemToUtilitiesSubmenu("Segregate Matching Chromatograms...", makeCommand("extract", this));
 		return true;
 	}
 	/*.................................................................................................................*/

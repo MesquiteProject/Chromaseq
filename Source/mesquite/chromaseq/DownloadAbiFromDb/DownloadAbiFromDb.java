@@ -15,7 +15,7 @@ public class DownloadAbiFromDb extends UtilitiesAssistant {
 
 	/* ................................................................................................................. */
 	public boolean startJob(String arguments, Object condition, boolean hiredByName) {
-		addMenuItem(null, "Process Chromatograms from Database...", makeCommand(
+		addMenuItemToUtilitiesSubmenu("Process Chromatograms from Database...", makeCommand(
 				COMMAND_NAME, this));
 		return true;
 	}
